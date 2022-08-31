@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\SuperUserController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function () { return view('login'); });
+// ====================================================
+//                    AUTENTIKASI
+// ====================================================
+Route::get('dashboard',     [AuthController::class, 'dashboard']);
+Route::get('masuk',         [AuthController::class, 'index'])->name('masuk');
+Route::get('daftar',  [AuthController::class, 'daftar'])->name('daftar-user');
+Route::get('keluar',        [AuthController::class, 'keluar'])->name('keluar');
+Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.post');
+Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.post');
+// ====================================================
+//                    SUPER ADMIN
+// ====================================================
+Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 'as' => 'super-admin.'], function () {
+    Route::get('dashboard', [SuperAdminController::class, 'index']);
+
+
 });
+
