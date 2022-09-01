@@ -27,7 +27,9 @@
     <link rel="stylesheet" href="{{ asset('dist_admin/plugins/select2/css/select2.min.css') }}">
 </head>
 
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
+
+<body class="hold-transition sidebar-mini layout-fixed">
 
     <div class="wrapper">
 
@@ -112,7 +114,7 @@
                         <img src="{{ asset('dist_admin/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->full_name }}</a>
+                        <a href="#" class="d-block text-capitalize">{{ Auth::user()->nama }}</a>
                     </div>
                 </div>
 
@@ -132,35 +134,239 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ url('admin-master/dashboard') }}" class="nav-link {{ Request::is('admin-master/dashboard') ? 'active' : '' }}">
+                            <a href="{{ url('super-admin/dashboard') }}" class="nav-link {{ Request::is('super-admin/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-header font-weight-bold">Menu</li>
+                        <li class="nav-header font-weight-bold">Pengguna</li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-master/barang/daftar/semua') }}" class="nav-link {{ Request::is('admin-master/barang/daftar/semua') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-boxes"></i>
-                                <p>Master Barang</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-master/gudang/daftar/semua') }}" class="nav-link {{ Request::is('admin-master/gudang/daftar/semua') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-warehouse"></i>
-                                <p>Master Gudang</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-master/pengguna/daftar/semua') }}" class="nav-link {{ Request::is('admin-master/pengguna/daftar/semua') ? 'active' : '' }}">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
-                                <p>Master Pengguna</p>
+                                <p>
+                                    Level
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/level/utama/') }}" class="nav-link {{ Request::is('super-admin/level/utama/') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Level</p>
+                                    </a>
+                                </li>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/level/sub/') }}" class="nav-link {{ Request::is('super-admin/level/sub/') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sub Level</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-master/unit-kerja/daftar/semua') }}" class="nav-link {{ Request::is('admin-master/unit-kerja/daftar/semua') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-briefcase"></i>
-                                <p>Master Unit Kerja</p>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Master Pengguna
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="../../index.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pengguna</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="../../index2.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tim Kerja</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="../../index2.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unit Kerja</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="../../index2.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unit Utama</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-header font-weight-bold">Aplikasi</li>
+                        <!-- Pengelolaan OLAT -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
+                                <i class="fas fa-list mr-3"></i> PENGELOLAAN OLDAT
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/oldat/dashboard') }}" class="nav-link {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-header ">Barang</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Kategori
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-boxes"></i>
+                                        <p>
+                                            Master Barang
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-header">Status</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Status
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="../../index.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Status Barang</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="../../index2.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Status Pengadaan</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-header">Pengadaan</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Form Pengadaan
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-file"></i>
+                                        <p>
+                                            Master Pengadaan
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-header">Rekapitulasi</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>
+                                            Master Rekapitulasi
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="../../index.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Pengguna</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="../../index2.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Tim Kerja</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="../../index2.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Unit Kerja</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="../../index2.html" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Unit Utama</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Pengelolaan AADB -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
+                                <i class="fas fa-list mr-3"></i> PENGELOLAAN AADB
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/aadb/dashboard') }}" class="nav-link {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-header ">Menu</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Sub Menu
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Pengelolaan ATK -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="fas fa-list mr-3"></i> PENGELOLAAN ATK
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-header ">Menu</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Sub Menu
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Pengelolaan Pemeliharaan -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="fas fa-list mr-3"></i> PENGELOLAAN MTC
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-header ">Menu</li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Sub Menu
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </nav>

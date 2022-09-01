@@ -94,7 +94,7 @@
     <!-- Bootstrap 4 -->
     <script src="{{ asset('dist_admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
-    <script src="{{ asset('dist_admin/dist/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('dist_admin/js/adminlte.min.js') }}"></script>
     <!-- Lihat Password -->
     <script type="text/javascript">
         function lihatPassword() {

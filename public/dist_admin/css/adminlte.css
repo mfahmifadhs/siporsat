@@ -52457,18 +52457,18 @@ a.text-muted:hover {
     padding-left: 1vh;
     padding-right: 1vh;
     float: left;
-  }   
+  }
 
   .col-xs-1-5 a {
     width: 100%;
     text-overflow: ellipsis;
-  }  
+  }
   .col-xs-1-6 {
     width: 100%;
     padding-left: 1vh;
     padding-right: 1vh;
     float: left;
-  }  
+  }
 
   .col-xs-1-6 a {
     display: none;
@@ -52478,3 +52478,20 @@ a.text-muted:hover {
     float: left;
   }
 }
+
+/* CUSTOM */
+
+.card-main {
+    padding: 20px 0;
+    height: 100%;
+}
+
+.card-main h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    padding: 0;
+    white-space: nowrap;
+}
+
+

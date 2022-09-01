@@ -12,12 +12,20 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
-class SuperAdminController extends Controller
+class SuperadminController extends Controller
 {
     public function index()
     {
         return view('v_super_admin.index');
     }
-}
 
-?>
+    // ====================================================
+    //                      LEVEL
+    // ====================================================
+
+    public function showLevel(Request $request, $aksi, $id)
+    {
+
+    }
+
+}

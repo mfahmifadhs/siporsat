@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\OldatController;
+use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\UserController;
 
@@ -32,7 +33,17 @@ Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.pos
 //                    SUPER ADMIN
 // ====================================================
 Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 'as' => 'super-admin.'], function () {
-    Route::get('dashboard', [SuperAdminController::class, 'index']);
+    Route::get('dashboard', [SuperadminController::class, 'index']);
+    Route::get('level/{aksi}/{id}', [SuperadminController::class, 'showLevel']);
+
+    Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
+        Route::get('dashboard', [OldatController::class, 'index']);
+
+    });
+
+    Route::group(['prefix' => 'super-admin', 'as' => 'super-admin.'], function () {
+
+    });
 
 
 });
