@@ -142,7 +142,7 @@
                         <li class="nav-header font-weight-bold">Pengguna</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
+                                <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
                                     Level
                                     <i class="right fas fa-angle-left"></i>
@@ -150,14 +150,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/level/utama/') }}" class="nav-link {{ Request::is('super-admin/level/utama/') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Level</p>
-                                    </a>
-                                </li>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/level/sub/') }}" class="nav-link {{ Request::is('super-admin/level/sub/') ? 'active' : '' }}">
+                                    <a href="{{ url('super-admin/level/sub/data') }}" class="nav-link {{ Request::is('super-admin/level/sub/data') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Sub Level</p>
                                     </a>
@@ -174,25 +167,25 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../../index.html" class="nav-link">
+                                    <a href="{{ url('super-admin/pengguna/data/semua') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pengguna</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../../index2.html" class="nav-link">
+                                    <a href="{{ url('super-admin/tim-kerja/data/semua') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Tim Kerja</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../../index2.html" class="nav-link">
+                                    <a href="{{ url('super-admin/unit-kerja/data/semua') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Unit Kerja</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../../index2.html" class="nav-link">
+                                    <a href="#" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Unit Utama</p>
                                     </a>
@@ -203,7 +196,8 @@
                         <!-- Pengelolaan OLAT -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
-                                <i class="fas fa-list mr-3"></i> PENGELOLAAN OLDAT
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>PENGELOLAAN OLDAT</p>
                             </a>
                             <ul class="nav nav-treeview">
 
@@ -312,7 +306,8 @@
                         <!-- Pengelolaan AADB -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
-                                <i class="fas fa-list mr-3"></i> PENGELOLAAN AADB
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>PENGELOLAAN AADB</p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
@@ -335,7 +330,8 @@
                         <!-- Pengelolaan ATK -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
-                                <i class="fas fa-list mr-3"></i> PENGELOLAAN ATK
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>PENGELOLAAN ATK</p>
                             </a>
                             <ul class="nav nav-treeview">
 
@@ -353,7 +349,8 @@
                         <!-- Pengelolaan Pemeliharaan -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
-                                <i class="fas fa-list mr-3"></i> PENGELOLAAN MTC
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>PENGELOLAAN MTC</p>
                             </a>
                             <ul class="nav nav-treeview">
 
