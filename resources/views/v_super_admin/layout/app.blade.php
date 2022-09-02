@@ -81,8 +81,12 @@
                         <b>{{ Auth::user()->full_name }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header text-capitalize">
-                            {{ Auth::user()->nama.' / '.Auth::user()->jabatan }}
+                        <span class="dropdown-item dropdown-header">
+                            <?php
+                            $user    = Auth()->user();
+                            $pegawai = $user->pegawai;
+                            ?>
+                            {{ $pegawai->nama_pegawai }} <br> {{ $pegawai->keterangan_pegawai }}
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
@@ -114,7 +118,9 @@
                         <img src="{{ asset('dist_admin/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block text-capitalize">{{ Auth::user()->nama }}</a>
+                        <a href="#" class="d-block text-capitalize">
+                            Super Admin
+                        </a>
                     </div>
                 </div>
 
@@ -139,65 +145,13 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-header font-weight-bold">Pengguna</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-users-cog"></i>
-                                <p>
-                                    Level
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/level/sub/data') }}" class="nav-link {{ Request::is('super-admin/level/sub/data') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sub Level</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Master Pengguna
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/pengguna/data/semua') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pengguna</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/tim-kerja/data/semua') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tim Kerja</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/unit-kerja/data/semua') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Unit Kerja</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Unit Utama</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-header font-weight-bold">Aplikasi</li>
+                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT</li>
                         <!-- Pengelolaan OLAT -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>PENGELOLAAN OLDAT</p>
+                                <i class="nav-icon fas fa-parachute-box"></i>
+                                <p>Pengelolaan OLDAT </p>
+                                <i class="right fas fa-angle-left"></i>
                             </a>
                             <ul class="nav nav-treeview">
 
@@ -209,7 +163,7 @@
                                 </li>
                                 <li class="nav-header ">Barang</li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('super-admin/oldat/kategori-barang/data/semua') }}" class="nav-link {{ Request::is('super-admin/oldat/kategori-barang/data/semua') ? 'active' : '' }}">
                                         <i class="nav-icon fas fa-list-alt"></i>
                                         <p>
                                             Kategori
@@ -217,7 +171,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('super-admin/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('super-admin/oldat/barang/data/semua') ? 'active' : '' }}">
                                         <i class="nav-icon fas fa-boxes"></i>
                                         <p>
                                             Master Barang
@@ -303,8 +257,9 @@
                                 </li>
                             </ul>
                         </li>
+                        <!-- <li class="nav-header font-weight-bold">Pengelolaan AADB</li> -->
                         <!-- Pengelolaan AADB -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>PENGELOLAAN AADB</p>
@@ -326,9 +281,10 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
+                        <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
                         <!-- Pengelolaan ATK -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>PENGELOLAAN ATK</p>
@@ -345,9 +301,10 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
+                        <!-- <li class="nav-header font-weight-bold">Pengelolaan Pemeliharaan</li> -->
                         <!-- Pengelolaan Pemeliharaan -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>PENGELOLAAN MTC</p>
@@ -361,6 +318,60 @@
                                         <p>
                                             Sub Menu
                                         </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <li class="nav-header font-weight-bold">Pengguna & Pegawai</li>
+                        <li class="nav-item">
+                            <a href="{{ url('super-admin/level/data/semua') }}" class="nav-link {{ Request::is('super-admin/level/data/semua') ? 'active' : '' }}">
+                                <i class="fas fa-users-cog nav-icon"></i>
+                                <p>Level</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{ Request::is('super-admin/kewenangan/data/semua') ? 'active' : '' }}">
+                                <i class="fas fa-users-cog nav-icon"></i>
+                                <p>Kewenangan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-4">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Master Pengguna
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/pengguna/data/semua') }}" class="nav-link {{ Request::is('super-admin/pengguna/data/semua') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pengguna</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/pegawai/data/semua') }}" class="nav-link {{ Request::is('super-admin/pegawai/data/semua') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pegawai</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/tim-kerja/data/semua') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tim Kerja</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/unit-kerja/data/semua') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unit Kerja</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unit Utama</p>
                                     </a>
                                 </li>
                             </ul>
@@ -427,6 +438,25 @@
     <!-- Select2 -->
     <script src="{{ asset('dist_admin/plugins/select2/js/select2.full.min.js') }}"></script>
     @yield('js')
+    <script>
+        $(function() {
+            var url = window.location;
+            // for single sidebar menu
+            $('ul.nav-sidebar a').filter(function() {
+                return this.href == url;
+            }).addClass('active');
+
+            // for sidebar menu and treeview
+            $('ul.nav-treeview a').filter(function() {
+                    return this.href == url;
+                }).parentsUntil(".nav-sidebar > .nav-treeview")
+                .css({
+                    'display': 'block'
+                })
+                .addClass('menu-open').prev('a')
+                .addClass('active');
+        });
+    </script>
 </body>
 
 </html>

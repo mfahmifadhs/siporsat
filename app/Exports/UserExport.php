@@ -15,9 +15,10 @@ class UserExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return User::select('id','level','unit_kerja','nama','jabatan','username','password_teks')
+        return User::select('id','level','unit_kerja','nama_pegawai','keterangan_pegawai','username','password_teks')
+        ->join('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'users.pegawai_id')
         ->join('tbl_level','tbl_level.id_level','users.level_id')
-        ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','users.unit_kerja_id')->get();
+        ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')->get();
     }
 
     public function headings(): array

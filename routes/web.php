@@ -35,10 +35,14 @@ Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.pos
 Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 'as' => 'super-admin.'], function () {
     Route::get('dashboard', [SuperAdminController::class, 'index']);
     Route::get('level/{aksi}/{id}', [SuperAdminController::class, 'showLevel']);
+    Route::get('pegawai/{aksi}/{id}', [SuperAdminController::class, 'showEmployees']);
     Route::get('pengguna/{aksi}/{id}', [SuperAdminController::class, 'showUsers']);
     Route::get('tim-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkteam']);
     Route::get('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
+    Route::get('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
 
+    Route::post('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
+    Route::post('pegawai/{aksi}/{id}', [SuperAdminController::class, 'showEmployees']);
     Route::post('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
     Route::post('tim-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkteam']);
     Route::post('pengguna/{aksi}/{id}', [SuperAdminController::class, 'showUsers']);
@@ -46,6 +50,11 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [OldatController::class, 'index']);
+        Route::get('barang/{aksi}/{id}', [OldatController::class, 'showItem']);
+        Route::get('kategori-barang/{aksi}/{id}', [OldatController::class, 'showCategoryItem']);
+
+        Route::post('barang/{aksi}/{id}', [OldatController::class, 'showItem']);
+        Route::post('kategori-barang/{aksi}/{id}', [OldatController::class, 'showCategoryItem']);
 
     });
 

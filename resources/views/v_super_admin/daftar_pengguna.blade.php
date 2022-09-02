@@ -6,13 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Sub Level</h1>
+                <h1 class="m-0">Daftar Pengguna</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-admin/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#">Level Utama</a></li>
-                    <li class="breadcrumb-item active">Sub Level</li>
+                    <li class="breadcrumb-item active">Daftar Pengguna</li>
                 </ol>
             </div>
         </div>
@@ -44,16 +43,17 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="table-pengguna" class="table table-bordered">
+                <table id="table-pengguna" class="table table-bordered text-center">
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Level</th>
                             <th>Nama</th>
-                            <th>Jabatan</th>
+                            <th>Posisi</th>
                             <th>Unit Kerja</th>
                             <th>Username</th>
                             <th>Password</th>
-                            <th class="text-center">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -61,12 +61,13 @@
                         @foreach($pengguna as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $row->nama }}</td>
-                            <td>{{ $row->jabatan }}</td>
+                            <td>{{ $row->level }}</td>
+                            <td>{{ $row->nama_pegawai }}</td>
+                            <td>{{ $row->keterangan_pegawai }}</td>
                             <td>{{ $row->unit_kerja }}</td>
                             <td>{{ $row->username }}</td>
                             <td>{{ $row->password_teks }}</td>
-                            <td class="text-center">
+                            <td>
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
@@ -116,12 +117,15 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nama">Nama Pengguna : </label>
-                                                <input type="text" name="nama" class="form-control" value="{{ $row->nama }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="jabatan">Jabatan : </label>
-                                                <input type="text" name="jabatan" class="form-control" value="{{ $row->jabatan }}">
+                                                <label for="nama">Pegawai : </label>
+                                                <select name="id_pegawai" class="form-control text-capitalize" required>
+                                                    <option value="">-- Pilih Pegawai --</option>
+                                                    @foreach($pegawai as $dataPegawai)
+                                                    <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($row->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
+                                                        {{ $dataPegawai->nama_pegawai }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <hr>
                                             <div class="form-group">
@@ -189,12 +193,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="nama">Nama Pengguna : </label>
-                        <input type="text" name="nama" class="form-control" placeholder="Nama Pengguna" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jabatan">Jabatan : </label>
-                        <input type="text" name="jabatan" class="form-control" placeholder="Jabatan Pengguna" required>
+                        <label for="unitkerja">Pegawai :</label>
+                        <select name="id_pegawai" class="form-control text-capitalize" required>
+                            <option value="">-- Pilih Pegawai --</option>
+                            @foreach($pegawai as $dataPegawai)
+                            <option value="{{ $dataPegawai->id_pegawai }}">{{ $dataPegawai->nama_pegawai }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <hr>
                     <div class="form-group">
