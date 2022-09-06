@@ -22,9 +22,11 @@ class CekLevel
             return redirect('/')->with('failed','Anda tidak memiliki akses!');
         }elseif ($role == 'super-admin' && auth()->user()->level_id != 1) {
             abort(403);
-        }elseif ($role == 'super-user' && auth()->user()->level_id != 2) {
+        }elseif ($role == 'admin-user' && auth()->user()->level_id != 2) {
             abort(403);
-        }elseif ($role == 'user' && auth()->user()->level_id != 3) {
+        }elseif ($role == 'super-user' && auth()->user()->level_id != 3) {
+            abort(403);
+        }elseif ($role == 'user' && auth()->user()->level_id != 4) {
             abort(403);
         }
 

@@ -95,7 +95,7 @@
                                         <form action="{{ url('super-admin/pengguna/proses-ubah/'. $row->id) }}" method="post">
                                             @csrf
                                             <div class="form-group">
-                                                <label for="level">Level :</label>
+                                                <label>Level :</label>
                                                 <select name="id_level" class="form-control" required>
                                                     <option value="">-- Pilih Level --</option>
                                                     @foreach($level as $dataLevel)
@@ -106,7 +106,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="aplikasi">Unit Kerja :</label>
+                                                <label>Unit Kerja :</label>
                                                 <select name="id_unit_kerja" class="form-control" required>
                                                     <option value="">-- Pilih Unit Kerja --</option>
                                                     @foreach($unitKerja as $dataUnitKerja)
@@ -117,7 +117,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nama">Pegawai : </label>
+                                                <label>Pegawai : </label>
                                                 <select name="id_pegawai" class="form-control text-capitalize" required>
                                                     <option value="">-- Pilih Pegawai --</option>
                                                     @foreach($pegawai as $dataPegawai)
@@ -126,6 +126,23 @@
                                                     </option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Hak Akses :</label>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <input type="checkbox" name="is_oldat" value="{{ $row->is_oldat }}" <?php if ($row->is_oldat == 1) echo "checked"; ?>> Pengelola Olah Data (BMN)
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="checkbox" name="is_aadb" value="{{ $row->is_oldat }}" <?php if ($row->is_aadb == 1) echo "checked"; ?>> Pengelola AADB
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="checkbox" name="is_atk" value="{{ $row->is_oldat }}" <?php if ($row->is_atk == 1) echo "checked"; ?>> Pengelola ATK
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="checkbox" name="is_mtc" value="{{ $row->is_oldat }}" <?php if ($row->is_mtc == 1) echo "checked"; ?>> Pengelola Pemeliharaan
+                                                    </div>
+                                                </div>
                                             </div>
                                             <hr>
                                             <div class="form-group">
@@ -200,6 +217,23 @@
                             <option value="{{ $dataPegawai->id_pegawai }}">{{ $dataPegawai->nama_pegawai }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Hak Akses :</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_oldat" value="1"> Pengelola Olah Data (BMN)
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_aadb" value="1"> Pengelola AADB
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_atk" value="1"> Pengelola ATK
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_mtc" value="1"> Pengelola Pemeliharaan
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     <div class="form-group">

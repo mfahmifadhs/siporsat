@@ -72,9 +72,13 @@ class AuthController extends Controller
         }
         elseif (Auth::check() && Auth::user()->level_id == 2)
         {
-            return redirect('super-user/dashboard');
+            return redirect('admin-user/dashboard');
         }
         elseif (Auth::check() && Auth::user()->level_id == 3)
+        {
+            return redirect('super-user/dashboard');
+        }
+        elseif (Auth::check() && Auth::user()->level_id == 4)
         {
             return redirect('user/dashboard');
         }

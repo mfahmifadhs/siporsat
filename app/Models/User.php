@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\pegawai;
+use App\Models\Pegawai;
+use App\Models\UserAkses;
 
 class User extends Authenticatable
 {
@@ -26,5 +27,9 @@ class User extends Authenticatable
 
     public function pegawai() {
         return $this->belongsTo(Pegawai::class, 'pegawai_id');
+    }
+
+    public function akses() {
+        return $this->HasMany(UserAkses::class);
     }
 }

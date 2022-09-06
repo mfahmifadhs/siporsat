@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OldatController;
@@ -29,6 +30,7 @@ Route::get('daftar',  [AuthController::class, 'daftar'])->name('daftar-user');
 Route::get('keluar',        [AuthController::class, 'keluar'])->name('keluar');
 Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.post');
 Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.post');
+
 // ====================================================
 //                    SUPER ADMIN
 // ====================================================
@@ -63,5 +65,29 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     });
 
 
+});
+
+// ====================================================
+//                    ADMIN USER
+// ====================================================
+Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'as' => 'admin-user.'], function () {
+    Route::get('dashboard', [AdminUserController::class, 'index']);
+
+    Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
+
+    });
+});
+
+// ====================================================
+//                    SUPER USER
+// ====================================================
+Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'as' => 'super-user.'], function () {
+    Route::get('dashboard', [SuperUserController::class, 'index']);
+
+    Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
+        Route::get('dashboard', [SuperUserController::class, 'dashboardOldat']);
+
+        Route::get('grafik/{aksi}/{id}', [SuperUserController::class, 'showGrafic']);
+    });
 });
 
