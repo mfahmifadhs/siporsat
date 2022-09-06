@@ -74,6 +74,10 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     Route::get('dashboard', [AdminUserController::class, 'index']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
+        Route::get('dashboard', [AdminUserController::class, 'index']);
+        Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'showItem']);
+
+        Route::post('barang/{aksi}/{id}', [AdminUserController::class, 'showItem']);
 
     });
 });

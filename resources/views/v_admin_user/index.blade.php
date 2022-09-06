@@ -2,11 +2,18 @@
 
 @section('content')
 
+<?php
+$user    = Auth()->user();
+$pegawai = $user->pegawai;
+$akses   = $user->akses;
+?>
+
+@foreach($akses as $dataAkses)
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard</h1>
+                <h1 class="m-0">{{ $dataAkses->is_oldat }}</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -16,6 +23,7 @@
         </div>
     </div>
 </div>
+@endforeach
 
 <section class="content">
     <div class="container-fluid">

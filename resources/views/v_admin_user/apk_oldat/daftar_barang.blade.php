@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Barang</h1>
+                <h1 class="m-0">Daftar Barang</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="table-kategori-barang" class="table table-bordered">
+                <table id="table-barang" class="table table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -72,12 +72,15 @@
                             <td>{{ $row->spesifikasi_barang }}</td>
                             <td>{{ $row->jumlah_barang }}</td>
                             <td>{{ $row->satuan_barang }}</td>
-                            <td>{{ $row->pengguna }}</td>
+                            <td>{{ $row->nama_pegawai }}</td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ url('admin-user/oldat/barang/detail/'. $row->id_barang) }}">
+                                        <i class="fas fa-info-circle"></i> Detail
+                                    </a>
                                     <a class="dropdown-item" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit-{{ $row->id_barang }}" title="Edit Unit Kerja">
                                         <i class="fas fa-edit"></i> Ubah
                                     </a>
@@ -87,33 +90,6 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Modal Edit -->
-                        <div class="modal fade" id="modal-edit-{{ $row->id_barang }}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Ubah Informasi Kategori Barang</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ url('super-admin/oldat/kategori-barang/proses-ubah/'. $row->id_barang) }}" method="post">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="level">Kategori Barang :</label>
-                                                <input type="text" class="form-control" name="kategori_barang" value="{{ $row->kategori_barang }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary" onclick="return confirm('Tambah Kategori Barang ?')">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -185,7 +161,7 @@
 @section('js')
 <script>
     $(function() {
-        $("#table-kategori-barang").DataTable({
+        $("#table-barang").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
