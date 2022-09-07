@@ -146,7 +146,6 @@
                         </tr>`
                     )
                 }
-                $(".input-barang").empty();
             } else {
                 $(".input-barang").empty();
             }
