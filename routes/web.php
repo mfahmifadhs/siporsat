@@ -89,9 +89,13 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
     Route::get('dashboard', [SuperUserController::class, 'index']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
-        Route::get('dashboard', [SuperUserController::class, 'dashboardOldat']);
-
+        Route::get('dashboard', [SuperUserController::class, 'oldat']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'report']);
         Route::get('/grafik', [SuperUserController::class, 'searchChartData'])->name('searchChartData');
+        Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'recap']);
+        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
+
+        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
     });
 });
 
