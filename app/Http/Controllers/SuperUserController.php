@@ -47,13 +47,14 @@ class SuperUserController extends Controller
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_tim_kerja.unit_kerja_id')
             ->get();
 
-            foreach ($kategoriBarang as $dataKategoriBarang) {
-                foreach ($timKerja as $dataTimKerja) {
-                    $rekap[$dataKategoriBarang->kategori_barang][$dataTimKerja->tim_kerja] =
-                        $dataBarang->where('kategori_barang', $dataKategoriBarang->kategori_barang)->where('tim_kerja', $dataTimKerja->tim_kerja)->count();
+            foreach ($timKerja as $dataTimKerja) {
+                foreach ($kategoriBarang as $dataKategoriBarang) {
+                    $rekap[$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
                 }
             }
-            return view('v_super_user.apk_oldat.daftar_rekap', compact('rekap'));
+
+
+            return view('v_super_user.apk_oldat.daftar_rekap', compact('rekap','kategoriBarang'));
         } else {
 
         }

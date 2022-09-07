@@ -41,17 +41,21 @@
                     <div class="card-body">
                         <table class="table table-bordered">
                             <tr>
-                                @foreach($rekap as $kategori => $kategoriBarang)
-                                <th>{{ $kategori }}</th>
-                                <th class="text-center">Jumlah Barang</th>
-                                @foreach($kategoriBarang as $tiker => $total)
-                                <tr>
-                                    <td>{{ $tiker }}</td>
-                                    <td class="text-center">{{ $total }} </td>
-                                </tr>
-                                @endforeach
+                                <th></th>
+                                <th>Tim Kerja</th>
+                                @foreach($kategoriBarang as $dataKategoriBarang)
+                                <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                 @endforeach
                             </tr>
+                                <td rowspan="10">2012</td>
+                            @foreach($rekap as $tiker => $timKerja)
+                            <tr>
+                                <td>{{ $tiker }}</td>
+                                @foreach($timKerja as $kategori => $totalBarang)
+                                <td>{{ $totalBarang }}</td>
+                                @endforeach
+                            </tr>
+                            @endforeach
 
                         </table>
                     </div>
