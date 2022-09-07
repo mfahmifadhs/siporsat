@@ -91,7 +91,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [SuperUserController::class, 'dashboardOldat']);
 
-        Route::get('grafik/{aksi}/{id}', [SuperUserController::class, 'showGrafic']);
+        Route::get('/grafik', [SuperUserController::class, 'searchChartData'])->name('searchChartData');
     });
 });
 
