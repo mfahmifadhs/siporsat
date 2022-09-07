@@ -36,7 +36,7 @@
         </div>
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>E-</b>OFFICE</a>
+                <a href="#" class="h1"><b>SIPORSAT</b> </a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sistem Informasi Pengelolaan Operasional Perkantoran Terpusat</p>

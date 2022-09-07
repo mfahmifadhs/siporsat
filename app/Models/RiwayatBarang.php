@@ -19,4 +19,5 @@ class RiwayatBarang extends Model
         'kondisi_barang_id',
         'keperluan_penggunaan'
     ];
+
 }

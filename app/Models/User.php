@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Pegawai;
 use App\Models\UserAkses;
+use App\Models\UnitKerja;
 
 class User extends Authenticatable
 {
@@ -27,6 +28,14 @@ class User extends Authenticatable
 
     public function pegawai() {
         return $this->belongsTo(Pegawai::class, 'pegawai_id');
+    }
+
+    public function jabatan() {
+        return $this->belongsTo(Pegawai::class, 'jabatan_id');
+    }
+
+    public function unitKerja() {
+        return $this->HasMany(UnitKerja::class);
     }
 
     public function akses() {
