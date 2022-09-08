@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\Pegawai;
-use App\Models\RiwayatBarang;
+use App\Models\KondisiBarang;
 use App\Models\TimKerja;
 use App\Models\FormUsulan;
 use App\Models\UnitKerja;
@@ -62,6 +62,14 @@ class SuperUserController extends Controller
 
     public function report(Request $request, $aksi, $id)
     {
+        if ($aksi == 'daftar') {
+            $kategoriBarang = KategoriBarang::get();
+            $kondisiBarang  = KondisiBarang::get();
+            $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
+            ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+            ->get();
+            return view('v_super_user.apk_oldat.daftar_laporan', compact('kategoriBarang', 'kondisiBarang', 'barang'));
+        }
     }
 
     public function recap(Request $request, $aksi, $id)

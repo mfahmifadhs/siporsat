@@ -51,7 +51,7 @@
                                 <label>Nama Pengusul :</label>
                                 <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}">
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 mt-3 form-group">
                                 <label>Jabatan Pengusul :</label>
                                 <input type="text" class="form-control text-capitalize" value="{{ $pegawai->jabatan }}">
                             </div>

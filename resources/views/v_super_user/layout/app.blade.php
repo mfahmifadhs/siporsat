@@ -147,7 +147,7 @@
                         </li>
                         @endif
                         <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/daftar/seluruh-laporan') ? 'active' : '' }}">
+                            <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/pengajuan/seluruh-pengajuan') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>Daftar Pengajuan</p>
                             </a>
