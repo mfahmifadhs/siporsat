@@ -18,7 +18,7 @@
 </div>
 
 <section class="content">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 form-group">
                 <div class="card text-center">
@@ -83,7 +83,7 @@
       }]
     },
     options: {
-    
+
       legend: {
           position: "left",
           align: "center"
@@ -92,7 +92,7 @@
       responsive : true,
       title: {
         display: true,
-        text: 'Total Peminjaman Barang'
+        text: 'Total Pengadaan Barang'
       }
     }
 

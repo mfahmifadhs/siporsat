@@ -83,6 +83,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th style="width: 20%;">Jenis Barang</th>
                                             <th style="width: 25%;">Merk</th>
                                             <th style="width: 12%;">Jumlah</th>
@@ -90,8 +91,10 @@
                                             <th>Spesifikasi</th>
                                         </tr>
                                     </thead>
+                                    <?php $no = 1; ?>
                                     <tbody id="input-barang">
                                         <tr>
+                                            <td>{{ $no++ }}</td>
                                             <td>
                                                 <select name="kategori_barang_id[]" class="form-control">
                                                     <option value="">-- Pilih Jenis Barang --</option>
@@ -107,6 +110,13 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <h5 class="font-weight-bold mt-2 mb-4">Verifikasi Kode OTP</h5>
+                                <hr>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input type="text" class="form-control" placeholder="Masukan Kode OTP">
                             </div>
                             <div class="col-md-12 form-group">
                                 <button type="reset" class="btn btn-default">BATAL</button>
@@ -124,13 +134,15 @@
 <script>
     $(function() {
         $('#jumlahBarang').change(function() {
+            $(".input-barang").empty();
+            let no = 2;
             let i;
             let jumlah = ($(this).val()) - 1;
-
-            if (jumlah > 0) {
+            console.log(jumlah);
                 for (i = 1; i <= jumlah; i++) {
                     $("#input-barang").append(
                         `<tr class='input-barang'>
+                            <td>`+ no++ +`</td>
                             <td>
                                 <select name="kategori_barang_id[]" class="form-control">
                                     <option value="">-- Pilih Jenis Barang --</option>
@@ -146,9 +158,7 @@
                         </tr>`
                     )
                 }
-            } else {
-                $(".input-barang").empty();
-            }
+
         });
     });
 </script>
