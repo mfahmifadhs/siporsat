@@ -29,10 +29,11 @@
 
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
-<body class="hold-transition sidebar-mini layout-collapse">
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <?php $user = Auth()->user();
-    $pegawai = $user->pegawai;
-    $jabatan = $user->jabatan; ?>
+    $pegawai    = $user->pegawai;
+    $jabatan    = $pegawai->jabatan;
+    $timKerja   = $pegawai->timKerja; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -75,11 +76,13 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ Auth::user()->full_name }}</b>
+                        <b>{{ $pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            {{ $pegawai->nama_pegawai }} <br> {{ $pegawai->keterangan_pegawai }}
+                            <p class="text-capitalize">
+                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                            </p>
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
@@ -105,10 +108,6 @@
 
             <!-- Sidebar -->
             <div class="sidebar mt-3">
-                <p class="text-center text-white">
-                    {{ $pegawai->nama_pegawai }} <br> <i> {{ $pegawai->jabatan.' '.$pegawai->keterangan_pegawai }} </i>
-                </p>
-                <hr class="bg-white">
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
@@ -138,14 +137,6 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        @if($pegawai->jabatan_id == 4)
-                        <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Form Pengajuan</p>
-                            </a>
-                        </li>
-                        @endif
                         <li class="nav-item">
                             <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/pengajuan/seluruh-pengajuan') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-invoice"></i>

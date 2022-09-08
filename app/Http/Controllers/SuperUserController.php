@@ -62,8 +62,8 @@ class SuperUserController extends Controller
             ->join('tbl_pegawai','id_pegawai','pegawai_id')
             ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
             ->join('tbl_tim_kerja','id_tim_kerja','tim_kerja_id');
-        
-        $dataKategoriBarang = KategoriBarang::get();   
+
+        $dataKategoriBarang = KategoriBarang::get();
 
         if($request->hasAny(['tahun', 'unit_kerja','tim_kerja'])){
             if($request->tahun){
@@ -78,12 +78,12 @@ class SuperUserController extends Controller
 
             $dataSearchBarang = $dataSearchBarang->get();
 
-            
-    
+
+
         }else {
             $dataSearchBarang = $dataBarang->get();
         }
-        
+
         foreach($dataKategoriBarang as $data){
             $labelChart[] = $data->kategori_barang;
             $dataChart[] = $dataSearchBarang->where('kategori_barang',$data->kategori_barang)->count();
@@ -113,10 +113,12 @@ class SuperUserController extends Controller
         if ($aksi == 'daftar') {
             $kategoriBarang = KategoriBarang::get();
             $kondisiBarang  = KondisiBarang::get();
+            $pegawai        = Pegawai::get();
             $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
-            ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
-            ->get();
-            return view('v_super_user.apk_oldat.daftar_laporan', compact('kategoriBarang', 'kondisiBarang', 'barang'));
+                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->get();
+            return view('v_super_user.apk_oldat.daftar_laporan', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
         }
     }
 

@@ -77,10 +77,6 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            <?php
-                            $user    = Auth()->user();
-                            $pegawai = $user->pegawai;
-                            ?>
                             {{ $pegawai->nama_pegawai }} <br> {{ $pegawai->keterangan_pegawai }}
                         </span>
                         <div class="dropdown-divider"></div>
@@ -106,7 +102,7 @@
             </a>
 
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar mt-3">
                 <p class="text-center text-white">
                     {{ $pegawai->nama_pegawai }} <br> <i> {{ $pegawai->jabatan.' '.$pegawai->keterangan_pegawai }} </i>
                 </p>

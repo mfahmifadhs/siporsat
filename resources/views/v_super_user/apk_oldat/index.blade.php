@@ -24,12 +24,12 @@
                 <div class="card text-center">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col">
+                            <div class="colmd-3">
                                 <div class="card-tools m-r-1">
                                     <input type="number" class="form-control" name="tahun" placeholder="Tahun" >
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-md-4">
                                 <div class="card-tools m-r-1">
                                     <select id="" class="form-control" name="unit_kerja">
                                         <option value="">-- Pilih Unit Kerja --</option>
@@ -39,7 +39,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-md-4">
                                 <div class="card-tools m-r-1">
                                     <select id="" class="form-control" name="tim_kerja">
                                         <option value="">-- Pilih  Tim Kerja --</option>
@@ -49,9 +49,11 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-md-1">
                                 <div class="card-tools">
-                                    <button id="searchChartData" class="btn btn-primary"> Cari</button>
+                                    <button id="searchChartData" class="btn btn-primary form-control">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +92,7 @@
           }]
         },
         options: {
-        
+
           legend: {
               position: "left",
               align: "center"
@@ -102,7 +104,7 @@
             text: 'Total Pengadaan Barang'
           }
         }
-    
+
     });
 
     }
@@ -133,7 +135,7 @@ $('body').on('click','#searchChartData',function () {
                 $('#konten-chart').hide();
                 var html = '';
                         html +='<div class="notif-tidak-ditemukan">'
-                        html +='<div class="card bg-secondary py-2">'
+                        html +='<div class="card bg-secondary py-4">'
                         html +='<div class="card-body text-white">'
                         html +='<h5 class="mb-4 font-weight-bold text-center">'
                         html +='Data tidak dapat ditemukan'

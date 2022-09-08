@@ -2,6 +2,10 @@
 
 @section('content')
 
+<?php $user = Auth()->user();
+    $pegawai = $user->pegawai;
+    $jabatan = $user->jabatan; ?>
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -37,9 +41,11 @@
                     <a href="#  " class="btn btn-primary" title="Download File" onclick="return confirm('Download data tim kerja ?')">
                         <i class="fas fa-file-download"></i>
                     </a>
+                    @if($pegawai->jabatan_id == 4)
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Buat Pengajuan Usulan">
                         <i class="fas fa-plus-circle"></i>
                     </a>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

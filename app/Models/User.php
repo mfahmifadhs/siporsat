@@ -30,10 +30,6 @@ class User extends Authenticatable
         return $this->belongsTo(Pegawai::class, 'pegawai_id');
     }
 
-    public function jabatan() {
-        return $this->belongsTo(Pegawai::class, 'jabatan_id');
-    }
-
     public function unitKerja() {
         return $this->HasMany(UnitKerja::class);
     }

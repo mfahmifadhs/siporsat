@@ -27,4 +27,12 @@ class Pegawai extends Model
     public function users() {
         return $this->HasMany(User::class);
     }
+
+    public function jabatan() {
+        return $this->belongsTo(PegawaiJabatan::class, 'jabatan_id');
+    }
+
+    public function timKerja() {
+        return $this->belongsTo(TimKerja::class, 'tim_kerja_id');
+    }
 }
