@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\Pegawai;
-use App\Models\RiwayatBarang;
+use App\Models\KondisiBarang;
 use App\Models\TimKerja;
 use App\Models\FormUsulan;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 
-use DB;
+use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class SuperUserController extends Controller
 {
@@ -30,41 +31,22 @@ class SuperUserController extends Controller
         $timKerja = TimKerja::get();
         $unitKerja = UnitKerja::get();
         $chartData = $this->getChartData();
-        return view('v_super_user.apk_oldat.index',['chartData'=>$chartData,'unitKerja'=>$unitKerja, 'timKerja'=>$timKerja]);
+        return view('v_super_user.apk_oldat.index', ['chartData' => $chartData, 'unitKerja' => $unitKerja, 'timKerja' => $timKerja]);
     }
 
     public function getChartData()
     {
-        // $dataRiwayatBarang = RiwayatBarang::select('id_riwayat_barang','barang_id','kategori_barang','oldat_tbl_riwayat_barang.pegawai_id','unit_kerja')
-        //     ->join('oldat_tbl_barang','barang_id','id_barang')
-        //     ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
-        //     ->join('tbl_pegawai','id_pegawai','oldat_tbl_riwayat_barang.pegawai_id')
-        //     ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-        //     ->get();
-
-        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','unit_kerja','tim_kerja')
-            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id')
-            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-            ->join('tbl_tim_kerja','id_tim_kerja','tim_kerja_id')
+        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'pegawai_id', 'unit_kerja', 'tim_kerja')
+            ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
+            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->get();
-        
+
         $dataKategoriBarang = KategoriBarang::get();
-        // $timKerja = TimKerja::get();
-        // $unitKerja = UnitKerja::get();
-
-        // foreach($timKerja as $item){
-        //     foreach($dataKategoriBarang as $data){
-        //         $dataChart[$item->tim_kerja][$data->kategori_barang] = $dataBarang->where('tim_kerja',$item->tim_kerja)->where('kategori_barang',$data->kategori_barang)->count();
-        //     }
-        // }
-        // dd($dataChart);
-
-        // dd($dataBarang);
-
-        foreach($dataKategoriBarang as $data){
+        foreach ($dataKategoriBarang as $data) {
             $labelChart[] = $data->kategori_barang;
-            $dataChart[] = $dataBarang->where('kategori_barang',$data->kategori_barang)->count();
+            $dataChart[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
         }
         $resultChart['label'] = $labelChart;
         $resultChart['data'] = $dataChart;
@@ -128,7 +110,14 @@ class SuperUserController extends Controller
 
     public function report(Request $request, $aksi, $id)
     {
-
+        if ($aksi == 'daftar') {
+            $kategoriBarang = KategoriBarang::get();
+            $kondisiBarang  = KondisiBarang::get();
+            $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
+            ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+            ->get();
+            return view('v_super_user.apk_oldat.daftar_laporan', compact('kategoriBarang', 'kondisiBarang', 'barang'));
+        }
     }
 
     public function recap(Request $request, $aksi, $id)
@@ -137,45 +126,72 @@ class SuperUserController extends Controller
             $kategoriBarang     = KategoriBarang::get();
             $timKerja           = TimKerja::get();
             $dataBarang         = Barang::select('id_barang', 'kategori_barang', 'pegawai_id', 'tim_kerja', 'unit_kerja')
-            ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
-            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
-            ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_tim_kerja.unit_kerja_id')
-            ->get();
+                ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_tim_kerja.unit_kerja_id')
+                ->get();
+
+            $rekapTotalBarang   = Barang::select('kategori_barang', DB::raw('count(id_barang) as totalbarang'))
+                ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
+                ->groupBy('kategori_barang')
+                ->get();
 
             foreach ($timKerja as $dataTimKerja) {
                 foreach ($kategoriBarang as $dataKategoriBarang) {
-                    $rekap[$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
+                    $rekapTimKerja[$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
                 }
             }
 
-
-            return view('v_super_user.apk_oldat.daftar_rekap', compact('rekap','kategoriBarang'));
+            return view('v_super_user.apk_oldat.daftar_rekap', compact('rekapTotalBarang','rekapTimKerja', 'kategoriBarang'));
         } else {
-
         }
     }
 
     public function submission(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $formUsulan = FormUsulan::join('tbl_pegawai','id_pegawai','pegawai_id')->get();
+            $formUsulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->get();
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
-
-        }elseif($aksi == 'form-usulan') {
+        } elseif ($aksi == 'form-usulan') {
             $kategoriBarang = KategoriBarang::get();
-            $pegawai = Pegawai::join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+            $pegawai = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->first();
 
             if ($id == 'pengadaan') {
-                return view('v_super_user.apk_oldat.usulan_pengadaan', compact('kategoriBarang','pegawai'));
+                return view('v_super_user.apk_oldat.usulan_pengadaan', compact('kategoriBarang', 'pegawai'));
             } else {
                 return view('v_super_user.apk_oldat.usulan_perbaikan', compact('pegawai'));
             }
-        } elseif($aksi == 'proses-pengajuan' && $id == 'pengadaan') {
-            dd($request->all());
+        } elseif ($aksi == 'proses-pengajuan' && $id == 'pengadaan') {
+            $otp = rand(1000,9999);
+            $cekData = FormUsulan::count();
+            $formUsulan = new FormUsulan();
+            $formUsulan->id_form_usulan = $cekData + 1;
+            $formUsulan->pegawai_id = $request->input('pegawai_id');
+            $formUsulan->kode_form  = 'OLDAT_001';
+            $formUsulan->jenis_form = 'pengadaan';
+            $formUsulan->total_pengajuan   = $request->input('total_pengajuan');
+            $formUsulan->tanggal_usulan    = $request->input('tanggal_usulan' );
+            $formUsulan->rencana_pengguna  = $request->input('rencana_pengguna');
+            $formUsulan->status_proses     = 'belum proses';
+            $formUsulan->kode_otp          = $otp;
+            $formUsulan->save();
+            // $this->sendWhatsappNotification($otp, '+6285772652563');
+            return $formUsulan;
         }
+    }
+
+    private function sendWhatsappNotification(string $otp, string $recipient)
+    {
+        $twilio_whatsapp_number = getenv("TWILIO_WHATSAPP_NUMBER");
+        $account_sid            = getenv("TWILIO_ACCOUNT_SID");
+        $auth_token             = getenv("TWILIO_AUTH_TOKEN");
+
+        $client = new Client($account_sid, $auth_token);
+        $message = "Your registration pin code is $otp";
+        return $client->messages->create("whatsapp:$recipient", array('from' => "whatsapp:$twilio_whatsapp_number", 'body' => $message));
     }
 }

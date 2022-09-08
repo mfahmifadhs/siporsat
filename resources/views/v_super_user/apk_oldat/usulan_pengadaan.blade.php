@@ -42,15 +42,16 @@
                         <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="font-weight-bold">Informasi Pengusul</h5>
-                                <hr>
+                            <div class="col-md-12 form-group">
+                                <div class="card-header bg-primary pt-4 pb-4" style="border-radius: 5px;">
+                                    <h5 class="font-weight-bold card-title">Informasi Pengusul</h5>
+                                </div>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 mt-3 form-group">
                                 <label>Nama Pengusul :</label>
                                 <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}">
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 mt-3 form-group">
                                 <label>Jabatan Pengusul :</label>
                                 <input type="text" class="form-control text-capitalize" value="{{ $pegawai->jabatan }}">
                             </div>
@@ -66,23 +67,27 @@
                                 <label>Rencana Pengguna :</label>
                                 <textarea type="date" name="rencana_pengguna" class="form-control text-capitalize"></textarea>
                             </div>
-                            <div class="col-md-12 mt-4">
-                                <span style="float: left;">
-                                    <h5 class="font-weight-bold mt-2">Informasi Kebutuhan Barang</h5>
-                                </span>
-                                <span style="float: right;">
-                                    <h5 class="font-weight-bold">
-                                        <div class="form-group row">
-                                            <h6 class="col-md-5 mt-2">Jumlah Barang : </h6>
-                                            <input type="text" class="form-control col-md-7" id="jumlahBarang">
+                            <div class="col-md-12 mt-4 form-group">
+                                <div class="card-header bg-primary" style="border-radius: 5px;">
+                                    <h5 class="font-weight-bold card-title mt-4">Informasi Kebutuhan Barang</h5>
+                                    <div class="card-tools">
+                                        <label>Jumlah Barang :</label>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="total_pengajuan" id="jumlahBarang" value="1">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a id="btnJumlah" class="btn btn-default ">Pilih</a>
+                                            </div>
                                         </div>
-                                    </h5>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <table class="table">
+                            <div class="col-md-12 mt-4 form-group">
+                                <table class="table table-responsive table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th class="text-center">No</th>
                                             <th style="width: 20%;">Jenis Barang</th>
                                             <th style="width: 25%;">Merk</th>
                                             <th style="width: 12%;">Jumlah</th>
@@ -90,8 +95,10 @@
                                             <th>Spesifikasi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="input-barang">
+                                    <?php $no = 1; ?>
+                                    <tbody id="input-barang" class="bg-grey">
                                         <tr>
+                                            <td class="text-center">{{ $no++ }}</td>
                                             <td>
                                                 <select name="kategori_barang_id[]" class="form-control">
                                                     <option value="">-- Pilih Jenis Barang --</option>
@@ -108,6 +115,14 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="col-md-12 mt-4 form-group">
+                                <div class="card-header bg-primary pt-4 pb-4" style="border-radius: 5px;">
+                                    <h5 class="font-weight-bold card-title">Verifikasi Kode OTP</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input type="text" class="form-control" placeholder="Masukan Kode OTP">
+                            </div>
                             <div class="col-md-12 form-group">
                                 <button type="reset" class="btn btn-default">BATAL</button>
                                 <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
@@ -123,14 +138,15 @@
 @section('js')
 <script>
     $(function() {
-        $('#jumlahBarang').change(function() {
+        $('#btnJumlah').click(function() {
+            $(".input-barang").empty();
+            let no = 2;
             let i;
-            let jumlah = ($(this).val()) - 1;
-
-            if (jumlah > 0) {
-                for (i = 1; i <= jumlah; i++) {
-                    $("#input-barang").append(
-                        `<tr class='input-barang'>
+            let jumlah = ($('#jumlahBarang').val()) - 1;
+            for (i = 1; i <= jumlah; i++) {
+                $("#input-barang").append(
+                    `<tr class='input-barang'>
+                            <td class="text-center">` + no++ + `</td>
                             <td>
                                 <select name="kategori_barang_id[]" class="form-control">
                                     <option value="">-- Pilih Jenis Barang --</option>
@@ -144,11 +160,9 @@
                             <td><input type="text" class="form-control" name="satuan_barang[]" placeholder="Satuan"></td>
                             <td><textarea class="form-control" name="spesifikasi_barang[]" placeholder="Contoh: Lenovo, RAM 8 GB" rows="3"></textarea></td>
                         </tr>`
-                    )
-                }
-            } else {
-                $(".input-barang").empty();
+                )
             }
+
         });
     });
 </script>
