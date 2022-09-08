@@ -73,8 +73,57 @@ class SuperUserController extends Controller
         // dd($chart);
         return $chart;
     }
+
     public function searchChartData(Request $request){
-        return $request->all();
+        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','id_unit_kerja','unit_kerja','id_tim_kerja','tim_kerja','tahun_perolehan')
+            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            ->join('tbl_tim_kerja','id_tim_kerja','tim_kerja_id');
+        
+        $dataKategoriBarang = KategoriBarang::get();   
+
+        if($request->hasAny(['tahun', 'unit_kerja','tim_kerja'])){
+            if($request->tahun){
+                $dataSearchBarang = $dataBarang->where('tahun_perolehan',$request->tahun);
+            }
+            if($request->unit_kerja){
+                $dataSearchBarang = $dataBarang->where('id_unit_kerja',$request->unit_kerja);
+            }
+            if($request->tim_kerja){
+                $dataSearchBarang = $dataBarang->where('id_tim_kerja',$request->tim_kerja);
+            }
+
+            $dataSearchBarang = $dataSearchBarang->get();
+
+            
+    
+        }else {
+            $dataSearchBarang = $dataBarang->get();
+        }
+        
+        foreach($dataKategoriBarang as $data){
+            $labelChart[] = $data->kategori_barang;
+            $dataChart[] = $dataSearchBarang->where('kategori_barang',$data->kategori_barang)->count();
+        }
+        $resultChart['label'] = $labelChart;
+        $resultChart['data'] = $dataChart;
+        $chart = json_encode($resultChart);
+
+        if(count($dataSearchBarang)>0){
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'success',
+                'data' => $chart
+            ], 200);
+        }else {
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'not found'
+            ], 200);
+        }
     }
 
     public function report(Request $request, $aksi, $id)
