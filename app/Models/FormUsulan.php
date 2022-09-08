@@ -20,7 +20,10 @@ class FormUsulan extends Model
         'total_pengajuan',
         'tanggal_usulan',
         'jenis_form',
-        'rencana_pengguna'
+        'rencana_pengguna',
+        'status_pengajuan',
+        'status_proses',
+        'kode_otp'
 
     ];
 }
