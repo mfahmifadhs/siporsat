@@ -53,6 +53,7 @@
                             <th>Tahun Perolehan</th>
                             <th>Kondisi</th>
                             <th>Pengguna</th>
+                            <th>Tim Kerja</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -69,6 +70,7 @@
                             <td>{{ $row->tahun_perolehan }}</td>
                             <td>{{ $row->kondisi_barang }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
+                            <td>{{ $row->tim_kerja }}</td>
                         </tr>
                         @endforeach
                     </tbody>

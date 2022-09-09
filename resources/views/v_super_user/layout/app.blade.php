@@ -81,7 +81,11 @@
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
                             <p class="text-capitalize">
-                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                                @if($pegawai->jabatan_id == '1' || $pegawai->jabatan_id == '2')
+                                    {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} {{ $pegawai->keterangan_pegawai }}
+                                @else
+                                    {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                                @endif
                             </p>
                         </span>
                         <div class="dropdown-divider"></div>
