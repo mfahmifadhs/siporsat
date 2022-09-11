@@ -1,4 +1,4 @@
-@extends('v_admin_user.layout.app')
+@extends('v_super_admin.layout.app')
 
 @section('content')
 
@@ -10,8 +10,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('admin-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/oldat/barang/data/semua') }}">Daftar Barang</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-admin/oldat/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-admin/oldat/barang/data/semua') }}">Daftar Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -53,36 +53,18 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link active" href="#informasi-barang" data-toggle="tab">Informasi Barang</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#riwayat-barang" data-toggle="tab">Riwayat</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#riwayat-barang" data-toggle="tab">Riwayat Penggunaan</a></li>
                         </ul>
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="informasi-barang">
-                                <form action="{{ url('admin-user/oldat/barang/proses-ubah/'. $barang->id_barang) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ url('super-admin/oldat/barang/proses-ubah/'. $barang->id_barang) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <label>Upload Foto Barang</label>
-                                            <p>
-                                                @if($barang->foto_barang == null)
-                                                <img id="preview-image-before-upload" src="{{ asset('dist_admin/img/1224838.png') }}" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
-                                                @else
-                                                <img id="preview-image-before-upload" src="{{ asset('gambar/barang_bmn/'. $barang->foto_barang) }}" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
-                                                @endif
-                                            </p>
-                                            <p>
-                                            <div class="btn btn-default btn-file">
-                                                <i class="fas fa-paperclip"></i> Upload Foto
-                                                <input type="hidden" class="form-control image" name="foto_lama" value="{{ $barang->foto_barang }}">
-                                                <input type="file" class="form-control image" name="foto_barang" accept="image/jpeg , image/jpg, image/png" value="{{ $barang->foto_barang }}">
-                                            </div><br>
-                                            <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
-                                            </p>
-                                        </div>
                                         <div class="col-md-6 form-group">
                                             <label>Pengguna Barang :</label>
-                                            <select name="id_pegawai" class="form-control">
+                                            <select name="id_pegawai" class="form-control" disabled>
                                                 <option value="">-- Pilih Pegawai --</option>
                                                 @foreach($pegawai as $dataPegawai)
                                                 <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($barang->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
@@ -93,7 +75,7 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kategori Barang :</label>
-                                            <select name="id_kategori_barang" class="form-control">
+                                            <select name="id_kategori_barang" class="form-control" disabled>
                                                 <option value="">-- Pilih Level --</option>
                                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                                 <option value="{{ $dataKategoriBarang->id_kategori_barang }}" <?php if ($barang->kategori_barang_id == $dataKategoriBarang->id_kategori_barang) echo "selected"; ?>>
@@ -104,27 +86,27 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kode Barang : </label>
-                                            <input type="text" name="kode_barang" class="form-control" value="{{ $barang->kode_barang }}">
+                                            <input type="text" name="kode_barang" class="form-control" value="{{ $barang->kode_barang }}" disabled>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>NUP : </label>
-                                            <input type="text" name="nup_barang" class="form-control" value="{{ $barang->nup_barang }}">
+                                            <input type="text" name="nup_barang" class="form-control" value="{{ $barang->nup_barang }}" disabled>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Jumlah : </label>
-                                            <input type="text" name="jumlah_barang" class="form-control" value="{{ $barang->jumlah_barang }}">
+                                            <input type="text" name="jumlah_barang" class="form-control" value="{{ $barang->jumlah_barang }}" disabled>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Satuan : </label>
-                                            <input type="text" name="satuan_barang" class="form-control" value="{{ $barang->satuan_barang }}">
+                                            <input type="text" name="satuan_barang" class="form-control" value="{{ $barang->satuan_barang }}" disabled>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Tahun Perolehan : </label>
-                                            <input type="text" name="tahun_perolehan" class="form-control" value="{{ $barang->tahun_perolehan }}">
+                                            <input type="text" name="tahun_perolehan" class="form-control" value="{{ $barang->tahun_perolehan }}" disabled>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label for="level">Kondisi Barang :</label>
-                                            <select name="id_kondisi_barang" class="form-control">
+                                            <select name="id_kondisi_barang" class="form-control" disabled>
                                                 <option value="">-- Pilih Kondisi Barang --</option>
                                                 @foreach($kondisiBarang as $dataKondisiBarang)
                                                 <option value="{{ $dataKondisiBarang->id_kondisi_barang }}" <?php if ($barang->kondisi_barang_id == $dataKondisiBarang->id_kondisi_barang) echo "selected"; ?>>
@@ -135,11 +117,7 @@
                                         </div>
                                         <div class="col-md-12 form-group">
                                             <label>Spesifikasi : </label>
-                                            <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5">{{ $barang->spesifikasi_barang}}</textarea>
-                                        </div>
-                                        <div class="col-md-12 form-group">
-                                            <button type="button" class="btn btn-default">Close</button>
-                                            <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah Informasi Barang ?')">Submit</button>
+                                            <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5" disabled>{{ $barang->spesifikasi_barang}}</textarea>
                                         </div>
                                     </div>
                                 </form>

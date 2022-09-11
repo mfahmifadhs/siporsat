@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OldatController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\UserController;
@@ -42,7 +41,6 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     Route::get('tim-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkteam']);
     Route::get('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
     Route::get('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
-
     Route::post('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
     Route::post('pegawai/{aksi}/{id}', [SuperAdminController::class, 'showEmployees']);
     Route::post('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
@@ -51,12 +49,14 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     Route::post('level/{aksi}/{id}', [SuperAdminController::class, 'showLevel']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
-        Route::get('dashboard', [OldatController::class, 'index']);
-        Route::get('barang/{aksi}/{id}', [OldatController::class, 'showItem']);
-        Route::get('kategori-barang/{aksi}/{id}', [OldatController::class, 'showCategoryItem']);
+        Route::get('dashboard', [SuperAdminController::class, 'index']);
+        Route::get('barang/{aksi}/{id}', [SuperAdminController::class, 'showItem']);
+        Route::get('kategori-barang/{aksi}/{id}', [SuperAdminController::class, 'showCategoryItem']);
+        Route::get('pengajuan/{aksi}/{id}', [SuperAdminController::class, 'submission']);
 
-        Route::post('barang/{aksi}/{id}', [OldatController::class, 'showItem']);
-        Route::post('kategori-barang/{aksi}/{id}', [OldatController::class, 'showCategoryItem']);
+        Route::post('pengajuan/{aksi}/{id}', [SuperAdminController::class, 'submission']);
+        Route::post('barang/{aksi}/{id}', [SuperAdminController::class, 'showItem']);
+        Route::post('kategori-barang/{aksi}/{id}', [SuperAdminController::class, 'showCategoryItem']);
 
     });
 
@@ -96,6 +96,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
 
         Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
+
+        Route::get('get-barang/{id}', [SuperUserController::class, 'getDataBarang']);
     });
 });
 

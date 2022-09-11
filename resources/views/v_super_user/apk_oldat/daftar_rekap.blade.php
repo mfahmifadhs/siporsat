@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <table class="table table-bordered" id="table-rekap">
                             <tr>
-                                <th>Nama Barang</th>
+                                <th style="width: 50%;">Nama Barang</th>
                                 <th>Jumlah Barang</th>
                             </tr>
                             @foreach($rekapTotalBarang as $dataTotalBarang)
@@ -69,12 +69,12 @@
         console.log(data);
         if (data == 1) {
             $("#table-rekap").append(
-                `<table class="table table-bordered">
+                `<table class="table table-bordered table-responsive">
                     @foreach($tahunPerolehan as $dataTahun)
                         <thead>
                             <tr class="bg-light">
-                                <th>Tahun</th>
-                                <th>Tim Kerja</th>
+                                <th style="width:10%;">Tahun</th>
+                                <th style="width:40%;">Tim Kerja</th>
                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                 <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                 @endforeach
@@ -101,9 +101,9 @@
             );
         } else if (data == 2) {
             $("#table-rekap").append(
-                `<table class="table table-bordered">
+                `<table class="table table-bordered table-responsive">
                             <tr>
-                                <th>Tim Kerja</th>
+                                <th style="width:40%;">Tim Kerja</th>
                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                 <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                 @endforeach
@@ -120,9 +120,9 @@
             );
         } else if (data == 3) {
             $("#table-rekap").append(
-                `<table class="table table-bordered">
+                `<table class="table table-bordered table-responsive">
                             <tr>
-                                <th>Unit Kerja</th>
+                                <th style="width:80%;">Unit Kerja</th>
                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                 <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                 @endforeach

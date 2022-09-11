@@ -1,4 +1,4 @@
-@extends('v_super_user.layout.app')
+@extends('v_super_admin.layout.app')
 
 @section('content')
 
@@ -70,7 +70,13 @@ $jabatan = $user->jabatan; ?>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
                             <td>{{ $row->kode_form }}</td>
-                            <td>{{ $row->jenis_form }}</td>
+                            <td>
+                                @if($row->jenis_form == 'pengadaan')
+                                    <span class="badge badge-success py-1">pengadaan</span>
+                                @else
+                                    <span class="badge badge-warning py-1">perbaikan</span>
+                                @endif
+                            </td>
                             <td>{{ $row->total_pengajuan }} barang</td>
                             <td>{{ $row->rencana_pengguna }}</td>
                             <td>{{ \Carbon\Carbon::parse($row->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
@@ -89,8 +95,12 @@ $jabatan = $user->jabatan; ?>
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $row->kode_otp }}" title="Edit Informasi Pegawai">
+                                    <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $row->kode_otp }}" title="Detail Pengajuan">
                                         <i class="fas fa-edit"></i> Detail
+                                    </a>
+                                    <a class="dropdown-item btn" type="button" href="{{ url('super-admin/oldat/pengajuan/hapus/'. $row->id_form_usulan) }}"
+                                    onclick="return confirm('Hapus pengajuan ini ?')">
+                                        <i class="fas fa-trash"></i> Hapus
                                     </a>
                                 </div>
                             </td>

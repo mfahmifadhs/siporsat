@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FormUsulanPengadaan;
+use App\Models\FormUsulanPerbaikan;
 
 class FormUsulan extends Model
 {
     use HasFactory;
     protected $table        = "oldat_tbl_form_usulan";
-    protected $primaryKey   = "id_form_usulan";
     public $timestamps      = false;
 
     protected $fillable = [
@@ -24,6 +25,13 @@ class FormUsulan extends Model
         'status_pengajuan',
         'status_proses',
         'kode_otp'
-
     ];
+
+    public function detailPengadaan() {
+        return $this->hasMany(FormUsulanPengadaan::class, 'form_usulan_id');
+    }
+
+    public function detailPerbaikan() {
+        return $this->hasMany(FormUsulanPerbaikan::class, 'form_usulan_id')->join('oldat_tbl_barang','id_barang','barang_id');
+    }
 }

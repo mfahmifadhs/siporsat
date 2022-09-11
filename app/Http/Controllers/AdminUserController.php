@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
+use App\Exports\BarangExport;
+
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\KondisiBarang;
@@ -30,6 +34,7 @@ class AdminUserController extends Controller
             $pegawai        = Pegawai::get();
             $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
             ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
             ->get();
             return view('v_admin_user.apk_oldat.daftar_barang', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
@@ -105,6 +110,8 @@ class AdminUserController extends Controller
             $riwayat->save();
 
             return redirect('admin-user/oldat/barang/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Barang');
+        }elseif ($aksi == 'download') {
+            return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
         } else {
             $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);
             $kategoriBarang->delete();
