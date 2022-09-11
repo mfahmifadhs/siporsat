@@ -30,7 +30,12 @@
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <?php $user = Auth()->user(); $pegawai = $user->pegawai; $jabatan = $user->jabatan; ?>
+    <?php
+        $user       = Auth()->user();
+        $pegawai    = $user->pegawai;
+        $jabatan    = $pegawai->jabatan;
+        $timKerja   = $pegawai->timKerja;
+    ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -73,15 +78,15 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ Auth::user()->full_name }}</b>
+                        <b>{{ $pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            <?php
-                            $user    = Auth()->user();
-                            $pegawai = $user->pegawai;
-                            ?>
-                            {{ $pegawai->nama_pegawai }} <br> {{ $pegawai->keterangan_pegawai }}
+                            @if($pegawai->jabatan_id == '4' || $pegawai->jabatan_id == '6' && $pegawai->tim_kerja_id != null)
+                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                            @else
+                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} {{ $pegawai->keterangan_pegawai }}
+                            @endif
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
@@ -106,12 +111,7 @@
             </a>
 
             <!-- Sidebar -->
-            <div class="sidebar">
-                <p class="text-center text-white">
-                    {{ $pegawai->nama_pegawai }} <br> <i> {{ $pegawai->jabatan.' '.$pegawai->keterangan_pegawai }} </i>
-                </p>
-                <hr class="bg-white">
-
+            <div class="sidebar mt-3">
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
@@ -134,7 +134,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-user/pegawai/data/semua') }}" class="nav-link {{ Request::is('admin-user/pegawai/data/semua') ? 'active' : '' }}">
+                            <a href="#" class="nav-link {{ Request::is('admin-user/pegawai/data/semua') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Daftar Pegawai</p>
                             </a>

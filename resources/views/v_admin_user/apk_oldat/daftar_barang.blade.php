@@ -38,7 +38,7 @@
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload" title="Upload Data Barang">
                         <i class="fas fa-file-upload"></i>
                     </a>
-                    <a href="{{ url('super-admin/tim-kerja/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data Kategori Barang ?')">
+                    <a href="{{ url('admin-user/oldat/barang/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data pengadaan ?')">
                         <i class="fas fa-file-download"></i>
                     </a>
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Barang">
@@ -58,6 +58,7 @@
                             <th>Jumlah</th>
                             <th>Satuan</th>
                             <th>Pengguna</th>
+                            <th>Unit Kerja</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -73,6 +74,7 @@
                             <td>{{ $row->jumlah_barang }}</td>
                             <td>{{ $row->satuan_barang }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
+                            <td>{{ $row->unit_kerja }}</td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
@@ -80,9 +82,6 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ url('admin-user/oldat/barang/detail/'. $row->id_barang) }}">
                                         <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                    <a class="dropdown-item" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit-{{ $row->id_barang }}" title="Edit Unit Kerja">
-                                        <i class="fas fa-edit"></i> Ubah
                                     </a>
                                     <a class="dropdown-item" href="{{ url('super-admin/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
                                         <i class="fas fa-trash"></i> Hapus

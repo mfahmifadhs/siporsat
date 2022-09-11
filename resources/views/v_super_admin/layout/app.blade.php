@@ -78,15 +78,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ Auth::user()->full_name }}</b>
+                        <b>{{ $pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            <?php
-                            $user    = Auth()->user();
-                            $pegawai = $user->pegawai;
-                            ?>
-                            {{ $pegawai->nama_pegawai }} <br> {{ $pegawai->keterangan_pegawai }}
+                            {{ $pegawai->nama_pegawai }} <br> Super Admin
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
@@ -204,10 +200,10 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('super-admin/oldat/pengajuan/data/seluruh-pengajuan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-file"></i>
                                         <p>
-                                            Master Pengadaan
+                                            Master Pengajuan
                                         </p>
                                     </a>
                                 </li>

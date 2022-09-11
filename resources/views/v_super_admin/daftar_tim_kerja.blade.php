@@ -78,7 +78,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Modal Tambah -->
+                        <!-- Modal Edit -->
                         <div class="modal fade" id="modal-edit-{{ $row->id_tim_kerja }}">
                             <div class="modal-dialog">
                                 <div class="modal-content">

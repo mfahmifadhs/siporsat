@@ -1,4 +1,4 @@
-@extends('v_admin_user.layout.app')
+@extends('v_super_admin.layout.app')
 
 @section('content')
 
@@ -35,14 +35,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-tools">
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload" title="Upload Data Barang">
-                        <i class="fas fa-file-upload"></i>
-                    </a>
-                    <a href="{{ url('super-admin/tim-kerja/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data Kategori Barang ?')">
+                    <a href="{{ url('super-admin/oldat/barang/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data Barang ?')">
                         <i class="fas fa-file-download"></i>
-                    </a>
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Barang">
-                        <i class="fas fa-plus-circle"></i>
                     </a>
                 </div>
             </div>
@@ -58,6 +52,7 @@
                             <th>Jumlah</th>
                             <th>Satuan</th>
                             <th>Pengguna</th>
+                            <th>Unit Kerja</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -72,14 +67,15 @@
                             <td>{{ $row->spesifikasi_barang }}</td>
                             <td>{{ $row->jumlah_barang }}</td>
                             <td>{{ $row->satuan_barang }}</td>
-                            <td>{{ $row->pengguna }}</td>
+                            <td>{{ $row->nama_pegawai }}</td>
+                            <td>{{ $row->unit_kerja }}</td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit-{{ $row->id_barang }}" title="Edit Unit Kerja">
-                                        <i class="fas fa-edit"></i> Ubah
+                                    <a class="dropdown-item" href="{{ url('super-admin/oldat/barang/detail/'. $row->id_barang) }}">
+                                        <i class="fas fa-info-circle"></i> Detail
                                     </a>
                                     <a class="dropdown-item" href="{{ url('super-admin/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
                                         <i class="fas fa-trash"></i> Hapus
@@ -87,33 +83,6 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Modal Edit -->
-                        <div class="modal fade" id="modal-edit-{{ $row->id_barang }}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Ubah Informasi Kategori Barang</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ url('super-admin/oldat/kategori-barang/proses-ubah/'. $row->id_barang) }}" method="post">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="level">Kategori Barang :</label>
-                                                <input type="text" class="form-control" name="kategori_barang" value="{{ $row->kategori_barang }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary" onclick="return confirm('Tambah Kategori Barang ?')">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -122,66 +91,6 @@
     </div>
 </section>
 
-<!-- Modal Tambah -->
-<div class="modal fade" id="modal-add">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Tambah Kategori Barang</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ url('super-admin/oldat/kategori-barang/proses-tambah/data') }}" method="post">
-                    @csrf
-                    <div class="form-group">
-                        <label for="level">Kategori Barang :</label>
-                        <input type="text" class="form-control" name="kategori_barang" placeholder="Tambah Kategori Barang" required>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="return confirm('Tambah Kategori Barang ?')">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal Upload -->
-<div class="modal fade" id="modal-upload">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Upload Data Barang</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ url('super-admin/oldat/barang/upload/data') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label>Upload Data Barang</label>
-                        <input type="file" name="upload" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                        <p class="mt-2">
-                            <small>Download format excel <a href="{{ asset('format/format_data_barang.xlsx') }}" download>disini</a></small> <br>
-                            <small>Format file harus (.xlsx)</small>
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="return confirm('Upload Data ?')">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
 @section('js')
 <script>
     $(function() {
@@ -189,9 +98,8 @@
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "print"],
             "lengthMenu": [[10, 25, 50, "Semua", -1], [10, 25, 50, "Semua"]]
-        }).buttons().container().appendTo('#table-kategori-barang_wrapper .col-md-6:eq(0)');
+        });
     });
 </script>
 @endsection
