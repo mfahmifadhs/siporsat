@@ -38,8 +38,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ url('super-user/oldat/pengajuan/proses-pengajuan/'. $id ) }}" method="POST">
+                    <form class="form-pengajuan" action="{{ url('super-user/oldat/pengajuan/proses-pengajuan/'. $id ) }}" method="POST">
                         <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
+                        <span id="kode_otp"></span>
                         @csrf
                         <div class="row">
                             <div class="col-md-12 form-group">
@@ -317,8 +318,9 @@
 
         let resOTP = ''
         $(document).on('click', '#btnKirimOTP', function() {
+            let jenisForm = "{{ $id }}"
             jQuery.ajax({
-                url: '/super-user/oldat/sendOTP',
+                url: '/super-user/oldat/sendOTP?jenisForm=' + jenisForm,
                 type: "GET",
                 success: function(res) {
                     // console.log(res)
@@ -329,6 +331,7 @@
         $(document).on('click','#btnCheckOTP',function(){
             let inputOTP = $('#inputOTP').val()
             if(inputOTP == resOTP){
+                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
                 alert('Kode OTP Benar')
                 $('#btnSubmit').prop('disabled', false)
             }else{

@@ -134,18 +134,17 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'detail') {
             dd('detail');
         } elseif ($aksi == 'proses-pengajuan' && $id == 'pengadaan') {
-            $otp = rand(1000,9999);
             $cekData = FormUsulan::count();
             $formUsulan = new FormUsulan();
-            $formUsulan->id_form_usulan = 'pengadaan_'.($cekData+1);
-            $formUsulan->pegawai_id = $request->input('pegawai_id');
-            $formUsulan->kode_form  = 'OLDAT_001';
-            $formUsulan->jenis_form = 'pengadaan';
+            $formUsulan->id_form_usulan    = 'pengadaan_'.($cekData+1);
+            $formUsulan->pegawai_id        = $request->input('pegawai_id');
+            $formUsulan->kode_form         = 'OLDAT_001';
+            $formUsulan->jenis_form        = 'pengadaan';
             $formUsulan->total_pengajuan   = $request->input('total_pengajuan');
             $formUsulan->tanggal_usulan    = $request->input('tanggal_usulan' );
             $formUsulan->rencana_pengguna  = $request->input('rencana_pengguna');
             $formUsulan->status_proses     = 'belum proses';
-            $formUsulan->kode_otp          = $otp;
+            $formUsulan->kode_otp          = $request->kode_otp;
             $formUsulan->save();
 
             $barang = $request->kategori_barang_id;
@@ -293,15 +292,24 @@ class SuperUserController extends Controller
 
     }
 
-    public function sentOTP(Request $request) {
+    public function sendOTPWhatsapp(Request $request){
+        $user           = Auth::user();
+        $pegawai        = $user->pegawai;
+        $version        = getenv("WHATSAPP_API_VERSION");
+        $token          = getenv("WHATSAPP_API_token");
+        $phoneNumberId  = getenv("WHATSAPP_API_PHONE_NUMBER_ID");
+        $penerima       = '6285772652563';
+        $otp            = rand(1000,9999);
 
-    }
-    public function sendOTPWhatsapp(){
-        $version = getenv("WHATSAPP_API_VERSION");
-        $token = getenv("WHATSAPP_API_token");
-        $phoneNumberId = getenv("WHATSAPP_API_PHONE_NUMBER_ID");
-        $penerima = '6285772652563';
-        $otp = rand(1000,9999);
+        // if($request->jenisForm == 'pengadaan') {
+        //     $formUsulan = new FormUsulan();
+        //     $formUsulan->id_form_usulan = 'pengadaan_'.(rand(100,999));
+        //     $formUsulan->pegawai_id     = Auth::user()->pegawai_id;
+        //     $formUsulan->kode_form      = 'OLDAT_001';
+        //     $formUsulan->jenis_form     = 'pengadaan';
+        //     $formUsulan->kode_otp       = $otp;
+        //     $formUsulan->save();
+        // }
 
         $client = new GuzzleHttpClient();
         $headers = [
@@ -314,7 +322,7 @@ class SuperUserController extends Controller
         "to": '.$penerima.',
         "type": "template",
         "template": {
-            "name": "tes_otp",
+            "name": "siporsat_otp",
             "language": {
             "code": "id"
             },
@@ -322,10 +330,18 @@ class SuperUserController extends Controller
             {
                 "type": "body",
                 "parameters": [
-                {
-                    "type": "text",
-                    "text": '.$otp.'
-                }
+                    {
+                        "type": "text",
+                        "text": '.$otp.'
+                    },
+                    {
+                        "type": "text",
+                        "text": "'.$pegawai->nama_pegawai.'"
+                    },
+                    {
+                        "type": "text",
+                        "text": "'.$request->jenisForm.'"
+                    }
                 ]
             }
             ]
@@ -335,9 +351,12 @@ class SuperUserController extends Controller
         $request = new Psr7Request('POST', 'https://graph.facebook.com/'.$version.'/'.$phoneNumberId.'/messages', $headers, $body);
         $res = $client->sendAsync($request)->wait();
         return $otp;
-
         // return $res->getBody();
-
         //   return view('v_super_user.apk_oldat.tes');
+    }
+
+    public function getForm(Request $request) {
+        $result = FormUsulan::where('id_form_usulan', $request->kode_otp)->first();
+        return $result;
     }
 }
