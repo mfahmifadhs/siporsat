@@ -98,4 +98,6 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
     });
 });
+Route::get('/tesOTP', [SuperUserController::class, 'sendOTPWhatsapp']);
+
 

@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Psr7\Request as Psr7Request;
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Support\Facades\Http;
 
 class SuperUserController extends Controller
 {
@@ -193,5 +197,49 @@ class SuperUserController extends Controller
         $client = new Client($account_sid, $auth_token);
         $message = "Your registration pin code is $otp";
         return $client->messages->create("whatsapp:$recipient", array('from' => "whatsapp:$twilio_whatsapp_number", 'body' => $message));
+    }
+    public function sendOTPWhatsapp(){
+        $version = getenv("WHATSAPP_API_VERSION");
+        $token = getenv("WHATSAPP_API_token");
+        $phoneNumberId = getenv("WHATSAPP_API_PHONE_NUMBER_ID");
+        $penerima = '6285772652563';
+        $otp = rand(1000,9999);
+
+        $client = new GuzzleHttpClient();
+        $headers = [
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer '.$token
+        ];
+
+        $body = '{
+        "messaging_product": "whatsapp",
+        "to": '.$penerima.',
+        "type": "template",
+        "template": {
+            "name": "tes_otp",
+            "language": {
+            "code": "id"
+            },
+            "components": [
+            {
+                "type": "body",
+                "parameters": [
+                {
+                    "type": "text",
+                    "text": '.$otp.'
+                }
+                ]
+            }
+            ]
+        }
+        }';
+
+        $request = new Psr7Request('POST', 'https://graph.facebook.com/'.$version.'/'.$phoneNumberId.'/messages', $headers, $body);
+        $res = $client->sendAsync($request)->wait();
+
+        return $otp;
+        // return $res->getBody();
+
+        //   return view('v_super_user.apk_oldat.tes');
     }
 }
