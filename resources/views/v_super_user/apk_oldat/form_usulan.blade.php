@@ -166,10 +166,11 @@
                             <div class="col-md-12 form-group">
                                 <input type="text" class="form-control col-md-2" id="inputOTP" placeholder="Masukan Kode OTP">
                                 <a class="btn btn-primary" id="btnKirimOTP">Kirim Kode OTP</a>
+                                <a class="btn btn-primary" id="btnCheckOTP">Check Kode OTP</a>
                             </div>
                             <div class="col-md-12 form-group">
                                 <button type="reset" class="btn btn-default">BATAL</button>
-                                <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')" disabled>SUBMIT</button>
                             </div>
                         </div>
                     </form>
@@ -314,43 +315,27 @@
             }
         });
 
-        $(document).on('click', 'btnKirimOTP', function() {
-            let kodeOTP  = rand(1000,9999);
-            let inputOTP = $('#inputOTP').val();
-            let sendOTP  =
-
+        let resOTP = ''
+        $(document).on('click', '#btnKirimOTP', function() {
             jQuery.ajax({
-                url: url,
+                url: '/super-user/oldat/sendOTP',
                 type: "GET",
-            success: function(res) {
-                console.log(res.message);
-                if (res.message == 'success') {
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').show();
-                    let data = JSON.parse(res.data)
-                    chart.destroy()
-                    loadChart(data)
-                } else {
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').hide();
-                    var html = '';
-                    html += '<div class="notif-tidak-ditemukan">'
-                    html += '<div class="card bg-secondary py-4">'
-                    html += '<div class="card-body text-white">'
-                    html += '<h5 class="mb-4 font-weight-bold text-center">'
-                    html += 'Data tidak dapat ditemukan'
-                    html += '</h5>'
-                    html += '</div>'
-                    html += '</div>'
-                    html += '</div>'
-                    $('#konten-statistik').append(html);
-
-                    }
-                },
-
-            })
+                success: function(res) {
+                    // console.log(res)
+                    resOTP = res
+                }
+            });
         });
-
+        $(document).on('click','#btnCheckOTP',function(){
+            let inputOTP = $('#inputOTP').val()
+            if(inputOTP == resOTP){
+                alert('Kode OTP Benar')
+                $('#btnSubmit').prop('disabled', false)
+            }else{
+                alert('Kode OTP Salah')
+                $('#btnSubmit').prop('disabled', true)
+            }
+        })
     });
 </script>
 @endsection

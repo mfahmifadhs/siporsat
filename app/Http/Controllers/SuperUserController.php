@@ -334,8 +334,8 @@ class SuperUserController extends Controller
 
         $request = new Psr7Request('POST', 'https://graph.facebook.com/'.$version.'/'.$phoneNumberId.'/messages', $headers, $body);
         $res = $client->sendAsync($request)->wait();
-
         return $otp;
+
         // return $res->getBody();
 
         //   return view('v_super_user.apk_oldat.tes');
