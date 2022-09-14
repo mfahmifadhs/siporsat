@@ -70,7 +70,6 @@
         if (data == 1) {
             $("#table-rekap").append(
                 `<table class="table table-bordered table-responsive">
-                    @foreach($tahunPerolehan as $dataTahun)
                         <thead>
                             <tr class="bg-light">
                                 <th style="width:10%;">Tahun</th>
@@ -81,63 +80,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($rekapTahunPerolehan as $tahun => $dataUnitKerja)
                             <tr>
-                                <td rowspan="{{ $timKerja->count() + 1 }}" class="text-centerl po">
-                                    {{ $dataTahun->tahun_perolehan }}
-                                </td>
+                                <td rowspan="{{$timKerja->count()+1}}" class="text-centerl po">{{ $tahun }}</td>
                             </tr>
-                            @foreach($rekapTahunPerolehan as $tiker => $dataTimKerja)
-                                <tr>
-                                    <td>{{ $tiker }}</td>
-                                    @foreach($dataTimKerja as $total => $totalBarang)
+                                @foreach($rekapTahunPerolehan[$tahun]['biro umum'] as $tiker => $dataKategoriBarang)
+                                <tr>    
+                                <td>{{ $tiker }}</td>
+                                    @foreach($dataKategoriBarang as $kategori => $totalBarang)
                                         <td>{{ $totalBarang }}</td>
                                     @endforeach
-
-                                </tr>
+                                    </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
-                    @endforeach
+                        {{ $tahunPerolehan->links("pagination::bootstrap-4") }}
                 </table>`
             );
-        } else if (data == 2) {
-            $("#table-rekap").append(
-                `<table class="table table-bordered table-responsive">
-                            <tr>
-                                <th style="width:40%;">Tim Kerja</th>
-                                @foreach($kategoriBarang as $dataKategoriBarang)
-                                <th>{{ $dataKategoriBarang->kategori_barang }}</th>
-                                @endforeach
-                            </tr>
-                                @foreach($rekapTimKerja as $tiker => $timKerja)
-                                <tr>
-                                    <td>{{ $tiker }}</td>
-                                    @foreach($timKerja as $kategori => $totalBarang)
-                                    <td>{{ $totalBarang }}</td>
-                                    @endforeach
-                                </tr>
-                                @endforeach
-                        </table>`
-            );
-        } else if (data == 3) {
-            $("#table-rekap").append(
-                `<table class="table table-bordered table-responsive">
-                            <tr>
-                                <th style="width:80%;">Unit Kerja</th>
-                                @foreach($kategoriBarang as $dataKategoriBarang)
-                                <th>{{ $dataKategoriBarang->kategori_barang }}</th>
-                                @endforeach
-                            </tr>
-                                @foreach($rekapUnitKerja as $unker => $unitKerja)
-                                <tr>
-                                    <td>{{ $unker }}</td>
-                                    @foreach($unitKerja as $kategori => $totalBarang)
-                                    <td>{{ $totalBarang }}</td>
-                                    @endforeach
-                                </tr>
-                                @endforeach
-                        </table>`
-            );
-        } else if (data == 0) {
+        } 
+         else if (data == 0) {
             location.reload();
         }
     });

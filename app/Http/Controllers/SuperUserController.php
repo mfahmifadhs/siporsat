@@ -78,7 +78,7 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'daftar') {
             $kategoriBarang     = KategoriBarang::get();
-            $tahunPerolehan      = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->get();
+            $tahunPerolehan      = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->paginate(3);
             $unitKerja          = UnitKerja::get();
             $timKerja           = TimKerja::get();
             $dataBarang         = Barang::select('id_barang', 'kategori_barang','tahun_perolehan', 'pegawai_id', 'tim_kerja', 'unit_kerja')
@@ -88,7 +88,7 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->get();
 
-                dd($dataBarang);
+                // dd($timKerja);
 
             $rekapTotalBarang   = Barang::select('kategori_barang', DB::raw('count(id_barang) as totalbarang'))
                 ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
@@ -99,17 +99,18 @@ class SuperUserController extends Controller
                 foreach ($unitKerja as $dataUnitKerja) {
                     foreach ($timKerja as $dataTimKerja) {
                         foreach ($kategoriBarang as $dataKategoriBarang) {
-                            $rekapTahunPerolehan[$dataTahunPerolehan->tahun_perolehan][$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tahun_perolehan', $dataTahunPerolehan->tahun_perolehan)->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
+                            $rekapTahunPerolehan[$dataTahunPerolehan->tahun_perolehan][$dataUnitKerja->unit_kerja][$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tahun_perolehan', $dataTahunPerolehan->tahun_perolehan)->where('unit_kerja', $dataUnitKerja->unit_kerja)->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
 
-                            $rekapUnitKerja[$dataUnitKerja->unit_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('unit_kerja', $dataUnitKerja->unit_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
+                            // $rekapUnitKerja[$dataUnitKerja->unit_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('unit_kerja', $dataUnitKerja->unit_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
 
-                            $rekapTimKerja[$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
+                            // $rekapTimKerja[$dataTimKerja->tim_kerja][$dataKategoriBarang->kategori_barang] = $dataBarang->where('tim_kerja', $dataTimKerja->tim_kerja)->where('kategori_barang', $dataKategoriBarang->kategori_barang)->count();
                         }
                     }
                 }
             }
+            // dd($rekapTahunPerolehan['2015']);
 
-            return view('v_super_user.apk_oldat.daftar_rekap', compact('timKerja','tahunPerolehan','rekapTotalBarang','rekapTahunPerolehan', 'rekapUnitKerja', 'rekapTimKerja','kategoriBarang'));
+            return view('v_super_user.apk_oldat.daftar_rekap', compact('timKerja','tahunPerolehan','rekapTotalBarang','rekapTahunPerolehan','kategoriBarang'));
         } else {
         }
     }
