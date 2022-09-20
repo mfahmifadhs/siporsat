@@ -165,9 +165,9 @@
                                 </div>
                             </div>
                             <div class="col-md-12 form-group">
-                                <input type="text" class="form-control col-md-2" id="inputOTP" placeholder="Masukan Kode OTP">
-                                <a class="btn btn-primary" id="btnKirimOTP">Kirim Kode OTP</a>
-                                <a class="btn btn-primary" id="btnCheckOTP">Check Kode OTP</a>
+                                <input type="text" class="form-control col-md-3" id="inputOTP" placeholder="Masukan Kode OTP" required>
+                                <a class="btn btn-primary mt-2" id="btnCheckOTP">Check Kode OTP</a>
+                                <a class="btn btn-default mt-2" id="btnKirimOTP">Kirim Kode OTP</a>
                             </div>
                             <div class="col-md-12 form-group">
                                 <button type="reset" class="btn btn-default">BATAL</button>
@@ -318,19 +318,23 @@
 
         let resOTP = ''
         $(document).on('click', '#btnKirimOTP', function() {
-            let jenisForm = "{{ $id }}"
+            let tujuan = "{{ $id }}"
             jQuery.ajax({
-                url: '/super-user/oldat/sendOTP?jenisForm=' + jenisForm,
+                url: '/super-user/oldat/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
                     // console.log(res)
+                    alert('Berhasi mengirim kode OTP')
                     resOTP = res
                 }
             });
         });
         $(document).on('click','#btnCheckOTP',function(){
             let inputOTP = $('#inputOTP').val()
-            if(inputOTP == resOTP){
+            console.log(inputOTP)
+            if (inputOTP == '') {
+                alert('Mohon isi kode OTP yang diterima')
+            }else if(inputOTP == resOTP){
                 $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
                 alert('Kode OTP Benar')
                 $('#btnSubmit').prop('disabled', false)

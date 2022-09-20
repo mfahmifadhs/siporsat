@@ -17,4 +17,5 @@ class FormUsulanPerbaikan extends Model
         'form_usulan_id',
         'barang_id'
     ];
+
 }

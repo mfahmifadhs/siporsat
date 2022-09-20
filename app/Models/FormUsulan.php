@@ -28,10 +28,13 @@ class FormUsulan extends Model
     ];
 
     public function detailPengadaan() {
-        return $this->hasMany(FormUsulanPengadaan::class, 'form_usulan_id');
+        return $this->hasMany(FormUsulanPengadaan::class, 'form_usulan_id','id_form_usulan')
+            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id');
     }
 
     public function detailPerbaikan() {
-        return $this->hasMany(FormUsulanPerbaikan::class, 'form_usulan_id')->join('oldat_tbl_barang','id_barang','barang_id');
+        return $this->hasMany(FormUsulanPerbaikan::class, 'form_usulan_id', 'id_form_usulan')
+            ->join('oldat_tbl_barang','id_barang','barang_id')
+            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\KategoriBarang;
 
 class FormUsulanPengadaan extends Model
@@ -25,7 +25,7 @@ class FormUsulanPengadaan extends Model
     ];
 
     public function kategori() {
-        return $this->hasMany(KategoriBarang::class, 'kategori_barang_id');
+        return $this->belongsTo(KategoriBarang::class, 'kategori_barang_id');
     }
 
 

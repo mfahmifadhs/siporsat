@@ -23,9 +23,10 @@
         <div class="row">
             <div class="col-lg-6 form-group">
                 <a href="{{ url('super-admin/oldat/dashboard') }}">
-                    <div class="card card-main bg-primary ">
+                    <div class="card card-main bg-primary">
                         <div class="card-body text-black text-center">
-                            <h3 class="font-weight-bold">PENGELOLAAN BMN <br> OLAH DATA <br> (OLDAT)</h3>
+                            <img src="https://cdn-icons-png.flaticon.com/512/3659/3659899.png" width="100" height="100">
+                            <h3 class="font-weight-bold mt-4">PENGELOLAAN BMN <br> OLAH DATA <br> (OLDAT)</h3>
                         </div>
                     </div>
                 </a>
@@ -34,7 +35,8 @@
                 <a href="#">
                     <div class="card card-main bg-primary ">
                         <div class="card-body text-black text-center">
-                            <h3 class="font-weight-bold">PENGELOLAAN BMN <br> ALAT ANGKUTAN DARAT BERMOTOR <br> (AADT)</h3>
+                            <img src="https://cdn-icons-png.flaticon.com/512/3418/3418139.png" width="100" height="100">
+                            <h3 class="font-weight-bold mt-4">PENGELOLAAN BMN <br> ALAT ANGKUTAN DARAT BERMOTOR <br> (AADT)</h3>
                         </div>
                     </div>
                 </a>
@@ -43,7 +45,8 @@
                 <a href="#">
                     <div class="card card-main bg-primary ">
                         <div class="card-body text-black text-center">
-                            <h3 class="font-weight-bold">PENGELOLAAN <br> ALAT TULIS KANTOR <br> (ATK)</h3>
+                            <img src="https://cdn-icons-png.flaticon.com/512/4100/4100658.png" width="100" height="100">
+                            <h3 class="font-weight-bold mt-4">PENGELOLAAN <br> ALAT TULIS KANTOR <br> (ATK)</h3>
                         </div>
                     </div>
                 </a>
@@ -52,6 +55,7 @@
                 <a href="#">
                     <div class="card card-main bg-primary ">
                         <div class="card-body text-black text-center">
+                            <img src="https://cdn-icons-png.flaticon.com/512/602/602182.png" width="100" height="100">
                             <h3 class="font-weight-bold" style="margin-top: 40px;">PENGELOLAAN PEMELIHARAAN</h3>
                         </div>
                     </div>

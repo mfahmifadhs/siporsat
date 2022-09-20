@@ -145,33 +145,32 @@
                                 </form>
                             </div>
                             <div class="tab-pane" id="riwayat-barang">
+                                @foreach($riwayat as $i => $riwayatPengguna)
                                 <div class="timeline timeline-inverse">
                                     <div class="time-label">
                                         <span class="bg-danger">
-                                            10 Feb. 2014
+                                            {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}
                                         </span>
                                     </div>
                                     <div>
-                                        <i class="fas fa-envelope bg-primary"></i>
+                                        <i class="fas fa-user bg-primary"></i>
 
                                         <div class="timeline-item">
                                             <span class="time"><i class="far fa-clock"></i> 12:05</span>
 
-                                            <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                                            <h3 class="timeline-header text-capitalize">
+                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}</h3>
 
                                             <div class="timeline-body">
-                                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                                weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                                jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                                quora plaxo ideeli hulu weebly balihoo...
+                                                {{ $riwayatPengguna->keperluan_penggunaan }}
                                             </div>
                                             <div class="timeline-footer">
-                                                <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                                <span class="badge badge-primary">Kondisi Barang {{ $riwayatPengguna->kondisi_barang }}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

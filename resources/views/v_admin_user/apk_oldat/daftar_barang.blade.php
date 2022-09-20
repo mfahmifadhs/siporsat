@@ -57,6 +57,7 @@
                             <th>Merk</th>
                             <th>Jumlah</th>
                             <th>Satuan</th>
+                            <th>Tahun Perolehan</th>
                             <th>Pengguna</th>
                             <th>Unit Kerja</th>
                             <th class="text-center">Aksi</th>
@@ -73,6 +74,7 @@
                             <td>{{ $row->spesifikasi_barang }}</td>
                             <td>{{ $row->jumlah_barang }}</td>
                             <td>{{ $row->satuan_barang }}</td>
+                            <td>{{ $row->tahun_perolehan }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
                             <td>{{ $row->unit_kerja }}</td>
                             <td class="text-center">

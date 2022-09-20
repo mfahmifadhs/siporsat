@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\RiwayatBarang;
 
 class Barang extends Model
 {
@@ -25,6 +26,11 @@ class Barang extends Model
         'kondisi_barang_id',
         'gambar_barang',
         'nilai_perolehan',
-        'tahun_perolehan'
+        'tahun_perolehan',
+        'status_barang'
     ];
+
+    public function riwayat() {
+        return $this->hasMany(RiwayatBarang::class, 'barang_id','id_barang')->join('tbl_pegawai','id_pegawai','pegawai_id');
+    }
 }

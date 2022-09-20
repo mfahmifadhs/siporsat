@@ -38,9 +38,6 @@ $jabatan = $user->jabatan; ?>
         <div class="card">
             <div class="card-header">
                 <div class="card-tools">
-                    <a href="#  " class="btn btn-primary" title="Download File" onclick="return confirm('Download data tim kerja ?')">
-                        <i class="fas fa-file-download"></i>
-                    </a>
                     @if($pegawai->jabatan_id == 4)
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Buat Pengajuan Usulan">
                         <i class="fas fa-plus-circle"></i>
@@ -89,9 +86,16 @@ $jabatan = $user->jabatan; ?>
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $row->kode_otp }}" title="Edit Informasi Pegawai">
-                                        <i class="fas fa-edit"></i> Detail
+                                    @if($row->status_proses == 'proses' || $row->status_proses == 'selesai')
+                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/pengajuan/'. $row->id_form_usulan) }}" target="_blank" title="Cetak Surat">
+                                        <i class="fas fa-file-download"></i> Cetak Surat
                                     </a>
+                                    @endif
+                                    @if($row->status_proses == 'selesai')
+                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/detail-bast/'. $row->id_form_usulan) }}" target="_blank" title="Cetak Surat">
+                                        <i class="fas fa-file-download"></i> BAST Surat
+                                    </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -117,11 +121,13 @@ $jabatan = $user->jabatan; ?>
                 <div class="row">
                     <div class="col-md-6 form-group font-weight-bold">
                         <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn btn-primary btn-lg text-center p-4">
+                            <img src="https://cdn-icons-png.flaticon.com/512/955/955063.png" width="50" height="50"> <br>
                             PENGADAAN
                         </a>
                     </div>
                     <div class="col-md-6 form-group">
                         <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn btn-primary btn-lg text-center p-4">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1086/1086470.png" width="50" height="50"> <br>
                             PERBAIKAN
                         </a>
                     </div>

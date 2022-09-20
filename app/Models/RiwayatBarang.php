@@ -20,4 +20,5 @@ class RiwayatBarang extends Model
         'keperluan_penggunaan'
     ];
 
+
 }

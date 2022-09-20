@@ -24,13 +24,14 @@ use App\Models\PegawaiJabatan;
 use App\Models\Pegawai;
 use App\Models\User;
 use App\Models\UnitKerja;
-use App\Models\UnitUtama;
+use App\Models\AADB\Kendaraan;
 use App\Models\TimKerja;
 use App\Models\UserAkses;
 use App\Models\FormUsulan;
 use App\Models\FormUsulanPengadaan;
 use App\Models\FormUsulanPerbaikan;
 
+use Auth;
 use Hash;
 use Validator;
 use Carbon\Carbon;
@@ -43,8 +44,67 @@ class SuperAdminController extends Controller
     }
 
     // ====================================================
-    //                    PENGAJUAN
+    //                       AADB
     // ====================================================
+
+    public function aadb()
+    {
+        return view('v_super_admin.apk_aadb.index');
+    }
+
+    public function vehicle(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+
+            if ($id == 'kendaraan') {
+                $kendaraan = Kendaraan::get();
+                return view('v_super_admin.apk_aadb.daftar_kendaraan', compact('kendaraan'));
+            } else {
+
+            }
+
+        } else {
+
+        }
+    }
+
+    // ====================================================
+    //                       OLDAT
+    // ====================================================
+
+    public function oldat()
+    {
+        $timKerja   = TimKerja::get();
+        $unitKerja  = UnitKerja::get();
+        $chartData  = $this->getChartData();
+        if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
+            $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('jenis_form','pengadaan')->where('status_proses','!=','selesai')
+                ->orderBy('tanggal_usulan', 'DESC')->limit(5)
+                ->get();
+            $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
+                ->where('status_proses','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
+                ->limit(5)->get();
+        } else {
+            $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('jenis_form','pengadaan')->where('status_proses','!=','selesai')
+                ->where('id_pegawai', Auth::user()->pegawai_id)
+                ->orderBy('tanggal_usulan', 'DESC')->limit(5)
+                ->get();
+            $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
+                ->where('status_proses','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
+                ->where('id_pegawai', Auth::user()->pegawai_id)
+                ->limit(5)->get();
+        }
+
+        return view('v_super_admin.apk_oldat.index', compact('chartData','unitKerja','timKerja','pengajuanPengadaan', 'pengajuanPerbaikan'));
+    }
 
     public function submission(Request $request, $aksi, $id)
     {
@@ -69,10 +129,6 @@ class SuperAdminController extends Controller
             return redirect('super-admin/oldat/pengajuan/data/semua-pengajuan')->with('success', 'Berhasil Menghapus Pengajuan');
         }
     }
-
-    // ====================================================
-    //                    BARANG
-    // ====================================================
 
     public function showItem(Request $request, $aksi, $id)
     {
@@ -117,10 +173,6 @@ class SuperAdminController extends Controller
         }
     }
 
-    // ====================================================
-    //                 KATEGORI BARANG
-    // ====================================================
-
     public function showCategoryItem(Request $request, $aksi, $id)
     {
         if ($aksi == 'data') {
@@ -142,6 +194,80 @@ class SuperAdminController extends Controller
             $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);
             $kategoriBarang->delete();
             return redirect('super-admin/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menghapus Kategori Barang');
+        }
+    }
+
+    public function getChartData()
+    {
+        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id','tim_kerja')
+            ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
+            ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
+            ->get();
+
+        $dataKategoriBarang = KategoriBarang::get();
+        foreach ($dataKategoriBarang as $data) {
+            $labelChart[] = $data->kategori_barang;
+            $dataChart[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
+        }
+        $resultChart['label'] = $labelChart;
+        $resultChart['data'] = $dataChart;
+        $chart = json_encode($resultChart);
+
+        // dd($chart);
+        return $chart;
+    }
+
+    public function searchChartData(Request $request){
+        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','id_unit_kerja','oldat_tbl_barang.unit_kerja_id','id_tim_kerja','tim_kerja','tahun_perolehan')
+            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
+            ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
+            ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
+            ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id');
+
+
+        $dataKategoriBarang = KategoriBarang::get();
+
+        if($request->hasAny(['tahun', 'unit_kerja','tim_kerja'])){
+            if($request->tahun){
+                $dataSearchBarang = $dataBarang->where('tahun_perolehan',$request->tahun);
+            }
+            if($request->unit_kerja){
+                $dataSearchBarang = $dataBarang->where('oldat_tbl_barang.unit_kerja_id',$request->unit_kerja);
+            }
+            if($request->tim_kerja){
+                $dataSearchBarang = $dataBarang->where('id_tim_kerja',$request->tim_kerja);
+            }
+
+            $dataSearchBarang = $dataSearchBarang->get();
+
+        }else {
+            $dataSearchBarang = $dataBarang->get();
+        }
+
+        foreach($dataKategoriBarang as $data){
+            $labelChart[] = $data->kategori_barang;
+            $dataChart[] = $dataSearchBarang->where('kategori_barang',$data->kategori_barang)->count();
+        }
+
+        $resultChart['label'] = $labelChart;
+        $resultChart['data'] = $dataChart;
+        $chart = json_encode($resultChart);
+
+        if(count($dataSearchBarang)>0){
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'success',
+                'data' => $chart
+            ], 200);
+        }else {
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'not found'
+            ], 200);
         }
     }
 

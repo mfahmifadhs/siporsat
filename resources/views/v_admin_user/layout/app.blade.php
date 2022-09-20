@@ -139,12 +139,28 @@
                                 <p>Daftar Pegawai</p>
                             </a>
                         </li>
-                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT</li>
+
                         <!-- Pengelolaan OLAT -->
+                        <li class="nav-header font-weight-bold">OLDAT</li>
                         <li class="nav-item">
                             <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('admin-user/oldat/barang/data/semua') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-boxes"></i>
                                 <p>Barang BMN</p>
+                            </a>
+                        </li>
+
+                        <!-- Pengelolaan AADB -->
+                        <li class="nav-header font-weight-bold">AADB</li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/aadb/dashboard/ ') }}" class="nav-link {{ Request::is('admin-user/aadb/dashboard/ ') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Dashboard AADB</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>Master Kendaraan</p>
                             </a>
                         </li>
                     </ul>

@@ -30,7 +30,6 @@
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <?php $user = Auth()->user(); $pegawai = $user->pegawai; $jabatan = $user->jabatan; ?>
     <div class="wrapper">
 
         <!-- Preloader -->
@@ -78,11 +77,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ $pegawai->nama_pegawai }}</b>
+                        <b>{{ Auth::user()->pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            {{ $pegawai->nama_pegawai }} <br> Super Admin
+                            {{ Auth::user()->pegawai->nama_pegawai }} <br> Super Admin
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
@@ -108,36 +107,14 @@
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <p class="text-center text-white">
-                    {{ $pegawai->nama_pegawai }} <br> <i> {{ $pegawai->jabatan.' '.$pegawai->keterangan_pegawai }} </i>
-                </p>
-                <hr class="bg-white">
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Sidebar Menu -->
-                <nav class="mt-2">
+                <nav class="mt-4">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
-                            <a href="{{ url('super-admin/dashboard') }}" class="nav-link {{ Request::is('super-admin/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT</li>
                         <!-- Pengelolaan OLAT -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-parachute-box"></i>
+                                <i class="nav-icon fas fa-laptop"></i>
                                 <p>Pengelolaan OLDAT </p>
                                 <i class="right fas fa-angle-left"></i>
                             </a>
@@ -245,34 +222,38 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- <li class="nav-header font-weight-bold">Pengelolaan AADB</li> -->
                         <!-- Pengelolaan AADB -->
-                        <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>PENGELOLAAN AADB</p>
+                                <i class="nav-icon fas fa-car-side"></i>
+                                <p>Pengelolaan AADB</p>
+                                <i class="right fas fa-angle-left"></i>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ url('super-admin/aadb/dashboard') }}" class="nav-link {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <i class="nav-icon fas fa-home"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
-                                <li class="nav-header ">Menu</li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-list-alt"></i>
-                                        <p>
-                                            Sub Menu
-                                        </p>
+                                    <a href="{{ url('super-admin/aadb/kendaraan/daftar/kendaraan') }}" class="nav-link {{ Request::is('super-admin/aadb/kendaraan/daftar/kendaraan') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-car"></i>
+                                        <p>Master Kendaraan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/aadb/kendaraan/daftar/pengemudi') }}" class="nav-link {{ Request::is('super-admin/aadb/kendaraan/daftar/pengemudi') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-user-tie"></i>
+                                        <p>Master Pengemudi</p>
                                     </a>
                                 </li>
                             </ul>
-                        </li> -->
-                        <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
-                        <!-- Pengelolaan ATK -->
-                        <!-- <li class="nav-item">
+                        </li>
+
+                                <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
+                                <!-- Pengelolaan ATK -->
+                                <!-- <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>PENGELOLAAN ATK</p>
@@ -290,9 +271,9 @@
                                 </li>
                             </ul>
                         </li> -->
-                        <!-- <li class="nav-header font-weight-bold">Pengelolaan Pemeliharaan</li> -->
-                        <!-- Pengelolaan Pemeliharaan -->
-                        <!-- <li class="nav-item">
+                                <!-- <li class="nav-header font-weight-bold">Pengelolaan Pemeliharaan</li> -->
+                                <!-- Pengelolaan Pemeliharaan -->
+                                <!-- <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>PENGELOLAAN MTC</p>
@@ -310,61 +291,61 @@
                                 </li>
                             </ul>
                         </li> -->
-                        <li class="nav-header font-weight-bold">Pengguna & Pegawai</li>
-                        <li class="nav-item">
-                            <a href="{{ url('super-admin/level/data/semua') }}" class="nav-link {{ Request::is('super-admin/level/data/semua') ? 'active' : '' }}">
-                                <i class="fas fa-users-cog nav-icon"></i>
-                                <p>Level</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link {{ Request::is('super-admin/kewenangan/data/semua') ? 'active' : '' }}">
-                                <i class="fas fa-users-cog nav-icon"></i>
-                                <p>Kewenangan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item mb-4">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Master Pengguna
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
+                                <li class="nav-header font-weight-bold mt-4">Pengguna & Pegawai</li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/pengguna/data/semua') }}" class="nav-link {{ Request::is('super-admin/pengguna/data/semua') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pengguna</p>
+                                    <a href="{{ url('super-admin/level/data/semua') }}" class="nav-link {{ Request::is('super-admin/level/data/semua') ? 'active' : '' }}">
+                                        <i class="fas fa-users-cog nav-icon"></i>
+                                        <p>Level</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/pegawai/data/semua') }}" class="nav-link {{ Request::is('super-admin/pegawai/data/semua') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pegawai</p>
+                                    <a href="#" class="nav-link {{ Request::is('super-admin/kewenangan/data/semua') ? 'active' : '' }}">
+                                        <i class="fas fa-users-cog nav-icon"></i>
+                                        <p>Kewenangan</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/tim-kerja/data/semua') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tim Kerja</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('super-admin/unit-kerja/data/semua') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Unit Kerja</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
+                                <li class="nav-item mb-4">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Unit Utama</p>
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>
+                                            Master Pengguna
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
                                     </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-admin/pengguna/data/semua') }}" class="nav-link {{ Request::is('super-admin/pengguna/data/semua') ? 'active' : '' }}">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Pengguna</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-admin/pegawai/data/semua') }}" class="nav-link {{ Request::is('super-admin/pegawai/data/semua') ? 'active' : '' }}">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Pegawai</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-admin/tim-kerja/data/semua') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Tim Kerja</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-admin/unit-kerja/data/semua') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Unit Kerja</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Unit Utama</p>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-                        </li>
-                    </ul>
                 </nav>
             </div>
         </aside>

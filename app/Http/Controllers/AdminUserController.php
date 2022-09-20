@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\BarangExport;
-
+use App\Imports\AADB\KendaraanImport;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\KondisiBarang;
 use App\Models\Pegawai;
 use App\Models\RiwayatBarang;
+
+use App\Models\AADB\Kendaraan;
 
 use Validator;
 
@@ -23,7 +25,33 @@ class AdminUserController extends Controller
     }
 
     // ====================================================
-    //                    BARANG
+    //                        AADB
+    // ====================================================
+
+    public function aadb(Request $request, $aksi)
+    {
+        if ($aksi == 'kendaraan') {
+            $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                        ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')->orderBy('jenis_aadb','ASC')->get();
+            return view('v_admin_user.apk_aadb.daftar_kendaraan', compact('kendaraan'));
+        } elseif ($aksi == 'pengemudi') {
+
+        } else {
+            return view('v_admin_user.apk_aadb.index');
+        }
+
+    }
+
+    public function kendaraan(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'upload') {
+            Excel::import(new KendaraanImport(), $request->upload);
+            return redirect('admin-user/aadb/kendaraan/')->with('success', 'Berhasil Mengupload Data Kendaraan');
+        }
+    }
+
+    // ====================================================
+    //                        OLDAT
     // ====================================================
 
     public function showItem(Request $request, $aksi, $id)
@@ -36,6 +64,7 @@ class AdminUserController extends Controller
             ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
             ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
             ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+            ->orderBy('tahun_perolehan','DESC')
             ->get();
             return view('v_admin_user.apk_oldat.daftar_barang', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
         } elseif ($aksi == 'detail') {
@@ -43,9 +72,16 @@ class AdminUserController extends Controller
             $kondisiBarang  = KondisiBarang::get();
             $pegawai        = Pegawai::orderBy('nama_pegawai','ASC')->get();
             $barang         = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->where('id_barang', $id)->first();
-            return view('v_admin_user.apk_oldat.detail_barang', compact('kategoriBarang','kondisiBarang','pegawai','barang'));
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->where('id_barang', $id)->first();
+            $riwayat        = RiwayatBarang::join('oldat_tbl_barang','id_barang','barang_id')
+                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_riwayat_barang.kondisi_barang_id')
+                ->join('tbl_pegawai','tbl_pegawai.id_pegawai','oldat_tbl_riwayat_barang.pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
+                ->where('barang_id', $id)->get();
+            return view('v_admin_user.apk_oldat.detail_barang', compact('kategoriBarang','kondisiBarang','pegawai','barang','riwayat'));
+
         } elseif ($aksi == 'upload') {
             Excel::import(new BarangImport(), $request->upload);
             return redirect('admin-user/oldat/barang/data/semua')->with('success', 'Berhasil Mengupload Data Barang');
@@ -118,10 +154,6 @@ class AdminUserController extends Controller
             return redirect('admin-user/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menghapus Kategori Barang');
         }
     }
-
-    // ====================================================
-    //                 KATEGORI BARANG
-    // ====================================================
 
     public function showCategoryItem(Request $request, $aksi, $id)
     {

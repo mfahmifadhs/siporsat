@@ -33,17 +33,21 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="card-tools">
-                    <a href="{{ url('super-user/tim-kerja/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data Kategori Barang ?')">
+                <h3 class="card-title font-weight-bold">Laporan Pengadaan Barang</h3>
+                <!-- <div class="card-tools">
+                    <a href="{{ url('super-user/oldat/laporan/download/excel') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data barang ?')">
                         <i class="fas fa-file-download"></i>
                     </a>
-                </div>
+                    <a href="{{ url('super-user/oldat/laporan/download/pdf') }}" class="btn btn-primary" title="Download PDF" onclick="return confirm('Download data barang ?')">
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                </div> -->
             </div>
             <div class="card-body">
                 <table id="table-barang" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th class="text-center">No</th>
                             <th>Kode Barang</th>
                             <th>NUP</th>
                             <th>Nama Barang</th>
@@ -53,14 +57,17 @@
                             <th>Tahun Perolehan</th>
                             <th>Kondisi</th>
                             <th>Pengguna</th>
-                            <th>Tim Kerja</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
                         @foreach($barang as $row)
                         <tr>
-                            <td>{{ $no++ }}</td>
+                            <td class="text-center font-weight-bold">
+                                <a href="{{ url('super-user/oldat/laporan/detail/'. $row->id_barang) }}">
+                                    {{ $no++ }}
+                                </a>
+                            </td>
                             <td>{{ $row->kode_barang }}</td>
                             <td>{{ $row->nup_barang }}</td>
                             <td>{{ $row->kategori_barang }}</td>
@@ -70,7 +77,6 @@
                             <td>{{ $row->tahun_perolehan }}</td>
                             <td>{{ $row->kondisi_barang }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
-                            <td>{{ $row->tim_kerja }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -87,8 +93,11 @@
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["pdf"],
-            "lengthMenu": [[10, 25, 50, "Semua", -1], [10, 25, 50, "Semua"]]
+            "buttons": ["pdf", "excel"],
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ]
         }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
     });
 </script>

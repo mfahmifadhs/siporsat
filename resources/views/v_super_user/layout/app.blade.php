@@ -30,10 +30,6 @@
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
 <body class="hold-transition sidebar-mini sidebar-collapse">
-    <?php $user = Auth()->user();
-    $pegawai    = $user->pegawai;
-    $jabatan    = $pegawai->jabatan;
-    $timKerja   = $pegawai->timKerja; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -76,15 +72,17 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ $pegawai->nama_pegawai }}</b>
+                        <b>{{ Auth::user()->pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
                             <p class="text-capitalize">
-                                @if($pegawai->jabatan_id == '1' || $pegawai->jabatan_id == '2')
-                                    {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} {{ $pegawai->keterangan_pegawai }}
+                                @if( Auth::user()->pegawai->jabatan_id == '1' || Auth::user()->pegawai->jabatan_id == '2')
+                                {{ Auth::user()->pegawai->nama_pegawai }} <br>
+                                {{ Auth::user()->pegawai->jabatan->jabatan }} {{ Auth::user()->pegawai->keterangan_pegawai }}
                                 @else
-                                    {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                                {{ Auth::user()->pegawai->nama_pegawai }} <br>
+                                {{ Auth::user()->pegawai->jabatan->jabatan }} <br> {{ Auth::user()->pegawai->timKerja->tim_kerja }}
                                 @endif
                             </p>
                         </span>
@@ -133,32 +131,70 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+
                         <li class="nav-header font-weight-bold">Pengelolaan OLDAT</li>
-                        <!-- Pengelolaan OLAT -->
                         <li class="nav-item">
                             <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link {{ Request::is('super-user/oldat/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>Dashboard</p>
+                                <i class="nav-icon fas fa-laptop"></i>
+                                <p>
+                                    Pengelolaan OLDAT
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link {{ Request::is('super-user/oldat/dashboard') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-home"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/pengajuan/seluruh-pengajuan') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <p>Daftar Pengajuan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/daftar/seluruh-laporan') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <p>Laporan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link {{ Request::is('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-file  -alt"></i>
+                                        <p>Rekapitulasi</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
+                        @if( Auth::user()->pegawai->jabatan_id == 2)
+                        <li class="nav-header font-weight-bold">Pengelolaan AADB</li>
                         <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/pengajuan/seluruh-pengajuan') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-invoice"></i>
-                                <p>Daftar Pengajuan</p>
+                            <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-car-side"></i>
+                                <p>
+                                    Pengelolaan AADB
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="nav-link {{ Request::is('super-user/aadb/dashboard') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-home"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('super-user/aadb/kendaraan') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-home"></i>
+                                        <p>Laporan</p>
+                                    </a>
+                                </li>
+                            </ul>
+
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/daftar/seluruh-laporan') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-invoice"></i>
-                                <p>Laporan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link {{ Request::is('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file  -alt"></i>
-                                <p>Rekapitulasi</p>
-                            </a>
-                        </li>
+                        @endif
                     </ul>
                 </nav>
             </div>

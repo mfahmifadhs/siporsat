@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Rekapitulasi Pengelolaan Olah Data (OLDAT)</h1>
+                <h1 class="m-0">Rekapitulasi</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -24,7 +24,7 @@
             <div class="col-md-4">
                 <select id="dataRekap" class="form-control">
                     <option value="0">-- Pilih Rekap --</option>
-                    <option value="1">Rekap Berdasarkan Tahun Perolehan</option>
+                    <option value="1">Rekap Berdasarkan Kategori Barang</option>
                     <option value="2">Rekap Berdasarkan Tim Kerja</option>
                     <option value="3">Rekap Berdasarkan Unit Kerja </option>
                 </select>
@@ -37,20 +37,34 @@
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <h4 class="card-title">Rekapitulasi Barang Bersarkan Tahun Perolehan dan Tim Kerja</h4>
+                        <h4 class="card-title">Rekapitulasi Barang</h4>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered" id="table-rekap">
-                            <tr>
-                                <th style="width: 50%;">Nama Barang</th>
-                                <th>Jumlah Barang</th>
-                            </tr>
-                            @foreach($rekapTotalBarang as $dataTotalBarang)
-                            <tr>
-                                <td>{{ $dataTotalBarang->kategori_barang }}</td>
-                                <td>{{ $dataTotalBarang->totalbarang }}</td>
-                            </tr>
-                            @endforeach
+                        <table class="table table-bordered table-responsive" id="table-rekap">
+                            <thead>
+                                <tr class="bg-light">
+                                    <th style="width:10%;">Tahun</th>
+                                    <th style="width:40%;">Tim Kerja</th>
+                                    @foreach($kategoriBarang as $dataKategoriBarang)
+                                    <th>{{ $dataKategoriBarang->kategori_barang }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($rekapTahunPerolehan as $tahun => $dataUnitKerja)
+                                <tr>
+                                    <td rowspan="{{$timKerja->count()+1}}" class="text-centerl po">{{ $tahun }}</td>
+                                </tr>
+                                @foreach($rekapTahunPerolehan[$tahun]['biro umum'] as $tiker => $dataKategoriBarang)
+                                <tr>
+                                    <td>{{ $tiker }}</td>
+                                    @foreach($dataKategoriBarang as $kategori => $totalBarang)
+                                    <td>{{ $totalBarang }}</td>
+                                    @endforeach
+                                </tr>
+                                @endforeach
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -69,36 +83,59 @@
         console.log(data);
         if (data == 1) {
             $("#table-rekap").append(
+                `<table class="table table-bordered">
+                    <tr>
+                        <th style="width: 50%;">Nama Barang</th>
+                        <th>Jumlah Barang</th>
+                    </tr>
+                    @foreach($rekapTotalBarang as $dataTotalBarang)
+                    <tr>
+                        <td>{{ $dataTotalBarang->kategori_barang }}</td>
+                        <td>{{ $dataTotalBarang->totalbarang }}</td>
+                    </tr>
+                    @endforeach
+                </table>`
+
+            );
+        } else if (data == 2) {
+            $("#table-rekap").append(
                 `<table class="table table-bordered table-responsive">
-                        <thead>
-                            <tr class="bg-light">
-                                <th style="width:10%;">Tahun</th>
+                            <tr>
                                 <th style="width:40%;">Tim Kerja</th>
                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                 <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                 @endforeach
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($rekapTahunPerolehan as $tahun => $dataUnitKerja)
-                            <tr>
-                                <td rowspan="{{$timKerja->count()+1}}" class="text-centerl po">{{ $tahun }}</td>
-                            </tr>
-                                @foreach($rekapTahunPerolehan[$tahun]['biro umum'] as $tiker => $dataKategoriBarang)
-                                <tr>    
-                                <td>{{ $tiker }}</td>
-                                    @foreach($dataKategoriBarang as $kategori => $totalBarang)
-                                        <td>{{ $totalBarang }}</td>
+                                @foreach($rekapTimKerja as $tiker => $timKerja)
+                                <tr>
+                                    <td>{{ $tiker }}</td>
+                                    @foreach($timKerja as $kategori => $totalBarang)
+                                    <td>{{ $totalBarang }}</td>
                                     @endforeach
-                                    </tr>
+                                </tr>
                                 @endforeach
-                            @endforeach
-                        </tbody>
-                        {{ $tahunPerolehan->links("pagination::bootstrap-4") }}
-                </table>`
+                        </table>`
             );
-        } 
-         else if (data == 0) {
+        } else if (data == 3) {
+            $("#table-rekap").append(
+                `<table class="table table-bordered table-responsive">
+                            <tr>
+                                <th style="width:80%;">Unit Kerja</th>
+                                @foreach($kategoriBarang as $dataKategoriBarang)
+                                <th>{{ $dataKategoriBarang->kategori_barang }}</th>
+                                @endforeach
+                            </tr>
+                                @foreach($rekapUnitKerja as $unker => $unitKerja)
+                                <tr>
+                                    <td>{{ $unker }}</td>
+                                    @foreach($unitKerja as $kategori => $totalBarang)
+                                    <td>{{ $totalBarang }}</td>
+                                    @endforeach
+                                </tr>
+                                @endforeach
+                        </table>`
+            );
+        } else if (data == 0) {
             location.reload();
         }
     });
