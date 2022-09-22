@@ -156,7 +156,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/daftar/seluruh-laporan') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <i class="nav-icon fas fa-file-alt"></i>
                                         <p>Laporan</p>
                                     </a>
                                 </li>
@@ -171,7 +171,7 @@
                         @if( Auth::user()->pegawai->jabatan_id == 2)
                         <li class="nav-header font-weight-bold">Pengelolaan AADB</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/aadb/dashboard') ? 'active' : '' }}">
+                            <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-car-side"></i>
                                 <p>
                                     Pengelolaan AADB
@@ -186,8 +186,43 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-file"></i>
+                                        <p>
+                                            Daftar Pengajuan
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="nav-link">
+                                                <i class="nav-icon far fa-circle"></i>
+                                                <p>Pengadaan Baru/Sewa</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/usulan-perpanjangan-stnk') }}" class="nav-link">
+                                                <i class="nav-icon far fa-circle"></i>
+                                                <p>Perpanjangan STNK</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/usulan-servis') }}" class="nav-link">
+                                                <i class="nav-icon far fa-circle"></i>
+                                                <p>Servis</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/usulan-voucher-bbm') }}" class="nav-link">
+                                                <i class="nav-icon far fa-circle"></i>
+                                                <p>Voucher BBM</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('super-user/aadb/kendaraan') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-home"></i>
+                                        <i class="nav-icon fas fa-file-alt"></i>
                                         <p>Laporan</p>
                                     </a>
                                 </li>

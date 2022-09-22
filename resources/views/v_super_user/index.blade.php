@@ -42,7 +42,7 @@
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a href="#" class="small-box-footer text-white">
+                        <a href="{{ url('super-user/aadb/dashboard') }}" class="small-box-footer text-white">
                             More info <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>

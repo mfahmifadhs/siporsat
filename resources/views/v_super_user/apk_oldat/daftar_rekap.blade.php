@@ -40,11 +40,11 @@
                         <h4 class="card-title">Rekapitulasi Barang</h4>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered table-responsive" id="table-rekap">
+                        <table class="table table-bordered" id="table-rekap">
                             <thead>
                                 <tr class="bg-light">
-                                    <th style="width:10%;">Tahun</th>
-                                    <th style="width:40%;">Tim Kerja</th>
+                                    <th>Tahun</th>
+                                    <th>Tim Kerja</th>
                                     @foreach($kategoriBarang as $dataKategoriBarang)
                                     <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                     @endforeach
@@ -64,6 +64,8 @@
                                 </tr>
                                 @endforeach
                                 @endforeach
+
+                                {{ $tahunPerolehan->links("pagination::bootstrap-4") }}
                             </tbody>
                         </table>
                     </div>
@@ -75,6 +77,15 @@
 
 @section('js')
 <script>
+    $(function() {
+        $("#table-rekap").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "buttons": ["pdf", "excel"]
+        }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');
+    });
+
     $('#btnPilihRekap').click(function() {
         $("#table-rekap").empty();
         let no = 2;

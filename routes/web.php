@@ -104,12 +104,12 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'report']);
         Route::get('/grafik', [SuperUserController::class, 'searchChartData'])->name('searchChartData');
         Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'recap']);
-        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
+        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submissionOLDAT']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'letter']);
         Route::get('bast/{aksi}/{id}', [SuperUserController::class, 'bast']);
 
         Route::post('bast/{aksi}/{id}', [SuperUserController::class, 'bast']);
-        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submission']);
+        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submissionOLDAT']);
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'letter']);
 
         Route::get('get-barang/{id}', [SuperUserController::class, 'getDataBarang']);
@@ -118,9 +118,9 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
         Route::get('{aksi}', [SuperUserController::class, 'aadb']);
-        Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'submissionAADB']);
 
-        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'submissionAADB']);
     });
 });
 

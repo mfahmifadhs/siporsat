@@ -123,28 +123,29 @@
                                 <?php $no = 1; ?>
                                 <tbody>
                                     @if($dataBast->jenis_form == 'pengadaan')
-                                        @foreach($dataBast->detailPengadaan as $dataBarang)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $dataBarang->kategori->  kategori_barang }}</td>
-                                            <td>{{ $dataBarang->merk_barang }}</td>
-                                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                            <td>{{ $dataBarang->jumlah_barang }}</td>
-                                            <td>{{ $dataBarang->satuan_barang }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @foreach($dataBast->detailPengadaan as $dataBarang)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarang->kode_barang }}</td>
+                                        <td>{{ $dataBarang->nup_barang }}</td>
+                                        <td>{{ $dataBarang->kategori_barang }}</td>
+                                        <td>{{ $dataBarang->spesifikasi_barang }}</td>
+                                        <td>{{ $dataBarang->jumlah_barang }}</td>
+                                        <td>{{ $dataBarang->satuan_barang }}</td>
+                                    </tr>
+                                    @endforeach
                                     @else
-                                        @foreach($dataBast->detailPerbaikan as $dataBarang)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $dataBarang->kode_barang }}</td>
-                                            <td>{{ $dataBarang->nup_barang }}</td>
-                                            <td>{{ $dataBarang->kategori_barang }}</td>
-                                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                            <td>{{ $dataBarang->jumlah_barang }}</td>
-                                            <td>{{ $dataBarang->satuan_barang }}</td>
-                                        </tr>
-                                        @endforeach
+                                    @foreach($dataBast->detailPerbaikan as $dataBarang)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarang->kode_barang }}</td>
+                                        <td>{{ $dataBarang->nup_barang }}</td>
+                                        <td>{{ $dataBarang->kategori_barang }}</td>
+                                        <td>{{ $dataBarang->spesifikasi_barang }}</td>
+                                        <td>{{ $dataBarang->jumlah_barang }}</td>
+                                        <td>{{ $dataBarang->satuan_barang }}</td>
+                                    </tr>
+                                    @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -153,7 +154,7 @@
                             <div style="margin-left:30%;text-transform:capitalize;">
                                 <label>yang menyerahkan, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
                                 <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$dataBast->kode_otp_bast) !!}
+                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/bast/'.$dataBast->kode_otp_bast) !!}
                                 </p>
                                 <div style="margin-top: 5%;">
                                     <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
@@ -163,9 +164,9 @@
                         </div>
                         <div class="col-md-6 form-group" style="margin-top: 10%;">
                             <div style="margin-right:20%;margin-left:10%;text-transform:capitalize;">
-                                <label>yang menerima, <br> {{ $dataBast->jabatan.' '.$dataBast->tim_kerja }}</label>
-                                <p style="margin-top: 5% ;">
-                                    {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.app/bast/'.$dataBast->kode_otp_bast) !!}
+                                <label>yang menerima, <br> pengusul</label>
+                                <p style="margin-top: 13%;margin-left:17%;">
+                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://milkshake.app/'.$dataBast->kode_otp_bast) !!}
                                 </p>
                                 <div style="margin-top: 5%;">
                                     <label class="text-underline">{{ $dataBast->nama_pegawai }}</label>

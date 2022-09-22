@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\BarangExport;
-
+use App\Models\AADB\JenisKendaraan;
+use App\Models\AADB\UsulanAadb;
+use App\Models\AADB\UsulanKendaraan;
+use App\Models\AADB\Kendaraan;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\Pegawai;
@@ -15,7 +18,6 @@ use App\Models\FormUsulanPengadaan;
 use App\Models\FormUsulanPerbaikan;
 use App\Models\UnitKerja;
 use App\Models\RiwayatBarang;
-use App\Models\AADB\Kendaraan;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -44,14 +46,58 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'pengemudi') {
 
         } else {
-            return view('v_super_user.apk_aadb.index');
+            $unitKerja      = UnitKerja::get();
+            $jenisKendaraan = JenisKendaraan::get();
+            $merk           = Kendaraan::select('merk_kendaraan')->groupBy('merk_kendaraan')->get();
+            $tahun          = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
+            $pengguna       = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
+            return view('v_super_user.apk_aadb.index', compact('unitKerja','jenisKendaraan','merk','tahun','pengguna'));
         }
     }
 
-    public function kendaraan(Request $request, $aksi, $id)
+    public function submissionAADB(Request $request, $aksi, $id)
     {
-        if ($aksi == 'download') {
+        if ($aksi == 'proses' && $id == 'pengadaan') {
+            $idFormUsulan = Carbon::now()->format('dmy').$request->id_usulan_pengadaan;
 
+            $usulan = new UsulanAadb();
+            $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->pegawai_id         = Auth::user()->pegawai_id;
+            $usulan->kode_form          = 'AADB_001';
+            $usulan->jenis_form         = 1;
+            $usulan->total_pengajuan    = 1;
+            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->rencana_pengguna   = $request->rencana_pengguna;
+            $usulan->status_proses      = 'belum proses';
+            $usulan->kode_otp_usulan    = $request->kode_otp_usulan;
+            $usulan->save();
+
+            $usulanPengadaan = new UsulanKendaraan();
+            $usulanPengadaan->id_form_usulan_pengadaan  = $request->id_usulan_pengadaan;
+            $usulanPengadaan->form_usulan_id            = $idFormUsulan;
+            $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
+            $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
+            $usulanPengadaan->merk_kendaraan            = $request->merk_kendaraan;
+            $usulanPengadaan->tipe_kendaraan            = $request->tipe_kendaraan;
+            $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
+            $usulanPengadaan->save();
+
+            return redirect('super-user/aadb/usulan/surat/'. $idFormUsulan);
+
+        } elseif ($aksi == 'surat') {
+
+            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+                $pimpinan = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                    ->where('jabatan_id', '2')->where('unit_kerja_id',1)->first();
+            } else {
+                $pimpinan = null;
+            }
+
+            $usulan = UsulanAadb::with('usulanKendaraan')->get();
+            return view('v_super_user/apk_aadb/surat_usulan', compact('pimpinan','usulan'));
+        } else {
+            $jenisKendaraan = JenisKendaraan::get();
+            return view('v_super_user.apk_aadb.usulan', compact('aksi','jenisKendaraan'));
         }
     }
 
@@ -117,7 +163,7 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'daftar') {
             $kategoriBarang     = KategoriBarang::get();
-            $tahunPerolehan     = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->get();
+            $tahunPerolehan     = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->paginate(1);
             $unitKerja          = UnitKerja::get();
             $timKerja           = TimKerja::get();
             $dataBarang         = Barang::select('id_barang', 'kategori_barang','tahun_perolehan', 'pegawai_id', 'tim_kerja', 'unit_kerja')
@@ -154,7 +200,7 @@ class SuperUserController extends Controller
         }
     }
 
-    public function submission(Request $request, $aksi, $id)
+    public function submissionOLDAT(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
             if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
