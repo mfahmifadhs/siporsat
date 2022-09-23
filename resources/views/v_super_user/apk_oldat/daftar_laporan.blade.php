@@ -57,17 +57,14 @@
                             <th>Tahun Perolehan</th>
                             <th>Kondisi</th>
                             <th>Pengguna</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
                         @foreach($barang as $row)
                         <tr>
-                            <td class="text-center font-weight-bold">
-                                <a href="{{ url('super-user/oldat/laporan/detail/'. $row->id_barang) }}">
-                                    {{ $no++ }}
-                                </a>
-                            </td>
+                            <td class="text-center">{{ $no++ }}</td>
                             <td>{{ $row->kode_barang }}</td>
                             <td>{{ $row->nup_barang }}</td>
                             <td>{{ $row->kategori_barang }}</td>
@@ -77,6 +74,16 @@
                             <td>{{ $row->tahun_perolehan }}</td>
                             <td>{{ $row->kondisi_barang }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
+                            <td>
+                                <a type="button" class="btn btn-primary" data-toggle="dropdown">
+                                    <i class="fas fa-bars"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/laporan/detail/'. $row->id_barang) }}">
+                                        <i class="fas fa-info-circle"></i> Detail
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -93,10 +100,29 @@
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["pdf", "excel"],
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
+            ],
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'laporan_pengadaan_barang',
+                    exportOptions: {
+                        columns: [0, 3, 4, 5, 10, 11,   12]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'laporan_pengadaan_barang',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12]
+                    }
+                }
             ]
         }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
     });

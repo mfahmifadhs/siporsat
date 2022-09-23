@@ -8,6 +8,7 @@ use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\UsulanAadb;
 use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\Kendaraan;
+use App\Models\AADB\RiwayatKendaraan;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use App\Models\Pegawai;
@@ -41,9 +42,33 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'kendaraan') {
             $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
-                        ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')->orderBy('jenis_aadb','ASC')->get();
-            return view('v_super_user.apk_aadb.daftar_kendaraan', compact('kendaraan'));
-        } elseif ($aksi == 'pengemudi') {
+                ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')
+                ->orderBy('jenis_aadb','ASC')
+                ->get();
+            return view('v_super_user.apk_aadb.daftar_laporan', compact('kendaraan'));
+
+        } elseif ($aksi == 'usulan-pengadaan') {
+            $pengajuan = UsulanAadb::join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->get();
+
+            return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
+
+        } elseif ($aksi == 'rekapitulasi') {
+            $unitKerja      = UnitKerja::get();
+            $jenisKendaraan = JenisKendaraan::get();
+            $dataKendaraan  = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                 ->get();
+
+            foreach ($unitKerja as $unker) {
+                foreach($jenisKendaraan as $jenis) {
+                    $rekapUnker[$unker->unit_kerja][$jenis->jenis_kendaraan] =
+                        $dataKendaraan->where('unit_kerja', $unker->unit_kerja)->where('jenis_kendaraan', $jenis->jenis_kendaraan)->count();
+                }
+            }
+
+            return view('v_super_user.apk_aadb.daftar_rekap', compact('unitKerja','jenisKendaraan','rekapUnker'));
 
         } else {
             $unitKerja      = UnitKerja::get();
@@ -55,7 +80,7 @@ class SuperUserController extends Controller
         }
     }
 
-    public function submissionAADB(Request $request, $aksi, $id)
+    public function pengajuanAadb(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses' && $id == 'pengadaan') {
             $idFormUsulan = Carbon::now()->format('dmy').$request->id_usulan_pengadaan;
@@ -98,6 +123,18 @@ class SuperUserController extends Controller
         } else {
             $jenisKendaraan = JenisKendaraan::get();
             return view('v_super_user.apk_aadb.usulan', compact('aksi','jenisKendaraan'));
+        }
+    }
+
+    public function kendaraan(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'detail') {
+            $kendaraan = Kendaraan::where('id_kendaraan', $id)
+                ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->first();
+            $pengguna = RiwayatKendaraan::where('kendaraan_id', $id)->get();
+
+            return view('v_super_user.apk_aadb.detail_kendaraan', compact('kendaraan','pengguna'));
         }
     }
 
@@ -163,7 +200,7 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'daftar') {
             $kategoriBarang     = KategoriBarang::get();
-            $tahunPerolehan     = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->paginate(1);
+            $tahunPerolehan     = Barang::select('tahun_perolehan')->groupBy('tahun_perolehan')->orderBy('tahun_perolehan','ASC')->paginate(2);
             $unitKerja          = UnitKerja::get();
             $timKerja           = TimKerja::get();
             $dataBarang         = Barang::select('id_barang', 'kategori_barang','tahun_perolehan', 'pegawai_id', 'tim_kerja', 'unit_kerja')

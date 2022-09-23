@@ -35,12 +35,12 @@
                 <table id="table-aadb" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th class="text-center">No</th>
                             <th>Jenis AADB</th>
                             <th>Kode Barang</th>
                             <th>Jenis Kendaraan</th>
-                            <th>Merk / Tipe</th>
-                            <th>No. Plat</th>
+                            <th style="width: 10%;">Merk / Tipe</th>
+                            <th style="width: 8%;">No. Plat</th>
                             <th>Masa Berlaku STNK</th>
                             <th>No. Plat RHS</th>
                             <th>Masa Berlaku STNK</th>
@@ -48,13 +48,14 @@
                             <th>Pengguna</th>
                             <th>Jabatan</th>
                             <th>Pengemudi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
                         @foreach($kendaraan as $row)
                         <tr>
-                            <td>{{ $no++ }}</td>
+                            <td class="text-center">{{ $no++ }}</td>
                             <td>{{ $row->jenis_aadb }}</td>
                             <td>{{ $row->kode_barang }}</td>
                             <td>{{ $row->jenis_kendaraan }}</td>
@@ -67,6 +68,16 @@
                             <td>{{ $row->pengguna }}</td>
                             <td>{{ $row->jabatan }}</td>
                             <td>{{ $row->pengemudi }}</td>
+                            <td>
+                                <a type="button" class="btn btn-primary" data-toggle="dropdown">
+                                    <i class="fas fa-bars"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item btn" href="{{ url('super-user/aadb/kendaraan/detail/'. $row->id_kendaraan) }}">
+                                        <i class="fas fa-info-circle"></i> Detail
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -111,10 +122,29 @@
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["pdf", "excel"],
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
+            ],
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'laporan_kendaraan',
+                    exportOptions: {
+                        columns: [0, 3, 4, 5, 10, 11,   12]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'laporan_kendaraan',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12]
+                    }
+                }
             ]
         }).buttons().container().appendTo('#table-aadb_wrapper .col-md-6:eq(0)');
     });

@@ -21,15 +21,15 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row form-group">
-            <div class="col-md-4">
+            <div class="col-md-4 form-group">
                 <select id="dataRekap" class="form-control">
-                    <option value="0">-- Pilih Rekap --</option>
+                    <option value="0">Rekap Berdasarkan Tahun Perolehan</option>
                     <option value="1">Rekap Berdasarkan Kategori Barang</option>
                     <option value="2">Rekap Berdasarkan Tim Kerja</option>
                     <option value="3">Rekap Berdasarkan Unit Kerja </option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 form-group">
                 <a id="btnPilihRekap" class="btn btn-primary">Pilih</a>
             </div>
         </div>
@@ -39,12 +39,12 @@
                     <div class="card-header">
                         <h4 class="card-title">Rekapitulasi Barang</h4>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-bordered" id="table-rekap">
+                    <div class="card-body" id="table-rekap">
+                        <table id="table-1" class="table table-bordered table-responsive">
                             <thead>
                                 <tr class="bg-light">
-                                    <th>Tahun</th>
-                                    <th>Tim Kerja</th>
+                                    <th style="width:10%;">Tahun</th>
+                                    <th style="width:40%;">Tim Kerja</th>
                                     @foreach($kategoriBarang as $dataKategoriBarang)
                                     <th>{{ $dataKategoriBarang->kategori_barang }}</th>
                                     @endforeach
@@ -52,6 +52,7 @@
                             </thead>
                             <tbody>
                                 @foreach($rekapTahunPerolehan as $tahun => $dataUnitKerja)
+
                                 <tr>
                                     <td rowspan="{{$timKerja->count()+1}}" class="text-centerl po">{{ $tahun }}</td>
                                 </tr>
@@ -64,10 +65,9 @@
                                 </tr>
                                 @endforeach
                                 @endforeach
-
-                                {{ $tahunPerolehan->links("pagination::bootstrap-4") }}
                             </tbody>
                         </table>
+                        {{ $tahunPerolehan->links("pagination::bootstrap-4") }}
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
 @section('js')
 <script>
     $(function() {
-        $("#table-rekap").DataTable({
+        $("#table-1").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
@@ -94,17 +94,21 @@
         console.log(data);
         if (data == 1) {
             $("#table-rekap").append(
-                `<table class="table table-bordered">
-                    <tr>
-                        <th style="width: 50%;">Nama Barang</th>
-                        <th>Jumlah Barang</th>
-                    </tr>
-                    @foreach($rekapTotalBarang as $dataTotalBarang)
-                    <tr>
-                        <td>{{ $dataTotalBarang->kategori_barang }}</td>
-                        <td>{{ $dataTotalBarang->totalbarang }}</td>
-                    </tr>
-                    @endforeach
+                `<table id="table-1" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Nama Barang</th>
+                            <th>Jumlah Barang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rekapTotalBarang as $dataTotalBarang)
+                        <tr>
+                            <td>{{ $dataTotalBarang->kategori_barang }}</td>
+                            <td>{{ $dataTotalBarang->totalbarang }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>`
 
             );

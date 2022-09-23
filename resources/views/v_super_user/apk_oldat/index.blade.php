@@ -1,10 +1,6 @@
 @extends('v_super_user.layout.app')
 
 @section('content')
-<?php
-$user       = Auth()->user();
-$pegawai    = $user->pegawai;
-?>
 
 <div class="content-header">
     <div class="container-fluid">
@@ -92,14 +88,14 @@ $pegawai    = $user->pegawai;
                                     @elseif($dataPengajuan->status_pengajuan == 'tolak')
                                     <span class="badge badge-danger py-1">pengajuan ditolak</span>
                                     @endif <br>
-                                    @if($pegawai->jabatan_id == 2 && $dataPengajuan->status_pengajuan == null)
+                                    @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_pengajuan == null)
                                     <a href="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->kode_otp_usulan) }}" class="btn btn-success btn-sm text-white mr-1 mt-2" onclick="return confirm('Apakah pengajuan ini diterima ?')">
                                         <i class="fas fa-check-circle"></i>
                                     </a>
                                     <a href="{{ url('super-user/oldat/pengajuan/proses-ditolak/'. $dataPengajuan->kode_otp_usulan) }}" class="btn btn-danger btn-sm text-white mt-2" onclick="return confirm('Apakah pengajuan ini ditolak ?')">
                                         <i class="fas fa-times-circle"></i>
                                     </a>
-                                    @elseif($pegawai->jabatan_id != 2 && $dataPengajuan->status_pengajuan == 'terima' && $dataPengajuan->status_proses == 'proses')
+                                    @elseif(Auth::user()->pegawai->jabatan_id != 2 && $dataPengajuan->status_pengajuan == 'terima' && $dataPengajuan->status_proses == 'proses')
                                     <a href="{{ url('super-user/oldat/surat/buat-bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary btn-xs text-white mt-2 text-decoration-none">
                                         <i class="fas fa-file"></i> &nbsp; Buat BAST
                                     </a>

@@ -187,7 +187,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-file"></i>
+                                        <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>
                                             Daftar Pengajuan
                                             <i class="right fas fa-angle-left"></i>
@@ -224,6 +224,12 @@
                                     <a href="{{ url('super-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('super-user/aadb/kendaraan') ? 'active' : '' }}">
                                         <i class="nav-icon fas fa-file-alt"></i>
                                         <p>Laporan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/aadb/rekapitulasi') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-file"></i>
+                                        <p>Rekapitulasi</p>
                                     </a>
                                 </li>
                             </ul>

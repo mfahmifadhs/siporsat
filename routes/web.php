@@ -118,9 +118,11 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
         Route::get('{aksi}', [SuperUserController::class, 'aadb']);
-        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'submissionAADB']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'pengajuanAadb']);
+        Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
 
-        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'submissionAADB']);
+        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'pengajuanAadb']);
     });
 });
 
