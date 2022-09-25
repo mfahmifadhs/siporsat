@@ -121,19 +121,19 @@
                                                 <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
+                                                <div class="col-md-4"><label>Jabatan Pengusul </label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
+                                                <div class="col-md-4"><label>Unit Kerja </label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
+                                                <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Rencana Pengguna :</label></div>
+                                                <div class="col-md-4"><label>Rencana Pengguna </label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
                                             <div class="form-group row">
