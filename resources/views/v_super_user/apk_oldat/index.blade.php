@@ -54,6 +54,9 @@
                         <div id="konten-chart">
                             <canvas id="pie-chart" width="800" height="450"></canvas>
                         </div>
+                        <div id="konten-chart-google-chart">
+                            <div id="piechart" style="width: 900px; height: 500px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -261,6 +264,34 @@
         })
     })
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
+      console.log(dataChart);
+      chartData =  [['Task', 'Hours per Day']]
+      dataChart.forEach(data => {
+          chartData.push(data)
+      })
+      console.log(chartData)
+      var data = google.visualization.arrayToDataTable(chartData);
+
+      var options = {
+        title: 'Total Pengadaan Barang',
+        legend: {
+            'position':'left',
+            'alignment':'center'
+        },
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data, options);
+    }
+  </script>
 @endsection
 
 @endsection

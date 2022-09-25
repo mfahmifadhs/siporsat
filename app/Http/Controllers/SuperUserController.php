@@ -148,6 +148,7 @@ class SuperUserController extends Controller
         $timKerja   = TimKerja::get();
         $unitKerja  = UnitKerja::get();
         $chartData  = $this->getChartData();
+        $googleChartData  = $this->getGoogleChartData();
         if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
             $pengajuan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
@@ -163,7 +164,7 @@ class SuperUserController extends Controller
                 ->paginate(5);
         }
 
-        return view('v_super_user.apk_oldat.index', compact('chartData','unitKerja','timKerja','pengajuan'));
+        return view('v_super_user.apk_oldat.index', compact('googleChartData','chartData','unitKerja','timKerja','pengajuan'));
     }
 
     public function report(Request $request, $aksi, $id)
@@ -531,6 +532,26 @@ class SuperUserController extends Controller
         $chart = json_encode($resultChart);
 
         // dd($chart);
+        return $chart;
+    }
+    public function getGoogleChartData()
+    {
+        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id','tim_kerja')
+            ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
+            ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
+            ->get();
+
+        $dataKategoriBarang = KategoriBarang::get();
+        foreach ($dataKategoriBarang as $data) {
+            $dataArray[] =$data->kategori_barang;
+            $dataArray[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
+        }
+        // dd($dataChart);
+        $chart = json_encode($dataChart);
         return $chart;
     }
 
