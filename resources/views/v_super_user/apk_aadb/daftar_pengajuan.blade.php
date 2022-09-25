@@ -57,6 +57,7 @@
     </div>
 </section>
 
+
 @section('js')
 <script>
     $(function() {
