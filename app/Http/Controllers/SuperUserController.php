@@ -50,6 +50,8 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'usulan-pengadaan') {
             $pengajuan = UsulanAadb::join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id  ')
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
