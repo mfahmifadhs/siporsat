@@ -123,6 +123,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
         Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'pengajuanAadb']);
+
+        Route::get('dashboard/grafik', [SuperUserController::class, 'searchChartDataAADB']);
     });
 });
 

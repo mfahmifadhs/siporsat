@@ -79,7 +79,88 @@ class SuperUserController extends Controller
             $merk           = Kendaraan::select('merk_kendaraan')->groupBy('merk_kendaraan')->get();
             $tahun          = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
             $pengguna       = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
-            return view('v_super_user.apk_aadb.index', compact('unitKerja','jenisKendaraan','merk','tahun','pengguna'));
+            $googleChartData  = $this->getGoogleChartDataAADB();
+            return view('v_super_user.apk_aadb.index', compact('unitKerja','jenisKendaraan','merk','tahun','pengguna', 'googleChartData'));
+        }
+    }
+    public function getGoogleChartDataAADB()
+    {
+        $dataKendaraan = Kendaraan::select('id_kendaraan','unit_kerja_id','unit_kerja','jenis_aadb','jenis_kendaraan_id','jenis_kendaraan','merk_kendaraan','tipe_kendaraan','tahun_kendaraan','pengguna')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan')
+            ->get();
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[] = $data->jenis_kendaraan;
+            $dataArray[] = $dataKendaraan->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
+        }
+        // dd($dataChart);
+        $chart = json_encode($dataChart);
+        return $chart;
+    }
+    public function searchChartDataAADB(Request $request)
+    {
+        $dataKendaraan = Kendaraan::select('id_kendaraan','unit_kerja_id','unit_kerja','jenis_aadb','jenis_kendaraan_id','jenis_kendaraan','merk_kendaraan','tipe_kendaraan','tahun_kendaraan')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan');
+
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+        // dd($request->all());
+
+        if($request->hasAny(['jenis_aadb', 'unit_kerja','jenis_kendaraan','merk_kendaraan', 'tahun_kendaraan', 'pengguna'])){
+            if($request->jenis_aadb){
+                $dataSearch = $dataKendaraan->where('jenis_aadb',$request->jenis_aadb);
+            }
+            if($request->unit_kerja){
+                $dataSearch = $dataKendaraan->where('unit_kerja_id',$request->unit_kerja);
+            }
+            if($request->jenis_kendaraan){
+                $dataSearch = $dataKendaraan->where('jenis_kendaraan_id',$request->jenis_kendaraan);
+            }
+            if($request->merk_kendaraan){
+                $dataSearch = $dataKendaraan->where('merk_kendaraan',$request->merk_kendaraan);
+            }
+            if($request->tahun_kendaraan){
+                $dataSearch = $dataKendaraan->where('tahun_kendaraan',$request->tahun_kendaraan);
+            }
+            if($request->pengguna){
+                $dataSearch = $dataKendaraan->where('pengguna',$request->pengguna);
+            }
+
+            $dataSearch = $dataSearch->get();
+
+        }else {
+            $dataSearch = $dataKendaraan->get();
+        }
+
+        // dd($dataSearch);
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[] = $data->jenis_kendaraan;
+            $dataArray[] = $dataSearch->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
+        }
+        // dd($dataChart);
+
+        $chart = json_encode($dataChart);
+
+        if(count($dataSearch)>0){
+            return response([
+                'status' => true,
+                'total' => count($dataSearch),
+                'message' => 'success',
+                'data' => $chart
+            ], 200);
+        }else {
+            return response([
+                'status' => true,
+                'total' => count($dataSearch),
+                'message' => 'not found'
+            ], 200);
         }
     }
 
@@ -563,14 +644,15 @@ class SuperUserController extends Controller
             $dataSearchBarang = $dataBarang->get();
         }
 
-        foreach($dataKategoriBarang as $data){
-            $labelChart[] = $data->kategori_barang;
-            $dataChart[] = $dataSearchBarang->where('kategori_barang',$data->kategori_barang)->count();
+        foreach ($dataKategoriBarang as $data) {
+            $dataArray[] = $data->kategori_barang;
+            $dataArray[] = $dataSearchBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
         }
+        // dd($dataChart);
 
-        $resultChart['label'] = $labelChart;
-        $resultChart['data'] = $dataChart;
-        $chart = json_encode($resultChart);
+        $chart = json_encode($dataChart);
 
         if(count($dataSearchBarang)>0){
             return response([

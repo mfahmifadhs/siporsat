@@ -52,9 +52,6 @@
                     </div>
                     <div class="card-body" id="konten-statistik">
                         <div id="konten-chart">
-                            <canvas id="pie-chart" width="800" height="450"></canvas>
-                        </div>
-                        <div id="konten-chart-google-chart">
                             <div id="piechart" style="width: 900px; height: 500px;"></div>
                         </div>
                     </div>
@@ -186,41 +183,71 @@
 
 @section('js')
 <!-- ChartJS -->
-<script src="{{ asset('assets/plugins/chart.js/Chart.min.js')}}"></script>
+{{-- <script src="{{ asset('assets/plugins/chart.js/Chart.min.js')}}"></script> --}}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-    let ChartData = JSON.parse(`<?php echo $chartData; ?>`)
+    // let ChartData = JSON.parse(`<?php echo $chartData; ?>`)
+    // let chart
+    // loadChart(ChartData)
+
+
+    // function loadChart(ChartData) {
+    //     chart = new Chart(document.getElementById("pie-chart"), {
+    //         type: 'pie',
+    //         data: {
+    //             labels: ChartData.label,
+    //             datasets: [{
+    //                 label: "qts",
+    //                 backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+    //                 data: ChartData.data
+    //             }]
+    //         },
+    //         options: {
+
+    //             legend: {
+    //                 position: "left",
+    //                 align: "center"
+    //             },
+    //             maintainAspectRatio: false,
+    //             responsive: true,
+    //             title: {
+    //                 display: true,
+    //                 text: 'Total Pengadaan Barang'
+    //             }
+    //         }
+
+    //     });
+
+    // }
     let chart
-    loadChart(ChartData)
+    let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(function(){
+        drawChart(dataChart)
+    });
 
+    function drawChart(dataChart) {
+      console.log(dataChart);
+      chartData =  [['Jenis Kendaraan', 'Jumlah']]
+      dataChart.forEach(data => {
+          chartData.push(data)
+      })
+      console.log(chartData)
+      var data = google.visualization.arrayToDataTable(chartData);
 
-    function loadChart(ChartData) {
-        chart = new Chart(document.getElementById("pie-chart"), {
-            type: 'pie',
-            data: {
-                labels: ChartData.label,
-                datasets: [{
-                    label: "qts",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: ChartData.data
-                }]
-            },
-            options: {
+      var options = {
+        title: 'Total Jenis Kendaraan',
+        legend: {
+            'position':'left',
+            'alignment':'center'
+        },
+      };
 
-                legend: {
-                    position: "left",
-                    align: "center"
-                },
-                maintainAspectRatio: false,
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Total Pengadaan Barang'
-                }
-            }
+      chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-        });
-
+      chart.draw(data, options);
     }
+
     $('body').on('click', '#searchChartData', function() {
         let tahun = $('input[name="tahun"').val()
         let unit_kerja = $('select[name="unit_kerja"').val()
@@ -241,8 +268,7 @@
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart').show();
                     let data = JSON.parse(res.data)
-                    chart.destroy()
-                    loadChart(data)
+                    drawChart(data)
                 } else {
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart').hide();
@@ -264,34 +290,7 @@
         })
     })
 </script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-      let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
-      console.log(dataChart);
-      chartData =  [['Task', 'Hours per Day']]
-      dataChart.forEach(data => {
-          chartData.push(data)
-      })
-      console.log(chartData)
-      var data = google.visualization.arrayToDataTable(chartData);
-
-      var options = {
-        title: 'Total Pengadaan Barang',
-        legend: {
-            'position':'left',
-            'alignment':'center'
-        },
-      };
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-      chart.draw(data, options);
-    }
-  </script>
 @endsection
 
 @endsection
