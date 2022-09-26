@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\OLDAT;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\KategoriBarang;
+use App\Models\OLDAT\KategoriBarang;
 
 class FormUsulanPengadaan extends Model
 {

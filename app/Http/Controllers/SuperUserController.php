@@ -9,16 +9,18 @@ use App\Models\AADB\UsulanAadb;
 use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\Kendaraan;
 use App\Models\AADB\RiwayatKendaraan;
-use App\Models\Barang;
-use App\Models\KategoriBarang;
-use App\Models\Pegawai;
-use App\Models\KondisiBarang;
-use App\Models\TimKerja;
-use App\Models\FormUsulan;
-use App\Models\FormUsulanPengadaan;
-use App\Models\FormUsulanPerbaikan;
+use App\Models\AADB\UsulanServis;
+use App\Models\AADB\UsulanVoucherBBM;
+use App\Models\OLDAT\Barang;
+use App\Models\OLDAT\KategoriBarang;
+use App\Models\OLDAT\KondisiBarang;
+use App\Models\OLDAT\FormUsulan;
+use App\Models\OLDAT\FormUsulanPengadaan;
+use App\Models\OLDAT\FormUsulanPerbaikan;
+use App\Models\OLDAT\RiwayatBarang;
 use App\Models\UnitKerja;
-use App\Models\RiwayatBarang;
+use App\Models\TimKerja;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +56,6 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
                 ->get();
-
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
 
         } elseif ($aksi == 'rekapitulasi') {
@@ -166,30 +167,61 @@ class SuperUserController extends Controller
 
     public function pengajuanAadb(Request $request, $aksi, $id)
     {
-        if ($aksi == 'proses' && $id == 'pengadaan') {
-            $idFormUsulan = Carbon::now()->format('dmy').$request->id_usulan_pengadaan;
-
+        if ($aksi == 'proses') {
+            $idFormUsulan = Carbon::now()->format('dmy').$request->id_usulan;
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->kode_form          = 'AADB_001';
-            $usulan->jenis_form         = 1;
-            $usulan->total_pengajuan    = 1;
+            $usulan->jenis_form         = $request->jenis_form;
+            $usulan->total_pengajuan    = $request->total_pengajuan;
             $usulan->tanggal_usulan     = $request->tanggal_usulan;
             $usulan->rencana_pengguna   = $request->rencana_pengguna;
             $usulan->status_proses      = 'belum proses';
             $usulan->kode_otp_usulan    = $request->kode_otp_usulan;
             $usulan->save();
 
-            $usulanPengadaan = new UsulanKendaraan();
-            $usulanPengadaan->id_form_usulan_pengadaan  = $request->id_usulan_pengadaan;
-            $usulanPengadaan->form_usulan_id            = $idFormUsulan;
-            $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
-            $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
-            $usulanPengadaan->merk_kendaraan            = $request->merk_kendaraan;
-            $usulanPengadaan->tipe_kendaraan            = $request->tipe_kendaraan;
-            $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
-            $usulanPengadaan->save();
+            if ($id == 'pengadaan') {
+                $usulanPengadaan = new UsulanKendaraan();
+                $usulanPengadaan->id_form_usulan_pengadaan  = $request->id_usulan;
+                $usulanPengadaan->form_usulan_id            = $idFormUsulan;
+                $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
+                $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
+                $usulanPengadaan->merk_kendaraan            = $request->merk_kendaraan;
+                $usulanPengadaan->tipe_kendaraan            = $request->tipe_kendaraan;
+                $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
+                $usulanPengadaan->save();
+            } elseif ($id == 'servis') {
+                $usulanServis   = new UsulanServis();
+                $usulanServis->id_form_usulan_servis    = $request->id_usulan;
+                $usulanServis->form_usulan_id           = $idFormUsulan;
+                $usulanServis->kendaraan_id             = $request->kendaraan_id;
+                $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir;
+                $usulanServis->tgl_servis_terakhir      = $request->tgl_servis_terakhir;
+                $usulanServis->jatuh_tempo_servis       = $request->jatuh_tempo_servis;
+                $usulanServis->tgl_ganti_oli_terakhir   = $request->tgl_ganti_oli_terakhir;
+                $usulanServis->jatuh_tempo_ganti_oli    = $request->jatuh_tempo_ganti_oli;
+                $usulanServis->save();
+            } elseif ($id == 'perpanjangan-stnk') {
+                dd($request->all());
+            } elseif ($id == 'voucher-bbm') {
+                $kendaraan = $request->kendaraan_id;
+                foreach($kendaraan as $i => $kendaraan_id){
+                    $usulanVoucherBBM   = new UsulanVoucherBBM();
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = $request->id_usulan + $i;
+                    $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
+                    $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
+                    $usulanVoucherBBM->harga_perliter               = $request->harga_perliter[$i];
+                    $usulanVoucherBBM->jumlah_kebutuhan             = $request->jumlah_kebutuhan[$i];
+                    $usulanVoucherBBM->jenis_bbm                    = $request->jenis_bbm[$i];
+                    $usulanVoucherBBM->total_biaya                  = $request->total_biaya[$i];
+                    $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                    // dd($usulanVoucherBBM);
+                    $usulanVoucherBBM->save();
+                }
+
+
+            }
 
             return redirect('super-user/aadb/usulan/surat/'. $idFormUsulan);
 
@@ -202,11 +234,39 @@ class SuperUserController extends Controller
                 $pimpinan = null;
             }
 
-            $usulan = UsulanAadb::with('usulanKendaraan')->get();
+            $usulan = UsulanAadb::with('usulanKendaraan')
+                ->join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('id_form_usulan', $id)
+                ->get();
+
             return view('v_super_user/apk_aadb/surat_usulan', compact('pimpinan','usulan'));
+
+        } elseif ($aksi == 'print-surat-usulan') {
+            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+                $pimpinan = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                    ->where('jabatan_id', '2')->where('unit_kerja_id',1)->first();
+            } else {
+                $pimpinan = null;
+            }
+
+            $usulan = UsulanAadb::join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('kode_otp_usulan', $id)
+                ->get();
+
+            return view('v_super_user/apk_aadb/print_surat_usulan', compact('pimpinan','usulan'));
+
         } else {
             $jenisKendaraan = JenisKendaraan::get();
-            return view('v_super_user.apk_aadb.usulan', compact('aksi','jenisKendaraan'));
+            $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->orderBy('jenis_kendaraan', 'ASC')
+                ->get();
+            return view('v_super_user.apk_aadb.usulan', compact('aksi','jenisKendaraan','kendaraan'));
         }
     }
 
@@ -227,10 +287,9 @@ class SuperUserController extends Controller
     // ===============================================
     public function oldat()
     {
-        $timKerja   = TimKerja::get();
-        $unitKerja  = UnitKerja::get();
-        $chartData  = $this->getChartData();
-        $googleChartData = $this->getChartData();
+        $timKerja        = TimKerja::get();
+        $unitKerja       = UnitKerja::get();
+        $googleChartData = $this->getGoogleChartData();
         if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
             $pengajuan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
@@ -246,7 +305,7 @@ class SuperUserController extends Controller
                 ->paginate(5);
         }
 
-        return view('v_super_user.apk_oldat.index', compact('chartData','googleChartData','unitKerja','timKerja','pengajuan'));
+        return view('v_super_user.apk_oldat.index', compact('googleChartData','unitKerja','timKerja','pengajuan'));
     }
 
     public function report(Request $request, $aksi, $id)
@@ -468,7 +527,6 @@ class SuperUserController extends Controller
                     ->where('id_form_usulan', $id)->get();
             }
 
-
             return view('v_super_user.apk_oldat.detail_bast', compact('bast','pimpinan'));
 
         } elseif ($aksi == 'buat-bast') {
@@ -533,7 +591,7 @@ class SuperUserController extends Controller
                     $barang->satuan_barang      = $request->satuan_barang[$i];
                     $barang->nilai_perolehan    = $request->nilai_perolehan[$i];
                     $barang->tahun_perolehan    = $request->tahun_perolehan[$i];
-                    $barang->kondisi_barang     = 1;
+                    $barang->kondisi_barang_id  = 1;
                     $barang->foto_barang        = $filename;
                     $barang->save();
                 }
@@ -595,7 +653,7 @@ class SuperUserController extends Controller
         }
     }
 
-    public function getChartData()
+    public function getGoogleChartData()
     {
         $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id','tim_kerja')
             ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
@@ -606,14 +664,13 @@ class SuperUserController extends Controller
 
         $dataKategoriBarang = KategoriBarang::get();
         foreach ($dataKategoriBarang as $data) {
-            $labelChart[] = $data->kategori_barang;
-            $dataChart[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataArray[] =$data->kategori_barang;
+            $dataArray[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
         }
-        $resultChart['label'] = $labelChart;
-        $resultChart['data'] = $dataChart;
-        $chart = json_encode($resultChart);
-
-        // dd($chart);
+        // dd($dataChart);
+        $chart = json_encode($dataChart);
         return $chart;
     }
 
@@ -719,7 +776,7 @@ class SuperUserController extends Controller
         "to": '.$penerima.',
         "type": "template",
         "template": {
-            "name": "siporsat_otp2",
+            "name": "siporsat_tes2",
             "language": {
             "code": "id"
             },

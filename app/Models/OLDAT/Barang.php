@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\OLDAT;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\RiwayatBarang;
+use App\Models\OLDAT\RiwayatBarang;
 
 class Barang extends Model
 {

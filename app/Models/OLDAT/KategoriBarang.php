@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\OLDAT;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KondisiBarang extends Model
+class KategoriBarang extends Model
 {
     use HasFactory;
-    protected $table        = "oldat_tbl_kondisi_barang";
-    protected $primaryKey   = "id_kondisi_barang";
+    protected $table        = "oldat_tbl_kategori_barang";
+    protected $primaryKey   = "id_kategori_barang";
     public $timestamps      = false;
 
     protected $fillable = [
-        'kondisi_barang'
+        'kategori_barang'
     ];
 }

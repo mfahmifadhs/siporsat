@@ -186,39 +186,10 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>
-                                            Daftar Pengajuan
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                        <p>Daftar Pengajuan</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="nav-link">
-                                                <i class="nav-icon far fa-circle"></i>
-                                                <p>Pengadaan Baru/Sewa</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/aadb/usulan-perpanjangan-stnk') }}" class="nav-link">
-                                                <i class="nav-icon far fa-circle"></i>
-                                                <p>Perpanjangan STNK</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/aadb/usulan-servis') }}" class="nav-link">
-                                                <i class="nav-icon far fa-circle"></i>
-                                                <p>Servis</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/aadb/usulan-voucher-bbm') }}" class="nav-link">
-                                                <i class="nav-icon far fa-circle"></i>
-                                                <p>Voucher BBM</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('super-user/aadb/kendaraan') ? 'active' : '' }}">

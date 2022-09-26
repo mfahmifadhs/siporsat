@@ -5,18 +5,8 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Dashboard Pengelolaan AADB</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">
-                        <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn btn-primary">Usulan <br> Pengadaan</a>
-                        <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary">Usulan <br> Servis</a>
-                        <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn btn-primary">Usulan <br> Perpanjangan STNK</a>
-                        <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn btn-primary">Usulan <br> Voucher BBM</a>
-                    </li>
-                </ol>
+            <div class="col-sm-8">
+                <h1 class="m-0">Dashboard Pengelolaan Alat Angkutan Darat Bermotor (AADB)</h1>
             </div>
         </div>
     </div>
@@ -25,7 +15,33 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-9 form-group">
+            <div class="col-md-2 form-group">
+                <div class="form-group col-md-12">
+                    <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn-block btn btn-primary">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2962/2962303.png" width="50" height="50">
+                        <h5 class="font-weight-bold mt-1">Usulan <br> Pengadaan</h5>
+                    </a>
+                </div>
+                <div class="form-group col-md-12">
+                    <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn-block btn btn-primary">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4659/4659844.png" width="50" height="50">
+                        <h5 class="font-weight-bold mt-1">Usulan <br> Servis</h5>
+                    </a>
+                </div>
+                <div class="form-group col-md-12">
+                    <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn-block btn btn-primary">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3389/3389596.png" width="50" height="50">
+                        <h5 class="font-weight-bold mt-1">Usulan Perpanjangan STNK</h5>
+                    </a>
+                </div>
+                <div class="form-group col-md-12">
+                    <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn-block btn btn-primary">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2915/2915450.png" width="50" height="50">
+                        <h5 class="font-weight-bold mt-1">Usulan <br> Voucher BBM</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-10 form-group">
                 <div class="card card-outline card-primary text-center" style="height: 100%;">
                     <div class="card-header">
                         <div class="row">
@@ -76,10 +92,17 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-1 form-group">
-                                <button id="searchChartData" class="btn btn-primary form-control">
-                                    <i class="fas fa-search"></i> Cari
-                                </button>
+                            <div class="col-md-6 form-group mr-2">
+                                <div class="row">
+
+                                    <a id="searchChartData" class="btn btn-primary ml-2">
+                                        <i class="fas fa-search"></i> Cari
+                                    </a>
+                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="btn btn-danger ml-2">
+                                        <i class="fas fa-undo"></i>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -99,31 +122,35 @@
 <script type="text/javascript">
     let chart
     let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(function(){
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+    google.charts.setOnLoadCallback(function() {
         drawChart(dataChart)
     });
 
     function drawChart(dataChart) {
-      console.log(dataChart);
-      chartData =  [['Jenis Kendaraan', 'Jumlah']]
-      dataChart.forEach(data => {
-          chartData.push(data)
-      })
-      console.log(chartData)
-      var data = google.visualization.arrayToDataTable(chartData);
+        console.log(dataChart);
+        chartData = [
+            ['Jenis Kendaraan', 'Jumlah']
+        ]
+        dataChart.forEach(data => {
+            chartData.push(data)
+        })
+        console.log(chartData)
+        var data = google.visualization.arrayToDataTable(chartData);
 
-      var options = {
-        title: 'Total Jenis Kendaraan',
-        legend: {
-            'position':'left',
-            'alignment':'center'
-        },
-      };
+        var options = {
+            title: 'Total Jenis Kendaraan',
+            legend: {
+                'position': 'left',
+                'alignment': 'center'
+            },
+        };
 
-      chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-      chart.draw(data, options);
+        chart.draw(data, options);
     }
 
 
@@ -166,7 +193,7 @@
                     $('#konten-statistik').append(html);
 
                 }
-               
+
             },
 
         })

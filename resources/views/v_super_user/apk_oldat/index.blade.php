@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="card-body" id="konten-statistik">
-                        <div id="konten-chart">
+                        <div id="konten-chart-google-chart">
                             <div id="piechart" style="width: 900px; height: 500px;"></div>
                         </div>
                     </div>
@@ -118,19 +118,19 @@
                                                 <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Jabatan Pengusul </label></div>
+                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Unit Kerja </label></div>
+                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Tanggal Usulan </label></div>
+                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Rencana Pengguna </label></div>
+                                                <div class="col-md-4"><label>Rencana Pengguna :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
                                             <div class="form-group row">
@@ -183,42 +183,8 @@
 
 @section('js')
 <!-- ChartJS -->
-{{-- <script src="{{ asset('assets/plugins/chart.js/Chart.min.js')}}"></script> --}}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-    // let ChartData = JSON.parse(`<?php echo $chartData; ?>`)
-    // let chart
-    // loadChart(ChartData)
-
-
-    // function loadChart(ChartData) {
-    //     chart = new Chart(document.getElementById("pie-chart"), {
-    //         type: 'pie',
-    //         data: {
-    //             labels: ChartData.label,
-    //             datasets: [{
-    //                 label: "qts",
-    //                 backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-    //                 data: ChartData.data
-    //             }]
-    //         },
-    //         options: {
-
-    //             legend: {
-    //                 position: "left",
-    //                 align: "center"
-    //             },
-    //             maintainAspectRatio: false,
-    //             responsive: true,
-    //             title: {
-    //                 display: true,
-    //                 text: 'Total Pengadaan Barang'
-    //             }
-    //         }
-
-    //     });
-
-    // }
     let chart
     let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
     google.charts.load('current', {'packages':['corechart']});
@@ -247,7 +213,6 @@
 
       chart.draw(data, options);
     }
-
     $('body').on('click', '#searchChartData', function() {
         let tahun = $('input[name="tahun"').val()
         let unit_kerja = $('select[name="unit_kerja"').val()
@@ -258,7 +223,6 @@
         } else {
             url = '<?= url("/super-user/oldat/grafik") ?>'
         }
-
         jQuery.ajax({
             url: url,
             type: "GET",
@@ -283,10 +247,8 @@
                     html += '</div>'
                     html += '</div>'
                     $('#konten-statistik').append(html);
-
                 }
             },
-
         })
     })
 </script>
