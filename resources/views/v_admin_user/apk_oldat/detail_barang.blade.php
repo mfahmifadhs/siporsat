@@ -156,18 +156,77 @@
                                         <i class="fas fa-user bg-primary"></i>
 
                                         <div class="timeline-item">
-                                            <span class="time"><i class="far fa-clock"></i> 12:05</span>
+                                            <span class="time"><i class="far fa-date"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
                                             <h3 class="timeline-header text-capitalize">
-                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}</h3>
+                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                            </h3>
 
                                             <div class="timeline-body">
-                                                {{ $riwayatPengguna->keperluan_penggunaan }}
-                                            </div>
-                                            <div class="timeline-footer">
-                                                <span class="badge badge-primary">Kondisi Barang {{ $riwayatPengguna->kondisi_barang }}</span>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label>Lokasi Pemakaian : </label>
+                                                        <p>{{ $riwayatPengguna->keperluan_penggunaan }}</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label>Kondisi Barang : </label>
+                                                        <p>{{ $riwayatPengguna->kondisi_barang }}</p>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="modal fade" id="modal-default">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title text-capitalize">
+                                                            {{ $riwayatPengguna->kategori_barang.' '.$riwayatPengguna->spesifikasi_barang }}
+                                                        </h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ url('admin-user/oldat/barang/ubah-riwayat/'. $riwayatPengguna->barang_id) }}">
+                                                            @csrf
+                                                            <input type="hidden" name="id_riwayat_barang" value="{{ $riwayatPengguna->id_riwayat_barang }}">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Pengguna</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->nama_pegawai }}" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Tanggal Pemakaian</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="date" class="form-control" name="tanggal_pengguna" value="{{ $riwayatPengguna->tanggal_pengguna }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Lokasi Pemakaian</label>
+                                                                <div class="col-sm-8">
+                                                                    <textarea type="text" class="form-control" name="keperluan_penggunaan">{{ $riwayatPengguna->keperluan_penggunaan }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">&nbsp;</label>
+                                                                <div class="col-sm-8">
+                                                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah informasi riwayat pemakaian ?')">Ubah</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
                                     </div>
                                 </div>
                                 @endforeach

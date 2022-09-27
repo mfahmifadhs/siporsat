@@ -18,14 +18,17 @@ class PegawaiImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
-        if ($row[5] != null) {
+
+        if ($row[5] != null || $row[6] != null) {
             $timKerja    = TimKerja::select('id_tim_kerja')->where('tim_kerja','like', '%'. $row[5] . '%')->first();
+            $unitKerja   = UnitKerja::select('id_unit_kerja')->where('unit_kerja','like', '%'. $row[6] . '%')->first();
             $idTimKerja  = $timKerja->id_tim_kerja;
+            $idUnitKerja = $timKerja->id_unit_kerja;
         } else {
-            $idTimKerja = $row[5];
+            $idTimKerja  = $row[5];
+            $idUnitKerja = $row[6];
         }
 
-        $idUnitKerja = UnitKerja::select('id_unit_kerja')->where('unit_kerja','like', '%'. $row[6] . '%')->first();
         $data        = Pegawai::where('id_pegawai', $row[0])->first();
 
         if ($data == '' && $row[0] != null) {
@@ -36,7 +39,7 @@ class PegawaiImport implements ToModel, WithStartRow
                 'nohp_pegawai'          => $row[3],
                 'jabatan_id'            => $row[4],
                 'tim_kerja_id'          => $idTimKerja,
-                'unit_kerja_id'         => $idUnitKerja->id_unit_kerja,
+                'unit_kerja_id'         => $idUnitKerja,
                 'keterangan_pegawai'    => $row[7]
             ]);
         }

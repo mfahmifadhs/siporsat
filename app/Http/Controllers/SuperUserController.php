@@ -320,6 +320,7 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->get();
             return view('v_super_user.apk_oldat.daftar_laporan', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
+
         } elseif ($aksi == 'detail') {
             $kategoriBarang = KategoriBarang::get();
             $kondisiBarang  = KondisiBarang::get();
@@ -331,10 +332,11 @@ class SuperUserController extends Controller
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_riwayat_barang.kondisi_barang_id')
                 ->join('tbl_pegawai','tbl_pegawai.id_pegawai','oldat_tbl_riwayat_barang.pegawai_id')
                 ->leftjoin('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
+                ->leftjoin('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
                 ->where('barang_id', $id)->get();
 
             return view('v_super_user.apk_oldat.detail_barang', compact('kategoriBarang','kondisiBarang','pegawai','barang','riwayat'));
+
         } elseif ($aksi == 'download') {
             return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
         }

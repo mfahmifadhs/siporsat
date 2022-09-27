@@ -7,14 +7,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\BarangExport;
 use App\Imports\AADB\KendaraanImport;
-use App\Models\Barang;
-use App\Models\KategoriBarang;
-use App\Models\KondisiBarang;
-use App\Models\Pegawai;
-use App\Models\RiwayatBarang;
-
 use App\Models\AADB\Kendaraan;
-
+use App\Models\OLDAT\Barang;
+use App\Models\OLDAT\KategoriBarang;
+use App\Models\OLDAT\KondisiBarang;
+use App\Models\OLDAT\RiwayatBarang;
+use App\Models\Pegawai;
+use Carbon\Carbon;
 use Validator;
 
 class AdminUserController extends Controller
@@ -61,12 +60,14 @@ class AdminUserController extends Controller
             $kondisiBarang  = KondisiBarang::get();
             $pegawai        = Pegawai::get();
             $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
-            ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
-            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->orderBy('tahun_perolehan','DESC')
-            ->get();
+                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->orderBy('tahun_perolehan','DESC')
+                ->get();
+
             return view('v_admin_user.apk_oldat.daftar_barang', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
+
         } elseif ($aksi == 'detail') {
             $kategoriBarang = KategoriBarang::get();
             $kondisiBarang  = KondisiBarang::get();
@@ -74,12 +75,15 @@ class AdminUserController extends Controller
             $barang         = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
                 ->where('id_barang', $id)->first();
+
             $riwayat        = RiwayatBarang::join('oldat_tbl_barang','id_barang','barang_id')
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_riwayat_barang.kondisi_barang_id')
+                ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
                 ->join('tbl_pegawai','tbl_pegawai.id_pegawai','oldat_tbl_riwayat_barang.pegawai_id')
-                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
+                ->leftjoin('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->leftjoin('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
                 ->where('barang_id', $id)->get();
+
             return view('v_admin_user.apk_oldat.detail_barang', compact('kategoriBarang','kondisiBarang','pegawai','barang','riwayat'));
 
         } elseif ($aksi == 'upload') {
@@ -142,11 +146,21 @@ class AdminUserController extends Controller
             $riwayat->id_riwayat_barang = $cekBarang + 1;
             $riwayat->barang_id         = $id;
             $riwayat->pegawai_id        = $request->input('id_pegawai');
+            $riwayat->tanggal_pengguna  = Carbon::now();
             $riwayat->kondisi_barang_id = $request->input('id_kondisi_barang');
             $riwayat->save();
 
             return redirect('admin-user/oldat/barang/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Barang');
-        }elseif ($aksi == 'download') {
+
+        } elseif ($aksi == 'ubah-riwayat') {
+            RiwayatBarang::where('id_riwayat_barang', $request->id_riwayat_barang)->update([
+                'tanggal_pengguna'     => $request->tanggal_pengguna,
+                'keperluan_penggunaan' => $request->keperluan_penggunaan
+            ]);
+
+            return redirect('admin-user/oldat/barang/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Barang');
+
+        } elseif ($aksi == 'download') {
             return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
         } else {
             $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);

@@ -144,16 +144,23 @@
                                         <i class="fas fa-user bg-primary"></i>
 
                                         <div class="timeline-item">
-                                            <span class="time"><i class="far fa-clock"></i> 12:05</span>
+                                            <span class="time"><i class="far fa-calendar"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
                                             <h3 class="timeline-header text-capitalize">
-                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}</h3>
+                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                            </h3>
 
                                             <div class="timeline-body">
-                                                {{ $riwayatPengguna->keperluan_penggunaan }}
-                                            </div>
-                                            <div class="timeline-footer">
-                                                <span class="badge badge-primary">Kondisi Barang {{ $riwayatPengguna->kondisi_barang }}</span>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label>Lokasi Pemakaian : </label>
+                                                        <p>{{ $riwayatPengguna->keperluan_penggunaan }}</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label>Kondisi Barang : </label>
+                                                        <p>{{ $riwayatPengguna->kondisi_barang }}</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

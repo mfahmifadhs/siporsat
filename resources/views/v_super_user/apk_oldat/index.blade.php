@@ -52,7 +52,29 @@
                     </div>
                     <div class="card-body" id="konten-statistik">
                         <div id="konten-chart-google-chart">
-                            <div id="piechart" style="width: 900px; height: 500px;"></div>
+                            <div id="piechart" style="height: 500px;"></div>
+                        </div>
+                        <div class="table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis Barang</th>
+                                        <th>Unit Kerja</th>
+                                        <th>Tim Kerja</th>
+                                        <th>Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -202,7 +224,7 @@
       var data = google.visualization.arrayToDataTable(chartData);
 
       var options = {
-        title: 'Total Jenis Kendaraan',
+        title: 'Total Barang',
         legend: {
             'position':'left',
             'alignment':'center'
@@ -214,9 +236,9 @@
       chart.draw(data, options);
     }
     $('body').on('click', '#searchChartData', function() {
-        let tahun = $('input[name="tahun"').val()
+        let tahun      = $('input[name="tahun"').val()
         let unit_kerja = $('select[name="unit_kerja"').val()
-        let tim_kerja = $('select[name="tim_kerja"').val()
+        let tim_kerja  = $('select[name="tim_kerja"').val()
         let url = ''
         if (tahun || unit_kerja || tim_kerja) {
             url = '<?= url("/super-user/oldat/grafik?tahun='+tahun+'&unit_kerja='+unit_kerja+'&tim_kerja='+tim_kerja+'") ?>'
