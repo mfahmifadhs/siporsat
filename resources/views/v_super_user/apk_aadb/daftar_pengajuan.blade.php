@@ -62,7 +62,13 @@
                                             <div class="modal-header">
                                                 @if ($dataPengajuan->status_pengajuan == '')
                                                     @if($dataPengajuan->status_proses == 'belum proses')
-                                                        <a class="btn btn-outline-warning disabled">Belum Diproses</a>
+                                                        <span class="border border-warning">
+                                                            <b class="text-warning p-3">Menunggu Persetujuan</b>
+                                                        </span>
+                                                    @elseif($dataPengajuan->status_proses == 'proses')
+                                                        <span class="border border-primary">
+                                                            <b class="text-primary p-3">Proses</b>
+                                                        </span>
                                                     @endif
                                                 @elseif ($dataPengajuan->status_pengajuan == 'diterima')
 
@@ -76,7 +82,9 @@
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center">
-                                                        <h5>Detail Pengajuan Usulan {{ $dataPengajuan->jenis_form_usulan }} <hr></h5>
+                                                        <h5>Detail Pengajuan Usulan {{ $dataPengajuan->jenis_form_usulan }}
+                                                            <hr>
+                                                        </h5>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row mt-2">
@@ -110,69 +118,104 @@
                                                     </h6>
                                                 </div>
                                                 @if($dataPengajuan->jenis_form == 1)
-                                                    @foreach($dataPengajuan -> usulanKendaraan as $dataKendaraan )
-                                                    <div class="form-group row mb-0">
+                                                @foreach($dataPengajuan -> usulanKendaraan as $dataKendaraan )
+                                                <div class="form-group">
+                                                    <div class="row">
                                                         <div class="col-md-4"><label>Jenis AADB </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->jenis_aadb }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-4"><label>Jenis Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->jenis_kendaraan }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-4"><label>Merk </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->merk_kendaraan }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-4"><label>Tipe </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->tipe_kendaraan }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-4"><label>Tahun Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->tahun_kendaraan }}</div>
                                                     </div>
-                                                    @endforeach
+                                                </div>
+                                                @endforeach
                                                 @elseif($dataPengajuan->jenis_form == 2)
-                                                    @foreach($dataPengajuan -> usulanServis as $dataServis)
-                                                    <div class="form-group row mb-0">
+                                                @foreach($dataPengajuan -> usulanServis as $dataServis)
+                                                <div class="form-group">
+                                                    <div class="row">
                                                         <div class="col-md-5"><label>Kendaraan </label></div>
                                                         <div class="col-md-7">: {{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-5"><label>Kilometer Terakhir </label></div>
                                                         <div class="col-md-7">: {{ $dataServis->kilometer_terakhir }} KM</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-5"><label>Tgl. Terakhir Servis </label></div>
                                                         <div class="col-md-7">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_servis)->isoFormat('DD MMMM Y') }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-5"><label>Jatuh Tempo Servis </label></div>
                                                         <div class="col-md-7">: {{ $dataServis->jatuh_tempo_servis }} KM</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-5"><label>Tgl. Terakhir Ganti Oli </label></div>
                                                         <div class="col-md-7">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_ganti_oli)->isoFormat('DD MMMM Y') }}</div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
                                                         <div class="col-md-5"><label>Jatuh Tempo Ganti Oli </label></div>
                                                         <div class="col-md-7">: {{ $dataServis->jatuh_tempo_ganti_oli }} KM</div>
                                                     </div>
-                                                    @endforeach
+                                                </div>
+                                                @endforeach
+                                                @elseif($dataPengajuan->jenis_form == 3)
+                                                @foreach($dataPengajuan -> usulanSTNK as $dataSTNK)
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4"><label>Kendaraan </label></div>
+                                                        <div class="col-md-8">: {{ $dataSTNK->merk_kendaraan.' '.$dataSTNK->tipe_kendaraan }}</div>
+                                                        <div class="col-md-4"><label>No Plat BBM </label></div>
+                                                        <div class="col-md-8">: {{ $dataSTNK->no_plat_kendaraan }}</div>
+                                                        <div class="col-md-4"><label>Masa Berlaku STNK</label></div>
+                                                        <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                                @elseif($dataPengajuan->jenis_form == 4)
+                                                @foreach($dataPengajuan -> usulanVoucher as $dataVoucher)
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4"><label>Kendaraan </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</div>
+                                                        <div class="col-md-4"><label>Jenis BBM </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->jenis_bbm }}</div>
+                                                        <div class="col-md-4"><label>Harga Perliter </label></div>
+                                                        <div class="col-md-8">: Rp {{ number_format($dataVoucher->harga_perliter, 0, ',', '.') }}</div>
+                                                        <div class="col-md-4"><label>Kebutuhan BBM </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->jumlah_kebutuhan }} L</div>
+                                                        <div class="col-md-4"><label>Total </label></div>
+                                                        <div class="col-md-8">: Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</div>
+                                                        <div class="col-md-4"><label>Bulan Pengadaan </label></div>
+                                                        <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
                                                 @endif
                                             </div>
                                             <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <a href="{{ url('super-user/aadb/usulan/surat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
-                                                    <i class="fas fa-file"></i> Surat Pengajuan
-                                                </a>
+                                                <div class="col-md-12">
+                                                    <span style="float: left;">
+                                                        @if($dataPengajuan->status_proses == 'proses')
+                                                            @if($dataPengajuan->kode_otp_bast == null)
+                                                                <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
+                                                                    <i class="fas fa-file"></i> Buat BAST
+                                                                </a>
+                                                            @else
+                                                                <a href="#" class="btn btn-primary">
+                                                                    <i class="fas fa-file"></i> Surat BAST
+                                                                </a>
+                                                            @endif
+                                                        @else
+                                                            <a class="btn btn-primary disabled">
+                                                                <i class="fas fa-file"></i> Buat BAST
+                                                            </a>
+                                                        @endif
+                                                    </span>
+                                                    <span style="float: right;">
+                                                        <a href="{{ url('super-user/aadb/usulan/surat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
+                                                            <i class="fas fa-file"></i> Surat Pengajuan
+                                                        </a>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal-dialog -->
                                 </div>
-                                <!-- /.modal -->
                                 @endforeach
                             </tbody>
                         </table>

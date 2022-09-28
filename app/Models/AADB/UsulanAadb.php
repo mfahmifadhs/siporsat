@@ -36,6 +36,11 @@ class UsulanAadb extends Model
             ->join('aadb_tbl_kendaraan','id_kendaraan','kendaraan_id');
     }
 
+    public function usulanSTNK() {
+        return $this->hasMany(UsulanPerpanjanganSTNK::class, 'form_usulan_id','id_form_usulan')
+            ->join('aadb_tbl_kendaraan','id_kendaraan','kendaraan_id');
+    }
+
     public function usulanVoucher() {
         return $this->hasMany(UsulanVoucherBBM::class, 'form_usulan_id','id_form_usulan')
             ->join('aadb_tbl_kendaraan','id_kendaraan','kendaraan_id');

@@ -123,6 +123,28 @@
                         @endforeach
                     </tbody>
                 </table>
+                @elseif($dataUsulan->jenis_form == '3')
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kendaraan</th>
+                            <th>No. Plat</th>
+                            <th>Masa Berlaku STNK</th>
+                        </tr>
+                    </thead>
+                    <?php $no = 1; ?>
+                    <tbody>
+                        @foreach($dataUsulan->usulanSTNK as $dataSTNK)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataSTNK->merk_kendaraan.' '.$dataSTNK->tipe_kendaraan }}</td>
+                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
                 @elseif($dataUsulan->jenis_form == '4')
                 <table class="table table-bordered m-0">
                     <thead>

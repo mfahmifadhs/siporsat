@@ -10,6 +10,7 @@ use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\Kendaraan;
 use App\Models\AADB\RiwayatKendaraan;
 use App\Models\AADB\UsulanServis;
+use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
@@ -55,6 +56,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->orderBy('tanggal_usulan','DESC')
                 ->get();
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
 
@@ -75,93 +77,17 @@ class SuperUserController extends Controller
             return view('v_super_user.apk_aadb.daftar_rekap', compact('unitKerja','jenisKendaraan','rekapUnker'));
 
         } else {
-            $unitKerja      = UnitKerja::get();
-            $jenisKendaraan = JenisKendaraan::get();
-            $merk           = Kendaraan::select('merk_kendaraan')->groupBy('merk_kendaraan')->get();
-            $tahun          = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
-            $pengguna       = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
-            $googleChartData  = $this->getGoogleChartDataAADB();
-            return view('v_super_user.apk_aadb.index', compact('unitKerja','jenisKendaraan','merk','tahun','pengguna', 'googleChartData'));
-        }
-    }
-    public function getGoogleChartDataAADB()
-    {
-        $dataKendaraan = Kendaraan::select('id_kendaraan','unit_kerja_id','unit_kerja','jenis_aadb','jenis_kendaraan_id','jenis_kendaraan','merk_kendaraan','tipe_kendaraan','tahun_kendaraan','pengguna')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan')
-            ->get();
-
-        $dataJenisKendaraan = JenisKendaraan::get();
-        foreach ($dataJenisKendaraan as $data) {
-            $dataArray[] = $data->jenis_kendaraan;
-            $dataArray[] = $dataKendaraan->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
-            $dataChart[] = $dataArray;
-            unset($dataArray);
-        }
-        // dd($dataChart);
-        $chart = json_encode($dataChart);
-        return $chart;
-    }
-    public function searchChartDataAADB(Request $request)
-    {
-        $dataKendaraan = Kendaraan::select('id_kendaraan','unit_kerja_id','unit_kerja','jenis_aadb','jenis_kendaraan_id','jenis_kendaraan','merk_kendaraan','tipe_kendaraan','tahun_kendaraan')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan');
-
-
-        $dataJenisKendaraan = JenisKendaraan::get();
-        // dd($request->all());
-
-        if($request->hasAny(['jenis_aadb', 'unit_kerja','jenis_kendaraan','merk_kendaraan', 'tahun_kendaraan', 'pengguna'])){
-            if($request->jenis_aadb){
-                $dataSearch = $dataKendaraan->where('jenis_aadb',$request->jenis_aadb);
-            }
-            if($request->unit_kerja){
-                $dataSearch = $dataKendaraan->where('unit_kerja_id',$request->unit_kerja);
-            }
-            if($request->jenis_kendaraan){
-                $dataSearch = $dataKendaraan->where('jenis_kendaraan_id',$request->jenis_kendaraan);
-            }
-            if($request->merk_kendaraan){
-                $dataSearch = $dataKendaraan->where('merk_kendaraan',$request->merk_kendaraan);
-            }
-            if($request->tahun_kendaraan){
-                $dataSearch = $dataKendaraan->where('tahun_kendaraan',$request->tahun_kendaraan);
-            }
-            if($request->pengguna){
-                $dataSearch = $dataKendaraan->where('pengguna',$request->pengguna);
-            }
-
-            $dataSearch = $dataSearch->get();
-
-        }else {
-            $dataSearch = $dataKendaraan->get();
-        }
-
-        // dd($dataSearch);
-        foreach ($dataJenisKendaraan as $data) {
-            $dataArray[] = $data->jenis_kendaraan;
-            $dataArray[] = $dataSearch->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
-            $dataChart[] = $dataArray;
-            unset($dataArray);
-        }
-        // dd($dataChart);
-
-        $chart = json_encode($dataChart);
-
-        if(count($dataSearch)>0){
-            return response([
-                'status' => true,
-                'total' => count($dataSearch),
-                'message' => 'success',
-                'data' => $chart
-            ], 200);
-        }else {
-            return response([
-                'status' => true,
-                'total' => count($dataSearch),
-                'message' => 'not found'
-            ], 200);
+            $unitKerja       = UnitKerja::get();
+            $jenisKendaraan  = JenisKendaraan::get();
+            $merk            = Kendaraan::select('merk_kendaraan')->groupBy('merk_kendaraan')->get();
+            $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
+            $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
+            $kendaraan       = Kendaraan::orderBy('jenis_aadb','ASC')
+                ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->get();
+            $googleChartData = $this->getGoogleChartDataAADB();
+            return view('v_super_user.apk_aadb.index', compact('unitKerja','jenisKendaraan','merk','tahun','pengguna', 'googleChartData','kendaraan'));
         }
     }
 
@@ -203,7 +129,16 @@ class SuperUserController extends Controller
                 $usulanServis->jatuh_tempo_ganti_oli    = $request->jatuh_tempo_ganti_oli;
                 $usulanServis->save();
             } elseif ($id == 'perpanjangan-stnk') {
-                dd($request->all());
+                $kendaraan = $request->kendaraan_id;
+                foreach($kendaraan as $i => $kendaraan_id){
+                    $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = $request->id_usulan + $i;
+                    $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
+                    $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
+                    $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
+                    $usulanPerpanjangan->save();
+                }
+
             } elseif ($id == 'voucher-bbm') {
                 $kendaraan = $request->kendaraan_id;
                 foreach($kendaraan as $i => $kendaraan_id){
@@ -261,6 +196,32 @@ class SuperUserController extends Controller
 
             return view('v_super_user/apk_aadb/print_surat_usulan', compact('pimpinan','usulan'));
 
+        } elseif ($aksi == 'bast') {
+            $cekForm = UsulanAadb::where('id_form_usulan', $id)->first();
+            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+                $pimpinan = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                    ->where('jabatan_id', '2')->where('unit_kerja_id',1)->first();
+            } else {
+                $pimpinan = null;
+            }
+
+            if ($cekForm->jenis_form == 1) {
+                $usulan = UsulanAadb::join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
+                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+            } elseif ($cekForm->jenis_form == 2) {
+
+            } elseif ($cekForm->jenis_form == 3) {
+
+            } else {
+
+            }
+
+            return view('v_super_user/apk_aadb/bast', compact('cekForm','pimpinan','usulan'));
+
         } else {
             $jenisKendaraan = JenisKendaraan::get();
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
@@ -279,6 +240,125 @@ class SuperUserController extends Controller
             $pengguna = RiwayatKendaraan::where('kendaraan_id', $id)->get();
 
             return view('v_super_user.apk_aadb.detail_kendaraan', compact('kendaraan','pengguna'));
+
+        } elseif ($aksi == 'detail-json') {
+            $result = Kendaraan::where('id_kendaraan', $request->kendaraanId)
+                ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->get();
+
+            return response()->json($result);
+
+        } elseif ($aksi == 'select2') {
+            $search = $request->search;
+
+            if($search == '') {
+                $kendaraan  = Kendaraan::where('jenis_aadb', 'bmn')
+                    ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                    ->orderBy('merk_kendaraan','ASC')
+                    ->get();
+            } else {
+                $kendaraan  = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                    ->where('merk_kendaraan', 'like', '%' .$search . '%')
+                    ->orWhere('tipe_kendaraan', 'like', '%' .$search . '%')
+                    ->orWhere('tahun_kendaraan', 'like', '%' .$search . '%')
+                    ->orderBy('merk_kendaraan','ASC')
+                    ->get();
+            }
+
+            $response = array();
+            foreach($kendaraan as $data){
+                if($data->jenis_aadb == 'bmn') {
+                    $response[] = array(
+                        "id"    =>  $data->id_kendaraan,
+                        "text"  =>  $data->merk_kendaraan.' '.$data->tipe_kendaraan.' tahun '.$data->tahun_kendaraan
+                    );
+                }
+            }
+
+            return response()->json($response);
+
+        }
+    }
+
+    public function getGoogleChartDataAADB()
+    {
+        $dataKendaraan = Kendaraan::select('id_kendaraan','unit_kerja_id','unit_kerja','jenis_aadb','jenis_kendaraan_id','jenis_kendaraan','merk_kendaraan','tipe_kendaraan','tahun_kendaraan','pengguna')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan')
+            ->get();
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[] = $data->jenis_kendaraan;
+            $dataArray[] = $dataKendaraan->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart[] = $dataArray;
+            unset($dataArray);
+        }
+        // dd($dataChart);
+        $chart = json_encode($dataChart);
+        return $chart;
+    }
+    public function searchChartDataAADB(Request $request)
+    {
+        $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan','jenis_kendaraan_id','id_jenis_kendaraan');
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+        // dd($request->all());
+
+        if($request->hasAny(['jenis_aadb', 'unit_kerja','jenis_kendaraan','merk_kendaraan', 'tahun_kendaraan', 'pengguna'])){
+            if($request->jenis_aadb){
+                $dataSearch = $dataKendaraan->where('jenis_aadb',$request->jenis_aadb);
+            }
+            if($request->unit_kerja){
+                $dataSearch = $dataKendaraan->where('unit_kerja_id',$request->unit_kerja);
+            }
+            if($request->jenis_kendaraan){
+                $dataSearch = $dataKendaraan->where('jenis_kendaraan_id',$request->jenis_kendaraan);
+            }
+            if($request->merk_kendaraan){
+                $dataSearch = $dataKendaraan->where('merk_kendaraan',$request->merk_kendaraan);
+            }
+            if($request->tahun_kendaraan){
+                $dataSearch = $dataKendaraan->where('tahun_kendaraan',$request->tahun_kendaraan);
+            }
+            if($request->pengguna){
+                $dataSearch = $dataKendaraan->where('pengguna',$request->pengguna);
+            }
+
+            $dataSearch = $dataSearch->get();
+
+        }else {
+            $dataSearch = $dataKendaraan->get();
+        }
+
+        // dd($dataSearch);
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[]        = $data->jenis_kendaraan;
+            $dataArray[]        = $dataSearch->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart[]        = $dataArray;
+            unset($dataArray);
+        }
+
+        $chart = json_encode($dataChart);
+        $table = json_encode($dataSearch);
+
+        if(count($dataSearch) > 0){
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'success',
+                'data'      => $chart,
+                'dataTable' => $table
+            ], 200);
+        }else {
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'not found'
+            ], 200);
         }
     }
 

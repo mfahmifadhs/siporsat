@@ -229,7 +229,7 @@
                 <form action="{{ url('super-user/aadb/usulan/proses/perpanjangan-stnk') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ rand(1000,9999) }}">
-                    <input type="hidden" name="jenis_form" value="4">
+                    <input type="hidden" name="jenis_form" value="3">
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Tanggal Pengajuan</label>
                         <div class="col-sm-9">
@@ -251,20 +251,15 @@
                         </div>
                     </div>
                     <div id="section-kendaraan">
-                        <div class="row">
+                        <div class="row form-group">
                             <label class="col-sm-3 col-form-label">Pilih Kendaraan</label>
                             <div class="col-sm-4">
-                                <select name="kendaraan_id" class="form-control text-capitalize">
-                                    <option value="">-- Pilih kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
-                                    </option>
-                                    @endforeach
+                                <select id="select2-kendaraan1" name="kendaraan_id[]" class="form-control text-capitalize kendaraan" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kendaraan --</option>
                                 </select>
                             </div>
                             <label class="col-sm-2 col-form-label">Masa Berlaku STNK</label>
-                            <span id="mb_stnk" class="col-sm-3"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
+                            <span id="mb-stnk1" class="col-sm-3"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -410,6 +405,30 @@
     // Jumlah Kendaraan
     $(function() {
         let j = 1
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        // Daftar Kendaraan
+        $("#select2-kendaraan" + j).select2({
+            ajax: {
+                url: "{{ url('super-user/aadb/kendaraan/select2/daftar') }}",
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        _token: CSRF_TOKEN,
+                        search: params.term // search term
+                    }
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    }
+                },
+                cache: true
+            }
+        })
+
         // More Item
         $('#btn-total').click(function() {
             let i
@@ -455,9 +474,51 @@
                         </div>`
                     )
                 }
+            } else if (aksi == 'perpanjangan-stnk') {
+                $(".section-kendaraan").empty()
+                for (i = 1; i <= total; i++) {
+                    ++j
+                    $("#section-kendaraan").append(
+                        `<div class="row section-kendaraan">
+                            <label class="col-sm-3 col-form-label form-group">Pilih Kendaraan</label>
+                            <div class="col-sm-4">
+                                <select id="select2-kendaraan`+j+`" name="kendaraan_id[]" class="form-control text-capitalize kendaraan" data-idtarget="`+j+`" required>
+                                    <option value="">-- Pilih Kendaraan --</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Masa Berlaku STNK</label>
+                            <span id="mb_stnk" class="col-sm-3">
+                                <span id="mb-stnk`+j+`"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
+                            </span>
+                        </div>`
+                    )
+
+                    // Daftar Kendaraan
+                    $("#select2-kendaraan" + j).select2({
+                        ajax: {
+                            url: "{{ url('super-user/aadb/kendaraan/select2/daftar') }}",
+                            type: "post",
+                            dataType: 'json',
+                            delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term // search term
+                                }
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                }
+                            },
+                            cache: true
+                        }
+                    })
+                }
             }
         })
 
+        // Kebutuhan BBM
         $(document).on('change', '.kebutuhanBbm', function() {
             let target = $(this).data('idtarget')
             let hargaBbm = $('.hargaBbm' + target).val()
@@ -470,6 +531,29 @@
                 '<input type="number" class="form-control" name="total_biaya[]" value="' + total + '" readonly>'
             )
 
+        })
+
+        // Masa Berlaku STNK
+        $(document).on('change', '.kendaraan', function() {
+            let target      = $(this).data('idtarget')
+            let kendaraanId = $(this).val()
+            if (kendaraanId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/super-user/aadb/kendaraan/detail-json/kendaraanId?kendaraanId=" + kendaraanId,
+                    dataType: 'JSON',
+                    success: function(res) {
+                        if (res) {
+                            $("#mb-stnk" + target).empty()
+                            $.each(res, function(index, row) {
+                                $("#mb-stnk" + target).append(
+                                    '<input type="date" name="mb_stnk[]" class="form-control" value="' + row.mb_stnk_plat_kendaraan + '" readonly>'
+                                )
+                            })
+                        }
+                    }
+                })
+            }
         })
     })
 

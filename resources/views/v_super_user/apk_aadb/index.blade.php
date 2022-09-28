@@ -95,7 +95,7 @@
                             <div class="col-md-6 form-group mr-2">
                                 <div class="row">
 
-                                    <a id="searchChartData" class="btn btn-primary ml-2">
+                                    <a id="searchChartData" class="btn btn-primary ml-2" value="1">
                                         <i class="fas fa-search"></i> Cari
                                     </a>
                                     <a href="{{ url('super-user/aadb/dashboard') }}" class="btn btn-danger ml-2">
@@ -110,6 +110,35 @@
                         <div id="konten-chart">
                             <div id="piechart" style="height: 500px;"></div>
                         </div>
+                        <div class="table">
+                            <table id="table-kendaraan" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis AADB</th>
+                                        <th>Unit Kerja</th>
+                                        <th>Jenis Kendaraan</th>
+                                        <th>Merk Kendaraan</th>
+                                        <th>Tahun Kendaraan</th>
+                                        <th>Pengguna</th>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody id="daftar-aadb">
+                                    @foreach($kendaraan as $dataKendaraan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                                        <td>{{ $dataKendaraan->unit_kerja }}</td>
+                                        <td>{{ $dataKendaraan->jenis_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->pengguna }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,6 +149,7 @@
 @section('js')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+    let cekAksi = []
     let chart
     let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
     google.charts.load('current', {
@@ -130,14 +160,13 @@
     });
 
     function drawChart(dataChart) {
-        console.log(dataChart);
         chartData = [
             ['Jenis Kendaraan', 'Jumlah']
         ]
         dataChart.forEach(data => {
             chartData.push(data)
         })
-        console.log(chartData)
+
         var data = google.visualization.arrayToDataTable(chartData);
 
         var options = {
@@ -146,37 +175,55 @@
                 'position': 'left',
                 'alignment': 'center'
             },
-        };
+        }
 
-        chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart = new google.visualization.PieChart(document.getElementById('piechart'))
 
-        chart.draw(data, options);
+        chart.draw(data, options)
     }
 
 
     $('body').on('click', '#searchChartData', function() {
-        let jenis_aadb = $('select[name="jenis_aadb"').val()
-        let unit_kerja = $('select[name="unit_kerja"').val()
+        let jenis_aadb      = $('select[name="jenis_aadb"').val()
+        let unit_kerja      = $('select[name="unit_kerja"').val()
         let jenis_kendaraan = $('select[name="jenis_kendaraan"').val()
-        let merk_kendaraan = $('select[name="merk_kendaraan"').val()
+        let merk_kendaraan  = $('select[name="merk_kendaraan"').val()
         let tahun_kendaraan = $('select[name="tahun_kendaraan"').val()
-        let pengguna = $('select[name="pengguna"').val()
+        let pengguna        = $('select[name="pengguna"').val()
         let url = ''
+
         if (jenis_aadb || unit_kerja || jenis_kendaraan || merk_kendaraan || merk_kendaraan || tahun_kendaraan || pengguna) {
-            url = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_kendaraan='+merk_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
+            url             = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_kendaraan='+merk_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
         } else {
-            url = '<?= url("/super-user/aadb/dashboard/grafik") ?>'
+            url             = '<?= url("/super-user/aadb/dashboard/grafik") ?>'
         }
+
         jQuery.ajax({
             url: url,
             type: "GET",
             success: function(res) {
-                console.log(res.message);
                 if (res.message == 'success') {
+                    let no = 1
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart').show();
-                    let data = JSON.parse(res.data)
+                    let data      = JSON.parse(res.data)
+                    let dataTable = JSON.parse(res.dataTable)
                     drawChart(data)
+
+                    $("#daftar-aadb").empty()
+                    $.each(dataTable, function(index, row) {
+                        $("#daftar-aadb").append(
+                            `<tr>
+                                <td>`+ no++ +`</td>
+                                <td>`+ row.jenis_aadb +`</td>
+                                <td>`+ row.unit_kerja +`</td>
+                                <td>`+ row.jenis_kendaraan +`</td>
+                                <td>`+ row.merk_kendaraan +`</td>
+                                <td>`+ row.tahun_kendaraan +`</td>
+                                <td>`+ row.pengguna +`</td>
+                            </tr>`
+                        )
+                    })
                 } else {
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart').hide();
@@ -191,6 +238,7 @@
                     html += '</div>'
                     html += '</div>'
                     $('#konten-statistik').append(html);
+                    $("#daftar-aadb").empty()
 
                 }
 
@@ -198,6 +246,17 @@
 
         })
     })
+
+    $(function() {
+        $("#table-kendaraan").DataTable({
+            "responsive"    : true,
+            "lengthChange"  : false,
+            "autoWidth"     : false,
+            "info"          : false,
+            "paging"        : false
+        });
+    });
+</script>
 </script>
 
 @endsection
