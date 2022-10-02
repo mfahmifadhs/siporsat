@@ -30,7 +30,8 @@
                                 <th>Pengusul</th>
                                 <th>Jenis Pengajuan</th>
                                 <th>Rencana Pengguna</th>
-                                <th>Status</th>
+                                <th>Status Pengajuan</th>
+                                <th>Status Pengadaan</th>
                                 <th>Aksi</th>
                             </thead>
                             @php $no = 1; @endphp
@@ -44,7 +45,20 @@
                                     <td>{{ $dataPengajuan->nama_pegawai }}</td>
                                     <td>{{ $dataPengajuan->jenis_form_usulan }}</td>
                                     <td>{{ $dataPengajuan->rencana_pengguna }}</td>
-                                    <td>{{ $dataPengajuan->status_pengajuan.' '.$dataPengajuan->status_proses }}</td>
+                                    <td class="text-center">
+                                        @if($dataPengajuan->status_pengajuan == 'terima')
+                                            <span class="border border-success text-success p-1">disetujui</span>
+                                        @else
+
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($dataPengajuan->status_proses == 'proses')
+                                            <span class="border border-warning text-warning p-1">proses</span>
+                                        @else
+
+                                        @endif
+                                    </td>
                                     <td>
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
@@ -192,11 +206,11 @@
                                                     <span style="float: left;">
                                                         @if($dataPengajuan->status_proses == 'proses')
                                                             @if($dataPengajuan->kode_otp_bast == null)
-                                                                <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
+                                                                <a href="{{ url('super-user/aadb/usulan/buat-bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
                                                                     <i class="fas fa-file"></i> Buat BAST
                                                                 </a>
                                                             @else
-                                                                <a href="#" class="btn btn-primary">
+                                                                <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
                                                                     <i class="fas fa-file"></i> Surat BAST
                                                                 </a>
                                                             @endif

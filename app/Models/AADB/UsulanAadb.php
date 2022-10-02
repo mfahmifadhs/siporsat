@@ -26,6 +26,11 @@ class UsulanAadb extends Model
         'konfirmasi_pengajuan'
     ];
 
+    public function kendaraan() {
+        return $this->hasMany(Kendaraan::class, 'form_usulan_id')
+            ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id');
+    }
+
     public function usulanKendaraan() {
         return $this->hasMany(UsulanKendaraan::class, 'form_usulan_id','id_form_usulan')
             ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id');
