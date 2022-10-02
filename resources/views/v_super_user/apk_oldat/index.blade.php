@@ -31,7 +31,7 @@
                                 <select id="" class="form-control" name="unit_kerja">
                                     <option value="">-- Pilih Unit Kerja --</option>
                                     @foreach ($unitKerja as $item)
-                                    <option value="{{$item->id_unit_kerja}}">{{$item->unit_kerja}}</option>
+                                    <option value="{{$item->id_unit_kerja}}" nama="{{$item->unit_kerja}}">{{$item->unit_kerja}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -39,7 +39,7 @@
                                 <select id="" class="form-control" name="tim_kerja">
                                     <option value="">-- Pilih Tim Kerja --</option>
                                     @foreach ($timKerja as $item)
-                                    <option value="{{$item->id_tim_kerja}}">{{$item->tim_kerja}}</option>
+                                    <option value="{{$item->id_tim_kerja}}" nama="{{$item->tim_kerja}}">{{$item->tim_kerja}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -54,25 +54,33 @@
                         <div id="konten-chart-google-chart">
                             <div id="piechart" style="height: 500px;"></div>
                         </div>
+                        <div id="notif-konten-chart"></div>
                         <div class="table">
-                            <table class="table">
+                            <table id="table-barang" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Jenis Barang</th>
+                                        <th>Spesifikasi Barang</th>
+                                        <th>Kondisi Barang</th>
                                         <th>Unit Kerja</th>
                                         <th>Tim Kerja</th>
-                                        <th>Jumlah</th>
+                                        <th>Tahun</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                <tbody> 
+                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
+                                    @foreach ($googleChartData1->barang as $item)
+                                                <tr>    
+                                                    <td>{{$no++}}</td>
+                                                    <td>{{$item->kategori_barang}}</td>
+                                                    <td>{{$item->spesifikasi_barang}}</td>
+                                                    <td>{{$item->kondisi_barang}}</td>
+                                                    <td>{{$item->unit_kerja}}</td>
+                                                    <td>{{$item->tim_kerja}}</td>
+                                                    <td>{{$item->tahun_perolehan}}</td>
+                                                </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -207,20 +215,34 @@
 <!-- ChartJS -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
+    $(function() {
+        $("#table-barang").DataTable({
+            "responsive"    : true,
+            "lengthChange"  : false,
+            "autoWidth"     : false,
+            "info"          : false,
+            "paging"        : true
+        });
+    });
+
+
     let chart
-    let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
+    let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
+    // console.log(chartData)
+    let dataChart = chartData.all
+    console.log(dataChart)
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(function(){
         drawChart(dataChart)
     });
 
     function drawChart(dataChart) {
-      console.log(dataChart);
-      chartData =  [['Jenis Kendaraan', 'Jumlah']]
+    //   console.log(dataChart);
+      chartData =  [['Kategori Barang', 'Jumlah']]
       dataChart.forEach(data => {
           chartData.push(data)
       })
-      console.log(chartData)
+    //   console.log(chartData)
       var data = google.visualization.arrayToDataTable(chartData);
 
       var options = {
@@ -249,15 +271,35 @@
             url: url,
             type: "GET",
             success: function(res) {
-                console.log(res.message);
+                // console.log(res.message);
+                let dataTable =$('#table-barang').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').show();
+                    $('#konten-chart-google-chart').show();
                     let data = JSON.parse(res.data)
-                    drawChart(data)
+                    drawChart(data.chart)
+                    
+                    dataTable.clear()
+                    dataTable.draw()
+                    let no = 1
+                    // let namaUnitKerja = $('select[name="unit_kerja"]').find(':selected').attr('nama')
+                    // let namaTimKerja = $('select[name="tim_kerja"]').find(':selected').attr('nama')
+                    // if(namaUnitKerja == undefined){
+                    //     namaUnitKerja = ''
+                    // }
+                    // if(namaTimKerja == undefined){
+                    //     namaTimKerja = ''
+                    // }
+                    // console.log(namaUnitKerja)
+                    // console.log(namaTimKerja)
+                    data.table.forEach(element => {
+                        dataTable.row.add([no++,element.kategori_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan]).draw(false)
+                    });
                 } else {
+                    dataTable.clear()
+                    dataTable.draw()
                     $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').hide();
+                    $('#konten-chart-google-chart').hide();
                     var html = '';
                     html += '<div class="notif-tidak-ditemukan">'
                     html += '<div class="card bg-secondary py-4">'
@@ -268,7 +310,7 @@
                     html += '</div>'
                     html += '</div>'
                     html += '</div>'
-                    $('#konten-statistik').append(html);
+                    $('#notif-konten-chart').append(html);
                 }
             },
         })
