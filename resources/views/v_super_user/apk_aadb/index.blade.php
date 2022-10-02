@@ -190,6 +190,7 @@
         let merk_kendaraan  = $('select[name="merk_kendaraan"').val()
         let tahun_kendaraan = $('select[name="tahun_kendaraan"').val()
         let pengguna        = $('select[name="pengguna"').val()
+        let table           = $('#table-kendaraan').DataTable();
         let url = ''
 
         if (jenis_aadb || unit_kerja || jenis_kendaraan || merk_kendaraan || merk_kendaraan || tahun_kendaraan || pengguna) {
@@ -209,8 +210,8 @@
                     let data      = JSON.parse(res.data)
                     let dataTable = JSON.parse(res.dataTable)
                     drawChart(data)
-
                     $("#daftar-aadb").empty()
+                    $("#tes").empty()
                     $.each(dataTable, function(index, row) {
                         $("#daftar-aadb").append(
                             `<tr>
