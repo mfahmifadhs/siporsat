@@ -228,7 +228,6 @@
 
     let chart
     let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
-    // console.log(chartData)
     let dataChart = chartData.all
     console.log(dataChart)
     google.charts.load('current', {'packages':['corechart']});
@@ -291,7 +290,7 @@
                     //     namaTimKerja = ''
                     // }
                     // console.log(namaUnitKerja)
-                    // console.log(namaTimKerja)
+                    // console.log(data.table)
                     data.table.forEach(element => {
                         dataTable.row.add([no++,element.kategori_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan]).draw(false)
                     });

@@ -756,30 +756,17 @@ class SuperUserController extends Controller
         }
         $unitKerja = UnitKerja::get();
 
-        $dataChart['barang'] = $dataBarang->toArray();
-
-        // foreach ($dataKategoriBarang as $data) {
-        //     $dataArray = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
-        //     $dataChart['all'][$data->kategori_barang] = $dataArray;
-        //     unset($dataArray);
-        // }
-        // foreach($unitKerja as $unit){
-        //     $timKerja = TimKerja::where('unit_kerja_id',$unit->id_unit_kerja)->get();
-        //     foreach ($timKerja as $tim) {
-        //         foreach ($dataKategoriBarang as $data) {
-        //             $dataChart['detail'][$unit->unit_kerja][$tim->tim_kerja][$data->kategori_barang] = $dataBarang->where('kategori_barang', $data->kategori_barang)->where('unit_kerja',$unit->unit_kerja)->where('tim_kerja',$tim->tim_kerja)->count();
-        //             unset($dataArray);
-        //         }
-        //     }
-        // }
-        // dd($dataChart);
+        $dataChart['barang'] = $dataBarang;
+        // $chart = $dataChart;
         $chart = json_encode($dataChart);
+        // dd($chart);
         return $chart;
     }
 
     public function searchChartData(Request $request){
-        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','id_unit_kerja','unit_kerja','oldat_tbl_barang.unit_kerja_id','id_tim_kerja','tim_kerja','tahun_perolehan')
+        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','id_unit_kerja','unit_kerja','oldat_tbl_barang.unit_kerja_id','id_tim_kerja','tim_kerja','tahun_perolehan','spesifikasi_barang', 'kondisi_barang')
             ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
+            ->join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
             ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
             ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
             ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
