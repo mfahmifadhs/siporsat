@@ -15,6 +15,7 @@ class KendaraanSewa extends Model
     protected $fillable = [
         'id_kendaraan_sewa',
         'kendaraan_id',
-        'mulai_sewa'
+        'mulai_sewa',
+        'penyedia'
     ];
 }

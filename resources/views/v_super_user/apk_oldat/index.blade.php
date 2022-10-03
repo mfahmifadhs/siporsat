@@ -35,7 +35,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <select id="" class="form-control" name="tim_kerja">
                                     <option value="">-- Pilih Tim Kerja --</option>
                                     @foreach ($timKerja as $item)
@@ -43,10 +43,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-1 form-group">
-                                <button id="searchChartData" class="btn btn-primary form-control">
-                                    <i class="fas fa-search"></i> Cari
-                                </button>
+                            <div class="col-md-2 form-group">
+                                <div class="row">
+                                    <button id="searchChartData" class="btn btn-primary ml-2">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
+                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="btn btn-danger ml-2"><i class="fas fa-undo"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -68,18 +71,18 @@
                                         <th>Tahun</th>
                                     </tr>
                                 </thead>
-                                <tbody> 
+                                <tbody>
                                     @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
                                     @foreach ($googleChartData1->barang as $item)
-                                                <tr>    
-                                                    <td>{{$no++}}</td>
-                                                    <td>{{$item->kategori_barang}}</td>
-                                                    <td>{{$item->spesifikasi_barang}}</td>
-                                                    <td>{{$item->kondisi_barang}}</td>
-                                                    <td>{{$item->unit_kerja}}</td>
-                                                    <td>{{$item->tim_kerja}}</td>
-                                                    <td>{{$item->tahun_perolehan}}</td>
-                                                </tr>
+                                    <tr>
+                                        <td>{{$no++}}</td>
+                                        <td>{{$item->kategori_barang}}</td>
+                                        <td>{{$item->spesifikasi_barang}}</td>
+                                        <td>{{$item->kondisi_barang}}</td>
+                                        <td>{{$item->unit_kerja}}</td>
+                                        <td>{{$item->tim_kerja}}</td>
+                                        <td>{{$item->tahun_perolehan}}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -217,89 +220,86 @@
 <script>
     $(function() {
         $("#table-barang").DataTable({
-            "responsive"    : true,
-            "lengthChange"  : false,
-            "autoWidth"     : false,
-            "info"          : false,
-            "paging"        : true
-        });
-    });
-
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true
+        })
+    })
 
     let chart
     let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
     let dataChart = chartData.all
-    console.log(dataChart)
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(function(){
+    google.charts.load('current', {
+        'packages': ['corechart']
+    })
+    google.charts.setOnLoadCallback(function() {
         drawChart(dataChart)
-    });
+    })
 
     function drawChart(dataChart) {
-    //   console.log(dataChart);
-      chartData =  [['Kategori Barang', 'Jumlah']]
-      dataChart.forEach(data => {
-          chartData.push(data)
-      })
-    //   console.log(chartData)
-      var data = google.visualization.arrayToDataTable(chartData);
 
-      var options = {
-        title: 'Total Barang',
-        legend: {
-            'position':'left',
-            'alignment':'center'
-        },
-      };
+        chartData = [
+            ['Kategori Barang', 'Jumlah']
+        ]
+        console.log(dataChart)
+        dataChart.forEach(data => {
+            chartData.push(data)
+        })
 
-      chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var data = google.visualization.arrayToDataTable(chartData);
 
-      chart.draw(data, options);
+        var options = {
+            title: 'Total Barang',
+            legend: {
+                'position': 'left',
+                'alignment': 'center'
+            },
+        }
+
+        chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
     }
+
     $('body').on('click', '#searchChartData', function() {
-        let tahun      = $('input[name="tahun"').val()
+        let tahun = $('input[name="tahun"').val()
         let unit_kerja = $('select[name="unit_kerja"').val()
-        let tim_kerja  = $('select[name="tim_kerja"').val()
+        let tim_kerja = $('select[name="tim_kerja"').val()
         let url = ''
         if (tahun || unit_kerja || tim_kerja) {
             url = '<?= url("/super-user/oldat/grafik?tahun='+tahun+'&unit_kerja='+unit_kerja+'&tim_kerja='+tim_kerja+'") ?>'
         } else {
             url = '<?= url("/super-user/oldat/grafik") ?>'
         }
+
         jQuery.ajax({
             url: url,
             type: "GET",
             success: function(res) {
                 // console.log(res.message);
-                let dataTable =$('#table-barang').DataTable()
+                let dataTable = $('#table-barang').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart-google-chart').show();
                     let data = JSON.parse(res.data)
                     drawChart(data.chart)
-                    
+
                     dataTable.clear()
                     dataTable.draw()
                     let no = 1
-                    // let namaUnitKerja = $('select[name="unit_kerja"]').find(':selected').attr('nama')
-                    // let namaTimKerja = $('select[name="tim_kerja"]').find(':selected').attr('nama')
-                    // if(namaUnitKerja == undefined){
-                    //     namaUnitKerja = ''
-                    // }
-                    // if(namaTimKerja == undefined){
-                    //     namaTimKerja = ''
-                    // }
-                    // console.log(namaUnitKerja)
-                    // console.log(data.table)
+
                     data.table.forEach(element => {
-                        dataTable.row.add([no++,element.kategori_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan]).draw(false)
+                        dataTable.row.add([no++, element.kategori_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan]).draw(false)
                     });
+
                 } else {
                     dataTable.clear()
                     dataTable.draw()
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart-google-chart').hide();
-                    var html = '';
+                    var html = ''
                     html += '<div class="notif-tidak-ditemukan">'
                     html += '<div class="card bg-secondary py-4">'
                     html += '<div class="card-body text-white">'
@@ -309,7 +309,7 @@
                     html += '</div>'
                     html += '</div>'
                     html += '</div>'
-                    $('#notif-konten-chart').append(html);
+                    $('#notif-konten-chart').append(html)
                 }
             },
         })

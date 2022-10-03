@@ -34,4 +34,8 @@ class Kendaraan extends Model
         'jabatan',
         'pengemudi'
     ];
+
+    public function kendaraanSewa() {
+        return $this->hasMany(KendaraanSewa::class, 'kendaraan_id','id_kendaraan');
+    }
 }

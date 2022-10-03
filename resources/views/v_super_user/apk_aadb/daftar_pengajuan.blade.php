@@ -48,15 +48,17 @@
                                     <td class="text-center">
                                         @if($dataPengajuan->status_pengajuan == 'terima')
                                             <span class="border border-success text-success p-1">disetujui</span>
-                                        @else
-
+                                        @elseif($dataPengajuan->status_pengajuan == 'tolak')
+                                            <span class="border border-danger text-danger p-1">ditolak</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($dataPengajuan->status_proses == 'proses')
+                                        @if($dataPengajuan->status_proses == 'belum proses')
+                                            <span class="border border-warning text-warning p-1">belum diproses</span>
+                                        @elseif ($dataPengajuan->status_proses == 'proses')
                                             <span class="border border-warning text-warning p-1">proses</span>
                                         @else
-
+                                            <span class="border border-success text-success p-1">selesai</span>
                                         @endif
                                     </td>
                                     <td>
@@ -214,6 +216,10 @@
                                                                     <i class="fas fa-file"></i> Surat BAST
                                                                 </a>
                                                             @endif
+                                                        @elseif($dataPengajuan->status_proses == 'selesai')
+                                                            <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
+                                                                <i class="fas fa-file"></i> Surat BAST
+                                                            </a>
                                                         @else
                                                             <a class="btn btn-primary disabled">
                                                                 <i class="fas fa-file"></i> Buat BAST

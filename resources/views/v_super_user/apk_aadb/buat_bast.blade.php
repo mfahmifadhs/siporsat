@@ -65,6 +65,37 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Masa Berlaku STNK</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="mb_stnk_plat_kendaraan">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Masa Berlaku STNK RHS</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="mb_stnk_plat_rhs">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">No. BPKB</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="no_bpkb">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">No. Rangka</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="no_rangka">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">No. Mesin</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="no_mesin">
+                        </div>
+                    </div>
+                    @endif
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jenis AADB</label>
                         <div class="col-sm-10">
                             <select name="jenis_aadb" class="form-control" readonly>
@@ -105,39 +136,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Masa Berlaku STNK</label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control" name="mb_stnk_plat_kendaraan">
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Plat RHS</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" name="no_plat_rhs">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Masa Berlaku STNK RHS</label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control" name="mb_stnk_plat_rhs">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. BPKB</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="no_bpkb">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. Rangka</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="no_rangka">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. Mesin</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="no_mesin">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -154,6 +155,19 @@
                         <label class="col-sm-2 col-form-label">Rencana Penggunaan</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" name="rencana_pengguna" readonly>{{ $usulan->rencana_pengguna }}</textarea>
+                        </div>
+                    </div>
+                    @if($dataUsulan->jenis_aadb == 'sewa')
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Mulai Sewa</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" name="mulai_sewa" placeholder="Tahun mulai sewa, contoh: 2022">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Penyedia</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="penyedia" placeholder="Penyedia kendaraan">
                         </div>
                     </div>
                     @endif

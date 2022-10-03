@@ -63,7 +63,7 @@
                 <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="{{ url('super-user/aadb/usulan/print-surat-bast/'. $usulan->kode_otp_bast) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                <a href="{{ url('super-user/aadb/usulan/print-surat-bast/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
             </div>
@@ -125,27 +125,42 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        @if($jenisAadb->jenis_aadb == 'bmn')
                                         <th>Kode Barang</th>
+                                        @endif
                                         <th>Jenis AADB</th>
                                         <th>Jenis Kendaraan</th>
                                         <th>No. Plat</th>
                                         <th>Merk</th>
                                         <th>Tipe</th>
                                         <th>Tahun Perolehan</th>
+                                        @if($jenisAadb->jenis_aadb == 'sewa')
+                                        <th>Mulai Sewa</th>
+                                        <th>Penyedia</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                    @foreach($usulan->kendaraan as $dataKendaraan)
+                                    @foreach($kendaraan as $dataKendaraan)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataKendaraan->kode_barang }}</td>
+                                        @if($dataKendaraan->jenis_aadb == 'bmn')
+                                            <td>{{ $dataKendaraan->kode_barang }}</td>
+                                        @endif
                                         <td>{{ $dataKendaraan->jenis_aadb }}</td>
                                         <td>{{ $dataKendaraan->jenis_kendaraan }}</td>
                                         <td class="text-uppercase">{{ $dataKendaraan->no_plat_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->merk_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->tipe_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
+                                        @if($dataKendaraan->jenis_aadb == 'sewa')
+                                            @foreach($dataKendaraan->kendaraanSewa as $dataSewa)
+                                                <td>{{ $dataSewa->mulai_sewa }}</td>
+                                                <td>{{ $dataSewa->penyedia }}</td>
+                                            @endforeach
+                                        @endif
+
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -94,10 +94,9 @@
                             </div>
                             <div class="col-md-6 form-group mr-2">
                                 <div class="row">
-
-                                    <a id="searchChartData" class="btn btn-primary ml-2" value="1">
+                                    <button id="searchChartData" class="btn btn-primary ml-2">
                                         <i class="fas fa-search"></i> Cari
-                                    </a>
+                                    </button>
                                     <a href="{{ url('super-user/aadb/dashboard') }}" class="btn btn-danger ml-2">
                                         <i class="fas fa-undo"></i>
                                     </a>
@@ -123,9 +122,9 @@
                                         <th>Pengguna</th>
                                     </tr>
                                 </thead>
-                                @php $no = 1; @endphp
-                                <tbody id="daftar-aadb">
-                                    @foreach($kendaraan as $dataKendaraan)
+                                <tbody>
+                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
+                                    @foreach ($googleChartData1->kendaraan as $dataKendaraan)
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $dataKendaraan->jenis_aadb }}</td>
@@ -148,21 +147,34 @@
 
 @section('js')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    let cekAksi = []
+
+<script>
+    $(function() {
+        $("#table-kendaraan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true
+        })
+    })
+
     let chart
-    let dataChart = JSON.parse(`<?php echo $googleChartData; ?>`)
+    let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
+    let dataChart = chartData.all
     google.charts.load('current', {
         'packages': ['corechart']
-    });
+    })
     google.charts.setOnLoadCallback(function() {
         drawChart(dataChart)
-    });
+    })
 
     function drawChart(dataChart) {
+
         chartData = [
             ['Jenis Kendaraan', 'Jumlah']
         ]
+        console.log(dataChart)
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -170,65 +182,68 @@
         var data = google.visualization.arrayToDataTable(chartData);
 
         var options = {
-            title: 'Total Jenis Kendaraan',
+            title: 'Total Kendaraan',
             legend: {
                 'position': 'left',
                 'alignment': 'center'
             },
         }
 
-        chart = new google.visualization.PieChart(document.getElementById('piechart'))
+        chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-        chart.draw(data, options)
+        chart.draw(data, options);
     }
 
-
     $('body').on('click', '#searchChartData', function() {
-        let jenis_aadb      = $('select[name="jenis_aadb"').val()
-        let unit_kerja      = $('select[name="unit_kerja"').val()
+        let jenis_aadb = $('select[name="jenis_aadb"').val()
+        let unit_kerja = $('select[name="unit_kerja"').val()
         let jenis_kendaraan = $('select[name="jenis_kendaraan"').val()
-        let merk_kendaraan  = $('select[name="merk_kendaraan"').val()
+        let merk_kendaraan = $('select[name="merk_kendaraan"').val()
         let tahun_kendaraan = $('select[name="tahun_kendaraan"').val()
-        let pengguna        = $('select[name="pengguna"').val()
-        let table           = $('#table-kendaraan').DataTable();
+        let pengguna = $('select[name="pengguna"').val()
+        let table = $('#table-kendaraan').DataTable();
         let url = ''
 
         if (jenis_aadb || unit_kerja || jenis_kendaraan || merk_kendaraan || merk_kendaraan || tahun_kendaraan || pengguna) {
-            url             = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_kendaraan='+merk_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
+            url = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_kendaraan='+merk_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
         } else {
-            url             = '<?= url("/super-user/aadb/dashboard/grafik") ?>'
+            url = '<?= url("/super-user/aadb/dashboard/grafik") ?>'
         }
 
         jQuery.ajax({
             url: url,
             type: "GET",
             success: function(res) {
+                // console.log(res.message);
+                let dataTable = $('#table-kendaraan').DataTable()
                 if (res.message == 'success') {
+                    $('.notif-tidak-ditemukan').remove();
+                    $('#konten-chart-google-chart').show();
+                    let data = JSON.parse(res.data)
+                    drawChart(data.chart)
+
+                    dataTable.clear()
+                    dataTable.draw()
                     let no = 1
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').show();
-                    let data      = JSON.parse(res.data)
-                    let dataTable = JSON.parse(res.dataTable)
-                    drawChart(data)
-                    $("#daftar-aadb").empty()
-                    $("#tes").empty()
-                    $.each(dataTable, function(index, row) {
-                        $("#daftar-aadb").append(
-                            `<tr>
-                                <td>`+ no++ +`</td>
-                                <td>`+ row.jenis_aadb +`</td>
-                                <td>`+ row.unit_kerja +`</td>
-                                <td>`+ row.jenis_kendaraan +`</td>
-                                <td>`+ row.merk_kendaraan +`</td>
-                                <td>`+ row.tahun_kendaraan +`</td>
-                                <td>`+ row.pengguna +`</td>
-                            </tr>`
-                        )
+
+                    data.table.forEach(element => {
+                        dataTable.row.add([
+                            no++,
+                            element.jenis_aadb,
+                            element.unit_kerja,
+                            element.jenis_kendaraan,
+                            element.merk_kendaraan,
+                            element.tahun_kendaraan,
+                            element.pengguna
+                        ]).draw(false)
                     })
+
                 } else {
+                    dataTable.clear()
+                    dataTable.draw()
                     $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').hide();
-                    var html = '';
+                    $('#konten-chart-google-chart').hide();
+                    var html = ''
                     html += '<div class="notif-tidak-ditemukan">'
                     html += '<div class="card bg-secondary py-4">'
                     html += '<div class="card-body text-white">'
@@ -238,26 +253,11 @@
                     html += '</div>'
                     html += '</div>'
                     html += '</div>'
-                    $('#konten-statistik').append(html);
-                    $("#daftar-aadb").empty()
-
+                    $('#notif-konten-chart').append(html)
                 }
-
             },
-
         })
     })
-
-    $(function() {
-        $("#table-kendaraan").DataTable({
-            "responsive"    : true,
-            "lengthChange"  : false,
-            "autoWidth"     : false,
-            "info"          : false,
-            "paging"        : false
-        });
-    });
-</script>
 </script>
 
 @endsection
