@@ -8,13 +8,16 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
 use App\Imports\AADB\KendaraanImport;
 use App\Models\AADB\Kendaraan;
+use App\Models\AADB\RiwayatKendaraan;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
 use App\Models\OLDAT\RiwayatBarang;
 use App\Models\Pegawai;
+use App\Models\User;
 use Carbon\Carbon;
 use Validator;
+use Auth;
 
 class AdminUserController extends Controller
 {
@@ -27,23 +30,32 @@ class AdminUserController extends Controller
     //                        AADB
     // ====================================================
 
-    public function aadb(Request $request, $aksi)
+    public function Aadb(Request $request, $aksi)
     {
-        if ($aksi == 'kendaraan') {
-            $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
-                        ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')->orderBy('jenis_aadb','ASC')->get();
-            return view('v_admin_user.apk_aadb.daftar_kendaraan', compact('kendaraan'));
-        } elseif ($aksi == 'pengemudi') {
-
-        } else {
-            return view('v_admin_user.apk_aadb.index');
-        }
-
+        return view('v_admin_user.apk_aadb.index');
     }
 
-    public function kendaraan(Request $request, $aksi, $id)
+    public function Vehicle(Request $request, $aksi, $id)
     {
-        if ($aksi == 'upload') {
+        if ($aksi == 'daftar') {
+            $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->orderBy('jenis_aadb','ASC')
+                ->get();
+
+            return view('v_admin_user.apk_aadb.daftar_kendaraan', compact('kendaraan'));
+
+        } elseif ($aksi == 'detail') {
+            $kendaraan = Kendaraan::where('id_kendaraan', $id)
+                ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->first();
+
+            $pengguna = RiwayatKendaraan::where('kendaraan_id', $id)->get();
+
+            return view('v_admin_user.apk_aadb.detail_kendaraan', compact('kendaraan','pengguna'));
+
+        } elseif ($aksi == 'upload') {
             Excel::import(new KendaraanImport(), $request->upload);
             return redirect('admin-user/aadb/kendaraan/')->with('success', 'Berhasil Mengupload Data Kendaraan');
         }

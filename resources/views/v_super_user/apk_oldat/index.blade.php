@@ -20,6 +20,18 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-md-12 form-group">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                </div>
+                @endif
+                @if ($message = Session::get('failed'))
+                <div class="alert alert-danger">
+                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                </div>
+                @endif
+            </div>
             <div class="col-md-9 form-group">
                 <div class="card card-outline card-primary text-center" style="height: 100%;">
                     <div class="card-header">
@@ -29,7 +41,7 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <select id="" class="form-control" name="unit_kerja">
-                                    <option value="">-- Pilih Unit Kerja --</option>
+                                    <option value="">Semua Unit Kerja</option>
                                     @foreach ($unitKerja as $item)
                                     <option value="{{$item->id_unit_kerja}}" nama="{{$item->unit_kerja}}">{{$item->unit_kerja}}</option>
                                     @endforeach
@@ -37,7 +49,7 @@
                             </div>
                             <div class="col-md-3 form-group">
                                 <select id="" class="form-control" name="tim_kerja">
-                                    <option value="">-- Pilih Tim Kerja --</option>
+                                    <option value="">Semua Tim Kerja</option>
                                     @foreach ($timKerja as $item)
                                     <option value="{{$item->id_tim_kerja}}" nama="{{$item->tim_kerja}}">{{$item->tim_kerja}}</option>
                                     @endforeach
@@ -64,11 +76,13 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Jenis Barang</th>
+                                        <th>Merk Barang</th>
                                         <th>Spesifikasi Barang</th>
                                         <th>Kondisi Barang</th>
                                         <th>Unit Kerja</th>
                                         <th>Tim Kerja</th>
                                         <th>Tahun</th>
+                                        <th>Pengguna</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,11 +91,13 @@
                                     <tr>
                                         <td>{{$no++}}</td>
                                         <td>{{$item->kategori_barang}}</td>
+                                        <td>{{$item->merk_tipe_barang}}</td>
                                         <td>{{$item->spesifikasi_barang}}</td>
                                         <td>{{$item->kondisi_barang}}</td>
                                         <td>{{$item->unit_kerja}}</td>
                                         <td>{{$item->tim_kerja}}</td>
                                         <td>{{$item->tahun_perolehan}}</td>
+                                        <td>{{$item->nama_pegawai}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -92,54 +108,95 @@
             </div>
             <!-- Usulan Pengadaan -->
             <div class="col-md-3 form-group">
-                <div class="card card-outline card-primary" style="height: 100%;">
+                <div class="form-group">
+                    <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn btn-primary btn-lg text-center ml-1 mr-2 p-4">
+                        <img src="https://cdn-icons-png.flaticon.com/512/955/955063.png" width="50" height="50"> <br>
+                        PENGADAAN
+                    </a>
+                    <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn btn-primary btn-lg text-center ml-4 p-4">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1086/1086470.png" width="50" height="50"> <br>
+                        PERBAIKAN
+                    </a>
+                </div>
+                <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h4 class="card-title font-weight-bold">DAFTAR USULAN PENGAJUAN</h4>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="col-md-12">
                             @foreach($pengajuan as $dataPengajuan)
-                            <div class="col-md-6 text-capitalize">
-                                <a class="text-decoration-none" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->kode_otp }}" title="Upload Data Tim Kerja">
-                                    <span style="font-size: 12px;">Usuan {{ $dataPengajuan->jenis_form }}</span><br>
-                                    <span style="font-size: 13px;">
-                                        <label>{{ $dataPengajuan->nama_pegawai }} <br> Kode OTP : {{ $dataPengajuan->kode_otp_usulan }}</label>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-md-6 text-capitalize ">
-                                <p class="float-right" style="font-size: 14px;">
-                                    {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
-                                    @if($dataPengajuan->status_pengajuan == null && $dataPengajuan->status_proses == 'belum proses')
-                                    <span class="badge badge-warning py-1">belum diproses</span>
-                                    @elseif($dataPengajuan->status_pengajuan == 'terima' && $dataPengajuan->status_proses == 'proses')
-                                    <span class="badge badge-success py-1">disetujui</span>
-                                    <span class="badge badge-warning py-1">diproses</span>
-                                    @elseif($dataPengajuan->status_pengajuan == 'terima' && $dataPengajuan->status_proses == 'selesai')
-                                    <span class="badge badge-warning py-1">disetujui</span>
-                                    <span class="badge badge-warning py-1">selesai</span>
-                                    @elseif($dataPengajuan->status_pengajuan == 'tolak')
-                                    <span class="badge badge-danger py-1">pengajuan ditolak</span>
-                                    @endif <br>
-                                    @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_pengajuan == null)
-                                    <a href="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->kode_otp_usulan) }}" class="btn btn-success btn-sm text-white mr-1 mt-2" onclick="return confirm('Apakah pengajuan ini diterima ?')">
-                                        <i class="fas fa-check-circle"></i>
-                                    </a>
-                                    <a href="{{ url('super-user/oldat/pengajuan/proses-ditolak/'. $dataPengajuan->kode_otp_usulan) }}" class="btn btn-danger btn-sm text-white mt-2" onclick="return confirm('Apakah pengajuan ini ditolak ?')">
-                                        <i class="fas fa-times-circle"></i>
-                                    </a>
-                                    @elseif(Auth::user()->pegawai->jabatan_id != 2 && $dataPengajuan->status_pengajuan == 'terima' && $dataPengajuan->status_proses == 'proses')
-                                    <a href="{{ url('super-user/oldat/surat/buat-bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary btn-xs text-white mt-2 text-decoration-none">
-                                        <i class="fas fa-file"></i> &nbsp; Buat BAST
-                                    </a>
-                                    @endif
-                                </p>
-                            </div>
+                            <small>
+                                <div class="form-group row">
+                                    <label class="col-md-5 col-6">{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</label>
+                                    <div class="col-md-7 col-6 text-right">
+                                        @if($dataPengajuan->status_proses_id == 1)
+                                        <span class="badge badge-warning py-1">menunggu persetujuan</span>
+                                        @elseif($dataPengajuan->status_proses_id == 2)
+                                        <span class="badge badge-warning py-1">usulan diproses</span>
+                                        @elseif($dataPengajuan->status_proses_id == 3)
+                                        <span class="badge badge-warning py-1">konfirmasi penerimaan</span>
+                                        @elseif($dataPengajuan->status_proses_id == 4)
+                                        <span class="badge badge-warning py-1">konfirmasi kabag rt</span>
+                                        @endif
+                                    </div>
+                                    <label class="col-md-5 col-6">ID Usulan</label>
+                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                    <label class="col-md-5 col-6">Tujuan</label>
+                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->jenis_form }}</div>
+                                    <label class="col-md-5 col-6">Nama Pengusul</label>
+                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                    <label class="col-md-5 col-6">Jumlah Usulan</label>
+                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->total_pengajuan }} barang</div>
+                                    <div class="col-md-12 col-12">
+                                        <small>
+                                            <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <!-- Aksi untuk Kepala Bagian RT -->
+                                            @if($dataPengajuan->status_proses_id == 1)
+                                            @if(Auth::user()->pegawai->jabatan_id == 2)
+                                            <a type="button" class="btn btn-success btn-sm text-white mt-2" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}">
+                                                <i class="fas fa-check-circle"></i>
+                                            </a>
+                                            <a href="{{ url('super-user/oldat/pengajuan/proses-ditolak/'. $dataPengajuan->kode_otp_usulan) }}" class="btn btn-danger btn-sm text-white mt-2" onclick="return confirm('Apakah pengajuan ini ditolak ?')">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                            @endif
+                                            @endif
+
+                                            @if($dataPengajuan->status_proses_id == 2)
+                                            @if(Auth::user()->pegawai->jabatan_id == 5)
+                                            <a class="btn btn-success btn-sm text-white" href="{{ url('super-user/ppk/oldat/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Usulan Selesai Di Proses ?')">
+                                                <i class="fas fa-people-carry"></i>
+                                            </a>
+                                            @endif
+                                            @endif
+
+                                            @if($dataPengajuan->status_proses_id == 3)
+                                            @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id)
+                                            <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                                <i class="fas fa-check-circle"></i> <small>barang diterima</small>
+                                            </a>
+                                            @endif
+                                            @endif
+
+                                            @if($dataPengajuan->status_proses_id == 4)
+                                            @if(Auth::user()->pegawai->jabatan_id == 2)
+                                            <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                                <i class="fas fa-check-circle"></i> <small>usulan diterima</small>
+                                            </a>
+                                            @endif
+                                            @endif
+
+                                        </small>
+                                    </div>
+                                </div>
+                            </small>
                             <div class="col-md-12">
                                 <hr>
                             </div>
                             <!-- Modal Detail Pengajuan -->
-                            <div class="modal fade" id="modal-info-{{ $dataPengajuan->kode_otp }}">
+                            <div class="modal fade" id="modal-info-{{ $dataPengajuan->id_form_usulan }}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-body text-capitalize" style="font-family: times new roman;">
@@ -168,15 +225,16 @@
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-md-12">
-                                                    <table class="table table-responsive table-bordered">
+                                                    <table class="table table-responsive table-bordered text-center">
                                                         <thead>
                                                             <tr>
                                                                 <td>No</td>
                                                                 <td style="width: 15%;">Jenis Barang</td>
                                                                 <td style="width: 20%;">Merk Barang</td>
                                                                 <td style="width: 40%;">Spesifikasi</td>
-                                                                <td style="width: 10%;">Volume</td>
-                                                                <td style="width: 15%;">Satuan</td>
+                                                                <td>Jumlah</td>
+                                                                <td>Satuan</td>
+                                                                <td style="width: 25%;">Estimasi Biaya</td>
                                                             </tr>
                                                         </thead>
                                                         <?php $no = 1; ?>
@@ -189,11 +247,156 @@
                                                                 <td>{{ $dataBarangPengadaan->spesifikasi_barang }}</td>
                                                                 <td>{{ $dataBarangPengadaan->jumlah_barang }}</td>
                                                                 <td>{{ $dataBarangPengadaan->satuan_barang }}</td>
+                                                                <td>Rp {{ number_format($dataBarangPengadaan->estimasi_biaya, 0, ',', '.') }}</td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
+                                                <div class="col-md-12">
+                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
+                                                        @csrf
+                                                        <div class="form-group row mt-4">
+                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
+                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
+                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-6">
+                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button type="reset" class="btn btn-default">BATAL</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Detail Barang -->
+                            <div class="modal fade" id="konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-body text-capitalize" style="font-family: times new roman;">
+                                            <div class="text-uppercase text-center font-weight-bold mb-4">
+                                                konfirmasi penerimaan barang
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Nama Pengusul </label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
+                                                <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Rencana Pengguna :</label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-responsive table-bordered text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>No</td>
+                                                                <td style="width: 15%;">Jenis Barang</td>
+                                                                <td style="width: 20%;">Merk Barang</td>
+                                                                <td style="width: 40%;">Spesifikasi</td>
+                                                                <td>Jumlah</td>
+                                                                <td>Satuan</td>
+                                                                <td style="width: 25%;">Estimasi Biaya</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <?php $no = 1; ?>
+                                                        <tbody>
+                                                            @foreach($dataPengajuan->barang as $dataBarang)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataBarang->kategori_barang }}</td>
+                                                                <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                                                <td>{{ $dataBarang->spesifikasi_barang }}</td>
+                                                                <td>{{ $dataBarang->jumlah_barang }}</td>
+                                                                <td>{{ $dataBarang->satuan_barang }}</td>
+                                                                <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id && $dataPengajuan->status_proses_id == 3)
+                                                <div class="col-md-12">
+                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="status_usulan" value="4">
+                                                        <div class="form-group row mt-4">
+                                                            <div class="col-sm-10">
+                                                                <label>Apakah semua barang telah diterima dengan baik ?</label><br>
+                                                                <input type="radio" name="konfirmasi" value="1"> Ya
+                                                                <input type="radio" name="konfirmasi" value="1"> Tidak
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row mt-4">
+                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
+                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
+                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-6">
+                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button type="reset" class="btn btn-default">BATAL</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @endif
+                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 4)
+                                                <div class="col-md-12">
+                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="status_usulan" value="5">
+                                                        <div class="form-group row mt-4">
+                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
+                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
+                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-6">
+                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button type="reset" class="btn btn-default">BATAL</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -215,8 +418,6 @@
 </section>
 
 @section('js')
-<!-- ChartJS -->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
     $(function() {
         $("#table-barang").DataTable({
@@ -225,6 +426,35 @@
             "autoWidth": false,
             "info": false,
             "paging": true
+        })
+
+        let resOTP = ''
+        $(document).on('click', '#btnKirimOTP', function() {
+            let tujuan = "Kepala Bagian Rumah Tangga"
+            jQuery.ajax({
+                url: '/super-user/sendOTP?tujuan=' + tujuan,
+                type: "GET",
+                success: function(res) {
+                    // console.log(res)
+                    alert('Berhasi mengirim kode OTP')
+                    resOTP = res
+                }
+            });
+        });
+
+        $(document).on('click', '#btnCheckOTP', function() {
+            let inputOTP = $('#inputOTP').val()
+            console.log(inputOTP)
+            if (inputOTP == '') {
+                alert('Mohon isi kode OTP yang diterima')
+            } else if (inputOTP == resOTP) {
+                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
+                alert('Kode OTP Benar')
+                $('#btnSubmit').prop('disabled', false)
+            } else {
+                alert('Kode OTP Salah')
+                $('#btnSubmit').prop('disabled', true)
+            }
         })
     })
 
@@ -291,7 +521,7 @@
                     let no = 1
 
                     data.table.forEach(element => {
-                        dataTable.row.add([no++, element.kategori_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan]).draw(false)
+                        dataTable.row.add([no++, element.kategori_barang, element.merk_tipe_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan, element.nama_pegawai]).draw(false)
                     });
 
                 } else {

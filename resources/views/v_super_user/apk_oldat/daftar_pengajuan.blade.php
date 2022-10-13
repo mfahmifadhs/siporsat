@@ -10,7 +10,7 @@ $jabatan = $user->jabatan; ?>
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Daftar Pengajuan</h1>
+                <h1 class="m-0">Daftar Usulan Pengajuan</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -36,27 +36,18 @@ $jabatan = $user->jabatan; ?>
             @endif
         </div>
         <div class="card">
-            <div class="card-header">
-                <div class="card-tools">
-                    @if($pegawai->jabatan_id == 4)
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Buat Pengajuan Usulan">
-                        <i class="fas fa-plus-circle"></i>
-                    </a>
-                    @endif
-                </div>
-            </div>
             <div class="card-body">
                 <table id="table-pengajuan" class="table table-bordered text-capitalize text-center">
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Tanggal Usulan</th>
                             <th>Pengusul</th>
-                            <th>Kode Form</th>
-                            <th>Jenis Form</th>
+                            <th>Usulan Pengajuan</th>
                             <th>Total Pengajuan</th>
                             <th>Rencana Pengguna</th>
-                            <th>Tanggal Usulan</th>
                             <th>Status Pengajuan</th>
+                            <th>Status Usulan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -65,20 +56,29 @@ $jabatan = $user->jabatan; ?>
                         @foreach($formUsulan as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ \Carbon\Carbon::parse($row->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
-                            <td>{{ $row->kode_form }}</td>
-                            <td>{{ $row->jenis_form }}</td>
+                            <td>{{ $row->jenis_form }} barang</td>
                             <td>{{ $row->total_pengajuan }} barang</td>
                             <td>{{ $row->rencana_pengguna }}</td>
-                            <td>{{ \Carbon\Carbon::parse($row->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                             <td class="text-center">
-                                @if($row->status_pengajuan == null && $row->status_proses == 'belum proses')
-                                <span class="badge badge-warning py-1">belum diproses</span>
-                                @elseif($row->status_pengajuan == 'terima' && $row->status_proses == 'proses')
-                                <span class="badge badge-success py-1">disetujui</span>
-                                <span class="badge badge-warning py-1">diproses</span>
-                                @elseif($row->status_pengajuan == 'terima' && $row->status_proses == 'selesai')
-                                <span class="badge badge-success py-1">selesai</span>
+                                @if($row->status_pengajuan_id == 1)
+                                <span class="border border-success text-success p-1">disetujui</span>
+                                @elseif($row->status_pengajuan_id == 2)
+                                <span class="border border-danger text-danger p-1">ditolak</span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if($row->status_proses_id == 1)
+                                <span class="border border-warning text-warning p-1">menunggu persetujuan</span>
+                                @elseif ($row->status_proses_id == 2)
+                                <span class="border border-warning text-warning p-1">usulan sedang diproses</span>
+                                @elseif ($row->status_proses_id == 3)
+                                <span class="border border-success text-success p-1">menunggu konfirmasi pengusul</span>
+                                @elseif ($row->status_proses_id == 4)
+                                <span class="border border-success text-success p-1">menunggu konfirmasi kabag rt</span>
+                                @elseif ($row->status_proses_id == 5)
+                                <span class="border border-success text-success p-1">selesai</span>
                                 @endif
                             </td>
                             <td>
@@ -86,19 +86,148 @@ $jabatan = $user->jabatan; ?>
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    @if($row->status_proses == 'proses' || $row->status_proses == 'selesai')
-                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/pengajuan/'. $row->id_form_usulan) }}" target="_blank" title="Cetak Surat">
-                                        <i class="fas fa-file-download"></i> Cetak Surat
+                                    <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $row->id_form_usulan }}">
+                                        <i class="fas fa-info-circle"></i> Detail
                                     </a>
-                                    @endif
-                                    @if($row->status_proses == 'selesai')
-                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/detail-bast/'. $row->id_form_usulan) }}" target="_blank" title="Cetak Surat">
-                                        <i class="fas fa-file-download"></i> BAST Surat
-                                    </a>
-                                    @endif
                                 </div>
                             </td>
                         </tr>
+                        <div class="modal fade" id="modal-info-{{ $row->id_form_usulan }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        @if($row->status_pengajuan_id == '')
+                                            <span class="border border-warning">
+                                                <b class="text-warning p-3">menunggu persetujuan</b>
+                                            </span>
+                                        @elseif ($row->status_pengajuan_id == 1)
+                                            @if($row->status_proses_id == 2)
+                                            <span class="border border-warning">
+                                                <b class="text-warning p-3">usulan sedang diproses</b>
+                                            </span>
+                                            @elseif($row->status_proses_id == 3)
+                                            <span class="border border-warning">
+                                                <b class="text-warning p-3">menunggu konfirmasi pengusul</b>
+                                            </span>
+                                            @elseif($row->status_proses_id == 4)
+                                            <span class="border border-warning">
+                                                <b class="text-warning p-3">menunggu konfirmasi kabag rt</b>
+                                            </span>
+                                            @elseif($row->status_proses_id == 5)
+                                            <span class="border border-warning">
+                                                <b class="text-warning p-3">selesai</b>
+                                            </span>
+                                            @endif
+                                        @endif
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-capitalize">
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-center">
+                                                <h5>Detail Pengajuan Usulan {{ $row->jenis_form_usulan }}
+                                                    <hr>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mt-2">
+                                            <h6 class="col-md-12 font-weight-bold text-muted">
+                                                Informasi Pengusul
+                                            </h6>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Nama Pengusul </label></div>
+                                            <div class="col-md-8">: {{ $row->nama_pegawai }}</div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Jabatan Pengusul </label></div>
+                                            <div class="col-md-8">: {{ $row->jabatan.' '.$row->keterangan_pegawai }}</div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Unit Kerja</label></div>
+                                            <div class="col-md-8">: {{ $row->unit_kerja }}</div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Tanggal Usulan </label></div>
+                                            <div class="col-md-8">: {{ \Carbon\Carbon::parse($row->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Rencana Pengguna </label></div>
+                                            <div class="col-md-8">: {{ $row->rencana_pengguna }}</div>
+                                        </div>
+                                        <div class="form-group row mt-4">
+                                            <h6 class="col-md-12 font-weight-bold text-muted">
+                                                Informasi Kendaraan
+                                            </h6>
+                                        </div>
+                                        @if($row->jenis_form == 'pengadaan')
+                                        @foreach($row->detailPengadaan as $dataPengadaan )
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4"><label>Nama Barang </label></div>
+                                                <div class="col-md-8">: {{ $dataPengadaan->kategori_barang }}</div>
+                                                <div class="col-md-4"><label>Merk </label></div>
+                                                <div class="col-md-8">: {{ $dataPengadaan->merk_barang }}</div>
+                                                <div class="col-md-4"><label>Spesifikasi </label></div>
+                                                <div class="col-md-8">: {{ $dataPengadaan->spesifikasi_barang }}</div>
+                                                <div class="col-md-4"><label>Jumlah </label></div>
+                                                <div class="col-md-8">: {{ $dataPengadaan->jumlah_barang.' '.$dataPengadaan->satuan_barang }}</div>
+                                                <div class="col-md-4"><label>Estimasi Biaya</label></div>
+                                                <div class="col-md-8">: Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                        @else
+                                        @foreach($row->detailPerbaikan as $dataPerbaikan)
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4"><label>Nama Barang </label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->kategori_barang }}</div>
+                                                <div class="col-md-4"><label>Spesifikasi </label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->spesifikasi_barang }}</div>
+                                                <div class="col-md-4"><label>Jumlah </label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->jumlah_barang.' '.$dataPerbaikan->satuan_barang }}</div>
+                                                <div class="col-md-4"><label>Nilai Perolehan</label></div>
+                                                <div class="col-md-8">: Rp {{ number_format($dataPerbaikan->nilai_perolehan, 0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                        @endif
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <div class="col-md-12">
+                                            <span style="float: left;">
+                                                @if($row->status_proses == 'proses')
+                                                @if($row->otp_bast_pengusul == null)
+                                                <a href="{{ url('super-user/oldat/surat/buat-bast/'. $row->id_form_usulan) }}" class="btn btn-primary">
+                                                    <i class="fas fa-file"></i> Buat BAST
+                                                </a>
+                                                @else
+                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_pengusul) }}" class="btn btn-primary">
+                                                    <i class="fas fa-file"></i> Surat BAST
+                                                </a>
+                                                @endif
+                                                @elseif($row->status_proses == 'selesai')
+                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_pengusul) }}" class="btn btn-primary">
+                                                    <i class="fas fa-file"></i> Surat BAST
+                                                </a>
+                                                @else
+                                                <azz class="btn btn-primary disabled">
+                                                    <i class="fas fa-file"></i> Buat BAST
+                                                </azz>
+                                                @endif
+                                            </span>
+                                            <span style="float: right;">
+                                                <a href="{{ url('super-user/oldat/surat/surat-usulan/'. $row->otp_usulan_pengusul) }}" class="btn btn-primary">
+                                                    <i class="fas fa-file"></i> Surat Usulan Pengajuan
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -106,37 +235,6 @@ $jabatan = $user->jabatan; ?>
         </div>
     </div>
 </section>
-
-<!-- Modal Tambah -->
-<div class="modal fade" id="modal-add">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Pilih Usulan Pengajuan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="row">
-                    <div class="col-md-6 form-group font-weight-bold">
-                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn btn-primary btn-lg text-center p-4">
-                            <img src="https://cdn-icons-png.flaticon.com/512/955/955063.png" width="50" height="50"> <br>
-                            PENGADAAN
-                        </a>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn btn-primary btn-lg text-center p-4">
-                            <img src="https://cdn-icons-png.flaticon.com/512/1086/1086470.png" width="50" height="50"> <br>
-                            PERBAIKAN
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 @section('js')
 <script>

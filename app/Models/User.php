@@ -35,6 +35,6 @@ class User extends Authenticatable
     }
 
     public function akses() {
-        return $this->HasMany(UserAkses::class);
+        return $this->HasMany(UserAkses::class,'user_id','id');
     }
 }

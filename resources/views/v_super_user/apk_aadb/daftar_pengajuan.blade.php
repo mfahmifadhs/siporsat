@@ -31,7 +31,7 @@
                                 <th>Jenis Pengajuan</th>
                                 <th>Rencana Pengguna</th>
                                 <th>Status Pengajuan</th>
-                                <th>Status Pengadaan</th>
+                                <th>Status Usulan</th>
                                 <th>Aksi</th>
                             </thead>
                             @php $no = 1; @endphp
@@ -47,9 +47,9 @@
                                     <td>{{ $dataPengajuan->rencana_pengguna }}</td>
                                     <td class="text-center">
                                         @if($dataPengajuan->status_pengajuan == 'terima')
-                                            <span class="border border-success text-success p-1">disetujui</span>
+                                            <span class="border border-success text-success p-1 mt-2">disetujui</span>
                                         @elseif($dataPengajuan->status_pengajuan == 'tolak')
-                                            <span class="border border-danger text-danger p-1">ditolak</span>
+                                            <span class="border border-danger text-danger p-1 mt-2">ditolak</span>
                                         @endif
                                     </td>
                                     <td class="text-center">

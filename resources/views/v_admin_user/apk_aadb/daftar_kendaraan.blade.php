@@ -6,11 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Daftar AADB</h1>
+                <h1 class="m-0">Master Kendaraan</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Daftar AADB</li>
+                    <li class="breadcrumb-item"><a href="{{ url('admin-user/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Master Kendaraan</li>
                 </ol>
             </div>
         </div>
@@ -36,12 +37,12 @@
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload" title="Upload Data Kendaraan">
                         <i class="fas fa-file-upload"></i>
                     </a>
-                    <a href="{{ url('admin-user/aadb/kendaraan/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data kendaraan ?')">
+                    <!-- <a href="{{ url('admin-user/aadb/kendaraan/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data kendaraan ?')">
                         <i class="fas fa-file-download"></i>
-                    </a>
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Kendaraan">
+                    </a> -->
+                    <!-- <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Kendaraan">
                         <i class="fas fa-plus-circle"></i>
-                    </a>
+                    </a> -->
                 </div>
             </div>
             <div class="card-body">
@@ -49,14 +50,20 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Unit Kerja</th>
                             <th>Jenis AADB</th>
                             <th>Kode Barang</th>
                             <th>Jenis Kendaraan</th>
-                            <th>Merk / Tipe</th>
+                            <th>Merk</th>
+                            <th>Tipe</th>
                             <th>No. Plat</th>
                             <th>Masa Berlaku STNK</th>
                             <th>No. Plat RHS</th>
                             <th>Masa Berlaku STNK</th>
+                            <th>No. BPKB</th>
+                            <th>No. Rangka</th>
+                            <th>No. Mesin</th>
+                            <th>Tahun Kendaraan</th>
                             <th>Kondisi</th>
                             <th>Pengguna</th>
                             <th>Jabatan</th>
@@ -69,14 +76,20 @@
                         @foreach($kendaraan as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $row->unit_kerja }}</td>
                             <td>{{ $row->jenis_aadb }}</td>
                             <td>{{ $row->kode_barang }}</td>
                             <td>{{ $row->jenis_kendaraan }}</td>
-                            <td>{{ $row->merk_kendaraan.' '.$row->tipe_kendaraan }}</td>
+                            <td>{{ $row->merk_kendaraan }}</td>
+                            <td>{{ $row->tipe_kendaraan }}</td>
                             <td>{{ $row->no_plat_kendaraan }}</td>
                             <td>{{ $row->mb_stnk_plat_kendaraan }}</td>
                             <td>{{ $row->no_plat_rhs }}</td>
                             <td>{{ $row->mb_stnk_plat_rhs }}</td>
+                            <td>{{ $row->no_bpkb }}</td>
+                            <td>{{ $row->no_rangka }}</td>
+                            <td>{{ $row->no_mesin }}</td>
+                            <td>{{ $row->tahun_kendaraan }}</td>
                             <td>{{ $row->kondisi_kendaraan }}</td>
                             <td>{{ $row->pengguna }}</td>
                             <td>{{ $row->jabatan }}</td>
@@ -86,11 +99,8 @@
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url('super-admin/aadb/kendaraan/detail/'. $row->id_kendaraan) }}">
+                                    <a class="dropdown-item" href="{{ url('admin-user/aadb/kendaraan/detail/'. $row->id_kendaraan) }}">
                                         <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                    <a class="dropdown-item" href="{{ url('super-admin/aadb/kategori-kendaraan/proses-hapus/'. $row->id_kendaraan) }}" onclick="return confirm('Hapus data kategori kendaraan ?')">
-                                        <i class="fas fa-trash"></i> Hapus
                                     </a>
                                 </div>
                             </td>
@@ -166,12 +176,45 @@
 @section('js')
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/"
+            + (currentdate.getMonth()+1)  + "/"
+            + currentdate.getFullYear() + " \n Pukul: "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds()
+
         $("#table-aadb").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "lengthMenu": [[10, 25, 50, "All", -1], [10, 25, 50, "All"]]
-        }).buttons().container().appendTo('#table-aadb .col-md-6:eq(0)');;
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Kendaraan',
+                    exportOptions: {
+                        columns: [0,3,4,5,6,8,9,10]
+                    },
+                    messageTop: datetime
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Kendaraan',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                    },
+                    messageTop: datetime
+                }
+            ]
+        }).buttons().container().appendTo('#table-aadb_wrapper .col-md-6:eq(0)');
     });
 </script>
 @endsection

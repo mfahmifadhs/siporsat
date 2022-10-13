@@ -21,6 +21,7 @@ class FormUsulanPengadaan extends Model
         'spesifikasi_barang',
         'jumlah_barang',
         'satuan_barang',
+        'estimasi_biaya',
         'foto_barang'
     ];
 

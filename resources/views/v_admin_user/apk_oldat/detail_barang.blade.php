@@ -133,6 +133,10 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Nilai Perolehan : </label>
+                                            <input type="number" name="nilai_perolehan" class="form-control" value="{{ $barang->nilai_perolehan }}">
+                                        </div>
                                         <div class="col-md-12 form-group">
                                             <label>Spesifikasi : </label>
                                             <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5">{{ $barang->spesifikasi_barang}}</textarea>

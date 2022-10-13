@@ -39,18 +39,15 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ url('super-user/dashboard') }}" class="nav-link">Dashboard</a>
-                </li>
             </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                    <!-- <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                         <i class="fas fa-search"></i>
-                    </a>
+                    </a> -->
                     <div class="navbar-search-block">
                         <form class="form-inline">
                             <div class="input-group input-group-sm">
@@ -128,11 +125,11 @@
                         <li class="nav-item">
                             <a href="{{ url('super-user/dashboard') }}" class="nav-link {{ Request::is('super-user/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
+                                <p>Home</p>
                             </a>
                         </li>
 
-                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT</li>
+                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
                         <li class="nav-item">
                             <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link {{ Request::is('super-user/oldat/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-laptop"></i>
@@ -143,32 +140,55 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link {{ Request::is('super-user/oldat/dashboard') ? 'active' : '' }}">
+                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link">
                                         <i class="nav-icon fas fa-home"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/pengajuan/seluruh-pengajuan') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>Daftar Pengajuan</p>
+                                    <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                        <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}" class="nav-link {{ Request::is('super-user/oldat/laporan/daftar/seluruh-laporan') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-file-alt"></i>
-                                        <p>Laporan</p>
+                                    <a href="{{ url('super-user/oldat/barang/daftar/seluruh-barang') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-boxes"></i>
+                                        <p>Master Barang</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link {{ Request::is('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-file  -alt"></i>
+                                    <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
                                         <p>Rekapitulasi</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-chart-bar"></i>
+                                        <p>
+                                            Laporan
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/oldat/laporan/pengadaan/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Pengadaan</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/oldat/laporan/perbaikan/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Perbaikan</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
-                        @if( Auth::user()->pegawai->jabatan_id == 2)
+                        @if(Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5)
                         <li class="nav-header font-weight-bold">Pengelolaan AADB</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
@@ -180,21 +200,21 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="nav-link {{ Request::is('super-user/aadb/dashboard') ? 'active' : '' }}">
+                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="nav-link">
                                         <i class="nav-icon fas fa-home"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>Daftar Pengajuan</p>
+                                    <a href="{{ url('super-user/aadb/usulan/pengajuan/seluruh-pengajuan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                        <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('super-user/aadb/kendaraan') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-file-alt"></i>
-                                        <p>Laporan</p>
+                                    <a href="{{ url('super-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-car"></i>
+                                        <p>Master AADB</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -203,8 +223,42 @@
                                         <p>Rekapitulasi</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-chart-bar"></i>
+                                        <p>
+                                            Laporan
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/laporan/pengadaan/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Pengadaan</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/laporan/servis/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Servis</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/laporan/perpanjangan/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Perpanjangan STNK</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ url('super-user/aadb/laporan/voucher/daftar') }}" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <p>Laporan Voucher BBM</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
-
                         </li>
                         @endif
                     </ul>
@@ -268,6 +322,10 @@
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('dist_admin/plugins/select2/js/select2.full.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Coma in input price -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
     @yield('js')
     <script>
         $(function() {
@@ -280,12 +338,12 @@
             // for sidebar menu and treeview
             $('ul.nav-treeview a').filter(function() {
                     return this.href == url;
-                }).parentsUntil(".nav-sidebar > .nav-treeview")
-                .css({
+            }).parentsUntil(".nav-sidebar > .nav-treeview")
+            .css({
                     'display': 'block'
-                })
-                .addClass('menu-open').prev('a')
-                .addClass('active');
+            })
+            .addClass('menu-open').prev('a')
+            .addClass('active');
         });
     </script>
 </body>

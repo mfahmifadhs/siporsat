@@ -249,7 +249,7 @@
                             <div style="margin-left:30%;text-transform:capitalize;">
                                 <label>Pengusul, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
                                 <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat.app/bast/'.$usulan->kode_otp_bast) !!}
+                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.png'), 1, true)->generate('https://www.siporsat.app/bast/'.$usulan->kode_otp_bast) !!}
                                 </p>
                                 <div style="margin-top: 5%;">
                                     <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>

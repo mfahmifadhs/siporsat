@@ -566,7 +566,7 @@
         $(document).on('click', '#btnKirimOTP', function() {
             let tujuan = "{{ $aksi }}"
             jQuery.ajax({
-                url: '/super-user/oldat/sendOTP?tujuan=' + tujuan,
+                url: '/super-user/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
                     // console.log(res)

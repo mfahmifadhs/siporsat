@@ -22,17 +22,6 @@
 
 <section class="content">
     <div class="container">
-        <div class="col-md-12 form-group">
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p style="color:white;margin: auto;">{{ $message }}</p>
-            </div>
-            @elseif ($message = Session::get('failed'))
-            <div class="alert alert-danger">
-                <p style="color:white;margin: auto;">{{ $message }}</p>
-            </div>
-            @endif
-        </div>
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Berita Acara Serah Terima (BAST) Pengadaan AADB</h3>
@@ -202,6 +191,59 @@
     </div>
 </section>
 
+@elseif ($cekForm->jenis_form == 2)
+
+<section class="content">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Berita Acara Serah Terima (BAST) Pengadaan AADB</h3>
+            </div>
+            <div class="card-body">
+                <form action="{{ url('super-user/aadb/usulan/proses-bast/'. $usulan->id_form_usulan) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id_usulan" value="{{ rand(1000,9999) }}">
+                    <input type="hidden" name="jenis_form" value="1">
+                    <input type="hidden" name="total_pengajuan" value="1">
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <div class="col-sm-10 mb-2">
+                            <small>
+                                Pastikan seluruh kolom terisi dengan baik dan benar. <br>
+                                BAST dibuat setelah servis dan pergantian oli kendaraan dilakukan.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal Servis</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="tanggal_servis" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal Ganti Oli</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="tanggal_servis" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Bukti Pembayaran</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" name="bukti_pembayaran" placeholder="Bukti Pembayaran">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <div class="col-sm-10">
+                            <button class="btn btn-primary">SUBMIT</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
 @endif
 
 @section('js')
@@ -215,7 +257,7 @@
         $(document).on('click', '#btnKirimOTP', function() {
             let tujuan = "{{ $usulan->jenis_form_usulan }}"
             jQuery.ajax({
-                url: '/super-user/oldat/sendOTP?tujuan=' + tujuan,
+                url: '/super-user/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
                     // console.log(res)

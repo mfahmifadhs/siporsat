@@ -29,13 +29,7 @@
 
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
-<body class="hold-transition sidebar-mini layout-fixed">
-    <?php
-        $user       = Auth()->user();
-        $pegawai    = $user->pegawai;
-        $jabatan    = $pegawai->jabatan;
-        $timKerja   = $pegawai->timKerja;
-    ?>
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -78,14 +72,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ $pegawai->nama_pegawai }}</b>
+                        <b>{{ Auth::user()->pegawai->nama_pegawai }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            @if($pegawai->jabatan_id == '4' || $pegawai->jabatan_id == '6' && $pegawai->tim_kerja_id != null)
-                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
+                            @if( Auth::user()->pegawai->jabatan_id == '4' || Auth::user()->pegawai->jabatan_id == '6' && Auth::user()->pegawai->tim_kerja_id != null)
+                                {{  Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
                             @else
-                                {{ $pegawai->nama_pegawai }} <br> {{ $jabatan->jabatan }} {{ $pegawai->keterangan_pegawai }}
+                                {{  Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->jabatan->jabatan }} {{ Auth::user()->pegawai->keterangan_pegawai }}
                             @endif
                         </span>
                         <div class="dropdown-divider"></div>
@@ -139,30 +133,45 @@
                                 <p>Daftar Pegawai</p>
                             </a>
                         </li>
+                        <li><hr style="border: 0.5px solid grey;"></li>
+                        @if(Auth::user()->akses->first()->is_oldat == 1)
+                            <li class="nav-header font-weight-bold">OLDAT & MEUBELAIR</li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('admin-user/oldat/barang/data/semua') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-boxes"></i>
+                                    <p>Master Barang</p>
+                                </a>
+                            </li>
+                        @endif
+                        <li><hr style="border: 0.5px solid grey;"></li>
+                        @if(Auth::user()->akses->first()->is_aadb == 1)
+                            <li class="nav-header font-weight-bold">AADB</li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>Master Kendaraan</p>
+                                </a>
+                            </li>
+                        @endif
+                        <li><hr style="border: 0.5px solid grey;"></li>
+                        @if(Auth::user()->akses->first()->is_atk == 1)
+                            <li class="nav-header font-weight-bold">ATK</li>
+                        @endif
+                        <li><hr style="border: 0.5px solid grey;"></li>
+                        @if(Auth::user()->akses->first()->is_mtc == 1)
+                            <li class="nav-header font-weight-bold">PEMELIHARAAN</li>
+                        @endif
+                        <li><hr style="border: 0.5px solid grey;"></li>
+                        @if(Auth::user()->akses->first()->is_mtc == 1)
+                            <li class="nav-header font-weight-bold">RUMAH DINAS</li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>Master Rumah Dinas</p>
+                                </a>
+                            </li>
+                        @endif
 
-                        <!-- Pengelolaan OLAT -->
-                        <li class="nav-header font-weight-bold">OLDAT</li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('admin-user/oldat/barang/data/semua') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-boxes"></i>
-                                <p>Barang BMN</p>
-                            </a>
-                        </li>
-
-                        <!-- Pengelolaan AADB -->
-                        <li class="nav-header font-weight-bold">AADB</li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-user/aadb/dashboard/ ') }}" class="nav-link {{ Request::is('admin-user/aadb/dashboard/ ') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>Dashboard AADB</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-user/aadb/kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-car"></i>
-                                <p>Master Kendaraan</p>
-                            </a>
-                        </li>
                     </ul>
                 </nav>
             </div>

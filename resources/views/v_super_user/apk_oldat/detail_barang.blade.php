@@ -6,12 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Daftar Barang</h1>
+                <h1 class="m-0">Detail Barang</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/laporan/daftar/seluruh-laporan') }}">Daftar Barang</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/barang/daftar/seluruh-laporan') }}">Daftar Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -44,6 +44,7 @@
                             @endif
                         </div>
                         <h3 class="profile-username text-center">{{ $barang->kategori_barang }}</h3>
+                        <p class="text-muted text-center">{{ $barang->merk_tipe_barang }}</p>
                         <p class="text-muted text-center">{{ $barang->spesifikasi_barang }}</p>
                     </div>
                 </div>
@@ -75,23 +76,13 @@
                                         <div class="col-md-6 form-group">
                                             <label>Pengguna Barang :</label>
                                             <select name="id_pegawai" class="form-control" disabled>
-                                                <option value="">-- Pilih Pegawai --</option>
-                                                @foreach($pegawai as $dataPegawai)
-                                                <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($barang->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
-                                                    {{ $dataPegawai->nama_pegawai }}
-                                                </option>
-                                                @endforeach
+                                                <option value="">{{ $barang->nama_pegawai }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kategori Barang :</label>
                                             <select name="id_kategori_barang" class="form-control" disabled>
-                                                <option value="">-- Pilih Level --</option>
-                                                @foreach($kategoriBarang as $dataKategoriBarang)
-                                                <option value="{{ $dataKategoriBarang->id_kategori_barang }}" <?php if ($barang->kategori_barang_id == $dataKategoriBarang->id_kategori_barang) echo "selected"; ?>>
-                                                    {{ $dataKategoriBarang->kategori_barang }}
-                                                </option>
-                                                @endforeach
+                                                <option value="">{{ $barang->kategori_barang }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6 form-group">
@@ -117,13 +108,12 @@
                                         <div class="col-md-6 form-group">
                                             <label for="level">Kondisi Barang :</label>
                                             <select name="id_kondisi_barang" class="form-control" disabled>
-                                                <option value="">-- Pilih Kondisi Barang --</option>
-                                                @foreach($kondisiBarang as $dataKondisiBarang)
-                                                <option value="{{ $dataKondisiBarang->id_kondisi_barang }}" <?php if ($barang->kondisi_barang_id == $dataKondisiBarang->id_kondisi_barang) echo "selected"; ?>>
-                                                    {{ $dataKondisiBarang->kondisi_barang }}
-                                                </option>
-                                                @endforeach
+                                                <option value="">{{ $barang->kondisi_barang }}</option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Nilai Perolehan : </label>
+                                            <input type="text" name="tahun_perolehan" class="form-control" value="Rp {{ number_format($barang->nilai_perolehan, 0, ',', '.') }}" readonly>
                                         </div>
                                         <div class="col-md-12 form-group">
                                             <label>Spesifikasi : </label>

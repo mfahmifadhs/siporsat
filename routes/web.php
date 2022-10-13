@@ -86,10 +86,10 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
-        Route::get('{aksi}', [AdminUserController::class, 'aadb']);
-        Route::get('kendaraan/{aksi}/{id}', [AdminUserController::class, 'kendaraan']);
+        Route::get('dasboard', [AdminUserController::class, 'Aadb']);
+        Route::get('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
 
-        Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'kendaraan']);
+        Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
     });
 });
 
@@ -98,34 +98,43 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 // ====================================================
 Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'as' => 'super-user.'], function () {
     Route::get('dashboard', [SuperUserController::class, 'index']);
+    Route::get('sendOTP', [SuperUserController::class, 'SendOTPWhatsApp']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
-        Route::get('dashboard', [SuperUserController::class, 'oldat'])->name('oldat');
-        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'report']);
-        Route::get('/grafik', [SuperUserController::class, 'searchChartData'])->name('searchChartData');
-        Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'recap']);
-        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submissionOLDAT']);
-        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'letter']);
-        Route::get('bast/{aksi}/{id}', [SuperUserController::class, 'bast']);
+        Route::get('dashboard', [SuperUserController::class, 'Oldat']);
+        Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'Items']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'Report']);
+        Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'Recap']);
+        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
 
-        Route::post('bast/{aksi}/{id}', [SuperUserController::class, 'bast']);
-        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'submissionOLDAT']);
-        Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'letter']);
+        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
+        Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
 
-        Route::get('get-barang/{id}', [SuperUserController::class, 'getDataBarang']);
-        Route::get('sendOTP', [SuperUserController::class, 'sendOTPWhatsapp']);
+        Route::get('get-barang/{id}', [SuperUserController::class, 'JsonItems']);
+        Route::get('/grafik', [SuperUserController::class, 'SearchChartDataOldat']);
+        Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportOldat']);
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
-        Route::get('{aksi}', [SuperUserController::class, 'aadb']);
-        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'pengajuanAadb']);
-        Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
+        Route::get('dashboard', [SuperUserController::class, 'Aadb']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportAadb']);
+        Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
+        Route::get('rekapitulasi', [SuperUserController::class, 'RecapAadb']);
 
-        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'kendaraan']);
-        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'pengajuanAadb']);
+        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
 
-        Route::get('dashboard/{aksi}', [SuperUserController::class, 'searchChartDataAADB']);
+        Route::get('dashboard/{aksi}', [SuperUserController::class, 'SearchChartDataAadb']);
+        Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportAadb']);
     });
+
+    Route::group(['prefix' => 'ppk', 'as' => 'ppk'], function () {
+        Route::get('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
+        Route::post('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
+    });
+
 });
 
 

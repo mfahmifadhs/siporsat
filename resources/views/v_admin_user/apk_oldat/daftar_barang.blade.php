@@ -38,12 +38,12 @@
                     <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload" title="Upload Data Barang">
                         <i class="fas fa-file-upload"></i>
                     </a>
-                    <a href="{{ url('admin-user/oldat/barang/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data pengadaan ?')">
+                    <!-- <a href="{{ url('admin-user/oldat/barang/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data pengadaan ?')">
                         <i class="fas fa-file-download"></i>
-                    </a>
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Barang">
+                    </a> -->
+                    <!-- <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Barang">
                         <i class="fas fa-plus-circle"></i>
-                    </a>
+                    </a> -->
                 </div>
             </div>
             <div class="card-body">
@@ -54,9 +54,9 @@
                             <th>Kode Barang</th>
                             <th>NUP</th>
                             <th>Nama Barang</th>
-                            <th>Merk</th>
+                            <th>Spesifikasi</th>
                             <th>Jumlah</th>
-                            <th>Satuan</th>
+                            <th>Nilai Perolehan</th>
                             <th>Tahun Perolehan</th>
                             <th>Pengguna</th>
                             <th>Unit Kerja</th>
@@ -72,8 +72,8 @@
                             <td>{{ $row->nup_barang }}</td>
                             <td>{{ $row->kategori_barang }}</td>
                             <td>{{ $row->spesifikasi_barang }}</td>
-                            <td>{{ $row->jumlah_barang }}</td>
-                            <td>{{ $row->satuan_barang }}</td>
+                            <td>{{ $row->jumlah_barang.' '.$row->satuan_barang }}</td>
+                            <td>Rp {{ number_format($row->nilai_perolehan, 0, ',', '.') }}</td>
                             <td>{{ $row->tahun_perolehan }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
                             <td>{{ $row->unit_kerja }}</td>
@@ -85,9 +85,9 @@
                                     <a class="dropdown-item" href="{{ url('admin-user/oldat/barang/detail/'. $row->id_barang) }}">
                                         <i class="fas fa-info-circle"></i> Detail
                                     </a>
-                                    <a class="dropdown-item" href="{{ url('super-admin/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
+                                    <!-- <a class="dropdown-item" href="{{ url('admin-user/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
                                         <i class="fas fa-trash"></i> Hapus
-                                    </a>
+                                    </a> -->
                                 </div>
                             </td>
                         </tr>
@@ -162,13 +162,45 @@
 @section('js')
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/"
+            + (currentdate.getMonth()+1)  + "/"
+            + currentdate.getFullYear() + " \n Pukul: "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds()
+
         $("#table-barang").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "print"],
-            "lengthMenu": [[10, 25, 50, "Semua", -1], [10, 25, 50, "Semua"]]
-        }).buttons().container().appendTo('#table-kategori-barang_wrapper .col-md-6:eq(0)');
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Barang',
+                    exportOptions: {
+                        columns: [0,3,4,5,6,7,9]
+                    },
+                    messageTop: datetime
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Barang',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5,6,7,8,9]
+                    },
+                    messageTop: datetime
+                }
+            ]
+        }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
     });
 </script>
 @endsection
