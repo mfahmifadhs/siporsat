@@ -80,25 +80,25 @@ class SuperAdminController extends Controller
         if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
             $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->where('jenis_form','pengadaan')->where('status_proses','!=','selesai')
+                ->where('jenis_form','pengadaan')->where('status_proses_id','!=','selesai')
                 ->orderBy('tanggal_usulan', 'DESC')->limit(5)
                 ->get();
             $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
-                ->where('status_proses','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
+                ->where('status_proses_id','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
                 ->limit(5)->get();
         } else {
             $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->where('jenis_form','pengadaan')->where('status_proses','!=','selesai')
+                ->where('jenis_form','pengadaan')->where('status_proses_id','!=','selesai')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->orderBy('tanggal_usulan', 'DESC')->limit(5)
                 ->get();
             $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
-                ->where('status_proses','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
+                ->where('status_proses_id','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->limit(5)->get();
         }

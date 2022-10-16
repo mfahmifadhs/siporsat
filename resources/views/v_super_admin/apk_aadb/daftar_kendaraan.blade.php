@@ -48,7 +48,7 @@
                             <th>Merk</th>
                             <th>Tipe</th>
                             <th>No. Plat</th>
-                            <th>No. Plat RHS</th>
+                            <th>Masa Berlaku STNK</th>
                             <th>Pengguna</th>
                             <th>Jabatan</th>
                             <th>Pengemudi</th>
@@ -61,13 +61,14 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->nup_barang }}</td>
-                            <td>{{ $row->kategori_barang }}</td>
-                            <td>{{ $row->spesifikasi_barang }}</td>
-                            <td>{{ $row->jumlah_barang }}</td>
-                            <td>{{ $row->satuan_barang }}</td>
-                            <td>{{ $row->nama_pegawai }}</td>
-                            <td>{{ $row->unit_kerja }}</td>
+                            <td>{{ $row->jenis_kendaraan }}</td>
+                            <td>{{ $row->merk_kendaraan }}</td>
+                            <td>{{ $row->tipe_kendaraan }}</td>
+                            <td>{{ $row->no_plat_kendaraan }}</td>
+                            <td>{{ $row->mb_stnk_plat_kendaraan }}</td>
+                            <td>{{ $row->pengguna }}</td>
+                            <td>{{ $row->jabatan }}</td>
+                            <td>{{ $row->pengemudi }}</td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>

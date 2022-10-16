@@ -198,24 +198,10 @@ $jabatan = $user->jabatan; ?>
                                     <div class="modal-footer justify-content-between">
                                         <div class="col-md-12">
                                             <span style="float: left;">
-                                                @if($row->status_proses == 'proses')
-                                                @if($row->otp_bast_pengusul == null)
-                                                <a href="{{ url('super-user/oldat/surat/buat-bast/'. $row->id_form_usulan) }}" class="btn btn-primary">
-                                                    <i class="fas fa-file"></i> Buat BAST
-                                                </a>
-                                                @else
-                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_pengusul) }}" class="btn btn-primary">
+                                                @if($row->status_proses_id == 5)
+                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_ppk) }}" class="btn btn-primary">
                                                     <i class="fas fa-file"></i> Surat BAST
                                                 </a>
-                                                @endif
-                                                @elseif($row->status_proses == 'selesai')
-                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_pengusul) }}" class="btn btn-primary">
-                                                    <i class="fas fa-file"></i> Surat BAST
-                                                </a>
-                                                @else
-                                                <azz class="btn btn-primary disabled">
-                                                    <i class="fas fa-file"></i> Buat BAST
-                                                </azz>
                                                 @endif
                                             </span>
                                             <span style="float: right;">

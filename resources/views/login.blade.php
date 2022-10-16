@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-OFFICE</title>
+    <title>SIPORSAT KEMENKES RI</title>
 
     <!-- Icon Title -->
     <link rel="icon" type="image/png" href="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">

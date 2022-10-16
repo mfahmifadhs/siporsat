@@ -198,12 +198,6 @@
                             <input type="text" class="form-control" name="tahun_perolehan[]" value="{{ $dataBarang->tahun_perolehan }}" readonly>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Spesifikasi Barang </label>
-                        <div class="col-sm-10">
-                            <textarea type="text" class="form-control" name="spesifikasi_barang[]"></textarea>
-                        </div>
-                    </div>
                     @endforeach
                     @endif
                     <div class="form-group row">
@@ -212,7 +206,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Verifikasi BAST</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
+                            <input type="text" class="form-control" name="otp_bast_ppk" id="inputOTP" placeholder="Masukan Kode OTP" required>
                             <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
                             <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
                         </div>

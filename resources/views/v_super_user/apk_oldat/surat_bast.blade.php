@@ -64,9 +64,11 @@
                 <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="{{ url('super-user/oldat/surat/pdf-bast/'. $bast->kode_otp_bast) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                @if($bast->status_proses_id == 5)
+                <a href="{{ url('super-user/oldat/surat/print-surat-bast/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
+                @endif
             </div>
             <div class="col-md-12 form-group ">
                 <div style="background-color: white;margin-right: 15%;margin-left: 15%;padding:2%;">
@@ -153,27 +155,31 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-6 form-group" style="margin-top: 10%;">
-                            <div style="margin-left:30%;text-transform:capitalize;">
-                                <label>yang menyerahkan, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                                <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$bast->kode_otp_bast) !!}
+                        <div class="col-md-4 form-group" style="margin-top: 15vh;">
+                            <div class="text-center text-capitalize">
+                                <label>Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                                <p style="margin-top: 8vh;">
+                                    {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_ppk) !!}
                                 </p>
-                                <div style="margin-top: 5%;">
-                                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
-                                </div>
-                                </p>
+                                <label class="text-underline">Marten Avero</label>
                             </div>
                         </div>
-                        <div class="col-md-6 form-group" style="margin-top: 10%;">
-                            <div style="margin-right:20%;margin-left:10%;text-transform:capitalize;">
-                                <label>yang menerima, <br> pengusul</label>
-                                <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->generate('https://milkshake.app/'.$bast->kode_otp_bast) !!}
+                        <div class="col-md-4 form-group" style="margin-top: 15vh;">
+                            <div class="text-center text-capitalize">
+                                <label>Yang Menerima, <br> {{ $bast->jabatan.' '.$bast->tim_kerja }}</label>
+                                <p style="margin-top: 5vh;">
+                                    {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}
                                 </p>
-                                <div style="margin-top: 5%;">
-                                    <label class="text-underline">{{ $bast->nama_pegawai }}</label>
-                                </div>
+                                <label class="text-underline">{{ $bast->nama_pegawai }}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group" style="margin-top: 15vh;">
+                            <div class="text-center text-capitalize">
+                                <label>Mengetahui, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                                <p style="margin-top: 8vh;">
+                                    {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_kabag) !!}
+                                </p>
+                                <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                             </div>
                         </div>
                     </div>

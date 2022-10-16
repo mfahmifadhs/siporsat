@@ -165,7 +165,7 @@
                         @if(Auth::user()->akses->first()->is_mtc == 1)
                             <li class="nav-header font-weight-bold">RUMAH DINAS</li>
                             <li class="nav-item">
-                                <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
+                                <a href="{{ url('admin-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
                                     <i class="nav-icon fas fa-home"></i>
                                     <p>Master Rumah Dinas</p>
                                 </a>

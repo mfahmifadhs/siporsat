@@ -64,7 +64,7 @@
                 <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-primary print">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="{{ url('super-user/oldat/surat/print-surat-usulan/'. $usulan->otp_usulan_pengusul) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                <a href="{{ url('super-user/oldat/surat/print-surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
             </div>
@@ -168,14 +168,14 @@
                     <div class="col-md-7 form-group" style="margin-top: 15vh;">
                         <div class="text-center text-capitalize">
                             <label>Yang Mengusulkan, <br> {{ $usulan->jabatan.' '.$usulan->tim_kerja }}</label>
-                            <p>{!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$usulan->kode_otp_bast) !!}</p>
+                            <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$usulan->otp_usulan_pengusul) !!}</p>
                             <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                         </div>
                     </div>
                     <div class="col-md-5 form-group" style="margin-top: 15vh;">
                         <div class="text-center text-capitalize">
                             <label>Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                            <p>{!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$usulan->kode_otp_bast) !!}</p>
+                            <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$usulan->otp_usulan_kabag) !!}</p>
                             <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                         </div>
                     </div>

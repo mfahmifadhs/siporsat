@@ -45,18 +45,19 @@
                                     <label>Status Pengajuan</label>
                                     <select name="status_pengajuan" class="form-control">
                                         <option value="">Semua</option>
-                                        <option value="proses">Menunggu Persetujuan</option>
-                                        <option value="terima">Diterima</option>
-                                        <option value="tolak">Ditolak</option>
+                                        <option value="1">Diterima</option>
+                                        <option value="2">Ditolak</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Status Proses</label>
                                     <select name="status_proses" class="form-control">
                                         <option value="">Semua</option>
-                                        <option value="belum proses">Belum Diproses</option>
-                                        <option value="proses">Sedang Diproses</option>
-                                        <option value="selesai">Selesai</option>
+                                        <option value="1">Menunggu Persetujuan</option>
+                                        <option value="2">Sedang Diproses</option>
+                                        <option value="3">Menunggu Konfirmasi Pengusul</option>
+                                        <option value="4">Menunggu Konfirmasi Kepala Bagian RT</option>
+                                        <option value="5">Selesai</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -190,11 +191,11 @@
     }
 
     $('body').on('click', '#searchChartData', function() {
-        let form = $('input[name="jenis_form"').val()
-        let bulan = $('input[name="bulan"').val()
-        let unit_kerja = $('select[name="unit_kerja"').val()
+        let form             = $('input[name="jenis_form"').val()
+        let bulan            = $('input[name="bulan"').val()
+        let unit_kerja       = $('select[name="unit_kerja"').val()
         let status_pengajuan = $('select[name="status_pengajuan"').val()
-        let status_proses = $('select[name="status_proses"').val()
+        let status_proses    = $('select[name="status_proses"').val()
         let url = ''
         console.log(bulan)
         if (form || bulan || unit_kerja || status_pengajuan || status_proses) {

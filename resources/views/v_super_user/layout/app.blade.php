@@ -128,6 +128,12 @@
                                 <p>Home</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ url('super-user/laporan-siporsat') }}" class="nav-link">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>Laporan</p>
+                            </a>
+                        </li>
 
                         <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
                         <li class="nav-item">
@@ -206,7 +212,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/aadb/usulan/pengajuan/seluruh-pengajuan') }}" class="nav-link">
+                                    <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usd"></i>
                                         <p>Usulan Pengajuan</p>
                                     </a>
@@ -261,6 +267,11 @@
                             </ul>
                         </li>
                         @endif
+                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
+
+                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
+
+                        <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas</li>
                     </ul>
                 </nav>
             </div>

@@ -27,6 +27,29 @@ class AdminUserController extends Controller
     }
 
     // ====================================================
+    //                        Rumah Dinas
+    // ====================================================
+
+    public function Rdn(Request $request, $aksi)
+    {
+        return view('v_admin_user.apk_rdn.index');
+    }
+
+    public function House(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $rumah = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->orderBy('jenis_aadb','ASC')
+                ->get();
+
+            return view('v_admin_user.apk_aadb.daftar_rumah', compact('rumah'));
+
+        }
+    }
+
+    // ====================================================
     //                        AADB
     // ====================================================
 

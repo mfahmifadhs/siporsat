@@ -110,27 +110,31 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10%;">
-                <div style="margin-left:30%;text-transform:capitalize;">
-                    <label>Yang Menyerahkan, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p style="margin-top: 13%;margin-left:17%;">
-                        {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$bast->kode_otp_bast) !!}
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                    <p style="margin-top: 6vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_ppk) !!}
                     </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
-                    </div>
-                    </p>
+                    <label class="text-underline">Marten Avero</label>
                 </div>
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10%;">
-                <div style="margin-right:20%;margin-left:15%;text-transform:capitalize;">
-                    <label>yang menerima, <br> pengusul</label>
-                    <p style="margin-top: 13%;margin-left:17%;">
-                        {!! QrCode::size(100)->generate('https://milkshake.app/'.$bast->kode_otp_bast) !!}
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Yang Menerima, <br> {{ $bast->jabatan.' '.$bast->tim_kerja }}</label>
+                    <p style="margin-top: 3vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}
                     </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">{{ $bast->nama_pegawai }}</label>
-                    </div>
+                    <label class="text-underline">{{ $bast->nama_pegawai }}</label>
+                </div>
+            </div>
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Mengetahui, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                    <p style="margin-top: 7vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_kabag) !!}
+                    </p>
+                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                 </div>
             </div>
         </div>

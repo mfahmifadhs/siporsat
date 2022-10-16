@@ -8,6 +8,11 @@
             <div class="col-sm-6">
                 <h1 class="m-0">Daftar Pengajuan</h1>
             </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/aadb/dashboard') }}">Dashboard</a></li>
+                </ol>
+            </div>
         </div>
     </div>
 </div>
@@ -46,19 +51,23 @@
                                     <td>{{ $dataPengajuan->jenis_form_usulan }}</td>
                                     <td>{{ $dataPengajuan->rencana_pengguna }}</td>
                                     <td class="text-center">
-                                        @if($dataPengajuan->status_pengajuan == 'terima')
-                                            <span class="border border-success text-success p-1 mt-2">disetujui</span>
-                                        @elseif($dataPengajuan->status_pengajuan == 'tolak')
-                                            <span class="border border-danger text-danger p-1 mt-2">ditolak</span>
+                                        @if($dataPengajuan->status_pengajuan_id == 1)
+                                        <span class="border border-success text-success p-1">disetujui</span>
+                                        @elseif($dataPengajuan->status_pengajuan_id == 2)
+                                        <span class="border border-danger text-danger p-1">ditolak</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($dataPengajuan->status_proses == 'belum proses')
-                                            <span class="border border-warning text-warning p-1">belum diproses</span>
-                                        @elseif ($dataPengajuan->status_proses == 'proses')
-                                            <span class="border border-warning text-warning p-1">proses</span>
-                                        @else
-                                            <span class="border border-success text-success p-1">selesai</span>
+                                        @if($dataPengajuan->status_proses_id == 1)
+                                        <span class="border border-warning text-warning p-1">menunggu persetujuan</span>
+                                        @elseif ($dataPengajuan->status_proses_id == 2)
+                                        <span class="border border-warning text-warning p-1">usulan sedang diproses</span>
+                                        @elseif ($dataPengajuan->status_proses_id == 3)
+                                        <span class="border border-success text-success p-1">menunggu konfirmasi pengusul</span>
+                                        @elseif ($dataPengajuan->status_proses_id == 4)
+                                        <span class="border border-success text-success p-1">menunggu konfirmasi kabag rt</span>
+                                        @elseif ($dataPengajuan->status_proses_id == 5)
+                                        <span class="border border-success text-success p-1">selesai</span>
                                         @endif
                                     </td>
                                     <td>
@@ -77,15 +86,15 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 @if ($dataPengajuan->status_pengajuan == '')
-                                                    @if($dataPengajuan->status_proses == 'belum proses')
-                                                        <span class="border border-warning">
-                                                            <b class="text-warning p-3">Menunggu Persetujuan</b>
-                                                        </span>
-                                                    @elseif($dataPengajuan->status_proses == 'proses')
-                                                        <span class="border border-primary">
-                                                            <b class="text-primary p-3">Proses</b>
-                                                        </span>
-                                                    @endif
+                                                @if($dataPengajuan->status_proses == 'belum proses')
+                                                <span class="border border-warning">
+                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
+                                                </span>
+                                                @elseif($dataPengajuan->status_proses == 'proses')
+                                                <span class="border border-primary">
+                                                    <b class="text-primary p-3">Proses</b>
+                                                </span>
+                                                @endif
                                                 @elseif ($dataPengajuan->status_pengajuan == 'diterima')
 
                                                 @else
@@ -206,29 +215,15 @@
                                             <div class="modal-footer justify-content-between">
                                                 <div class="col-md-12">
                                                     <span style="float: left;">
-                                                        @if($dataPengajuan->status_proses == 'proses')
-                                                            @if($dataPengajuan->kode_otp_bast == null)
-                                                                <a href="{{ url('super-user/aadb/usulan/buat-bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
-                                                                    <i class="fas fa-file"></i> Buat BAST
-                                                                </a>
-                                                            @else
-                                                                <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
-                                                                    <i class="fas fa-file"></i> Surat BAST
-                                                                </a>
-                                                            @endif
-                                                        @elseif($dataPengajuan->status_proses == 'selesai')
-                                                            <a href="{{ url('super-user/aadb/usulan/bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
-                                                                <i class="fas fa-file"></i> Surat BAST
-                                                            </a>
-                                                        @else
-                                                            <a class="btn btn-primary disabled">
-                                                                <i class="fas fa-file"></i> Buat BAST
-                                                            </a>
+                                                        @if($dataPengajuan->status_proses_id == 5)
+                                                        <a href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->otp_bast_ppk) }}" class="btn btn-primary">
+                                                            <i class="fas fa-file"></i> Surat BAST
+                                                        </a>
                                                         @endif
                                                     </span>
                                                     <span style="float: right;">
-                                                        <a href="{{ url('super-user/aadb/usulan/surat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
-                                                            <i class="fas fa-file"></i> Surat Pengajuan
+                                                        <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
+                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
                                                     </span>
                                                 </div>

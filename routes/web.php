@@ -19,7 +19,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () { return view('login'); });
+Route::get('/', function () { return view('index'); });
+Route::get('/login', function () { return view('login'); });
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
@@ -91,22 +92,30 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 
         Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
     });
+
+    Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
+        Route::get('dasboard', [AdminUserController::class, 'Rdn']);
+        Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'House']);
+
+        Route::post('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'House']);
+    });
 });
 
 // ====================================================
 //                    SUPER USER
 // ====================================================
 Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'as' => 'super-user.'], function () {
-    Route::get('dashboard', [SuperUserController::class, 'index']);
+    Route::get('dashboard', [SuperUserController::class, 'Index']);
+    Route::get('laporan-siporsat', [SuperUserController::class, 'ReportMain']);
     Route::get('sendOTP', [SuperUserController::class, 'SendOTPWhatsApp']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [SuperUserController::class, 'Oldat']);
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'Items']);
-        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'Report']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportOldat']);
         Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'Recap']);
         Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
-        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterOldat']);
 
         Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
@@ -114,17 +123,20 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('get-barang/{id}', [SuperUserController::class, 'JsonItems']);
         Route::get('/grafik', [SuperUserController::class, 'SearchChartDataOldat']);
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportOldat']);
+        Route::get('QiscusOTP', [SuperUserController::class, 'OTPQiscus']);
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
         Route::get('dashboard', [SuperUserController::class, 'Aadb']);
-        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
-        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportAadb']);
         Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportAadb']);
         Route::get('rekapitulasi', [SuperUserController::class, 'RecapAadb']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAadb']);
 
-        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
+        Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAadb']);
 
         Route::get('dashboard/{aksi}', [SuperUserController::class, 'SearchChartDataAadb']);
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportAadb']);

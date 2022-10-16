@@ -140,7 +140,7 @@
                                         @endif
                                     </div>
                                     <label class="col-md-5 col-6">ID Usulan</label>
-                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                    <div class="col-md-7 col-6">: {{ $dataPengajuan->id_form_usulan }}</div>
                                     <label class="col-md-5 col-6">Tujuan</label>
                                     <div class="col-md-7 col-6">: {{ $dataPengajuan->jenis_form }}</div>
                                     <label class="col-md-5 col-6">Nama Pengusul</label>
@@ -149,7 +149,7 @@
                                     <div class="col-md-7 col-6">: {{ $dataPengajuan->total_pengajuan }} barang</div>
                                     <div class="col-md-12 col-12">
                                         <small>
-                                            <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                            <a class="btn btn-primary btn-sm mt-2" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
                                                 <i class="fas fa-info-circle"></i>
                                             </a>
                                             <!-- Aksi untuk Kepala Bagian RT -->
@@ -166,15 +166,15 @@
 
                                             @if($dataPengajuan->status_proses_id == 2)
                                             @if(Auth::user()->pegawai->jabatan_id == 5)
-                                            <a class="btn btn-success btn-sm text-white" href="{{ url('super-user/ppk/oldat/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Usulan Selesai Di Proses ?')">
-                                                <i class="fas fa-people-carry"></i>
+                                            <a class="btn btn-success btn-sm text-white mt-2" href="{{ url('super-user/ppk/oldat/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Usulan Selesai Di Proses ?')">
+                                                <i class="fas fa-people-carry"></i> Menyerahkan Barang
                                             </a>
                                             @endif
                                             @endif
 
                                             @if($dataPengajuan->status_proses_id == 3)
                                             @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id)
-                                            <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                            <a class="btn btn-success btn-sm mt-2" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
                                                 <i class="fas fa-check-circle"></i> <small>barang diterima</small>
                                             </a>
                                             @endif
@@ -182,7 +182,7 @@
 
                                             @if($dataPengajuan->status_proses_id == 4)
                                             @if(Auth::user()->pegawai->jabatan_id == 2)
-                                            <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
+                                            <a class="btn btn-success btn-sm mt-2" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
                                                 <i class="fas fa-check-circle"></i> <small>usulan diterima</small>
                                             </a>
                                             @endif
@@ -199,7 +199,7 @@
                             <div class="modal fade" id="modal-info-{{ $dataPengajuan->id_form_usulan }}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <div class="modal-body text-capitalize" style="font-family: times new roman;">
+                                        <div class="modal-body text-capitalize">
                                             <div class="text-uppercase text-center font-weight-bold mb-4">
                                                 usulan {{ $dataPengajuan->jenis_form }} bmn alat pengolah data
                                             </div>
@@ -234,10 +234,15 @@
                                                                 <td style="width: 40%;">Spesifikasi</td>
                                                                 <td>Jumlah</td>
                                                                 <td>Satuan</td>
+                                                                @if($dataPengajuan->jenis_form == 'pengadaan')
                                                                 <td style="width: 25%;">Estimasi Biaya</td>
+                                                                @else
+                                                                <td style="width: 25%;">Nilai Perolehan</td>
+                                                                @endif
                                                             </tr>
                                                         </thead>
                                                         <?php $no = 1; ?>
+                                                        @if($dataPengajuan->jenis_form == 'pengadaan')
                                                         <tbody>
                                                             @foreach($dataPengajuan->detailPengadaan as $dataBarangPengadaan)
                                                             <tr>
@@ -251,6 +256,21 @@
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
+                                                        @else
+                                                        <tbody>
+                                                            @foreach($dataPengajuan->detailPerbaikan as $dataBarangPerbaikan)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->spesifikasi_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->jumlah_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->satuan_barang }}</td>
+                                                                <td>Rp {{ number_format($dataBarangPerbaikan->nilai_perolehan, 0, ',', '.') }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        @endif
                                                     </table>
                                                 </div>
                                                 @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
@@ -286,7 +306,7 @@
                             <div class="modal fade" id="konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <div class="modal-body text-capitalize" style="font-family: times new roman;">
+                                        <div class="modal-body text-capitalize">
                                             <div class="text-uppercase text-center font-weight-bold mb-4">
                                                 konfirmasi penerimaan barang
                                             </div>
@@ -321,10 +341,15 @@
                                                                 <td style="width: 40%;">Spesifikasi</td>
                                                                 <td>Jumlah</td>
                                                                 <td>Satuan</td>
+                                                                @if($dataPengajuan == 'pengadaan')
                                                                 <td style="width: 25%;">Estimasi Biaya</td>
+                                                                @else
+                                                                <td style="width: 25%;">Nilai Perolehan</td>
+                                                                @endif
                                                             </tr>
                                                         </thead>
                                                         <?php $no = 1; ?>
+                                                        @if($dataPengajuan->jenis_form == 'pengadaan')
                                                         <tbody>
                                                             @foreach($dataPengajuan->barang as $dataBarang)
                                                             <tr>
@@ -338,6 +363,21 @@
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
+                                                        @else
+                                                        <tbody>
+                                                            @foreach($dataPengajuan->detailPerbaikan as $dataBarangPerbaikan)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->spesifikasi_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->jumlah_barang }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->satuan_barang }}</td>
+                                                                <td>Rp {{ number_format($dataBarangPerbaikan->nilai_perolehan, 0, ',', '.') }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        @endif
                                                     </table>
                                                 </div>
                                                 @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id && $dataPengajuan->status_proses_id == 3)
@@ -494,9 +534,9 @@
     }
 
     $('body').on('click', '#searchChartData', function() {
-        let tahun = $('input[name="tahun"').val()
-        let unit_kerja = $('select[name="unit_kerja"').val()
-        let tim_kerja = $('select[name="tim_kerja"').val()
+        let tahun       = $('input[name="tahun"').val()
+        let unit_kerja  = $('select[name="unit_kerja"').val()
+        let tim_kerja   = $('select[name="tim_kerja"').val()
         let url = ''
         if (tahun || unit_kerja || tim_kerja) {
             url = '<?= url("/super-user/oldat/grafik?tahun='+tahun+'&unit_kerja='+unit_kerja+'&tim_kerja='+tim_kerja+'") ?>'
@@ -519,9 +559,19 @@
                     dataTable.clear()
                     dataTable.draw()
                     let no = 1
-
+                    console.log(res)
                     data.table.forEach(element => {
-                        dataTable.row.add([no++, element.kategori_barang, element.merk_tipe_barang, element.spesifikasi_barang, element.kondisi_barang, element.unit_kerja, element.tim_kerja, element.tahun_perolehan, element.nama_pegawai]).draw(false)
+                        dataTable.row.add([
+                            no++,
+                            element.kategori_barang,
+                            element.merk_tipe_barang,
+                            element.spesifikasi_barang,
+                            element.kondisi_barang,
+                            element.unit_kerja,
+                            element.tim_kerja,
+                            element.tahun_perolehan,
+                            element.nama_pegawai
+                        ]).draw(false)
                     });
 
                 } else {

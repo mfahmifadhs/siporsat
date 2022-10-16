@@ -45,18 +45,19 @@
                                     <label>Status Pengajuan</label>
                                     <select name="status_pengajuan" class="form-control">
                                         <option value="">Semua</option>
-                                        <option value="proses">Menunggu Persetujuan</option>
-                                        <option value="terima">Diterima</option>
-                                        <option value="tolak">Ditolak</option>
+                                        <option value="1">Diterima</option>
+                                        <option value="2">Ditolak</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Status Proses</label>
                                     <select name="status_proses" class="form-control">
                                         <option value="">Semua</option>
-                                        <option value="belum proses">Belum Diproses</option>
-                                        <option value="proses">Sedang Diproses</option>
-                                        <option value="selesai">Selesai</option>
+                                        <option value="1">Menunggu Persetujuan</option>
+                                        <option value="2">Sedang Diproses</option>
+                                        <option value="3">Menunggu Konfirmasi Pengusul</option>
+                                        <option value="4">Menunggu Konfirmasi Kepala Bagian RT</option>
+                                        <option value="5">Selesai</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

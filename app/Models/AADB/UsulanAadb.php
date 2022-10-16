@@ -20,9 +20,13 @@ class UsulanAadb extends Model
         'total_pengajuan',
         'tanggal_usulan',
         'rencana_pengguna',
-        'status_pengajuan',
-        'kode_otp_usulan',
-        'kode_otp_bast',
+        'status_pengajuan_id',
+        'status_proses_id',
+        'otp_usulan_pengusul',
+        'otp_usulan_kabag',
+        'otp_bast_ppk',
+        'otp_bast_pengusul',
+        'otp_bast_pengusul',
         'konfirmasi_pengajuan'
     ];
 

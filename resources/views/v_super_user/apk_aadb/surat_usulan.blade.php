@@ -49,6 +49,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/aadb/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Surat Pengajuan Usulan {{ $dataUsulan->jenis_form_usulan }}</li>
                 </ol>
             </div>
@@ -61,10 +62,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 form-group" style="margin-right: 15%;margin-left: 15%;">
-                <a href="{{ url('super-user/aadb/usulan-pengadaan') }}" class="btn btn-primary print mr-2">
+                <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="{{ url('super-user/aadb/usulan/print-surat-usulan/'. $dataUsulan->kode_otp_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                <a href="{{ url('super-user/aadb/surat/print-surat-usulan/'. $dataUsulan->otp_usulan_pengusul) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
             </div>
@@ -227,29 +228,20 @@
                             </table>
                             @endif
                         </div>
-                        <div class="col-md-6 form-group" style="margin-top: 10%;">
-                            <div style="margin-left:30%;text-transform:capitalize;">
-                                <label>Pengusul, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                                <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/bast/'.$dataUsulan->kode_otp_bast) !!}
-                                </p>
-                                <div style="margin-top: 5%;">
-                                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
-                                </div>
-                                </p>
+                        <div class="col-md-7 form-group" style="margin-top: 15vh;">
+                            <div class="text-center text-capitalize">
+                                <label>Yang Mengusulkan, <br> {{ $dataUsulan->jabatan.' '.$dataUsulan->tim_kerja }}</label>
+                                <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_pengusul) !!}</p>
+                                <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                             </div>
                         </div>
-                        <!-- <div class="col-md-6 form-group" style="margin-top: 10%;">
-                            <div style="margin-right:20%;margin-left:10%;text-transform:capitalize;">
-                                <label>yang menerima, <br> pengusul</label>
-                                <p style="margin-top: 13%;margin-left:17%;">
-                                    {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://milkshake.app/'.$dataUsulan->kode_otp_bast) !!}
-                                </p>
-                                <div style="margin-top: 5%;">
-                                    <label class="text-underline">{{ $dataUsulan->nama_pegawai }}</label>
-                                </div>
+                        <div class="col-md-5 form-group" style="margin-top: 15vh;">
+                            <div class="text-center text-capitalize">
+                                <label>Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                                <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_kabag) !!}</p>
+                                <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>

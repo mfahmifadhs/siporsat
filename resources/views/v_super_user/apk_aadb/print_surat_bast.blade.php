@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $usulan->id_form_usulan }}</title>
+    <title>{{ $bast->id_form_usulan }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -41,33 +41,33 @@
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
                 <div class="form-group row mb-4">
-                    <div class="col-md-12">pengajuan usulan {{ $usulan->jenis_form_usulan }}</div>
+                    <div class="col-md-12">pengajuan usulan {{ $bast->jenis_form_usulan }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
-                    <div class="col-md-10">: {{ $usulan->nama_pegawai }}</div>
+                    <div class="col-md-10">: {{ $bast->nama_pegawai }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Jabatan</div>
-                    <div class="col-md-9">: {{ $usulan->jabatan.' '.$usulan->keterangan_pegawai }}</div>
+                    <div class="col-md-9">: {{ $bast->jabatan.' '.$bast->keterangan_pegawai }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Unit Kerja</div>
-                    <div class="col-md-9">: {{ $usulan->unit_kerja }}</div>
+                    <div class="col-md-9">: {{ $bast->unit_kerja }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                 </div>
-                @if($usulan->rencana_pengguna != null)
+                @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Rencana Pengguna</div>
-                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
+                    <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
                 </div>
                 @endif
             </div>
             <div class="col-12 table-responsive mt-4">
-                @if($usulan->jenis_form == '1')
+                @if($bast->jenis_form == '1')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -112,7 +112,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                @elseif($usulan->jenis_form == '2')
+                @elseif($bast->jenis_form == '2')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -127,7 +127,7 @@
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
-                        @foreach($usulan->usulanServis as $dataServis)
+                        @foreach($bast->usulanServis as $dataServis)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
@@ -140,7 +140,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                @elseif($usulan->jenis_form == '3')
+                @elseif($bast->jenis_form == '3')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -152,7 +152,7 @@
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
-                        @foreach($usulan->usulanSTNK as $dataSTNK)
+                        @foreach($bast->usulanSTNK as $dataSTNK)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataSTNK->merk_kendaraan.' '.$dataSTNK->tipe_kendaraan }}</td>
@@ -162,7 +162,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                @elseif($usulan->jenis_form == '4')
+                @elseif($bast->jenis_form == '4')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -177,7 +177,7 @@
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
-                        @foreach($usulan->usulanVoucher as $dataVoucher)
+                        @foreach($bast->usulanVoucher as $dataVoucher)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
@@ -192,30 +192,33 @@
                 </table>
                 @endif
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10%;">
-                <div style="margin-left:30%;text-transform:capitalize;">
-                    <label>Pengusul, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p style="margin-top: 13%;margin-left:17%;">
-                        {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/bast/'.$usulan->kode_otp_bast) !!}
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                    <p style="margin-top: 6vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_ppk) !!}
                     </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
-                    </div>
-                    </p>
+                    <label class="text-underline">Marten Avero</label>
                 </div>
             </div>
-            <!-- <div class="col-md-6 form-group mt-4">
-                <div class="text-center">
-                    <label class="font-weight-bold text-center">KEPALA BAGIAN RT</label>
-                    <p style="margin-top: 5% ;">
-                        {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/'.$usulan->kode_otp_usulan) !!}
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Yang Menerima, <br> {{ $bast->jabatan.' '.$bast->tim_kerja }}</label>
+                    <p style="margin-top: 6vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}
                     </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">Muhamad Edwin Arafat, S.kom</label>
-                    </div>
-                    </p>
+                    <label class="text-underline">{{ $bast->nama_pegawai }}</label>
                 </div>
-            </div> -->
+            </div>
+            <div class="col-md-4 form-group" style="margin-top: 5vh;">
+                <div class="text-center text-capitalize">
+                    <label>Mengetahui, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                    <p style="margin-top: 6vh;">
+                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_kabag) !!}
+                    </p>
+                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+                </div>
+            </div>
         </div>
     </div>
     <!-- ./wrapper -->

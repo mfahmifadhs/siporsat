@@ -175,30 +175,20 @@
                 </table>
                 @endif
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10%;">
-                <div style="margin-left:30%;text-transform:capitalize;">
-                    <label>Pengusul, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p style="margin-top: 13%;margin-left:17%;">
-                        {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/bast/'.$dataUsulan->kode_otp_bast) !!}
-                    </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
-                    </div>
-                    </p>
+            <div class="col-md-6 form-group" style="margin-top: 15vh;">
+                <div class="text-center text-capitalize">
+                    <label>Yang Mengusulkan, <br> {{ $dataUsulan->jabatan.' '.$dataUsulan->tim_kerja }}</label>
+                    <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_pengusul) !!}</p>
+                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                 </div>
             </div>
-            <!-- <div class="col-md-6 form-group mt-4">
-                <div class="text-center">
-                    <label class="font-weight-bold text-center">KEPALA BAGIAN RT</label>
-                    <p style="margin-top: 5% ;">
-                        {!! QrCode::size(100)->merge(public_path('logo-kemenkes-icon.PNG'), 1, true)->generate('https://www.siporsat-kemenkes.com/'.$dataUsulan->kode_otp_usulan) !!}
-                    </p>
-                    <div style="margin-top: 5%;">
-                        <label class="text-underline">Muhamad Edwin Arafat, S.kom</label>
-                    </div>
-                    </p>
+            <div class="col-md-6 form-group" style="margin-top: 15vh;">
+                <div class="text-center text-capitalize">
+                    <label>Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                    <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_kabag) !!}</p>
+                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
     <!-- ./wrapper -->

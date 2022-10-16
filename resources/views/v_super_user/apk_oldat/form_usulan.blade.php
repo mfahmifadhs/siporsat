@@ -356,9 +356,9 @@
                             $("#barang" + target).empty();
                             $("#barang" + target).select2();
                             $("#barang" + target).append('<option value="">-- Pilih Barang --</option>');
-                            $.each(res, function(spesifikasi_barang, id_barang) {
+                            $.each(res, function(merk_tipe_barang, id_barang) {
                                 $("#barang" + target).append(
-                                    '<option value="' + id_barang + '">' + spesifikasi_barang + '</option>'
+                                    '<option value="' + id_barang + '">' + merk_tipe_barang + '</option>'
                                 )
                             });
                         } else {
