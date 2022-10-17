@@ -32,91 +32,21 @@
                 </div>
                 @endif
             </div>
-            <div class="col-md-9 form-group">
-                <div class="card card-outline card-primary text-center" style="height: 100%;">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <input type="number" class="form-control" name="tahun" placeholder="Tahun">
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="unit_kerja">
-                                    <option value="">Semua Unit Kerja</option>
-                                    @foreach ($unitKerja as $item)
-                                    <option value="{{$item->id_unit_kerja}}" nama="{{$item->unit_kerja}}">{{$item->unit_kerja}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <select id="" class="form-control" name="tim_kerja">
-                                    <option value="">Semua Tim Kerja</option>
-                                    @foreach ($timKerja as $item)
-                                    <option value="{{$item->id_tim_kerja}}" nama="{{$item->tim_kerja}}">{{$item->tim_kerja}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-2 form-group">
-                                <div class="row">
-                                    <button id="searchChartData" class="btn btn-primary ml-2">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="btn btn-danger ml-2"><i class="fas fa-undo"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body" id="konten-statistik">
-                        <div id="konten-chart-google-chart">
-                            <div id="piechart" style="height: 500px;"></div>
-                        </div>
-                        <div id="notif-konten-chart"></div>
-                        <div class="table">
-                            <table id="table-barang" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Barang</th>
-                                        <th>Merk Barang</th>
-                                        <th>Spesifikasi Barang</th>
-                                        <th>Kondisi Barang</th>
-                                        <th>Unit Kerja</th>
-                                        <th>Tim Kerja</th>
-                                        <th>Tahun</th>
-                                        <th>Pengguna</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
-                                    @foreach ($googleChartData1->barang as $item)
-                                    <tr>
-                                        <td>{{$no++}}</td>
-                                        <td>{{$item->kategori_barang}}</td>
-                                        <td>{{$item->merk_tipe_barang}}</td>
-                                        <td>{{$item->spesifikasi_barang}}</td>
-                                        <td>{{$item->kondisi_barang}}</td>
-                                        <td>{{$item->unit_kerja}}</td>
-                                        <td>{{$item->tim_kerja}}</td>
-                                        <td>{{$item->tahun_perolehan}}</td>
-                                        <td>{{$item->nama_pegawai}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Usulan Pengadaan -->
-            <div class="col-md-3 form-group">
-                <div class="form-group">
-                    <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn btn-primary btn-lg text-center ml-1 mr-2 p-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/955/955063.png" width="50" height="50"> <br>
-                        PENGADAAN
-                    </a>
-                    <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn btn-primary btn-lg text-center ml-4 p-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1086/1086470.png" width="50" height="50"> <br>
-                        PERBAIKAN
-                    </a>
+            <div class="col-md-5 form-group">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn-block btn btn-primary">
+                            <img src="https://cdn-icons-png.flaticon.com/512/955/955063.png" width="50" height="50">
+                            <h5 class="font-weight-bold mt-1"><small>Usulan <br> Pengadaan</small></h5>
+                        </a>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn-block btn btn-primary">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1086/1086470.png" width="50" height="50">
+                            <h5 class="font-weight-bold mt-1"><small>Usulan <br> Perbaikan</small></h5>
+                        </a>
+                    </div>
                 </div>
                 <div class="card card-outline card-primary">
                     <div class="card-header">
@@ -450,6 +380,80 @@
                         <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">
                             <i class="fas fa-arrow-circle-right"></i> Seluruh pengajuan
                         </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 form-group">
+                <div class="card card-outline card-primary text-center" style="height: 100%;">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <input type="number" class="form-control" name="tahun" placeholder="Tahun">
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="unit_kerja">
+                                    <option value="">Semua Unit Kerja</option>
+                                    @foreach ($unitKerja as $item)
+                                    <option value="{{$item->id_unit_kerja}}" nama="{{$item->unit_kerja}}">{{$item->unit_kerja}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <select id="" class="form-control" name="tim_kerja">
+                                    <option value="">Semua Tim Kerja</option>
+                                    @foreach ($timKerja as $item)
+                                    <option value="{{$item->id_tim_kerja}}" nama="{{$item->tim_kerja}}">{{$item->tim_kerja}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <div class="row">
+                                    <button id="searchChartData" class="btn btn-primary ml-2">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
+                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="btn btn-danger ml-2"><i class="fas fa-undo"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" id="konten-statistik">
+                        <div id="konten-chart-google-chart">
+                            <div id="piechart" style="height: 500px;"></div>
+                        </div>
+                        <div id="notif-konten-chart"></div>
+                        <div class="table">
+                            <table id="table-barang" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis Barang</th>
+                                        <th>Merk Barang</th>
+                                        <th>Spesifikasi Barang</th>
+                                        <th>Kondisi Barang</th>
+                                        <th>Unit Kerja</th>
+                                        <th>Tim Kerja</th>
+                                        <th>Tahun</th>
+                                        <th>Pengguna</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
+                                    @foreach ($googleChartData1->barang as $item)
+                                    <tr>
+                                        <td>{{$no++}}</td>
+                                        <td>{{$item->kategori_barang}}</td>
+                                        <td>{{$item->merk_tipe_barang}}</td>
+                                        <td>{{$item->spesifikasi_barang}}</td>
+                                        <td>{{$item->kondisi_barang}}</td>
+                                        <td>{{$item->unit_kerja}}</td>
+                                        <td>{{$item->tim_kerja}}</td>
+                                        <td>{{$item->tahun_perolehan}}</td>
+                                        <td>{{$item->nama_pegawai}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

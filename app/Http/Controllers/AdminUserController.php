@@ -15,6 +15,7 @@ use App\Models\OLDAT\KondisiBarang;
 use App\Models\OLDAT\RiwayatBarang;
 use App\Models\Pegawai;
 use App\Models\User;
+use App\Models\RDN\RumahDinas;
 use Carbon\Carbon;
 use Validator;
 use Auth;
@@ -35,16 +36,12 @@ class AdminUserController extends Controller
         return view('v_admin_user.apk_rdn.index');
     }
 
-    public function House(Request $request, $aksi, $id)
+    public function OfficialResidence(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $rumah = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
-                ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->orderBy('jenis_aadb','ASC')
-                ->get();
+            $rumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')->get();
 
-            return view('v_admin_user.apk_aadb.daftar_rumah', compact('rumah'));
+            return view('v_admin_user.apk_rdn.daftar_rumah', compact('rumah'));
 
         }
     }

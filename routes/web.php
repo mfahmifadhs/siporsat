@@ -95,9 +95,9 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
         Route::get('dasboard', [AdminUserController::class, 'Rdn']);
-        Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'House']);
+        Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'OfficialResidence']);
 
-        Route::post('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'House']);
+        Route::post('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'OfficialResidence']);
     });
 });
 
@@ -109,6 +109,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
     Route::get('laporan-siporsat', [SuperUserController::class, 'ReportMain']);
     Route::get('sendOTP', [SuperUserController::class, 'SendOTPWhatsApp']);
 
+    // oldat
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [SuperUserController::class, 'Oldat']);
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'Items']);
@@ -126,6 +127,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('QiscusOTP', [SuperUserController::class, 'OTPQiscus']);
     });
 
+    // aadb
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
         Route::get('dashboard', [SuperUserController::class, 'Aadb']);
         Route::get('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
@@ -142,8 +144,26 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportAadb']);
     });
 
+    // rumah dinas
+    Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
+        Route::get('dashboard', [SuperUserController::class, 'Rdn']);
+        Route::get('rumah-dinas/{aksi}/{id}', [SuperUserController::class, 'OfficialResidence']);
+        Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportRdn']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionRdn']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterRdn']);
+
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionRdn']);
+        Route::post('rumah-dinas/{aksi}/{id}', [SuperUserController::class, 'OfficialResidence']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterRdn']);
+
+        Route::get('/grafik', [SuperUserController::class, 'SearchChartDataRdn']);
+        Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportRdn']);
+    });
+
+    // ppk
     Route::group(['prefix' => 'ppk', 'as' => 'ppk'], function () {
         Route::get('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
+
         Route::post('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
     });
 

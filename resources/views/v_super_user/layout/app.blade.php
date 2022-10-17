@@ -267,11 +267,31 @@
                             </ul>
                         </li>
                         @endif
-                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
 
-                        <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li>
-
-                        <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas</li>
+                        <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas Negara</li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-house-user"></i>
+                                <p>
+                                    Pengelolaan RDN
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/rdn/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-home"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-house-user"></i>
+                                        <p>Master Rumah Dinas</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -336,7 +356,7 @@
     <!-- ChartJS -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!-- Coma in input price -->
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script> -->
     @yield('js')
     <script>
         $(function() {

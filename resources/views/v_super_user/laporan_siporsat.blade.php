@@ -1,4 +1,4 @@
-@extends('v_super_user.app')
+@extends('v_super_user.layout.app')
 
 @section('content')
 
@@ -43,11 +43,6 @@
                                         </tr>
                                     </thead>
                                     @php $no = 1; @endphp
-                                    <thead class="bg-secondary">
-                                        <tr>
-                                            <td colspan="5">Olah Data BMN & Meubelair</td>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         @foreach($reportOldat as $report)
                                         <tr>
@@ -58,13 +53,6 @@
                                             <td>{{ $report['selesai'] }}</td>
                                         </tr>
                                         @endforeach
-                                    </tbody>
-                                    <thead class="bg-secondary">
-                                        <tr>
-                                            <td colspan="5">Olah Data BMN & Meubelair</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
                                         @foreach($reportAadb as $report)
                                         <tr>
                                             <td>{{ $no++ }}</td>
@@ -90,9 +78,12 @@
 <script>
     $(function() {
         $("#table").DataTable({
-            "responsive": true,
-            "lengthChange": true,
-            "autoWidth": false,
+            "responsive"   : true,
+            "lengthChange" : false,
+            "searching"    : false,
+            "info"         : false,
+            "paging"       : false,
+            "autoWidth"    : false,
             buttons: [
                 {
                     extend: 'excel',

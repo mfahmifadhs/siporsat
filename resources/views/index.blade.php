@@ -86,10 +86,10 @@
     <!-- Features section -->
     <section class="features-section spad gradient-bg ">
         <div class="container text-white">
-            <div class="section-title text-center">
+            <!-- <div class="section-title text-center">
                 <h2>Our Features</h2>
                 <p>Bitcoin is the simplest way to exchange money at very low cost.</p>
-            </div>
+            </div> -->
             <div class="row">
                 <!-- feature -->
                 <div class="col-md-6 col-lg-6 feature">

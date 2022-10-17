@@ -16,11 +16,11 @@ use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
-use App\Models\OLDAT\VerifikasiUsulan;
 use App\Models\OLDAT\FormUsulan;
 use App\Models\OLDAT\FormUsulanPengadaan;
 use App\Models\OLDAT\FormUsulanPerbaikan;
 use App\Models\OLDAT\RiwayatBarang;
+use App\Models\RDN\RumahDinas;
 use App\Models\UnitKerja;
 use App\Models\TimKerja;
 use App\Models\Pegawai;
@@ -132,6 +132,95 @@ class SuperUserController extends Controller
         return $otp;
         // return $res->getBody();
         //   return view('v_super_user.apk_oldat.tes');
+    }
+
+    // ===============================================
+    //             RUMAH DINAS NEGARA (RDN)
+    // ===============================================
+    public function Rdn(Request $request)
+    {
+        $lokasiKota = RumahDinas::select('lokasi_kota')->groupBy('lokasi_kota')->get();
+        $kendaraan  = Kendaraan::orderBy('jenis_aadb','ASC')
+            ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            ->get();
+        $googleChartData = $this->ChartDataRDN();
+        return view('v_super_user.apk_rdn.index', compact('lokasiKota','googleChartData','kendaraan'));
+    }
+
+    public function OfficialResidence(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $rumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')->get();
+            return view('v_super_user.apk_rdn.daftar_rumah', compact('rumah'));
+        }
+    }
+
+    public function ChartDataRdn()
+    {
+        $dataRumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah', 'kondisi_rumah_id')->get();
+        $lokasi    = RumahDinas::select('lokasi_kota')->groupBy('lokasi_kota')->get();
+
+        foreach ($lokasi as $data) {
+            $dataArray[] = $data->lokasi_kota;
+            $dataArray[] = $dataRumah->where('lokasi_kota', $data->lokasi_kota)->count();
+            $dataChart['all'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['rumah'] = $dataRumah;
+        $chart = json_encode($dataChart);
+        return $chart;
+    }
+
+    public function SearchChartDataRdn(Request $request)
+    {
+        $dataRumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah', 'kondisi_rumah_id');
+
+        $lokasi    = RumahDinas::select('lokasi_kota')->groupBy('lokasi_kota')->get();
+
+        if($request->hasAny(['golongan_rumah', 'lokasi_kota','kondisi_rumah'])){
+            if($request->golongan_rumah){
+                $dataSearch = $dataRumah->where('golongan_rumah',$request->golongan_rumah);
+            }
+            if($request->lokasi_kota){
+                $dataSearch = $dataRumah->where('lokasi_kota',$request->lokasi_kota);
+            }
+            if($request->kondisi_rumah){
+                $dataSearch = $dataRumah->where('kondisi_rumah_id',$request->kondisi_rumah);
+            }
+
+            $dataSearch = $dataSearch->get();
+
+        }else {
+            $dataSearch = $dataRumah->get();
+        }
+
+        // dd($dataSearch);
+        foreach ($lokasi as $data) {
+            $dataArray[]          = $data->lokasi_kota;
+            $dataArray[]          = $dataSearch->where('lokasi_kota', $data->lokasi_kota)->count();
+            $dataChart['chart'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['table']= $dataSearch;
+        $chart = json_encode($dataChart);
+
+        if(count($dataSearch) > 0){
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'success',
+                'data'      => $chart
+            ], 200);
+        }else {
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'not found'
+            ], 200);
+        }
     }
 
     // ===============================================
@@ -542,6 +631,20 @@ class SuperUserController extends Controller
             unset($dataArray);
         }
 
+        // Report AADB
+        $aadbUsulan     = UsulanAadb::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%m-%Y'))"), Carbon::now()->isoFormat('M-Y'))->get();
+        $aadbJenisForm  = JenisUsulan::get();
+        foreach ($aadbJenisForm as $data) {
+            $dataArray['usulan']  = $data->jenis_form_usulan;
+            $dataArray['ditolak'] = $aadbUsulan->where('status_pengajuan_id',2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['proses']  = $aadbUsulan->where('status_proses_id',2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['selesai'] = $aadbUsulan->where('status_proses_id',5)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['bulan']   = Carbon::now()->isoFormat('MMMM Y');
+            $reportAadb[] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['laporan']   = $reportAadb;
         $dataChart['pengajuan'] = $dataPengajuan;
         $chart = json_encode($dataChart);
         return $chart;
@@ -598,6 +701,20 @@ class SuperUserController extends Controller
             unset($dataArray);
         }
 
+        // Report AADB
+        $aadbUsulan     = UsulanAadb::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), $request->bulan)->get();
+        $aadbJenisForm  = JenisUsulan::get();
+        foreach ($aadbJenisForm as $data) {
+            $dataArray['usulan']  = $data->jenis_form_usulan;
+            $dataArray['ditolak'] = $aadbUsulan->where('status_pengajuan_id',2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['proses']  = $aadbUsulan->where('status_proses_id',2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['selesai'] = $aadbUsulan->where('status_proses_id',5)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+            $dataArray['bulan']   = Carbon::parse($request->bulan)->isoFormat('MMMM Y');
+            $reportAadb[] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['searchLaporan'] = $reportAadb;
         $dataChart['table'] = $dataSearchPengajuan;
         $chart = json_encode($dataChart);
         if(count($dataSearchPengajuan)>0){
@@ -635,6 +752,7 @@ class SuperUserController extends Controller
         $chart = json_encode($dataChart);
         return $chart;
     }
+
     public function SearchChartDataAadb(Request $request)
     {
         $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -758,13 +876,13 @@ class SuperUserController extends Controller
                 $kategoriBarang = KategoriBarang::get();
                 $chartPengajuan = $this->ChartReportOldat($aksi);
                 $unitKerja      = UnitKerja::get();
-                return view('v_super_user.apk_oldat.laporan_pengadaan', compact('aksi','kategoriBarang','pengajuan','chartPengajuan','unitKerja'));
+                return view('v_super_user.apk_oldat.laporan', compact('aksi','kategoriBarang','pengajuan','chartPengajuan','unitKerja'));
             } else {
                 $pengajuan      = FormUsulanPengadaan::get();
                 $kategoriBarang = KategoriBarang::get();
                 $chartPengajuan = $this->ChartReportOldat($aksi);
                 $unitKerja      = UnitKerja::get();
-                return view('v_super_user.apk_oldat.laporan_perbaikan', compact('aksi','kategoriBarang','pengajuan','chartPengajuan','unitKerja'));
+                return view('v_super_user.apk_oldat.laporan', compact('aksi','kategoriBarang','pengajuan','chartPengajuan','unitKerja'));
             }
         }
     }
@@ -1179,8 +1297,22 @@ class SuperUserController extends Controller
             unset($dataArray);
         }
 
+        // Laporan
+        $oldatUsulan    = FormUsulan::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->isoFormat('M-Y'))->get();
+        $oldatJenisForm = FormUsulan::select('jenis_form')->groupBy('jenis_form')->get();
+        foreach ($oldatJenisForm as $data) {
+            $dataArray['usulan']  = $data->jenis_form;
+            $dataArray['ditolak'] = $oldatUsulan->where('status_pengajuan_id',2)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['proses']  = $oldatUsulan->where('status_proses_id',2)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['selesai'] = $oldatUsulan->where('status_proses_id',5)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['bulan']   = Carbon::now()->isoFormat('MMMM Y');
+            $reportOldat[] = $dataArray;
+            unset($dataArray);
+        }
+        $dataChart['laporan'] = $reportOldat;
         $dataChart['pengajuan'] = $dataPengajuan;
         $chart = json_encode($dataChart);
+        // dd($chart);
         return $chart;
     }
 
@@ -1233,6 +1365,20 @@ class SuperUserController extends Controller
             unset($dataArray);
         }
 
+        // Laporan
+        $oldatUsulan    = FormUsulan::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), $request->bulan)->get();
+        $oldatJenisForm = FormUsulan::select('jenis_form')->groupBy('jenis_form')->get();
+        foreach ($oldatJenisForm as $data) {
+            $dataArray['usulan'] = $data->jenis_form;
+            $dataArray['ditolak'] = $oldatUsulan->where('status_pengajuan_id',2)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['proses'] = $oldatUsulan->where('status_proses_id',2)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['selesai'] = $oldatUsulan->where('status_proses_id',5)->where('jenis_form', $data->jenis_form)->count();
+            $dataArray['bulan']   = Carbon::parse($request->bulan)->isoFormat('MMMM Y');
+            $reportOldat[] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['searchLaporan'] = $reportOldat;
         $dataChart['table'] = $dataSearchPengajuan;
         $chart = json_encode($dataChart);
 
@@ -1274,7 +1420,6 @@ class SuperUserController extends Controller
 
         $dataChart['barang'] = $dataBarang;
         $chart = json_encode($dataChart);
-
         return $chart;
     }
 

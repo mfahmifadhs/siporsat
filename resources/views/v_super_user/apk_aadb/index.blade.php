@@ -28,107 +28,6 @@
                 @endif
             </div>
             <div class="col-md-6 form-group">
-                <div class="card card-outline card-primary text-center" style="height: 100%;">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="jenis_aadb">
-                                    <option value="">-- Pilih Jenis AADB --</option>
-                                    <option value="bmn">BMN</option>
-                                    <option value="sewa">SEWA</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="unit_kerja">
-                                    <option value="">-- Pilih Unit Kerja --</option>
-                                    @foreach ($unitKerja as $item)
-                                    <option value="{{$item->id_unit_kerja}}">{{$item->unit_kerja}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="jenis_kendaraan">
-                                    <option value="">-- Pilih Jenis Kendaraan --</option>
-                                    @foreach ($jenisKendaraan as $item)
-                                    <option value="{{$item->id_jenis_kendaraan}}">{{$item->jenis_kendaraan}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="merk_kendaraan">
-                                    <option value="">-- Pilih Merk Kendaraan --</option>
-                                    @foreach ($merk as $item)
-                                    <option value="{{$item->merk_kendaraan}}">{{$item->merk_kendaraan}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="tahun_kendaraan">
-                                    <option value="">-- Pilih Tahun Kendaraan --</option>
-                                    @foreach ($tahun as $item)
-                                    <option value="{{$item->tahun_kendaraan}}">{{$item->tahun_kendaraan}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="pengguna">
-                                    <option value="">-- Pilih Pengguna --</option>
-                                    @foreach ($pengguna as $item)
-                                    <option value="{{$item->pengguna}}">{{$item->pengguna}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 form-group mr-2">
-                                <div class="row">
-                                    <button id="searchChartData" class="btn btn-primary ml-2">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="btn btn-danger ml-2">
-                                        <i class="fas fa-undo"></i>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body" id="konten-statistik">
-                        <div id="konten-chart">
-                            <div id="piechart" style="height: 500px;"></div>
-                        </div>
-                        <div class="table">
-                            <table id="table-kendaraan" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis AADB</th>
-                                        <th>Unit Kerja</th>
-                                        <th>Jenis Kendaraan</th>
-                                        <th>Merk Kendaraan</th>
-                                        <th>Tahun Kendaraan</th>
-                                        <th>Pengguna</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
-                                    @foreach ($googleChartData1->kendaraan as $dataKendaraan)
-                                    <tr>
-                                        <td>{{ $no++ }}</td>
-                                        <td>{{ $dataKendaraan->jenis_aadb }}</td>
-                                        <td>{{ $dataKendaraan->unit_kerja }}</td>
-                                        <td>{{ $dataKendaraan->jenis_kendaraan }}</td>
-                                        <td>{{ $dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}</td>
-                                        <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
-                                        <td>{{ $dataKendaraan->pengguna }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 form-group">
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn-block btn btn-primary">
@@ -535,6 +434,108 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6 form-group">
+                <div class="card card-outline card-primary text-center" style="height: 100%;">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="jenis_aadb">
+                                    <option value="">-- Pilih Jenis AADB --</option>
+                                    <option value="bmn">BMN</option>
+                                    <option value="sewa">SEWA</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="unit_kerja">
+                                    <option value="">-- Pilih Unit Kerja --</option>
+                                    @foreach ($unitKerja as $item)
+                                    <option value="{{$item->id_unit_kerja}}">{{$item->unit_kerja}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="jenis_kendaraan">
+                                    <option value="">-- Pilih Jenis Kendaraan --</option>
+                                    @foreach ($jenisKendaraan as $item)
+                                    <option value="{{$item->id_jenis_kendaraan}}">{{$item->jenis_kendaraan}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="merk_kendaraan">
+                                    <option value="">-- Pilih Merk Kendaraan --</option>
+                                    @foreach ($merk as $item)
+                                    <option value="{{$item->merk_kendaraan}}">{{$item->merk_kendaraan}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="tahun_kendaraan">
+                                    <option value="">-- Pilih Tahun Kendaraan --</option>
+                                    @foreach ($tahun as $item)
+                                    <option value="{{$item->tahun_kendaraan}}">{{$item->tahun_kendaraan}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select id="" class="form-control" name="pengguna">
+                                    <option value="">-- Pilih Pengguna --</option>
+                                    @foreach ($pengguna as $item)
+                                    <option value="{{$item->pengguna}}">{{$item->pengguna}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mr-2">
+                                <div class="row">
+                                    <button id="searchChartData" class="btn btn-primary ml-2">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
+                                    <a href="{{ url('super-user/aadb/dashboard') }}" class="btn btn-danger ml-2">
+                                        <i class="fas fa-undo"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" id="konten-statistik">
+                        <div id="konten-chart">
+                            <div id="piechart" style="height: 500px;"></div>
+                        </div>
+                        <div class="table">
+                            <table id="table-kendaraan" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis AADB</th>
+                                        <th>Unit Kerja</th>
+                                        <th>Jenis Kendaraan</th>
+                                        <th>Merk Kendaraan</th>
+                                        <th>Tahun Kendaraan</th>
+                                        <th>Pengguna</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
+                                    @foreach ($googleChartData1->kendaraan as $dataKendaraan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                                        <td>{{ $dataKendaraan->unit_kerja }}</td>
+                                        <td>{{ $dataKendaraan->jenis_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->pengguna }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </div>

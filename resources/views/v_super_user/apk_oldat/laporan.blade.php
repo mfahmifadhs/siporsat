@@ -78,7 +78,42 @@
                             <div id="piechart" style="height: 300px;"></div>
                         </div>
                         <div id="notif-konten-chart"></div>
-                        <div class="table">
+                        <div class="table-laporan">
+                            <label>Laporan Usulan Pengajuan Olah Data BMN & Meubelair</label>
+                            <table id="table-laporan" class="table table-striped table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <td colspan="6">Total Usulan Penyediaan Barang / Jasa </td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2" class="py-5">No</td>
+                                        <td rowspan="2" class="py-5">Kategori Pengadaan / Penyediaan</td>
+                                        <td colspan="3">Status </td>
+                                        <td rowspan="2" class="py-5">Bulan</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ditolak</td>
+                                        <td>Sudah BAST (Selesai)</td>
+                                        <td>Sedang Proses Pengadaan</td>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; $dataChart = json_decode($chartPengajuan) @endphp
+                                <tbody>
+                                    @foreach ($dataChart->laporan as $dataLaporan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataLaporan->usulan }}</td>
+                                        <td>{{ $dataLaporan->ditolak }}</td>
+                                        <td>{{ $dataLaporan->proses }}</td>
+                                        <td>{{ $dataLaporan->selesai }}</td>
+                                        <td>{{ $dataLaporan->bulan }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-daftar mt-4">
+                            <label>Daftar Usulan Pengajuan Olah Data BMN & Meubelair</label>
                             <table id="table-pengajuan" class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -153,6 +188,32 @@
                 }
             ]
         }).buttons().container().appendTo('#table-pengajuan_wrapper .col-md-6:eq(0)');
+
+        $("#table-laporan").DataTable({
+            "responsive"   : true,
+            "lengthChange" : false,
+            "searching"    : false,
+            "info"         : false,
+            "paging"       : false,
+            "autoWidth"    : false,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Laporan Usulan Pengajuan OLDAT'
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Laporan Usulan Pengajuan OLDAT'
+                }
+            ]
+        }).buttons().container().appendTo('#table-laporan_wrapper .col-md-6:eq(0)');
     });
 
     let chart
@@ -170,7 +231,7 @@
         chartData = [
             ['Pengusul', 'Jumlah']
         ]
-        console.log(dataChart)
+        // console.log(dataChart)
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -191,11 +252,11 @@
     }
 
     $('body').on('click', '#searchChartData', function() {
-        let form             = $('input[name="jenis_form"').val()
-        let bulan            = $('input[name="bulan"').val()
-        let unit_kerja       = $('select[name="unit_kerja"').val()
+        let form = $('input[name="jenis_form"').val()
+        let bulan = $('input[name="bulan"').val()
+        let unit_kerja = $('select[name="unit_kerja"').val()
         let status_pengajuan = $('select[name="status_pengajuan"').val()
-        let status_proses    = $('select[name="status_proses"').val()
+        let status_proses = $('select[name="status_proses"').val()
         let url = ''
         console.log(bulan)
         if (form || bulan || unit_kerja || status_pengajuan || status_proses) {
@@ -208,25 +269,50 @@
             url: url,
             type: "GET",
             success: function(res) {
-                // console.log(res.message);
-                let dataTable = $('#table-pengajuan').DataTable()
+                let dataTableDaftar  = $('#table-pengajuan').DataTable()
+                let dataTableLaporan = $('#table-laporan').DataTable()
                 if (res.message == 'success') {
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart-google-chart').show();
+                    $('.notif-tidak-ditemukan').remove()
+                    $('#konten-chart-google-chart').show()
                     let data = JSON.parse(res.data)
+                    console.log(data.bulan)
                     drawChart(data.chart)
 
-                    dataTable.clear()
-                    dataTable.draw()
+                    dataTableDaftar.clear()
+                    dataTableLaporan.clear()
+                    dataTableDaftar.draw()
+                    dataTableLaporan.draw()
                     let no = 1
-                    console.log(data)
+                    console.log(data.searchLaporan)
                     data.table.forEach(element => {
-                        dataTable.row.add([no++, element.id_form_usulan, element.tanggal_usulan, element.nama_pegawai, element.unit_kerja, element.total_pengajuan, element.status_pengajuan, element.status_proses]).draw(false)
+                        dataTableDaftar.row.add([
+                            no++,
+                            element.id_form_usulan,
+                            element.tanggal_usulan,
+                            element.nama_pegawai,
+                            element.unit_kerja,
+                            element.total_pengajuan,
+                            element.status_pengajuan,
+                            element.status_proses
+                        ]).draw(false)
+                    });
+
+                    data.searchLaporan.forEach(element => {
+                        dataTableLaporan.row.add([
+                            no++,
+                            element.usulan,
+                            element.ditolak,
+                            element.proses,
+                            element.selesai,
+                            element.bulan
+                        ]).draw(false)
                     });
 
                 } else {
-                    dataTable.clear()
-                    dataTable.draw()
+                    dataTableDaftar.clear()
+                    dataTableLaporan.clear()
+                    dataTableDaftar.draw()
+                    dataTableLaporan.draw()
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart-google-chart').hide();
                     var html = ''
