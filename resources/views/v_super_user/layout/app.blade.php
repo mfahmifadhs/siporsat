@@ -194,7 +194,6 @@
                                 </li>
                             </ul>
                         </li>
-                        @if(Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5)
                         <li class="nav-header font-weight-bold">Pengelolaan AADB</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
@@ -266,8 +265,6 @@
                                 </li>
                             </ul>
                         </li>
-                        @endif
-
                         <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas Negara</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">

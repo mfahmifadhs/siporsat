@@ -137,7 +137,7 @@
                                     <div class="modal-content">
                                         <div class="modal-body text-capitalize">
                                             <div class="text-uppercase text-center font-weight-bold mb-4">
-                                                usulan {{ $dataPengajuan->jenis_form_usulan }} bmn alat pengolah data
+                                                usulan {{ $dataPengajuan->jenis_form_usulan }} aadb
                                             </div>
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Nama Pengusul </label></div>
@@ -154,6 +154,10 @@
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Tanggal Usulan :</label></div>
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Total Pengajuan :</label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
                                             </div>
                                             @if($dataPengajuan->jenis_form == 1)
                                             <div class="form-group row mb-0">
@@ -243,36 +247,77 @@
                                                     @endif
                                                     <!-- Informasi Kendaraan : Pengajuan Voucher BBM -->
                                                     @if($dataPengajuan->jenis_form == 4)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td style="width: 5%;">No</td>
-                                                                <td>Kendaraan</td>
-                                                                <td style="width: 12%;">Harga /Liter</td>
-                                                                <td style="width: 12%;">Jumlah Kebutuhan (L)</td>
-                                                                <td style="width: 15%;">Jenis BBMN</td>
-                                                                <td style="width: 12%;">Total Biaya</td>
-                                                                <td style="width: 12%;">Bulan Pengadaan</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
-                                                                <td>Rp {{ number_format($dataVoucher->harga_perliter, 0, ',', '.') }}</td>
-                                                                <td>{{ $dataVoucher->jumlah_kebutuhan }}</td>
-                                                                <td>{{ $dataVoucher->jenis_bbm }}</td>
-                                                                <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
+                                                    <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
+                                                        @csrf
+                                                        <table class="table table-responsive table-bordered text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td style="width: 5%;">No</td>
+                                                                    <td>Kendaraan</td>
+                                                                    <td style="width: 12%;">Voucer 25</td>
+                                                                    <td style="width: 12%;">Voucer 50</td>
+                                                                    <td style="width: 12%;">Voucer 100</td>
+                                                                    <td style="width: 12%;">Total Biaya</td>
+                                                                    <td style="width: 12%;">Bulan Pengadaan</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <?php $no = 1; ?>
+                                                            @if($dataPengajuan->status_proses_id == 1)
+                                                            <tbody>
+                                                                @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
+                                                                <tr>
+                                                                    <td>{{ $no++ }}</td>
+                                                                    <td>
+                                                                        <input type="hidden" name="detail_usulan_id[]" value="{{ $dataVoucher->id_form_usulan_voucher_bbm  }}">
+                                                                        {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}
+                                                                    </td>
+                                                                    <td><input type="text" class="form-control text-center" name="voucher_25[]" value="{{ $dataVoucher->voucher_25 }}"></td>
+                                                                    <td><input type="text" class="form-control text-center" name="voucher_50[]" value="{{ $dataVoucher->voucher_50 }}"></td>
+                                                                    <td><input type="text" class="form-control text-center" name="voucher_100[]" value="{{ $dataVoucher->voucher_100 }}"></td>
+                                                                    <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
+                                                                    <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            @else
+                                                            <tbody>
+                                                                @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
+                                                                <tr>
+                                                                    <td>{{ $no++ }}</td>
+                                                                    <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
+                                                                    <td>{{ $dataVoucher->voucher_25 }}</td>
+                                                                    <td>{{ $dataVoucher->voucher_50 }}</td>
+                                                                    <td>{{ $dataVoucher->voucher_100 }}</td>
+                                                                    <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
+                                                                    <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            @endif
+                                                        </table>
+                                                        @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
+                                                        <div class="form-group row mt-4">
+                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
+                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
+                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-6">
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button type="reset" class="btn btn-default">BATAL</button>
+                                                            </div>
+                                                        </div>
+                                                        @endif
+                                                    </form>
                                                     @endif
                                                 </div>
-                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
+                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1 && $dataPengajuan->jenis_form != 4)
                                                 <div class="col-md-12">
                                                     <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
                                                         @csrf
@@ -289,7 +334,7 @@
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -326,21 +371,24 @@
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Total Pengajuan :</label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
+                                            </div>
+                                            <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Rencana Pengguna :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-md-12">
+                                                @if($dataPengajuan->jenis_form == 1)
                                                     <table class="table table-responsive table-bordered text-center">
                                                         <thead>
                                                             <tr>
                                                                 <td>No</td>
                                                                 <td style="width: 15%;">Jenis AADB</td>
-                                                                <td style="width: 15%;">Merk</td>
-                                                                <td style="width: 25%;">Tipe</td>
-                                                                <td style="width: 10%;">Tahun</td>
-                                                                <td style="width: 15%;">No. Plat</td>
-                                                                <td style="width: 20%;">Masa Berlaku STNK</td>
+                                                                <td style="width: 30%;">Merk Kendaraan</td>
+                                                                <td style="width: 30%;">Tipe Kendaraan</td>
+                                                                <td style="width: 20%;">Tahun Kendaraan</td>
                                                             </tr>
                                                         </thead>
                                                         <?php $no = 1; ?>
@@ -352,12 +400,92 @@
                                                                 <td>{{ $dataKendaraan->merk_kendaraan }}</td>
                                                                 <td>{{ $dataKendaraan->tipe_kendaraan }}</td>
                                                                 <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
-                                                                <td>{{ $dataKendaraan->no_plat_kendaraan }}</td>
-                                                                <td>{{ $dataKendaraan->mb_stnk_plat_kendaraan }}</td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                    @endif
+                                                    <!-- Informasi Kendaraan : Pengajuan Servis -->
+                                                    @if($dataPengajuan->jenis_form == 2)
+                                                    <table class="table table-responsive table-bordered text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <td style="width: 5%;">No</td>
+                                                                <td>Kendaraan</td>
+                                                                <td style="width: 12%;">Kilometer Terakhir</td>
+                                                                <td style="width: 12%;">Tanggal Terakhir Servis</td>
+                                                                <td style="width: 15%;">Tanggal Jatuh Tempo Servis</td>
+                                                                <td style="width: 12%;">Tanggal Terakhir Ganti Oli</td>
+                                                                <td style="width: 12%;">Jatuh Tempo Ganti Oli</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <?php $no = 1; ?>
+                                                        <tbody class="text-capitalize">
+                                                            @foreach($dataPengajuan->usulanServis as $dataServis)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
+                                                                <td>{{ $dataServis->kilometer_terakhir }}</td>
+                                                                <td>{{ $dataServis->tgl_servis_terakhir }}</td>
+                                                                <td>{{ $dataServis->jatuh_tempo_servis }}</td>
+                                                                <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
+                                                                <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                    @endif
+                                                    <!-- Informasi Kendaraan : Pengajuan Perpanjangan STNK -->
+                                                    @if($dataPengajuan->jenis_form == 3)
+                                                    <table class="table table-responsive table-bordered text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <td style="width: 5%;">No</td>
+                                                                <td>Kendaraan</td>
+                                                                <td style="width: 12%;">Masa Berlaku STNK</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <?php $no = 1; ?>
+                                                        <tbody>
+                                                            @foreach($dataPengajuan->usulanSTNK as $dataServis)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
+                                                                <td>{{ $dataServis->mb_stnk_lama }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                    @endif
+                                                    @if($dataPengajuan->jenis_form == 4)
+                                                    <table class="table table-bordered m-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Kendaraan</th>
+                                                                <th>Voucher 25</th>
+                                                                <th>Voucher 50</th>
+                                                                <th>Voucher 100</th>
+                                                                <th>Total</th>
+                                                                <th>Bulan Pengadaan</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <?php $no = 1; ?>
+                                                        <tbody>
+                                                            @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
+                                                            <tr>
+                                                                <td>{{ $no++ }}</td>
+                                                                <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
+                                                                <td>{{ $dataVoucher->voucher_25 }}</td>
+                                                                <td>{{ $dataVoucher->voucher_50 }}</td>
+                                                                <td>{{ $dataVoucher->voucher_100 }}</td>
+                                                                <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                    @endif
                                                 </div>
                                                 @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id && $dataPengajuan->status_proses_id == 3)
                                                 <div class="col-md-12">
@@ -384,7 +512,7 @@
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -396,17 +524,17 @@
                                                     <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="status_usulan" value="5">
-                                                        <div class="form-group row">
+                                                        <div class="form-group row mt-4">
                                                             <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
                                                             <div class="col-sm-6">
-                                                            <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
+                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
                                                                 <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
                                                                 <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -577,10 +705,10 @@
             } else if (inputOTP == resOTP) {
                 $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
                 alert('Kode OTP Benar')
-                $('#btnSubmit').prop('disabled', false)
+                $('#btnSubmit' + idUsulan).prop('disabled', false)
             } else {
                 alert('Kode OTP Salah')
-                $('#btnSubmit').prop('disabled', true)
+                $('#btnSubmit' + idUsulan).prop('disabled', true)
             }
         })
     })

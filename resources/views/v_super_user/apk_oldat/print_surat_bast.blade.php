@@ -71,13 +71,19 @@
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Kode Barang</th>
-                            <th>NUP</th>
-                            <th>Jenis Barang</th>
-                            <th>Spesifikasi</th>
-                            <th>Jumlah</th>
-                            <th>Satuan</th>
+                            <td>No</td>
+                            <td style="width: 15%;">Jenis Barang</td>
+                            <td style="width: 20%;">Merk Barang</td>
+                            @if($bast->jenis_form == 'pengadaan')
+                            <td style="width: 40%;">Spesifikasi</td>
+                            <td>Jumlah</td>
+                            <td>Satuan</td>
+                            <td style="width: 25%;">Nilai Perolehan </td>
+                            @else
+                            <td style="width: 25%;">Pengguna</td>
+                            <td style="width: 25%;">Unit Kerja</td>
+                            <td style="width: 25%;">Tahun Perolehan</td>
+                            @endif
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -86,24 +92,23 @@
                         @foreach($bast->barang as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang }}</td>
-                            <td>{{ $dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
+                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
                             <td>{{ $dataBarang->spesifikasi_barang }}</td>
                             <td>{{ $dataBarang->jumlah_barang }}</td>
                             <td>{{ $dataBarang->satuan_barang }}</td>
+                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
                         </tr>
                         @endforeach
                         @else
                         @foreach($bast->detailPerbaikan as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang }}</td>
-                            <td>{{ $dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
-                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                            <td>{{ $dataBarang->jumlah_barang }}</td>
-                            <td>{{ $dataBarang->satuan_barang }}</td>
+                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                            <td>{{ $dataBarang->nama_pegawai }}</td>
+                            <td>{{ $dataBarang->unit_kerja }}</td>
+                            <td>{{ $dataBarang->tahun_perolehan }}</td>
                         </tr>
                         @endforeach
                         @endif

@@ -42,6 +42,16 @@
                     @csrf
                     <div class="form-group row">
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
+                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/oldat/'.$form.'/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal Penyerahan </label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control text-capitalize" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nama Pengusul </label>
@@ -52,7 +62,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->jabatan.' '.$dataPengajuan->tim_kerja }}" readonly>
+                            <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->jabatan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -68,16 +78,19 @@
                             <input type="date" class="form-control text-capitalize" name="tanggal_pengguna" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
+                    @if($dataPengajuan->jenis_form == 'pengadaan')
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Rencana Pengguna </label>
                         <div class="col-sm-10">
                             <textarea type="date" name="rencana_pengguna" class="form-control text-capitalize" readonly>{{ $dataPengajuan->rencana_pengguna }}</textarea>
                         </div>
                     </div>
+                    @endif
 
                     @if ($form == 'pengadaan')
                     @foreach($dataPengajuan->detailPengadaan as $i => $dataBarang)
                     <input type="hidden" name="id_barang[]" value="{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
+                    <input type="hidden" name="detail_usulan_id[]" value="{{ $dataBarang->id_form_usulan_pengadaan }}">
                     <div class="form-group row mt-4">
                         <div class="col-md-12"><label class="text-muted">Informasi Barang</label></div>
                     </div>
@@ -100,7 +113,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Merk Barang </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_barang }}" readonly>
+                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_tipe_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -175,30 +188,50 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Merk Barang </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" name="merk_barang[]" value="{{ $dataBarang->merk_barang }}" readonly>
+                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_tipe_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Barang</label>
+                        <label class="col-sm-2 col-form-label">Pengguna</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="jumlah_barang[]" value="{{ $dataBarang->jumlah_barang }}" readonly>
+                            <input type="text" class="form-control" name="nama_pegawai[]" value="{{ $dataBarang->nama_pegawai }}" readonly>
                         </div>
-                        <label class="col-sm-2 col-form-label">Satuan</label>
+                        <label class="col-sm-2 col-form-label">Unit Kerja</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="satuan_barang[]" value="{{ $dataBarang->satuan_barang }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nilai Perolehan (*) </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="nilai_perolehan[]" value="Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}" readonly>
-                        </div>
-                        <label class="col-sm-2 col-form-label">Tahun Perolehan (*) </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="tahun_perolehan[]" value="{{ $dataBarang->tahun_perolehan }}" readonly>
+                            <input type="text" class="form-control" name="unit_kerja[]" value="{{ $dataBarang->unit_kerja }}" readonly>
                         </div>
                     </div>
                     @endforeach
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-12 text-muted">Bukti Pembayaran</label>
+                    </div>
+                    <hr>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Total Biaya (*)</label>
+                        <div class="col-sm-10">
+                            <input type="number" name="total_biaya" class="form-control" placeholder="Nominal Biaya Perpanjangan STNK" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Foto Kwitansi</label>
+                        <div class="col-sm-10">
+                            <p>
+                                @if($dataPengajuan->lampiran == null)
+                                <img id="preview-image-before-upload" src="https://cdn-icons-png.flaticon.com/512/1611/1611318.png" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
+                                @else
+                                <img id="preview-image-before-upload" src="{{ asset('gambar/kwitansi/oldat_perbaikan/'. $dataPengajuan->lampiran) }}" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
+                                @endif
+                            </p>
+                            <p>
+                            <div class="btn btn-default btn-file">
+                                <i class="fas fa-paperclip"></i> Upload Foto
+                                <input type="hidden" class="form-control image" name="foto_lama" value="{{ $dataPengajuan->lampiran }}">
+                                <input type="file" class="form-control image" name="foto_kwitansi" accept="image/jpeg , image/jpg, image/png" value="{{ $dataPengajuan->lampiran }}">
+                            </div><br>
+                            <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
+                            </p>
+                        </div>
+                    </div>
                     @endif
                     <div class="form-group row">
                         <label class="text-muted col-md-12">Verifikasi</label>
@@ -225,6 +258,15 @@
 
 @section('js')
 <script>
+    $('.image').change(function() {
+        let reader = new FileReader();
+
+        reader.onload = (e) => {
+            $('#preview-image-before-upload').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    });
+
     $(function() {
         let resOTP = ''
         $(document).on('click', '#btnKirimOTP', function() {

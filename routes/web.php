@@ -77,6 +77,8 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 // ====================================================
 Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'as' => 'admin-user.'], function () {
     Route::get('dashboard', [AdminUserController::class, 'index']);
+    Route::get('jabatan', [AdminUserController::class, 'JsonJabatan']);
+    Route::post('select2/{aksi}', [AdminUserController::class, 'Select2']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [AdminUserController::class, 'index']);
@@ -124,7 +126,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('get-barang/{id}', [SuperUserController::class, 'JsonItems']);
         Route::get('/grafik', [SuperUserController::class, 'SearchChartDataOldat']);
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportOldat']);
-        Route::get('QiscusOTP', [SuperUserController::class, 'OTPQiscus']);
+        // Route::get('QiscusOTP', [SuperUserController::class, 'OTPQiscus']);
+        Route::get('/select2/{aksi}', [SuperUserController::class, 'Select2Oldat']);
     });
 
     // aadb
@@ -142,6 +145,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
         Route::get('dashboard/{aksi}', [SuperUserController::class, 'SearchChartDataAadb']);
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportAadb']);
+        Route::post('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
     });
 
     // rumah dinas
@@ -162,9 +166,9 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
     // ppk
     Route::group(['prefix' => 'ppk', 'as' => 'ppk'], function () {
-        Route::get('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
+        Route::get('{modul}/{tujuan}/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
 
-        Route::post('{modul}/pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
+        Route::post('{modul}/{tujuan}/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
     });
 
 });

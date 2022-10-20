@@ -20,6 +20,12 @@ class RumahDinas extends Model
         'luas_bangunan',
         'luas_tanah',
         'kondisi_rumah_id',
-        'foto_rumah'
+        'foto_rumah',
+        'penghuni_id'
     ];
+
+    public function PenghuniRumah() {
+        return $this->hasMany(PenghuniRumah::class, 'rumah_dinas_id','id_rumah_dinas')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id');
+    }
 }

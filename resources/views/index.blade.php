@@ -38,7 +38,7 @@
     <header class="header-section clearfix">
         <div class="container-fluid">
             <a href="index.html" class="site-logo">
-                <img src="{{ asset('dist_admin/img/logo-kemenkes-brown.png') }}" width="200" height="100" alt="">
+                <img src="{{ asset('dist_admin/img/biro-umum.png') }}" width="350" height="120" alt="">
             </a>
         </div>
     </header>
@@ -50,8 +50,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 hero-text">
-                    <h2>SIPORSAT</h2>
-                    <h4><small>Sistem Informasi Pengelolaan Operasional Perkantoran Terpusat</small></h4>
+                    <h2 class="mb-1">SIPORSAT</h2>
+                    <h4><small>
+                        Sistem Informasi Pengelolaan Operasional Perkantoran Terpusat <br class="mb-4">
+                        Biro Umum Kementerian Kesehatan Republik Indonesia
+                    </small></h4>
                     <a href="{{ url('login') }}" class="site-btn sb-gradients mt-4">Masuk</a>
                 </div>
                 <div class="col-md-6">
@@ -146,7 +149,7 @@
         <div class="container">
             <div class="row spad">
                 <div class="col-md-8 col-lg-12 footer-widget text-center">
-                    <img src="{{ asset('dist_admin/img/logo-kemenkes-brown.png') }}" width="200" height="100" alt="">
+                    <img src="{{ asset('dist_admin/img/biro-umum.png') }}" width="350" height="120" alt="">
                     <p>
                         Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Kota Jakarta Selatan, <br> Daerah Khusus Ibu Kota Jakarta
                     </p>

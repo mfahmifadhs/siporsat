@@ -16,9 +16,9 @@ class UsulanVoucherBBM extends Model
         'id_form_usulan_voucher_bbm',
         'form_usulan_id',
         'kendaraan_id',
-        'harga_perliter',
-        'jumlah_kebutuhan',
-        'jenis_bbm',
+        'voucher_25',
+        'voucher_50',
+        'voucher_100',
         'total_biaya',
         'bulan_pengadaan'
     ];

@@ -28,7 +28,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use DB;
-use \PDF;
+use Validator;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 use Carbon\Carbon;
@@ -152,7 +152,14 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'daftar') {
             $rumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')->get();
+
             return view('v_super_user.apk_rdn.daftar_rumah', compact('rumah'));
+        } elseif ($aksi == 'detail') {
+            $rumah = RumahDinas::where('id_rumah', $id)
+                ->join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')
+                ->first();
+
+            return view('v_super_user.apk_rdn.detail_rumah', compact('rumah'));
         }
     }
 
@@ -286,11 +293,14 @@ class SuperUserController extends Controller
             $usulan->rencana_pengguna    = $request->rencana_pengguna;
             $usulan->status_proses_id    = 1;
             $usulan->otp_usulan_pengusul = $request->kode_otp_usulan;
+            $usulan->no_surat_usulan     = $request->no_surat_usulan;
             $usulan->save();
 
             if ($id == 'pengadaan') {
+                $totalUsulan    = UsulanKendaraan::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $usulanPengadaan = new UsulanKendaraan();
-                $usulanPengadaan->id_form_usulan_pengadaan  = $request->id_usulan;
+                $usulanPengadaan->id_form_usulan_pengadaan  = $idUsulan;
                 $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                 $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                 $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
@@ -299,21 +309,29 @@ class SuperUserController extends Controller
                 $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
                 $usulanPengadaan->save();
             } elseif ($id == 'servis') {
-                $usulanServis   = new UsulanServis();
-                $usulanServis->id_form_usulan_servis    = $request->id_usulan;
-                $usulanServis->form_usulan_id           = $idFormUsulan;
-                $usulanServis->kendaraan_id             = $request->kendaraan_id;
-                $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir;
-                $usulanServis->tgl_servis_terakhir      = $request->tgl_servis_terakhir;
-                $usulanServis->jatuh_tempo_servis       = $request->jatuh_tempo_servis;
-                $usulanServis->tgl_ganti_oli_terakhir   = $request->tgl_ganti_oli_terakhir;
-                $usulanServis->jatuh_tempo_ganti_oli    = $request->jatuh_tempo_ganti_oli;
-                $usulanServis->save();
+                $totalUsulan    = UsulanServis::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $kendaraan = $request->kendaraan_id;
+                foreach($kendaraan as $i => $kendaraan_id){
+                    $usulanServis   = new UsulanServis();
+                    $usulanServis->id_form_usulan_servis    = $idUsulan + $i;
+                    $usulanServis->form_usulan_id           = $idFormUsulan;
+                    $usulanServis->kendaraan_id             = $kendaraan_id;
+                    $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
+                    $usulanServis->tgl_servis_terakhir      = $request->tgl_servis_terakhir[$i];
+                    $usulanServis->jatuh_tempo_servis       = $request->jatuh_tempo_servis[$i];
+                    $usulanServis->tgl_ganti_oli_terakhir   = $request->tgl_ganti_oli_terakhir[$i];
+                    $usulanServis->jatuh_tempo_ganti_oli    = $request->jatuh_tempo_ganti_oli[$i];
+                    $usulanServis->save();
+                }
+
             } elseif ($id == 'perpanjangan-stnk') {
+                $totalUsulan    = UsulanPerpanjanganSTNK::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $kendaraan = $request->kendaraan_id;
                 foreach($kendaraan as $i => $kendaraan_id){
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = $request->id_usulan + $i;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = $idUsulan + $i;
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
@@ -321,21 +339,25 @@ class SuperUserController extends Controller
                 }
 
             } elseif ($id == 'voucher-bbm') {
+                $totalUsulan    = UsulanVoucherBBM::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $kendaraan = $request->kendaraan_id;
                 foreach($kendaraan as $i => $kendaraan_id){
+                    $totalVoucher = ($request->voucher_25[$i]*25000) + ($request->voucher_50[$i]*50000) + ($request->voucher_100[$i]*100000);
                     $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = $request->id_usulan + $i;
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = $idUsulan + $i;
                     $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
                     $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
-                    $usulanVoucherBBM->harga_perliter               = $request->harga_perliter[$i];
-                    $usulanVoucherBBM->jumlah_kebutuhan             = $request->jumlah_kebutuhan[$i];
-                    $usulanVoucherBBM->jenis_bbm                    = $request->jenis_bbm[$i];
-                    $usulanVoucherBBM->total_biaya                  = $request->total_biaya[$i];
+                    $usulanVoucherBBM->voucher_25                   = $request->voucher_25[$i];
+                    $usulanVoucherBBM->voucher_50                   = $request->voucher_50[$i];
+                    $usulanVoucherBBM->voucher_100                  = $request->voucher_100[$i];
+                    $usulanVoucherBBM->total_biaya                  = $totalVoucher;
                     $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
-                    // dd($usulanVoucherBBM);
+                    $total[$i] =+ $totalVoucher;
                     $usulanVoucherBBM->save();
                 }
 
+                UsulanAadb::where('id_form_usulan')->update([ 'total_biaya' => array_sum($total) ]);
 
             }
 
@@ -354,11 +376,33 @@ class SuperUserController extends Controller
                     'otp_bast_kabag'    => $request->kode_otp
                 ]);
             } else {
-                UsulanAadb::where('id_form_usulan', $id)->update([
-                    'status_pengajuan_id' => 1,
-                    'status_proses_id'    => 2,
-                    'otp_usulan_kabag'    => $request->kode_otp
-                ]);
+                $cekUsulan = UsulanAadb::where('id_form_usulan',$id)->first();
+                if ($cekUsulan->jenis_form == 4) {
+                    $form = $request->detail_usulan_id;
+                    foreach($form as $i => $detail_usulan_id){
+                        $totalVoucher = ($request->voucher_25[$i]*25000) + ($request->voucher_50[$i]*50000) + ($request->voucher_100[$i]*100000);
+                        UsulanVoucherBBM::where('id_form_usulan_voucher_bbm', $detail_usulan_id)->update([
+                            'voucher_25'    => $request->voucher_25[$i],
+                            'voucher_50'    => $request->voucher_25[$i],
+                            'voucher_100'   => $request->voucher_25[$i],
+                            'total_biaya'   => $totalVoucher,
+                        ]);
+                        $total[$i] =+ $totalVoucher;
+                    }
+                    UsulanAadb::where('id_form_usulan', $id)->update([
+                        'status_pengajuan_id' => 1,
+                        'status_proses_id'    => 2,
+                        'otp_usulan_kabag'    => $request->kode_otp,
+                        'total_biaya'         => array_sum($total)
+                    ]);
+
+                } else {
+                    UsulanAadb::where('id_form_usulan', $id)->update([
+                        'status_pengajuan_id' => 1,
+                        'status_proses_id'    => 2,
+                        'otp_usulan_kabag'    => $request->kode_otp
+                    ]);
+                }
             }
 
             return redirect('super-user/aadb/dashboard')->with('success','Berhasil melakukan konfirmasi usulan');
@@ -368,11 +412,13 @@ class SuperUserController extends Controller
             return redirect('super-user/aadb/dashboard')->with('failed','Usulan Pengajuan Ditolak');
 
         } else {
+            $totalUsulan    = UsulanAadb::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
                 ->orderBy('jenis_kendaraan', 'ASC')
                 ->get();
-            return view('v_super_user.apk_aadb.usulan', compact('aksi','jenisKendaraan','kendaraan'));
+            return view('v_super_user.apk_aadb.usulan', compact('idUsulan','aksi','jenisKendaraan','kendaraan'));
         }
     }
 
@@ -812,6 +858,36 @@ class SuperUserController extends Controller
             ], 200);
         }
     }
+    public function Select2Aadb(Request $request, $aksi)
+    {
+        if ($aksi == 'kendaraan') {
+            $search = $request->search;
+
+            if ($search == '') {
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan," / ",pengguna) AS nama_kendaraan'))
+                    ->orderby('nama_kendaraan', 'asc')
+                    ->get();
+            } else {
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan," / ",pengguna) AS nama_kendaraan'))
+                    ->orderby('nama_kendaraan', 'asc')
+                    ->where('merk_kendaraan', 'like', '%' . $search . '%')
+                    ->where('no_plat_kendaraan', 'like', '%' . $search . '%')
+                    ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
+                    ->orWhere('pengguna', 'like', '%' . $search . '%')
+                    ->get();
+            }
+
+            $response = array();
+            foreach ($kendaraan as $data) {
+                $response[] = array(
+                    "id"    =>  $data->id_kendaraan,
+                    "text"  =>  $data->nama_kendaraan
+                );
+            }
+
+            return response()->json($response);
+        }
+    }
 
     // ===============================================
     //                   OLDAT
@@ -878,7 +954,7 @@ class SuperUserController extends Controller
                 $unitKerja      = UnitKerja::get();
                 return view('v_super_user.apk_oldat.laporan', compact('aksi','kategoriBarang','pengajuan','chartPengajuan','unitKerja'));
             } else {
-                $pengajuan      = FormUsulanPengadaan::get();
+                $pengajuan      = FormUsulanPerbaikan::get();
                 $kategoriBarang = KategoriBarang::get();
                 $chartPengajuan = $this->ChartReportOldat($aksi);
                 $unitKerja      = UnitKerja::get();
@@ -948,13 +1024,15 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
         } elseif ($aksi == 'form-usulan') {
+            $totalUsulan    = FormUsulan::where('jenis_form', $id)->count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kategoriBarang = KategoriBarang::get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->first();
 
-            return view('v_super_user.apk_oldat.form_usulan', compact('id','kategoriBarang', 'pegawai'));
+            return view('v_super_user.apk_oldat.form_usulan', compact('id','idUsulan','kategoriBarang', 'pegawai'));
 
         } elseif ($aksi == 'proses-pengajuan' && $id == 'pengadaan') {
             $idFormUsulan = Carbon::now()->format('dmy').rand(100,999). FormUsulan::count();
@@ -968,6 +1046,7 @@ class SuperUserController extends Controller
             $formUsulan->rencana_pengguna     = $request->input('rencana_pengguna');
             $formUsulan->status_proses_id     = 1;
             $formUsulan->otp_usulan_pengusul  = $request->kode_otp;
+            $formUsulan->no_surat_usulan      = $request->no_surat_usulan;
             $formUsulan->save();
 
             $barang = $request->kategori_barang_id;
@@ -989,7 +1068,7 @@ class SuperUserController extends Controller
                 }
             }
 
-            return redirect('super-user/oldat/dashboard');
+            return redirect('super-user/oldat/surat/surat-usulan/'. $request->kode_otp);
         } elseif ($aksi == 'proses-pengajuan' && $id == 'perbaikan') {
             $idFormUsulan = Carbon::now()->format('dmy').rand(100,999). FormUsulan::count();
             $cekData = FormUsulan::count();
@@ -1226,16 +1305,26 @@ class SuperUserController extends Controller
         }
     }
 
-    public function JsonItems(Request $request, $id)
+    public function Select2Oldat(Request $request, $id)
     {
-        $user     = Auth()->user();
-        $pegawai  = $user->pegawai;
-
         if ($id == 'daftar') {
-            $result   = Barang::join('oldat_tbl_kondisi_barang','id_kondisi_barang','kondisi_barang_id')
-                ->where('unit_kerja_id', $pegawai->unit_kerja_id)
-                ->where('kategori_barang_id', $request->kategori)
-                ->pluck('id_barang','merk_tipe_barang');
+            $search = $request->search;
+
+            if ($search == '') {
+                $result  = Barang::select('id_barang', DB::raw('CONCAT(kode_barang,".",nup_barang," / ",merk_tipe_barang," / ",nama_pegawai," / ", unit_kerja) AS merk_tipe_barang'))
+                    ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                    ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
+                    ->where('kategori_barang_id', $request->kategori)
+                    ->pluck('id_barang','merk_tipe_barang');
+            } else {
+                $result  = Kendaraan::select('id_barang', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan," / ",pengguna) AS nama_kendaraan'))
+                    ->orderby('nama_kendaraan', 'asc')
+                    ->where('merk_kendaraan', 'like', '%' . $search . '%')
+                    ->where('no_plat_kendaraan', 'like', '%' . $search . '%')
+                    ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
+                    ->orWhere('pengguna', 'like', '%' . $search . '%')
+                    ->get();
+            }
 
         } elseif ($id == 'detail') {
             $result   = Barang::join('oldat_tbl_kondisi_barang','id_kondisi_barang','kondisi_barang_id')
@@ -1298,7 +1387,7 @@ class SuperUserController extends Controller
         }
 
         // Laporan
-        $oldatUsulan    = FormUsulan::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->isoFormat('M-Y'))->get();
+        $oldatUsulan    = FormUsulan::where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->isoFormat('Y-M'))->get();
         $oldatJenisForm = FormUsulan::select('jenis_form')->groupBy('jenis_form')->get();
         foreach ($oldatJenisForm as $data) {
             $dataArray['usulan']  = $data->jenis_form;
@@ -1484,15 +1573,29 @@ class SuperUserController extends Controller
     //                   PPK
     // ===============================================
 
-    public function SubmissionPpk(Request $request, $modul, $aksi, $id)
+    public function SubmissionPpk(Request $request, $modul, $tujuan, $aksi, $id)
     {
-        // dd($request->all());
         if($modul == 'oldat')
         {
+            $totalUsulan    = FormUsulan::where('jenis_form', $id)->count();
+            $idBast         = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             if ($aksi == 'proses-pengadaan') {
+                $idForm = $request->detail_usulan_id;
+                foreach ($idForm as $i => $id_form_usulan_pengadaan) {
+                    FormUsulanPengadaan::where('id_form_usulan_pengadaan', $id_form_usulan_pengadaan)->update([
+                        'nilai_perolehan' => $request->nilai_perolehan[$i],
+                        'nomor_kontrak'   => $request->nomor_kontrak[$i],
+                        'nomor_kwitansi'  => $request->nomor_kwitansi[$i]
+                    ]);
+                    $total[$i] =+ $request->nilai_perolehan[$i];
+                }
+
                 FormUsulan::where('id_form_usulan', $id)->update([
-                    'status_proses_id'  => 3,
-                    'otp_bast_ppk'      => $request->kode_otp_ppk
+                    'tanggal_bast'     => $request->tanggal_bast,
+                    'total_biaya'      => array_sum($total),
+                    'no_surat_bast'    => $request->no_surat_bast,
+                    'status_proses_id' => 3,
+                    'otp_bast_ppk'     => $request->otp_bast_ppk
                 ]);
 
                 $idBarang = $request->id_barang;
@@ -1523,17 +1626,43 @@ class SuperUserController extends Controller
                     $tambahBarang->nilai_perolehan       = $request->nilai_perolehan[$i];
                     $tambahBarang->tahun_perolehan       = $request->tahun_perolehan[$i];
                     $tambahBarang->foto_barang           = $filename;
-                    $tambahBarang->satuan_barang         = 1;
                     $tambahBarang->save();
                 }
 
                 return redirect('super-user/oldat/dashboard')->with('success', 'Berhasil Memproses Usulan');
 
             } elseif ($aksi == 'proses-perbaikan') {
+
+                if ($request->foto_kwitansi == null) {
+                    $fotoKwitansi = $request->foto_lama;
+                } else {
+                    $dataUsulan = FormUsulan::where('id_form_usulan', $id)->first();
+
+                    if ($request->hasfile('foto_kwitansi')) {
+                        if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                            $file_old = public_path() . '\gambar\kwitansi\oldat_perbaikan\\' . $dataUsulan->lampiran;
+                            unlink($file_old);
+                        }
+                        $file       = $request->file('foto_kwitansi');
+                        $filename   = $file->getClientOriginalName();
+                        $file->move('gambar/kwitansi/oldat_perbaikan/', $filename);
+                        $dataUsulan->lampiran = $filename;
+                    } else {
+                        $dataUsulan->lampiran = '';
+                    }
+                    $fotoKwitansi = $dataUsulan->lampiran;
+                }
+
+
                 FormUsulan::where('id_form_usulan', $request->id_form_usulan)->update([
+                    'tanggal_bast'     => $request->tanggal_bast,
+                    'nilai_perolehan'  => $request->total_biaya,
+                    'lampiran'         => $fotoKwitansi,
+                    'no_surat_bast'    => $request->no_surat_bast,
                     'status_proses_id' => 3,
                     'otp_bast_ppk'     => $request->otp_bast_ppk
                 ]);
+
                 return redirect('super-user/oldat/dashboard')->with('success', 'Berhasil Memproses Usulan');
             } else {
                 $form       = $aksi;
@@ -1544,59 +1673,171 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja','id_unit_kerja','tbl_pegawai.unit_kerja_id')
                     ->where('id_form_usulan', $id)
                     ->get();
-                return view('v_super_user.apk_oldat.ppk_proses', compact('tujuan', 'pengajuan', 'id','form'));
+                return view('v_super_user.apk_oldat.ppk_proses', compact('idBast','tujuan', 'pengajuan', 'id','form'));
             }
         }
 
         if ($modul == 'aadb')
         {
-            if ($aksi != 'proses') {
-                $form       = $aksi;
-                $tujuan     = 'BAST';
-                $pengajuan  = UsulanAadb::leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
+            if ($tujuan == 'pengajuan') {
+
+                $totalUsulan = UsulanAadb::count();
+                $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $form        = $aksi;
+                $tujuan      = 'BAST';
+                $pengajuan   = UsulanAadb::leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
                     ->leftjoin('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                     ->leftjoin('tbl_tim_kerja','id_tim_kerja','tim_kerja_id')
                     ->join('tbl_unit_kerja','id_unit_kerja','tbl_pegawai.unit_kerja_id')
+                    ->join('aadb_tbl_jenis_form_usulan','id_jenis_form_usulan','jenis_form')
                     ->where('id_form_usulan', $id)
                     ->first();
-                return view('v_super_user.apk_aadb.ppk_proses', compact('tujuan', 'pengajuan','aksi', 'id','form'));
-
+                return view('v_super_user.apk_aadb.ppk_proses', compact('idBast','tujuan', 'pengajuan','aksi', 'id','form'));
             }
 
-            if ($aksi == 'proses' && $id == 'pengadaan') {
-                UsulanAadb::where('id_form_usulan', $request->id_form_usulan)->update([
-                    'status_proses_id' => 3,
-                    'otp_bast_ppk'     => $request->otp_bast_ppk
-                ]);
+            if ($tujuan == 'proses-usulan')
+            {
+                if ($aksi == 'pengadaan') {
+                    if ($request->foto_kwitansi == null) {
+                        $fotoKwitansi = $request->foto_lama;
+                    } else {
+                        $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
 
-                $kendaraan = new Kendaraan();
-                $kendaraan->id_kendaraan            = $request->id_kendaraan;
-                $kendaraan->form_usulan_id          = $request->id_form_usulan;
-                $kendaraan->unit_kerja_id           = 1;
-                $kendaraan->jenis_aadb              = $request->jenis_aadb;
-                $kendaraan->kode_barang             = $request->kode_barang;
-                $kendaraan->jenis_kendaraan_id      = $request->jenis_kendaraan;
-                $kendaraan->merk_kendaraan          = $request->merk_kendaraan;
-                $kendaraan->tipe_kendaraan          = $request->tipe_kendaraan;
-                $kendaraan->no_plat_kendaraan       = $request->no_plat_kendaraan;
-                $kendaraan->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
-                $kendaraan->no_plat_rhs             = $request->no_plat_rhs;
-                $kendaraan->mb_stnk_plat_rhs        = $request->mb_stnk_plat_rhs;
-                $kendaraan->tahun_kendaraan         = $request->tahun_kendaraan;
-                $kendaraan->kondisi_kendaraan_id    = 1;
-                $kendaraan->save();
+                        if ($request->hasfile('foto_kwitansi')) {
+                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                                $file_old = public_path() . '\gambar\kwitansi\pengadaan\\' . $dataUsulan->lampiran;
+                                unlink($file_old);
+                            }
+                            $file       = $request->file('foto_kwitansi');
+                            $filename   = $file->getClientOriginalName();
+                            $file->move('gambar/kwitansi/pengadaan/', $filename);
+                            $dataUsulan->lampiran = $filename;
+                        } else {
+                            $dataUsulan->lampiran = '';
+                        }
+                        $fotoKwitansi = $dataUsulan->lampiran;
+                    }
 
-                if ($request->jenis_aadb == 'sewa') {
-                    $idKendaraanSewa = KendaraanSewa::count();
-                    $kendaraanSewa = new KendaraanSewa();
-                    $kendaraanSewa->id_kendaraan_sewa   = $idKendaraanSewa + 1;
-                    $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
-                    $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
-                    $kendaraanSewa->penyedia            = $request->penyedia;
-                    $kendaraanSewa->save();
+                    UsulanAadb::where('id_form_usulan', $request->id_form_usulan)->update([
+                        'tanggal_bast'     => $request->tanggal_bast,
+                        'total_biaya'      => $request->total_biaya,
+                        'lampiran'         => $fotoKwitansi,
+                        'no_surat_bast'    => $request->no_surat_bast,
+                        'status_proses_id' => 3,
+                        'otp_bast_ppk'     => $request->otp_bast_ppk
+                    ]);
+
+                    $kendaraan = new Kendaraan();
+                    $kendaraan->id_kendaraan            = $request->id_kendaraan;
+                    $kendaraan->form_usulan_id          = $request->id_form_usulan;
+                    $kendaraan->unit_kerja_id           = 1;
+                    $kendaraan->jenis_aadb              = $request->jenis_aadb;
+                    $kendaraan->kode_barang             = $request->kode_barang;
+                    $kendaraan->jenis_kendaraan_id      = $request->jenis_kendaraan;
+                    $kendaraan->merk_kendaraan          = $request->merk_kendaraan;
+                    $kendaraan->tipe_kendaraan          = $request->tipe_kendaraan;
+                    $kendaraan->no_plat_kendaraan       = $request->no_plat_kendaraan;
+                    $kendaraan->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
+                    $kendaraan->no_plat_rhs             = $request->no_plat_rhs;
+                    $kendaraan->mb_stnk_plat_rhs        = $request->mb_stnk_plat_rhs;
+                    $kendaraan->tahun_kendaraan         = $request->tahun_kendaraan;
+                    $kendaraan->kondisi_kendaraan_id    = 1;
+                    $kendaraan->save();
+
+                    if ($request->jenis_aadb == 'sewa') {
+                        $idKendaraanSewa = KendaraanSewa::count();
+                        $kendaraanSewa = new KendaraanSewa();
+                        $kendaraanSewa->id_kendaraan_sewa   = $idKendaraanSewa + 1;
+                        $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
+                        $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
+                        $kendaraanSewa->penyedia            = $request->penyedia;
+                        $kendaraanSewa->save();
+                    }
+
+                    return redirect('super-user/aadb/dashboard')->with('success', 'Berhasil Memproses Usulan');
+
+                } elseif ($aksi == 'servis') {
+                    if ($request->foto_kwitansi == null) {
+                        $fotoKwitansi = $request->foto_lama;
+                    } else {
+                        $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
+
+                        if ($request->hasfile('foto_kwitansi')) {
+                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                                $file_old = public_path() . '\gambar\kwitansi\servis\\' . $dataUsulan->lampiran;
+                                unlink($file_old);
+                            }
+                            $file       = $request->file('foto_kwitansi');
+                            $filename   = $file->getClientOriginalName();
+                            $file->move('gambar/kwitansi/servis/', $filename);
+                            $dataUsulan->lampiran = $filename;
+                        } else {
+                            $dataUsulan->lampiran = '';
+                        }
+                        $fotoKwitansi = $dataUsulan->lampiran;
+                    }
+
+                    UsulanAadb::where('id_form_usulan', $id)->update([
+                        'tanggal_bast'     => $request->tanggal_bast,
+                        'total_biaya'      => $request->total_biaya,
+                        'lampiran'         => $fotoKwitansi,
+                        'no_surat_bast'    => $request->no_surat_bast,
+                        'status_proses_id' => 3,
+                        'otp_bast_ppk'     => $request->otp_bast_ppk
+                    ]);
+
+                    return redirect('super-user/aadb/dashboard')->with('success','Berhasil memproses usulan servis kendaraan');
+                } elseif ($aksi == 'perpanjangan-stnk') {
+                    if ($request->foto_stnk == null) {
+                        $fotoStnk = $request->foto_lama;
+                    } else {
+                        $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
+
+                        if ($request->hasfile('foto_stnk')) {
+                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                                $file_old = public_path() . '\gambar\kendaraan\stnk\\' . $dataUsulan->lampiran;
+                                unlink($file_old);
+                            }
+                            $file       = $request->file('foto_stnk');
+                            $filename   = $file->getClientOriginalName();
+                            $file->move('gambar/kendaraan/stnk/', $filename);
+                            $dataUsulan->lampiran = $filename;
+                        } else {
+                            $dataUsulan->lampiran = '';
+                        }
+                        $fotoStnk = $dataUsulan->lampiran;
+                    }
+
+                    UsulanAadb::where('id_form_usulan', $id)->update([
+                        'tanggal_bast'     => $request->tanggal_bast,
+                        'total_biaya'      => $request->total_biaya,
+                        'lampiran'         => $fotoStnk,
+                        'no_surat_bast'    => $request->no_surat_bast,
+                        'status_proses_id' => 3,
+                        'otp_bast_ppk'     => $request->otp_bast_ppk
+                    ]);
+
+                    $form = $request->detail_usulan_id;
+                    foreach($form as $i => $detail_usulan_id)
+                    {
+                        UsulanPerpanjanganSTNK::where('id_form_usulan_perpanjangan_stnk', $detail_usulan_id)
+                            ->update([
+                                'mb_stnk_baru' => $request->mb_stnk_baru[$i]
+                            ]);
+                    }
+
+                    return redirect('super-user/aadb/dashboard')->with('success','Berhasil memproses usulan perpanjang STNK kendaraan');
+                } elseif ($aksi == 'voucher-bbm') {
+                    UsulanAadb::where('id_form_usulan', $id)->update([
+                        'tanggal_bast'     => $request->tanggal_bast,
+                        'no_surat_bast'    => $request->no_surat_bast,
+                        'status_proses_id' => 3,
+                        'otp_bast_ppk'     => $request->otp_bast_ppk
+                    ]);
+
+
+                    return redirect('super-user/aadb/dashboard')->with('success','Berhasil memproses usulan voucher bbm kendaraan');
                 }
-
-                return redirect('super-user/aadb/dashboard')->with('success', 'Berhasil Memproses Usulan');
             }
         }
     }

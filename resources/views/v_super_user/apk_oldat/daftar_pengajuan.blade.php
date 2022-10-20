@@ -93,7 +93,7 @@ $jabatan = $user->jabatan; ?>
                             </td>
                         </tr>
                         <div class="modal fade" id="modal-info-{{ $row->id_form_usulan }}">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         @if($row->status_pengajuan_id == '')
@@ -152,13 +152,20 @@ $jabatan = $user->jabatan; ?>
                                             <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                             <div class="col-md-8">: {{ \Carbon\Carbon::parse($row->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                         </div>
+                                        @if($row->jenis_form == 'pengadaan')
                                         <div class="form-group row mb-0">
                                             <div class="col-md-4"><label>Rencana Pengguna </label></div>
                                             <div class="col-md-8">: {{ $row->rencana_pengguna }}</div>
                                         </div>
+                                        @else
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-4"><label>Biaya Perbaikan :</label></div>
+                                            <div class="col-md-8">: Rp {{ number_format($row->total_biaya, 0, ',', '.') }}</div>
+                                        </div>
+                                        @endif
                                         <div class="form-group row mt-4">
                                             <h6 class="col-md-12 font-weight-bold text-muted">
-                                                Informasi Kendaraan
+                                                Informasi Barang
                                             </h6>
                                         </div>
                                         @if($row->jenis_form == 'pengadaan')
@@ -169,8 +176,6 @@ $jabatan = $user->jabatan; ?>
                                                 <div class="col-md-8">: {{ $dataPengadaan->kategori_barang }}</div>
                                                 <div class="col-md-4"><label>Merk </label></div>
                                                 <div class="col-md-8">: {{ $dataPengadaan->merk_barang }}</div>
-                                                <div class="col-md-4"><label>Spesifikasi </label></div>
-                                                <div class="col-md-8">: {{ $dataPengadaan->spesifikasi_barang }}</div>
                                                 <div class="col-md-4"><label>Jumlah </label></div>
                                                 <div class="col-md-8">: {{ $dataPengadaan->jumlah_barang.' '.$dataPengadaan->satuan_barang }}</div>
                                                 <div class="col-md-4"><label>Estimasi Biaya</label></div>
@@ -184,12 +189,14 @@ $jabatan = $user->jabatan; ?>
                                             <div class="row">
                                                 <div class="col-md-4"><label>Nama Barang </label></div>
                                                 <div class="col-md-8">: {{ $dataPerbaikan->kategori_barang }}</div>
-                                                <div class="col-md-4"><label>Spesifikasi </label></div>
-                                                <div class="col-md-8">: {{ $dataPerbaikan->spesifikasi_barang }}</div>
-                                                <div class="col-md-4"><label>Jumlah </label></div>
-                                                <div class="col-md-8">: {{ $dataPerbaikan->jumlah_barang.' '.$dataPerbaikan->satuan_barang }}</div>
-                                                <div class="col-md-4"><label>Nilai Perolehan</label></div>
-                                                <div class="col-md-8">: Rp {{ number_format($dataPerbaikan->nilai_perolehan, 0, ',', '.') }}</div>
+                                                <div class="col-md-4"><label>Merk Barang </label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->merk_tipe_barang }}</div>
+                                                <div class="col-md-4"><label>Pengguna </label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->nama_pegawai }}</div>
+                                                <div class="col-md-4"><label>Unit Kerja</label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->unit_kerja }}</div>
+                                                <div class="col-md-4"><label>Tahun Perolehan</label></div>
+                                                <div class="col-md-8">: {{ $dataPerbaikan->tahun_perolehan }}</div>
                                             </div>
                                         </div>
                                         @endforeach

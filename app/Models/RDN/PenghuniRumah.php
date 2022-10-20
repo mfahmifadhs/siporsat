@@ -15,6 +15,8 @@ class PenghuniRumah extends Model
     protected $fillable = [
         'id_penghuni',
         'pegawai_id',
+        'rumah_dinas_id',
+        'tanggal_update',
         'nomor_sip',
         'masa_berakhir_sip',
         'jenis_sertifikat',
