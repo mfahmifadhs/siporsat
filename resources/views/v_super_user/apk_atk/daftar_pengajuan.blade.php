@@ -71,8 +71,8 @@
                                     <td>{{ $dataUsulan->nama_pegawai }}</td>
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
                                     <td>{{ $dataUsulan->rencana_pengguna }}</td>
-                                    <td>{{ $dataUsulan->status_pengajuan_id }}</td>
-                                    <td>{{ $dataUsulan->status_proses_id }}</td>
+                                    <td>{{ $dataUsulan->status_pengajuan }}</td>
+                                    <td>{{ $dataUsulan->status_proses }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

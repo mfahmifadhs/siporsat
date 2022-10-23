@@ -162,6 +162,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::get('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
 
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::post('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);

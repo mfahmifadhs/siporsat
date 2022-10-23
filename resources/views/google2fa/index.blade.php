@@ -20,20 +20,19 @@
                 <div class="panel panel-default">
                     <div class="panel-heading font-weight-bold">Verifikasi Dokumen</div>
                     <hr>
-                    @if($errors->any())
-                    <b style="color: red">{{$errors->first()}}</b>
-
-                    @endif
-
                     <div class="panel-body">
                         <form class="form-horizontal" method="POST" action="{{ url('super-user/verif/usulan/cek') }}">
                             {{ csrf_field() }}
-                            <input type="text" name="modul" value="{{ Auth::user()->sess_modul }}">
-                            <input type="text" name="form_id" value="{{ Auth::user()->sess_form_id }}">
+                            <input type="hidden" name="modul" value="{{ Auth::user()->sess_modul }}">
+                            <input type="hidden" name="form_id" value="{{ Auth::user()->sess_form_id }}">
                             <div class="form-group">
                                 <p>Mohon untuk memasukan kode <strong>OTP</strong> yang diterima pada aplikasi <b>Google Authenticator</b>. <br>
                                     Pastikan, anda memasukan kode OTP terkini, karena kode OTP akan berubah setiap 30 detik.</p>
-                                <label for="one_time_password" class="col-md-4 control-label">One Time Password</label>
+
+                                @if($errors->any())
+                                    <b style="color: red">{{$errors->first()}}</b><br>
+                                @endif
+                                <label for="one_time_password" class="col-md-4 control-label">Masukkan Kode OTP</label>
 
 
                                 <div class="col-md-12">

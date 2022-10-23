@@ -23,5 +23,12 @@ class UsulanAtk extends Model
         'rencana_pengguna',
         'status_pengajuan_id',
         'status_proses_id',
+        'otp_usulan_pengusul'
     ];
+
+    public function detailUsulanAtk() {
+        return $this->hasMany(UsulanAtkDetail::class, 'form_usulan_id')
+            ->join('atk_tbl','id_atk','atk_id')
+            ->join('atk_tbl_kelompok_sub_kategori','id_kategori_atk','kategori_atk_id');
+    }
 }
