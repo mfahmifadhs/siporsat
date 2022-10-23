@@ -168,6 +168,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::post('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AtkDashboard']);
+
+        Route::get('/grafik', [SuperUserController::class, 'SearchChartDataAtk']);
     });
 
     // rumah dinas

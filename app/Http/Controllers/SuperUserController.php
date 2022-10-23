@@ -285,10 +285,11 @@ class SuperUserController extends Controller
 
     public function Atk(Request $request, $aksi)
     {
+        $googleChartData = $this->ChartDataAtk();
         if ($aksi == 'pengadaan') {
             return view('v_super_user.apk_atk.index_pengadaan');
         } else {
-            return view('v_super_user.apk_atk.index_distribusi');
+            return view('v_super_user.apk_atk.index_distribusi', compact('googleChartData'));
         }
     }
 
@@ -487,6 +488,94 @@ class SuperUserController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function ChartDataAtk()
+    {
+        $dataAtk = SubKelompokAtk::join('atk_tbl_kelompok_sub_jenis', 'id_subkelompok_atk', 'subkelompok_atk_id')
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_jenis_atk','jenis_atk_id')
+            ->join('atk_tbl', 'id_kategori_atk','kategori_atk_id');
+        
+        $dataChart['atk'] = $dataAtk->get();
+        $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
+        $dataJenisAtk = KategoriAtk::get();
+        foreach ($dataJenisAtk as $data) {
+            $dataArray[] = $data->kategori_atk;
+            $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
+            $dataArray[] = $totalStok[0]->stok;
+            $dataChart['all'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        
+        $chart = json_encode($dataChart);
+        // dd($chart);
+        return $chart;
+    }
+
+    public function SearchChartDataAtk(Request $request)
+    {
+        // $jenisForm     = JenisUsulan::where('jenis_form_usulan','like','%'. $request->form .'%')->first();
+
+        $dataAtk = SubKelompokAtk::join('atk_tbl_kelompok_sub_jenis', 'id_subkelompok_atk', 'subkelompok_atk_id')
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_jenis_atk','jenis_atk_id')
+            ->join('atk_tbl', 'id_kategori_atk','kategori_atk_id');
+        
+        // dd($data->get());
+        
+        // $totalPengajuan = UsulanAadb::select('jenis_form', DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as bulan"), DB::raw("count(id_form_usulan) as total_pengajuan"))
+        //     ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+        //     ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
+        //     ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+        //     ->groupBy('jenis_form','bulan')
+        //     ->where('jenis_form', $jenisForm->id_jenis_form_usulan);
+
+        if($request->hasAny(['kategori', 'jenis','nama','merk'])){
+            if($request->kategori){
+                $dataSearchAtk = $dataAtk->where('id_subkelompok_atk', $request->kategori);
+            }
+            if($request->jenis){
+                $dataSearchAtk = $dataAtk->where('id_jenis_atk', $request->jenis);
+            }
+            if($request->nama){
+                $dataSearchAtk = $dataAtk->where('id_kategori_atk', $request->nama);
+            }
+            if($request->merk){
+                $dataSearchAtk = $dataAtk->where('id_atk', $request->merk);
+            }
+
+            $resultSearchAtk = $dataSearchAtk->get();
+            // dd($resultSearchAtk);
+        }else {
+            $resultSearchAtk = $dataAtk->get();
+        }
+
+        foreach ($resultSearchAtk as $data) {
+            $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
+            $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
+            $dataArray[] = $data->kategori_atk;
+            $dataArray[] = $totalStok[0]->stok;
+            $dataChart['chart'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['table'] = $resultSearchAtk;
+        $chart = json_encode($dataChart);
+        // dd($chart);
+        if(count($resultSearchAtk)>0){
+            return response([
+                'status' => true,
+                'total' => count($resultSearchAtk),
+                'message' => 'success',
+                'data' => $chart
+            ], 200);
+        }else {
+            return response([
+                'status' => true,
+                'total' => count($resultSearchAtk),
+                'message' => 'not found'
+            ], 200);
+        }
     }
 
     // ===============================================
