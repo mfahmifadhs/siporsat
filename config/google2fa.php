@@ -63,7 +63,7 @@ return [
      * One Time Password error message.
      */
     'error_messages' => [
-        'wrong_otp'       => "The 'One Time Password' typed was wrong.",
+        'wrong_otp'       => "Kode OTP yang anda masukan salah",
         'cannot_be_empty' => 'One Time Password cannot be empty.',
         'unknown'         => 'An unknown error has occurred. Please try again.',
     ],

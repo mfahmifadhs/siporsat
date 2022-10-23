@@ -66,13 +66,13 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ $dataUsulan->tanggal_usulan }}</td>
+                                    <td>{{ $dataUsulan->jenis_form }}</td>
+                                    <td>{{ $dataUsulan->nama_pegawai }}</td>
+                                    <td>{{ $dataUsulan->unit_kerja }}</td>
+                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
+                                    <td>{{ $dataUsulan->status_pengajuan_id }}</td>
+                                    <td>{{ $dataUsulan->status_proses_id }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
