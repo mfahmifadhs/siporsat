@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
 
 
@@ -21,6 +22,7 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () { return view('index'); });
 Route::get('/login', function () { return view('login'); });
+Route::get('/send-email',[MailController::class, 'index']);
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
@@ -167,6 +169,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::post('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AtkDashboard']);
+
+        Route::get('/grafik', [SuperUserController::class, 'SearchChartDataAtk']);
     });
 
     // rumah dinas

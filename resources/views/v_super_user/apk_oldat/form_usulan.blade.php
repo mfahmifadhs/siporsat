@@ -206,6 +206,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Verifikasi Melalui Email</label>
+                            <div class="col-sm-10">
+                                {{-- <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required> --}}
+                                {{-- <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a> --}}
+                                <a class="btn btn-primary btn mt-2" id="btn-kirim-email">Kirim Link Verifikasi</a>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">&nbsp;</label>
                             <div class="col-sm-10">
                                 <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
@@ -424,6 +432,19 @@
                     // console.log(res)
                     alert('Berhasi mengirim kode OTP')
                     resOTP = res
+                }
+            });
+        });
+
+        $(document).on('click', '#btn-kirim-email', function() {
+            let tujuan = "{{ $id }}"
+            jQuery.ajax({
+                url: '/send-email',
+                type: "GET",
+                success: function(res) {
+                    // console.log(res)
+                    alert('Berhasi mengirim link verifikasi')
+                    // resOTP = res
                 }
             });
         });
