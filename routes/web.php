@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
 
 
@@ -21,6 +22,7 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () { return view('index'); });
 Route::get('/login', function () { return view('login'); });
+Route::get('/send-email',[MailController::class, 'index']);
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
