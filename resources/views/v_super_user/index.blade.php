@@ -57,7 +57,7 @@
                             <b>Pengajuan Usulan : 0 </b> <br>
                         </div>
                         <div class="card-footer text-center">
-                            <a href="#" class="small-box-footer text-white">
+                            <a href="{{ url('super-user/atk/dashboard') }}" class="small-box-footer text-white">
                                 Selengkapnya <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         </div>

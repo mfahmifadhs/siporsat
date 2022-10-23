@@ -97,6 +97,10 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
     });
 
+    Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
+        Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
+    });
+
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
         Route::get('dasboard', [AdminUserController::class, 'Rdn']);
         Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'OfficialResidence']);
@@ -110,8 +114,15 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 // ====================================================
 Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'as' => 'super-user.'], function () {
     Route::get('dashboard', [SuperUserController::class, 'Index']);
+    Route::get('profil/{id}', [SuperUserController::class, 'Profile']);
     Route::get('laporan-siporsat', [SuperUserController::class, 'ReportMain']);
     Route::get('sendOTP', [SuperUserController::class, 'SendOTPWhatsApp']);
+    Route::get('verif/{id}', [SuperUserController::class, 'Verification']);
+
+    Route::post('verif/{id}', [SuperUserController::class, 'Verification'])->middleware('2fa');
+    // Route::post('/2fa', function () {
+    //     return view('/home');
+    // })->name('super-user.2fa')->middleware('2fa');
 
     // oldat
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
@@ -148,6 +159,16 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('dashboard/{aksi}', [SuperUserController::class, 'SearchChartDataAadb']);
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportAadb']);
         Route::post('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
+    });
+
+    Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
+        Route::get('dashboard/{aksi}', [SuperUserController::class, 'Atk']);
+        Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'OfficeStationery']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
+        Route::get('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
+
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
+        Route::post('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
     });
 
     // rumah dinas

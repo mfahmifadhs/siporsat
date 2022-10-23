@@ -23,7 +23,8 @@ class User extends Authenticatable
         'level_id',
         'pegawai_id',
         'username',
-        'password'
+        'password',
+        'secret_key'
     ];
 
     public function pegawai() {
@@ -36,5 +37,15 @@ class User extends Authenticatable
 
     public function akses() {
         return $this->HasMany(UserAkses::class,'user_id','id');
+    }
+
+    public function setGoogle2faSecretAttribute($value)
+    {
+         $this->attributes['secret_key'] = encrypt($value);
+    }
+
+    public function getGoogle2faSecretAttribute($value)
+    {
+        return decrypt($value);
     }
 }
