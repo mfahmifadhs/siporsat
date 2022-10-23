@@ -19,7 +19,11 @@
 
                     <p>Take note of the <strong>OTP</strong> generated on your Authenticator App.You will be unable to login otherwise </p>
                     <div>
-                        <a href="/complete-registration"><button class="btn-primary">Finish Registration</button></a>
+                        <form action="{{ url('super-user/profil/regist-user/'. Auth::user()->id ) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="secretkey" value="{{ $secretkey }}">
+                            <button type="submit" class="btn-primary">SUBMIT</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -42,11 +42,6 @@ use Carbon\Carbon;
 class SuperUserController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware(['auth']);
-    }
-
     public function Index()
     {
         if(Auth::user()->pegawai->jabatan_id == 2) {
@@ -64,34 +59,44 @@ class SuperUserController extends Controller
         return view('v_super_user.index', compact('usulanOldat','usulanAadb'));
     }
 
-    public function Profile(Request $request, $id)
+    public function Profile(Request $request,$aksi, $id)
     {
-        $google2fa  = app('pragmarx.google2fa');
-        $secretkey  = $google2fa->generateSecretKey();
-        $keyCek = User::where('id',$id)->first();
+        if ($aksi == 'user') {
+            $google2fa  = app('pragmarx.google2fa');
+            $secretkey  = $google2fa->generateSecretKey();
 
-        if ($keyCek->secret_key == null) {
-            User::where('id',$id)->update([
-                'secret_key' => encrypt($secretkey)
-            ]);
+            $QR_Image = $google2fa->getQRCodeInline(
+                config('app.name'),
+                $registration_data = Auth::user()->pegawai->nama_pegawai,
+                $registration_data = $secretkey
+            );
+
+            return view('v_super_user.profil', compact('QR_Image','secretkey'));
+        } else {
+            User::where('id',$id)->first();
+                User::where('id',$id)->update([
+                    'google2fa_secret' => encrypt($request->secretkey)
+                ]);
+
+            return redirect('super-user/dashboard');
         }
 
-        $QR_Image = $google2fa->getQRCodeInline(
-            config('app.name'),
-            $registration_data = Auth::user()->pegawai->nama_pegawai,
-            $registration_data = $secretkey
-        );
-        // dd($google2fa);
-        return view('v_super_user.profil', compact('QR_Image','secretkey'));
+
+
     }
 
-    public function Verification(Request $request, $id)
+    public function Verification(Request $request, $aksi, $id)
     {
         if ($id == 'cek')
         {
-            dd('success');
+            dd($request->all());
         } else {
-            return view('v_super_user.verif_docs');
+            $sessUser = User::find(Auth::user()->id);
+            $sessUser->sess_modul   = 'atk';
+            $sessUser->sess_form_id = $id;
+            $sessUser->save();
+
+            return view('google2fa.index');
         }
     }
 
@@ -316,14 +321,15 @@ class SuperUserController extends Controller
             $idAtk = UsulanAtkDetail::count();
             foreach ($atk as $i => $atk_id) {
                 $detail = new UsulanAtkDetail();
-                $detail->id_pengadaan_atk   = $idAtk + 1;
-                $detail->form_usulan_id     = $idFormUsulan;
-                $detail->atk_id             = $atk_id;
-                $detail->jumlah_pengajuan   = $request->jumlah[$i];
-                $detail->satuan             = $request->satuan[$i];
-                $detail->keterangan         = $request->keterangan[$i];
+                $detail->id_form_usulan_detail = $idAtk + 1;
+                $detail->form_usulan_id        = $idFormUsulan;
+                $detail->atk_id                = $atk_id;
+                $detail->jumlah_pengajuan      = $request->jumlah[$i];
+                $detail->satuan                = $request->satuan[$i];
+                $detail->keterangan            = $request->keterangan[$i];
+                $detail->save();
             }
-            return redirect('super-user/verif/'. $idFormUsulan);
+            return redirect('super-user/verif/usulan-atk/'. $idFormUsulan);
 
         } elseif ($aksi == 'proses-diterima') {
 
@@ -399,6 +405,74 @@ class SuperUserController extends Controller
             $atk  = StokAtk::select('id_stok as id','atk_id','stok_atk as stok', 'satuan')
                         ->orderby('id_stok', 'asc')
                         ->where('atk_id', $id)
+                        ->get();
+        }
+
+        $response = array();
+        foreach ($atk as $data) {
+            $response[] = array(
+                "id"     =>  $data->id,
+                "text"   =>  $data->id.' - '.$data->nama,
+                "stok"   =>  $data->stok,
+                "satuan" =>  $data->satuan
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function Select2AtkDashboard(Request $request, $aksi, $id)
+    {
+        $search = $request->search;
+        if ($aksi == 1) {
+            if ($search == '') {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk', 'subkelompok_atk')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->orWhere('subkelompok_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 2) {
+            if ($search == '') {
+                $atk  = JenisAtk::select('id_jenis_atk as id','subkelompok_atk_id', 'jenis_atk as nama')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = JenisAtk::select('id_jenis_atk','subkelompok_atk_id','jenis_atk')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->where('id_jenis_atk', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 3) {
+            if ($search == '') {
+                $atk  = KategoriAtk::select('id_kategori_atk as id','jenis_atk_id', 'kategori_atk as nama')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = KategoriAtk::select('id_kategori_atk','jenis_atk_id','kategori_atk')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->where('id_kategori_atk', 'like', '%' . $search . '%')
+                    ->orWhere('kategori_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 4) {
+            if ($search == '') {
+                $atk  = Atk::select('id_atk as id','kategori_atk_id', 'merk_atk as nama')
+                    ->orderby('id_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = Atk::select('id_atk','kategori_atk_id','merk_atk')
+                    ->orderby('id_atk', 'asc')
+                    ->orWhere('merk_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 5) {
+            $atk  = StokAtk::select('id_stok as id','atk_id','stok_atk as stok', 'satuan')
+                        ->orderby('id_stok', 'asc')
                         ->get();
         }
 

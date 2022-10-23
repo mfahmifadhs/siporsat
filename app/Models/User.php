@@ -24,7 +24,9 @@ class User extends Authenticatable
         'pegawai_id',
         'username',
         'password',
-        'secret_key'
+        'google2fa_secret',
+        'sess_modul',
+        'sess_form_id'
     ];
 
     public function pegawai() {
@@ -41,7 +43,7 @@ class User extends Authenticatable
 
     public function setGoogle2faSecretAttribute($value)
     {
-         $this->attributes['secret_key'] = encrypt($value);
+         $this->attributes['google2fa_secret'] = encrypt($value);
     }
 
     public function getGoogle2faSecretAttribute($value)

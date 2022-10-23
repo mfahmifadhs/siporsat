@@ -26,9 +26,10 @@
                     @endif
 
                     <div class="panel-body">
-                        <form class="form-horizontal" method="POST" action="{{ url('super-user/verif/cek') }}">
+                        <form class="form-horizontal" method="POST" action="{{ url('super-user/verif/usulan/cek') }}">
                             {{ csrf_field() }}
-
+                            <input type="text" name="modul" value="{{ Auth::user()->sess_modul }}">
+                            <input type="text" name="form_id" value="{{ Auth::user()->sess_form_id }}">
                             <div class="form-group">
                                 <p>Mohon untuk memasukan kode <strong>OTP</strong> yang diterima pada aplikasi <b>Google Authenticator</b>. <br>
                                     Pastikan, anda memasukan kode OTP terkini, karena kode OTP akan berubah setiap 30 detik.</p>
