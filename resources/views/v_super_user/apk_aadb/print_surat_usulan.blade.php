@@ -43,7 +43,7 @@
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
                 <div class="form-group row mb-4">
-                    <div class="col-md-12">pengajuan usulan {{ $dataUsulan->jenis_form_usulan }}</div>
+                    <div class="col-md-12 text-uppercase text-center">{{ $dataUsulan->no_surat_usulan }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
@@ -60,6 +60,10 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Tanggal Usulan</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-2">Total Pengajuan</div>
+                    <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} kendaraan</div>
                 </div>
                 @if($dataUsulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -151,9 +155,9 @@
                         <tr>
                             <th>No</th>
                             <th>Kendaraan</th>
-                            <th>Jenis BBM</th>
-                            <th>Harga Perliter</th>
-                            <th>Kebutuhan BBM</th>
+                            <th>Voucher 25</th>
+                            <th>Voucher 50</th>
+                            <th>Voucher 100</th>
                             <th>Total</th>
                             <th>Bulan Pengadaan</th>
                         </tr>
@@ -164,9 +168,9 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
-                            <td>{{ $dataVoucher->jenis_bbm }}</td>
-                            <td>Rp {{ number_format($dataVoucher->harga_perliter, 0, ',', '.') }}</td>
-                            <td>{{ $dataVoucher->jumlah_kebutuhan }} L</td>
+                            <td>{{ $dataVoucher->voucher_25 }}</td>
+                            <td>{{ $dataVoucher->voucher_50 }}</td>
+                            <td>{{ $dataVoucher->voucher_100 }}</td>
                             <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                         </tr>

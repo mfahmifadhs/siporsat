@@ -209,7 +209,7 @@
                     </div>
                     <div class="form-group">
                         <label>Unit Kerja : </label>
-                        <select name="id_unit_kerja" class="form-control" required>
+                        <select name="id_unit_kerja" class="form-control">
                             <option value="">-- Pilih Unit Kerja --</option>
                             @foreach($unitKerja as $dataUnitKerja)
                             <option value="{{ $dataUnitKerja->id_unit_kerja }}">{{ $dataUnitKerja->unit_kerja }}</option>

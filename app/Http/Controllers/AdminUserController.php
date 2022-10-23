@@ -14,6 +14,8 @@ use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
 use App\Models\OLDAT\RiwayatBarang;
 use App\Models\Pegawai;
+use App\Models\RDN\KondisiRumah;
+use App\Models\RDN\PenghuniRumah;
 use App\Models\User;
 use App\Models\RDN\RumahDinas;
 use Carbon\Carbon;
@@ -28,7 +30,7 @@ class AdminUserController extends Controller
     }
 
     // ====================================================
-    //                        Rumah Dinas
+    //                    Rumah Dinas
     // ====================================================
 
     public function Rdn(Request $request, $aksi)
@@ -39,10 +41,93 @@ class AdminUserController extends Controller
     public function OfficialResidence(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $rumah = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')->get();
-
+            $rumah      = RumahDinas::join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')->get();
             return view('v_admin_user.apk_rdn.daftar_rumah', compact('rumah'));
 
+        }elseif ($aksi == 'detail') {
+            $pegawai  = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->get();
+            $penghuni = PenghuniRumah::leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
+                ->where('rumah_dinas_id', $id)
+                ->orderBy('id_penghuni','DESC')
+                ->first();
+            $rumah    = RumahDinas::where('id_rumah_dinas', $id)
+                ->join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')
+                ->first();
+            $kondisi  = KondisiRumah::get();
+
+            return view('v_admin_user.apk_rdn.detail_rumah', compact('pegawai','rumah','penghuni','kondisi'));
+        }elseif ($aksi == 'proses-ubah') {
+            $cekFoto  = Validator::make($request->all(), [
+                'foto_rumah'    => 'mimes: jpg,png,jpeg|max:4096',
+            ]);
+
+            if ($cekFoto->fails()) {
+                return redirect('admin-user/rdn/rumah-dinas/detail/'. $id)->with('failed', 'Format foto tidak sesuai, mohon cek kembali');
+            }else{
+                if($request->foto_rumah == null) {
+                    $fotoRumah = $request->foto_lama;
+                } else {
+                    $dataRumah = RumahDinas::where('id_rumah_dinas', $id)->first();
+
+                    if ($request->hasfile('foto_rumah')){
+                        if($dataRumah->foto_rumah != ''  && $dataRumah->foto_rumah != null){
+                            $file_old = public_path().'\gambar\rumah_dinas\\' . $dataRumah->foto_rumah;
+                            unlink($file_old);
+                        }
+                        $file       = $request->file('foto_rumah');
+                        $filename   = $file->getClientOriginalName();
+                        $file->move('gambar/rumah_dinas/', $filename);
+                        $dataRumah->foto_rumah = $filename;
+                    } else {
+                        $dataRumah->foto_rumah = '';
+                    }
+                    $fotoRumah = $dataRumah->foto_rumah;
+                }
+
+                $rumah = RumahDinas::where('id_rumah_dinas', $id)->update([
+                    'golongan_rumah'    => $request->golongan_rumah,
+                    'nup_rumah'         => $request->nup_rumah,
+                    'alamat_rumah'      => $request->alamat_rumah,
+                    'lokasi_kota'       => $request->lokasi_kota,
+                    'luas_bangunan'     => $request->luas_bangunan,
+                    'luas_tanah'        => $request->luas_tanah,
+                    'kondisi_rumah_id'  => $request->kondisi_rumah_id,
+                    'foto_rumah'        => $fotoRumah
+                ]);
+            }
+
+            if ($request->proses == 1) {
+                $penghuni = PenghuniRumah::where('rumah_dinas_id', $id)->where('id_penghuni', $request->id_penghuni)
+                ->update([
+                    'pegawai_id'         => $request->id_pegawai,
+                    'nomor_sip'          => $request->nomor_sip,
+                    'masa_berakhir_sip'  => $request->masa_berakhir_sip,
+                    'jenis_sertifikat'   => $request->jenis_sertifikat,
+                    'status_penghuni'    => $request->status_penghuni
+                ]);
+            } else {
+                $statusPenghuni = PenghuniRumah::select('status_penghuni')->where('rumah_dinas_id', $id)->get();
+                foreach($statusPenghuni as $dataPenghuni)
+                {
+                    if ($dataPenghuni->status_penghuni == 1) {
+                        PenghuniRumah::where('rumah_dinas_id', $id)->update([ 'status_penghuni' => 2 ]);
+                    }
+                }
+
+                $cekRiwayat = PenghuniRumah::count();
+                $penghuni    = new PenghuniRumah();
+                $penghuni->id_penghuni       = $cekRiwayat + 1;
+                $penghuni->pegawai_id        = $request->id_pegawai;
+                $penghuni->rumah_dinas_id    = $id;
+                $penghuni->tanggal_update    = Carbon::now();
+                $penghuni->nomor_sip         = $request->nomor_sip;
+                $penghuni->masa_berakhir_sip = $request->masa_berakhir_sip;
+                $penghuni->jenis_sertifikat  = $request->jenis_sertifikat;
+                $penghuni->status_penghuni   = $request->status_penghuni;
+                $penghuni->save();
+            }
+
+            return redirect('admin-user/rdn/rumah-dinas/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Rumah Dinas');
         }
     }
 
@@ -224,4 +309,48 @@ class AdminUserController extends Controller
             return redirect('admin-user/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menghapus Kategori Barang');
         }
     }
+
+    /*===============================================================
+                                SELECT 2
+    ===============================================================*/
+
+    public function Select2(Request $request, $aksi)
+    {
+        if ($aksi == 'pegawai') {
+            $search = $request->search;
+
+            if ($search == '') {
+                $pegawai  = Pegawai::select('id_pegawai', 'nama_pegawai')
+                    ->orderby('nama_pegawai', 'asc')
+                    ->get();
+            } else {
+                $pegawai  = Pegawai::select('id_pegawai', 'nama_pegawai')
+                    ->orderby('nama_pegawai', 'asc')
+                    ->where('nama_pegawai', 'like', '%' . $search . '%')
+                    ->get();
+            }
+
+            $response = array();
+            foreach ($pegawai as $data) {
+                $response[] = array(
+                    "id"    =>  $data->id_pegawai,
+                    "text"  =>  $data->nama_pegawai
+                );
+            }
+
+            return response()->json($response);
+        }
+    }
+
+    /*===============================================================
+                                JSON
+    ===============================================================*/
+
+    public function JsonJabatan(Request $request)
+    {
+        $result   = Pegawai::where('id_pegawai', $request->penghuni)->pluck('keterangan_pegawai','id_pegawai');
+        return response()->json($result);
+    }
+
+
 }

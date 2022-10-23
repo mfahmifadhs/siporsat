@@ -96,16 +96,26 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <div class="form-group row mb-3 text-capitalize">
-                                <div class="col-md-12">berita acara serah terima {{ $bast->jenis_form }} barang</div>
+                            <div class="form-group row mb-4">
+                                <div class="col-md-12 text-uppercase text-center">{{ $bast->no_surat_bast }}</div>
                             </div>
-                            <p class="m-0 text-capitalize">
-                                Pengusul <span style="margin-left: 9%;"> : {{ $bast->nama_pegawai }} </span> <br>
-                                Jabatan <span style="margin-left: 9.8%;"> : {{ $bast->jabatan.' '.$bast->tim_kerja }}</span> <br>
-                                Unit Kerja <span style="margin-left: 8.5%;"> : {{ $bast->unit_kerja }}</span> <br>
-                                Tanggal Usulan <span style="margin-left: 4.7%;"> : {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</span> <br>
-                                Rencana Pengguna <span style="margin-left: 2%;"> : {{ $bast->rencana_pengguna }}</span> <br>
-                            </p>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Pengusul</label>
+                                <div class="col-sm-10">:{{ $bast->nama_pegawai }}</div>
+                                <label class="col-sm-2">Jabatan</label>
+                                <div class="col-sm-10">: {{ $bast->keterangan_pegawai.' '.$bast->tim_kerja }}</div>
+                                <label class="col-sm-2">Unit Kerja</label>
+                                <div class="col-sm-10">: {{ $bast->unit_kerja }}</div>
+                                <label class="col-sm-2">Tanggal Bast</label>
+                                <div class="col-sm-10">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
+                                @if($bast->jenis_form == 'pengadaan')
+                                <div class="col-md-2"><label>Rencana Pengguna </label></div>
+                                <div class="col-md-10">: {{ $bast->rencana_pengguna }}</div>
+                                @else
+                                <div class="col-md-2"><label>Biaya Perbaikan </label></div>
+                                <div class="col-md-10">: Rp {{ number_format($bast->total_biaya, 0, ',', '.') }}</div>
+                                @endif
+                            </div>
                             <p class="text-justify mt-4">
                                 Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                                 dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
@@ -116,13 +126,19 @@
                             <table class="table table-bordered m-0">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Kode Barang</th>
-                                        <th>NUP</th>
-                                        <th>Jenis Barang</th>
-                                        <th>Spesifikasi</th>
-                                        <th>Jumlah</th>
-                                        <th>Satuan</th>
+                                        <td>No</td>
+                                        <td style="width: 15%;">Jenis Barang</td>
+                                        <td style="width: 20%;">Merk Barang</td>
+                                        @if($bast->jenis_form == 'pengadaan')
+                                        <td style="width: 40%;">Spesifikasi</td>
+                                        <td>Jumlah</td>
+                                        <td>Satuan</td>
+                                        <td style="width: 25%;">Nilai Perolehan </td>
+                                        @else
+                                        <td style="width: 25%;">Pengguna</td>
+                                        <td style="width: 25%;">Unit Kerja</td>
+                                        <td style="width: 25%;">Tahun Perolehan</td>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -131,24 +147,23 @@
                                     @foreach($bast->barang as $dataBarang)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataBarang->kode_barang }}</td>
-                                        <td>{{ $dataBarang->nup_barang }}</td>
                                         <td>{{ $dataBarang->kategori_barang }}</td>
+                                        <td>{{ $dataBarang->merk_tipe_barang }}</td>
                                         <td>{{ $dataBarang->spesifikasi_barang }}</td>
                                         <td>{{ $dataBarang->jumlah_barang }}</td>
                                         <td>{{ $dataBarang->satuan_barang }}</td>
+                                        <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
                                     </tr>
                                     @endforeach
                                     @else
                                     @foreach($bast->detailPerbaikan as $dataBarang)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataBarang->kode_barang }}</td>
-                                        <td>{{ $dataBarang->nup_barang }}</td>
                                         <td>{{ $dataBarang->kategori_barang }}</td>
-                                        <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                        <td>{{ $dataBarang->jumlah_barang }}</td>
-                                        <td>{{ $dataBarang->satuan_barang }}</td>
+                                        <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                        <td>{{ $dataBarang->nama_pegawai }}</td>
+                                        <td>{{ $dataBarang->unit_kerja }}</td>
+                                        <td>{{ $dataBarang->tahun_perolehan }}</td>
                                     </tr>
                                     @endforeach
                                     @endif

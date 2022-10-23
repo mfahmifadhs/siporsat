@@ -82,7 +82,7 @@
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataPengajuan->id_form_usulan }}">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 @if ($dataPengajuan->status_pengajuan == '')
@@ -133,10 +133,12 @@
                                                     <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                                     <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                                 </div>
+                                                @if($dataPengajuan->jenis_form == 1)
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Rencana Pengguna </label></div>
                                                     <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                                 </div>
+                                                @endif
                                                 <div class="form-group row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi Kendaraan
@@ -197,12 +199,12 @@
                                                     <div class="row">
                                                         <div class="col-md-4"><label>Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</div>
-                                                        <div class="col-md-4"><label>Jenis BBM </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->jenis_bbm }}</div>
-                                                        <div class="col-md-4"><label>Harga Perliter </label></div>
-                                                        <div class="col-md-8">: Rp {{ number_format($dataVoucher->harga_perliter, 0, ',', '.') }}</div>
-                                                        <div class="col-md-4"><label>Kebutuhan BBM </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->jumlah_kebutuhan }} L</div>
+                                                        <div class="col-md-4"><label>Voucher 25 </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_25 }}</div>
+                                                        <div class="col-md-4"><label>Voucher 50 </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_50 }}</div>
+                                                        <div class="col-md-4"><label>Voucher 100 </label></div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_100 }} L</div>
                                                         <div class="col-md-4"><label>Total </label></div>
                                                         <div class="col-md-8">: Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</div>
                                                         <div class="col-md-4"><label>Bulan Pengadaan </label></div>

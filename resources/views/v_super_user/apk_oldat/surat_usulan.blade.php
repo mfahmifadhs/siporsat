@@ -48,6 +48,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Daftar Pengajuan Barang</li>
                 </ol>
             </div>
@@ -95,8 +96,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group text-capitalize">
-                        <div class="form-group row mb-3">
-                            <div class="col-md-12">pengajuan usulan {{ $usulan->jenis_form }}</div>
+                        <div class="form-group row mb-4">
+                            <div class="col-md-12 text-uppercase text-center">{{ $usulan->no_surat_usulan }}</div>
                         </div>
                         <div class="form-group row mb-0">
                             <div class="col-md-2">Pengusul</div>
@@ -114,6 +115,10 @@
                             <div class="col-md-2">Tanggal Usulan</div>
                             <div class="col-md-10">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                         </div>
+                        <div class="form-group row mb-0">
+                            <div class="col-md-2">Total Pengajuan</div>
+                            <div class="col-md-10">: {{ $usulan->total_pengajuan }} barang</div>
+                        </div>
                         @if($usulan->rencana_pengguna != null)
                         <div class="form-group row mb-0">
                             <div class="col-md-2">Rencana Pengguna</div>
@@ -127,7 +132,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Jenis Barang</th>
-                                    <th>Spesifikasi</th>
+                                    <th>Merk Barang</th>
                                     <th>Jumlah</th>
                                     <th>Satuan</th>
                                     @if($usulan->jenis_form == 'pengadaan')
@@ -144,10 +149,10 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $dataBarang->kategori_barang }}</td>
-                                    <td>{{ $dataBarang->spesifikasi_barang }}</td>
+                                    <td>{{ $dataBarang->merk_barang }}</td>
                                     <td>{{ $dataBarang->jumlah_barang }}</td>
                                     <td>{{ $dataBarang->satuan_barang }}</td>
-                                    <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
+                                    <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                                 @else
@@ -155,10 +160,10 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $dataBarang->kategori_barang }}</td>
-                                    <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                    <td>{{ $dataBarang->jumlah_barang }}</td>
-                                    <td>{{ $dataBarang->satuan_barang }}</td>
-                                    <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                                    <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                    <td>{{ $dataBarang->nama_pegawai }}</td>
+                                    <td>{{ $dataBarang->unit_kerja }}</td>
+                                    <td>{{ $dataBarang->tahun_perolehan }}</td>
                                 </tr>
                                 @endforeach
                                 @endif

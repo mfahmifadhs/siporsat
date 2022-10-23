@@ -51,41 +51,49 @@
                         @csrf
                         <div class="form-group row">
                             <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
+                            <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/oldat/'.$id.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Tanggal Usulan </label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control text-capitalize" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                                <input type="date" class="form-control text-capitalize" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Nama Pengusul </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}">
+                                <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->jabatan }}">
+                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->keterangan_pegawai }}" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Unit Kerja </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->unit_kerja }}">
+                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->unit_kerja }}" readonly>
                             </div>
                         </div>
+                        @if($id == 'pengadaan')
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Rencana Pengguna (*)</label>
                             <div class="col-sm-10">
                                 <textarea type="date" name="rencana_pengguna" class="form-control text-capitalize" required></textarea>
                             </div>
                         </div>
+                        @endif
                         <div class="form-group row mt-4">
                             <label class="text-muted col-md-12">Informasi Kebutuhan Barang</label>
                         </div>
                         <div class="form-group row mt-4">
                             <label class="col-sm-2 col-form-label">Jumlah Jenis Barang</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-4">
                                 <input type="number" class="form-control" name="total_pengajuan" id="jumlahBarang" minlength="1" value="1">
                                 <small>Jumlah barang disesuaikan dengan kebutuhan jenis barang</small>
                             </div>
@@ -153,38 +161,34 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Merk</label>
                                 <div class="col-sm-10">
-                                    <select name="kode_barang[]" class="form-control spekBarang" id="barang1" data-idtarget="1">
+                                    <select name="kode_barang[]" class="form-control spekBarang select2-barang" id="barang1" data-idtarget="1">
                                         <option value="">-- Pilih Barang --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Kode Barang</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="kode_barang1"><input type="text" class="form-control" readonly></span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">NUP</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="nup_barang1"><input type="text" class="form-control" readonly></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Jumlah</label>
-                                <div class="col-sm-10">
-                                    <span id="jumlah_barang1"><input class="form-control"></span>
+                                <div class="col-sm-4">
+                                    <span id="jumlah_barang1"><input class="form-control" readonly></span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Satuan</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="satuan_barang1"><input class="form-control" readonly></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Tahun Perolehan</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="tahun_perolehan1"><input class="form-control" readonly></span>
                                 </div>
                             </div>
@@ -225,9 +229,12 @@
 
 @section('js')
 <script>
+    // let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
         let j = 1;
         let id = "{{ $id }}"
+
+
         // Jumlah Barang yang akan diperbaiki
         $('#btnJumlah').click(function() {
             if (id == 'pengadaan') {
@@ -316,25 +323,21 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Kode Barang</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="kode_barang`+j+`"><input type="text" class="form-control" readonly></span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">NUP</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="nup_barang`+j+`"><input type="text" class="form-control" readonly></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Jumlah</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="jumlah_barang`+j+`"><input class="form-control" readonly></span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Satuan</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <span id="satuan_barang`+j+`"><input class="form-control" readonly></span>
                                 </div>
                             </div>
@@ -357,7 +360,7 @@
             if (kategori) {
                 $.ajax({
                     type: "GET",
-                    url: "/super-user/oldat/get-barang/daftar?kategori=" + kategori,
+                    url: "/super-user/oldat/select2/daftar?kategori=" + kategori,
                     dataType: 'JSON',
                     success: function(res) {
                         if (res) {
@@ -386,7 +389,7 @@
             if (idBarang) {
                 $.ajax({
                     type: "GET",
-                    url: "/super-user/oldat/get-barang/detail?idBarang=" + idBarang,
+                    url: "/super-user/oldat/select2/detail?idBarang=" + idBarang,
                     dataType: 'JSON',
                     success: function(res) {
                         $("#kode_barang" + target).empty();
@@ -403,7 +406,7 @@
                                 '<input type="number" class="form-control" value="' + row.nup_barang + '" readonly>'
                             );
                             $("#jumlah_barang" + target).append(
-                                '<input type="number" class="form-control" value="' + row.jumlah_barang + '">'
+                                '<input type="number" class="form-control" value="' + row.jumlah_barang + '" readonly>'
                             );
                             $("#satuan_barang" + target).append(
                                 '<input type="text" class="form-control" value="' + row.satuan_barang + '" readonly>'

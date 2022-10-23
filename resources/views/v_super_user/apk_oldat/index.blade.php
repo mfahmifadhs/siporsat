@@ -138,21 +138,23 @@
                                                 <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
+                                                <div class="col-md-4"><label>Jabatan Pengusul </label></div>
+                                                <div class="col-md-8">: {{ $dataPengajuan->keterangan_pegawai }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
+                                                <div class="col-md-4"><label>Unit Kerja </label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
+                                                <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
+                                            @if($dataPengajuan->jenis_form == 'pengadaan')
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Rencana Pengguna :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
+                                            @endif
                                             <div class="form-group row">
                                                 <div class="col-md-12">
                                                     <table class="table table-responsive table-bordered text-center">
@@ -161,13 +163,15 @@
                                                                 <td>No</td>
                                                                 <td style="width: 15%;">Jenis Barang</td>
                                                                 <td style="width: 20%;">Merk Barang</td>
+                                                                @if($dataPengajuan->jenis_form == 'pengadaan')
                                                                 <td style="width: 40%;">Spesifikasi</td>
                                                                 <td>Jumlah</td>
                                                                 <td>Satuan</td>
-                                                                @if($dataPengajuan->jenis_form == 'pengadaan')
                                                                 <td style="width: 25%;">Estimasi Biaya</td>
                                                                 @else
-                                                                <td style="width: 25%;">Nilai Perolehan</td>
+                                                                <td style="width: 25%;">Pengguna</td>
+                                                                <td style="width: 25%;">Unit Kerja</td>
+                                                                <td style="width: 25%;">Tahun Perolehan</td>
                                                                 @endif
                                                             </tr>
                                                         </thead>
@@ -193,10 +197,9 @@
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
                                                                 <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->spesifikasi_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->jumlah_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->satuan_barang }}</td>
-                                                                <td>Rp {{ number_format($dataBarangPerbaikan->nilai_perolehan, 0, ',', '.') }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->nama_pegawai }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->unit_kerja }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->tahun_perolehan }}</td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
@@ -256,10 +259,17 @@
                                                 <div class="col-md-4"><label>Tanggal Usulan :</label></div>
                                                 <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
+                                            @if($dataPengajuan->jenis_form == 'pengadaan')
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Rencana Pengguna :</label></div>
                                                 <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
+                                            @else
+                                            <div class="form-group row mb-0">
+                                                <div class="col-md-4"><label>Biaya Perbaikan :</label></div>
+                                                <div class="col-md-8">: Rp {{ number_format($dataPengajuan->total_biaya, 0, ',', '.') }}</div>
+                                            </div>
+                                            @endif
                                             <div class="form-group row">
                                                 <div class="col-md-12">
                                                     <table class="table table-responsive table-bordered text-center">
@@ -268,13 +278,15 @@
                                                                 <td>No</td>
                                                                 <td style="width: 15%;">Jenis Barang</td>
                                                                 <td style="width: 20%;">Merk Barang</td>
+                                                                @if($dataPengajuan->jenis_form == 'pengadaan')
                                                                 <td style="width: 40%;">Spesifikasi</td>
                                                                 <td>Jumlah</td>
                                                                 <td>Satuan</td>
-                                                                @if($dataPengajuan == 'pengadaan')
-                                                                <td style="width: 25%;">Estimasi Biaya</td>
+                                                                <td style="width: 25%;">Nilai Perolehan </td>
                                                                 @else
-                                                                <td style="width: 25%;">Nilai Perolehan</td>
+                                                                <td style="width: 25%;">Pengguna</td>
+                                                                <td style="width: 25%;">Unit Kerja</td>
+                                                                <td style="width: 25%;">Tahun Perolehan</td>
                                                                 @endif
                                                             </tr>
                                                         </thead>
@@ -300,10 +312,9 @@
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
                                                                 <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->spesifikasi_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->jumlah_barang }}</td>
-                                                                <td>{{ $dataBarangPerbaikan->satuan_barang }}</td>
-                                                                <td>Rp {{ number_format($dataBarangPerbaikan->nilai_perolehan, 0, ',', '.') }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->nama_pegawai }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->unit_kerja }}</td>
+                                                                <td>{{ $dataBarangPerbaikan->tahun_perolehan }}</td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>

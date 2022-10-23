@@ -93,8 +93,8 @@
                                     </tr>
                                     <tr>
                                         <td>Ditolak</td>
-                                        <td>Sudah BAST (Selesai)</td>
                                         <td>Sedang Proses Pengadaan</td>
+                                        <td>Sudah BAST (Selesai)</td>
                                     </tr>
                                 </thead>
                                 @php $no = 1; $dataChart = json_decode($chartPengajuan) @endphp

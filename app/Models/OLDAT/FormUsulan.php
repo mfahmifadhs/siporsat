@@ -20,8 +20,11 @@ class FormUsulan extends Model
         'kode_form',
         'jenis_form',
         'total_pengajuan',
+        'no_surat_usulan',
         'tanggal_usulan',
-        'jenis_form',
+        'no_surat_bast',
+        'tanggal_bast',
+        'total_biaya',
         'rencana_pengguna',
         'status_pengajuan_id',
         'status_proses_id',
@@ -30,7 +33,8 @@ class FormUsulan extends Model
         'otp_bast_ppk',
         'otp_bast_pengusul',
         'otp_bast_kabag',
-        'konfirmas_pengajuan'
+        'konfirmasi_pengajuan',
+        'lampiran'
     ];
 
     public function barang() {
@@ -46,6 +50,8 @@ class FormUsulan extends Model
     public function detailPerbaikan() {
         return $this->hasMany(FormUsulanPerbaikan::class, 'form_usulan_id', 'id_form_usulan')
             ->join('oldat_tbl_barang','id_barang','barang_id')
-            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id');
+            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
+            ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id');
     }
 }
