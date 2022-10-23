@@ -133,37 +133,34 @@
                                 <p>Daftar Pegawai</p>
                             </a>
                         </li>
-                        <li><hr style="border: 0.5px solid grey;"></li>
+                        <!-- <li class="nav-header font-weight-bold">DATA BMN</li> -->
                         @if(Auth::user()->akses->first()->is_oldat == 1)
-                            <li class="nav-header font-weight-bold">OLDAT & MEUBELAIR</li>
                             <li class="nav-item">
-                                <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('admin-user/oldat/barang/data/semua') ? 'active' : '' }}">
+                                <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link">
                                     <i class="nav-icon fas fa-boxes"></i>
                                     <p>Master Barang</p>
                                 </a>
                             </li>
                         @endif
-                        <li><hr style="border: 0.5px solid grey;"></li>
                         @if(Auth::user()->akses->first()->is_aadb == 1)
-                            <li class="nav-header font-weight-bold">AADB</li>
                             <li class="nav-item">
-                                <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link {{ Request::is('admin-user/aadb/kendaraan') ? 'active' : '' }}">
+                                <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
                                     <i class="nav-icon fas fa-car"></i>
                                     <p>Master Kendaraan</p>
                                 </a>
                             </li>
                         @endif
-                        <li><hr style="border: 0.5px solid grey;"></li>
                         @if(Auth::user()->akses->first()->is_atk == 1)
-                            <li class="nav-header font-weight-bold">ATK</li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin-user/atk/barang/daftar/seluruh-barang') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-pencil-ruler"></i>
+                                    <p>Master ATK</p>
+                                </a>
+                            </li>
                         @endif
-                        <li><hr style="border: 0.5px solid grey;"></li>
                         @if(Auth::user()->akses->first()->is_mtc == 1)
-                            <li class="nav-header font-weight-bold">PEMELIHARAAN</li>
                         @endif
-                        <li><hr style="border: 0.5px solid grey;"></li>
                         @if(Auth::user()->akses->first()->is_mtc == 1)
-                            <li class="nav-header font-weight-bold">RUMAH DINAS</li>
                             <li class="nav-item">
                                 <a href="{{ url('admin-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
                                     <i class="nav-icon fas fa-home"></i>

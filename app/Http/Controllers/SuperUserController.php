@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use Maatwebsite\Excel\Facades\Excel;
 
-use App\Exports\BarangExport;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\JenisUsulan;
 use App\Models\AADB\UsulanAadb;
@@ -14,6 +12,14 @@ use App\Models\AADB\RiwayatKendaraan;
 use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
+use App\Models\atk\Atk;
+use App\Models\atk\JenisAtk;
+use App\Models\atk\KategoriAtk;
+use App\Models\atk\KelompokAtk;
+use App\Models\atk\StokAtk;
+use App\Models\atk\SubKelompokAtk;
+use App\Models\atk\UsulanAtk;
+use App\Models\atk\UsulanAtkDetail;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\FormUsulan;
@@ -24,17 +30,23 @@ use App\Models\RDN\RumahDinas;
 use App\Models\UnitKerja;
 use App\Models\TimKerja;
 use App\Models\Pegawai;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use DB;
-use Validator;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 use Carbon\Carbon;
 
 class SuperUserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
     public function Index()
     {
         if(Auth::user()->pegawai->jabatan_id == 2) {
@@ -50,6 +62,37 @@ class SuperUserController extends Controller
         }
 
         return view('v_super_user.index', compact('usulanOldat','usulanAadb'));
+    }
+
+    public function Profile(Request $request, $id)
+    {
+        $google2fa  = app('pragmarx.google2fa');
+        $secretkey  = $google2fa->generateSecretKey();
+        $keyCek = User::where('id',$id)->first();
+
+        if ($keyCek->secret_key == null) {
+            User::where('id',$id)->update([
+                'secret_key' => encrypt($secretkey)
+            ]);
+        }
+
+        $QR_Image = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $registration_data = Auth::user()->pegawai->nama_pegawai,
+            $registration_data = $secretkey
+        );
+        // dd($google2fa);
+        return view('v_super_user.profil', compact('QR_Image','secretkey'));
+    }
+
+    public function Verification(Request $request, $id)
+    {
+        if ($id == 'cek')
+        {
+            dd('success');
+        } else {
+            return view('v_super_user.verif_docs');
+        }
     }
 
     public function ReportMain()
@@ -137,6 +180,7 @@ class SuperUserController extends Controller
     // ===============================================
     //             RUMAH DINAS NEGARA (RDN)
     // ===============================================
+
     public function Rdn(Request $request)
     {
         $lokasiKota = RumahDinas::select('lokasi_kota')->groupBy('lokasi_kota')->get();
@@ -228,6 +272,147 @@ class SuperUserController extends Controller
                 'message'   => 'not found'
             ], 200);
         }
+    }
+
+    // ===============================================
+    //             ALAT TULIS KANTOR (ATK)
+    // ===============================================
+
+    public function Atk(Request $request, $aksi)
+    {
+        if ($aksi == 'pengadaan') {
+            return view('v_super_user.apk_atk.index_pengadaan');
+        } else {
+            return view('v_super_user.apk_atk.index_distribusi');
+        }
+    }
+
+    public function OfficeStationery(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $atk = ATK::with('KategoriATK')->get();
+            return view('v_super_user.apk_atk.daftar_atk', compact('atk'));
+        }
+    }
+
+    public function SubmissionAtk(Request $request, $aksi, $id)
+    {
+        if($aksi == 'daftar') {
+            $usulan = UsulanAtk::get();
+            return view('v_super_user.apk_atk.daftar_pengajuan', compact('usulan'));
+        } elseif ($aksi == 'proses') {
+            $idFormUsulan = Carbon::now()->format('dmy').$request->id_usulan;
+            $usulan = new UsulanAtk();
+            $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->pegawai_id         = Auth::user()->id;
+            $usulan->jenis_form         = $id;
+            $usulan->total_pengajuan    = $request->total_pengajuan;
+            $usulan->no_surat_usulan    = $request->no_surat_usulan;
+            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->rencana_pengguna   = $request->rencana_pengguna;
+            $usulan->save();
+
+            $atk   = $request->atk_id;
+            $idAtk = UsulanAtkDetail::count();
+            foreach ($atk as $i => $atk_id) {
+                $detail = new UsulanAtkDetail();
+                $detail->id_pengadaan_atk   = $idAtk + 1;
+                $detail->form_usulan_id     = $idFormUsulan;
+                $detail->atk_id             = $atk_id;
+                $detail->jumlah_pengajuan   = $request->jumlah[$i];
+                $detail->satuan             = $request->satuan[$i];
+                $detail->keterangan         = $request->keterangan[$i];
+            }
+            return redirect('super-user/verif/'. $idFormUsulan);
+
+        } elseif ($aksi == 'proses-diterima') {
+
+        } elseif ($aksi == 'proses-ditolak') {
+
+        } else {
+            $totalUsulan    = UsulanAtk::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $kelompokAtk    = KelompokAtk::get();
+            return view('v_super_user.apk_atk.usulan', compact('idUsulan','aksi','kelompokAtk'));
+        }
+    }
+
+    public function Select2Atk(Request $request, $aksi, $id)
+    {
+
+        $search = $request->search;
+        if ($aksi == 1) {
+            if ($search == '') {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk', 'subkelompok_atk')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->where('id_subkelompok_atk', 'like', '%' . $search . '%')
+                    ->orWhere('subkelompok_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 2) {
+            if ($search == '') {
+                $atk  = JenisAtk::select('id_jenis_atk as id','subkelompok_atk_id', 'jenis_atk as nama')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->where('subkelompok_atk_id', $id)
+                    ->get();
+            } else {
+                $atk  = JenisAtk::select('id_jenis_atk','subkelompok_atk_id','jenis_atk')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->where('subkelompok_atk_id', $id)
+                    ->where('id_jenis_atk', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 3) {
+            if ($search == '') {
+                $atk  = KategoriAtk::select('id_kategori_atk as id','jenis_atk_id', 'kategori_atk as nama')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->where('jenis_atk_id', $id)
+                    ->get();
+            } else {
+                $atk  = KategoriAtk::select('id_kategori_atk','jenis_atk_id','kategori_atk')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->where('jenis_atk_id', $id)
+                    ->where('id_kategori_atk', 'like', '%' . $search . '%')
+                    ->orWhere('kategori_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 4) {
+            if ($search == '') {
+                $atk  = Atk::select('id_atk as id','kategori_atk_id', 'merk_atk as nama')
+                    ->orderby('id_atk', 'asc')
+                    ->where('kategori_atk_id', $id)
+                    ->get();
+            } else {
+                $atk  = Atk::select('id_atk','kategori_atk_id','merk_atk')
+                    ->orderby('id_atk', 'asc')
+                    ->where('kategori_atk_id', $id)
+                    ->where('id_atk', 'like', '%' . $search . '%')
+                    ->orWhere('merk_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 5) {
+            $atk  = StokAtk::select('id_stok as id','atk_id','stok_atk as stok', 'satuan')
+                        ->orderby('id_stok', 'asc')
+                        ->where('atk_id', $id)
+                        ->get();
+        }
+
+        $response = array();
+        foreach ($atk as $data) {
+            $response[] = array(
+                "id"     =>  $data->id,
+                "text"   =>  $data->id.' - '.$data->nama,
+                "stok"   =>  $data->stok,
+                "satuan" =>  $data->satuan
+            );
+        }
+
+        return response()->json($response);
     }
 
     // ===============================================
@@ -858,6 +1043,7 @@ class SuperUserController extends Controller
             ], 200);
         }
     }
+
     public function Select2Aadb(Request $request, $aksi)
     {
         if ($aksi == 'kendaraan') {

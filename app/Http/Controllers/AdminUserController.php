@@ -16,7 +16,11 @@ use App\Models\OLDAT\RiwayatBarang;
 use App\Models\Pegawai;
 use App\Models\RDN\KondisiRumah;
 use App\Models\RDN\PenghuniRumah;
-use App\Models\User;
+use App\Models\atk\ATK;
+use App\Models\atk\JenisATK;
+use App\Models\atk\KategoriATK;
+use App\Models\atk\KelompokATK;
+use App\Models\atk\SubKelompokATK;
 use App\Models\RDN\RumahDinas;
 use Carbon\Carbon;
 use Validator;
@@ -30,7 +34,7 @@ class AdminUserController extends Controller
     }
 
     // ====================================================
-    //                    Rumah Dinas
+    //                    RUMAH DINAS
     // ====================================================
 
     public function Rdn(Request $request, $aksi)
@@ -128,6 +132,24 @@ class AdminUserController extends Controller
             }
 
             return redirect('admin-user/rdn/rumah-dinas/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Rumah Dinas');
+        }
+    }
+
+    // ===============================================
+    //             ALAT TULIS KANTOR (ATK)
+    // ===============================================
+
+    public function OfficeStationery(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $kategoriAtk    = KategoriATK::get();
+            $jenisAtk       = JenisATK::get();
+            $subkelompokAtk = SubKelompokATK::get();
+            $kelompokAtk    = KelompokATK::get();
+            $atk = ATK::get();
+            return view('v_admin_user.apk_atk.daftar_atk', compact('kategoriAtk','jenisAtk','subkelompokAtk','kelompokAtk','atk'));
+        } elseif ($aksi == 'tambah') {
+            return view('v_admin_user.apk_atk.tambah_atk');
         }
     }
 
