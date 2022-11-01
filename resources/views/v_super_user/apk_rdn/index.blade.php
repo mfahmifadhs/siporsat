@@ -369,7 +369,7 @@
                             no++,
                             `<b> Gol.` + element.golongan_rumah + `/ NUP.` + element.nup_rumah + `/` + element.lokasi_kota + `</b> <br>` + element.alamat_rumah,
                             element.luas_bangunan + ` m<sup>2</sup> / ` + element.luas_tanah + ` m<sup>2</sup>`,
-                            `<label>` + element.nama_pegawai + `</label>`
+                            element.nama_pegawai == null ? '' : element.nama_pegawai,
 
                         ]).draw(false)
                     })
