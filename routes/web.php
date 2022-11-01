@@ -80,7 +80,12 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'as' => 'admin-user.'], function () {
     Route::get('dashboard', [AdminUserController::class, 'index']);
     Route::get('jabatan', [AdminUserController::class, 'JsonJabatan']);
+    Route::get('profil/{aksi}/{id}', [AdminUserController::class, 'Profile']);
+    Route::get('verif/{aksi}/{id}', [AdminUserController::class, 'Verification']);
+
+    Route::post('profil/{aksi}/{id}', [AdminUserController::class, 'Profile']);
     Route::post('select2/{aksi}', [AdminUserController::class, 'Select2']);
+    Route::post('verif/{aksi}/{id}', [AdminUserController::class, 'Verification'])->middleware('2fa');
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [AdminUserController::class, 'index']);
@@ -99,6 +104,10 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 
     Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
+        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
+        Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterAtk']);
+
+        Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
     });
 
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
@@ -159,18 +168,30 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::post('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
     });
 
+    // atk
     Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
-        Route::get('dashboard/{aksi}', [SuperUserController::class, 'Atk']);
+        Route::get('dashboard', [SuperUserController::class, 'Atk']);
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::get('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
 
+        Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::post('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AtkDashboard']);
 
         Route::get('/grafik', [SuperUserController::class, 'SearchChartDataAtk']);
+    });
+
+    // gedung dan bangunan
+    Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function() {
+        Route::get('dashboard', [SuperUserController::class, 'Gdn']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionGdn']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterGdn']);
+
+        Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterGdn']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionGdn']);
     });
 
     // rumah dinas
@@ -189,6 +210,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('/grafik-laporan', [SuperUserController::class, 'SearchChartReportRdn']);
     });
 
+
     // ppk
     Route::group(['prefix' => 'ppk', 'as' => 'ppk'], function () {
         Route::get('{modul}/{tujuan}/{aksi}/{id}', [SuperUserController::class, 'SubmissionPPK']);
@@ -198,4 +220,27 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 
 });
 
+
+// ====================================================
+//                    USER
+// ====================================================
+Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 'unit-kerja.'], function () {
+    Route::get('dashboard', [UserController::class, 'Index'])->name('user.index');
+    Route::get('profil/{aksi}/{id}', [UserController::class, 'Profile']);
+    Route::get('gdn', [UserController::class, 'Building']);
+    Route::get('verif/{aksi}/{id}', [UserController::class, 'Verification']);
+    Route::get('surat/{aksi}/{id}', [UserController::class, 'Letter']);
+
+
+    Route::post('profil/{aksi}/{id}', [UserController::class, 'Profile']);
+    Route::post('verif/{aksi}/{id}', [UserController::class, 'Verification'])->middleware('2fa');
+
+    Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function () {
+        Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
+        Route::get('js/{aksi}/{id}', [UserController::class, 'JsGdn']);
+
+        Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
+    });
+
+});
 

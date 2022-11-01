@@ -26,9 +26,9 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>surat pengajuan usulan</b></h5>
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $dataUsulan->unit_kerja.' '.$dataUsulan->unit_utama }}</b></h5>
+                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                 </h2>
             </div>
             <div class="col-md-2">
@@ -42,8 +42,9 @@
         </div>
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
-                <div class="form-group row mb-4">
-                    <div class="col-md-12 text-uppercase text-center">{{ $dataUsulan->no_surat_usulan }}</div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-2">Nomor Surat</div>
+                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
@@ -72,7 +73,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsive mt-4">
+            <div class="col-12 table-responsive mt-4 mb-5">
                 @if($dataUsulan->jenis_form == '1')
                 <table class="table table-bordered m-0">
                     <thead>
@@ -179,18 +180,28 @@
                 </table>
                 @endif
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 15vh;">
-                <div class="text-center text-capitalize">
-                    <label>Yang Mengusulkan, <br> {{ $dataUsulan->jabatan.' '.$dataUsulan->tim_kerja }}</label>
-                    <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_pengusul) !!}</p>
-                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+            <div class="col-md-12">
+                <div class="row text-center">
+                    <label class="col-sm-6">Yang Mengusulkan, <br> Ketua Tim Kerja {{ $dataUsulan->tim_kerja }}</label>
+                    @if ($dataUsulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                    @endif
                 </div>
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 15vh;">
-                <div class="text-center text-capitalize">
-                    <label>Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p>{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_bast_kabag) !!}</p>
-                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+            <div class="col-md-12 mt-4">
+                <div class="row text-center">
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
+                    @if ($dataUsulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$dataUsulan->otp_usulan_kabag) !!}</label>
+                    @endif
+                </div>
+            </div>
+            <div class="col-md-12 mt-4">
+                <div class="row text-center">
+                    <label class="col-sm-6">{{ $dataUsulan->nama_pegawai }}</label>
+                    @if ($dataUsulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
+                    @endif
                 </div>
             </div>
         </div>

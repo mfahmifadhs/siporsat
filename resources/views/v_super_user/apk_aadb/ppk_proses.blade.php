@@ -110,13 +110,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. Plat RHS (*)</label>
+                        <label class="col-sm-2 col-form-label">No. Plat RHS</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-uppercase" name="no_plat_rhs" required>
+                            <input type="text" class="form-control text-uppercase" name="no_plat_rhs">
                         </div>
                         <label class="col-sm-2 col-form-label">Masa Berlaku STNK RHS</label>
                         <div class="col-sm-4">
-                            <input type="date" class="form-control" name="mb_stnk_plat_rhs" required>
+                            <input type="date" class="form-control" name="mb_stnk_plat_rhs">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -153,20 +153,10 @@
                             </p>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-12 text-muted">Verifikasi Dokumen</label>
-                        <label class="col-sm-2 col-form-label">Kode OTP</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="otp_bast_ppk" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">&nbsp;</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -281,18 +271,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 text-muted">Verifikasi Dokumen</label>
-                        <label class="col-sm-3 col-form-label">Kode OTP</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="otp_bast_ppk" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -382,18 +363,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 col-form-label">Verifikasi Dokumen</label>
-                        <label class="col-sm-3 col-form-label">Kode OTP</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="otp_bast_ppk" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -487,23 +459,10 @@
                         </div>
                     </div>
                     @endforeach
-                    <div class="form-group row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Verifikasi Dokumen</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Kode OTP</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_otp_usulan" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">&nbsp;</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>

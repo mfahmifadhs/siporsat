@@ -24,9 +24,9 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>surat pengajuan usulan</b></h5>
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_kerja.' '.$bast->unit_utama }}</b></h5>
+                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                 </h2>
             </div>
             <div class="col-md-2">
@@ -40,8 +40,9 @@
         </div>
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
-                <div class="form-group row mb-4">
-                    <div class="col-md-12">pengajuan usulan {{ $bast->jenis_form_usulan }}</div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-2">Nomor Surat</div>
+                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
@@ -66,7 +67,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsive mt-4">
+            <div class="col-12 table-responsive mt-4 mb-5">
                 @if($bast->jenis_form == '1')
                 <table class="table table-bordered m-0">
                     <thead>
@@ -192,31 +193,31 @@
                 </table>
                 @endif
             </div>
-            <div class="col-md-4 form-group" style="margin-top: 5vh;">
-                <div class="text-center text-capitalize">
-                    <label>Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
-                    <p style="margin-top: 6vh;">
-                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_ppk) !!}
-                    </p>
-                    <label class="text-underline">Marten Avero</label>
+            <div class="col-md-12 text-capitalize">
+                <div class="row text-center">
+                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                    <label class="col-sm-4">Yang Menerima, <br> Pengusul </label>
+                    @if($bast->status_proses_id == 5)
+                    <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->keterangan_pegawai }}</label>
+                    @endif
                 </div>
             </div>
-            <div class="col-md-4 form-group" style="margin-top: 5vh;">
-                <div class="text-center text-capitalize">
-                    <label>Yang Menerima, <br> {{ $bast->jabatan.' '.$bast->tim_kerja }}</label>
-                    <p style="margin-top: 6vh;">
-                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}
-                    </p>
-                    <label class="text-underline">{{ $bast->nama_pegawai }}</label>
+            <div class="col-md-12 text-capitalize">
+                <div class="row text-center">
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_ppk) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                    @if($bast->status_proses_id == 5)
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_kabag) !!}</label>
+                    @endif
                 </div>
             </div>
-            <div class="col-md-4 form-group" style="margin-top: 5vh;">
-                <div class="text-center text-capitalize">
-                    <label>Mengetahui, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p style="margin-top: 6vh;">
-                        {!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_kabag) !!}
-                    </p>
-                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+            <div class="col-md-12 text-capitalize">
+                <div class="row text-center">
+                    <label class="col-sm-4">Marten Avero, Skm</label>
+                    <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
+                    @if($bast->status_proses_id == 5)
+                    <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
+                    @endif
                 </div>
             </div>
         </div>

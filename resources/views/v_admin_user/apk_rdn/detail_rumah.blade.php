@@ -10,8 +10,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('admin-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/oldat/barang/data/semua') }}">Daftar Barang</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('admin-user/rdn/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}">Daftar Rumah</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -86,7 +86,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Masa Berakhir SIP </label>
                                         <div class="col-md-10">
-                                            <input type="date" name="masa_berakhir_sip" class="form-control" value="{{ \Carbon\Carbon::parse($penghuni->masa_berlaku_sip)->isoFormat('Y-MM-DD') }}">
+                                            <input type="date" name="masa_berakhir_sip" class="form-control" value="{{ \Carbon\Carbon::parse($penghuni->masa_berakhir_sip)->isoFormat('Y-MM-DD') }}">
                                         </div>
                                     </div>
                                     <div class="form-group row">

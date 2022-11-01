@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('dist_admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('dist_admin/plugins/select2/css/select2.min.css') }}">
+    @yield('css')
 </head>
 
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
@@ -135,9 +136,9 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-header font-weight-bold">Pengelolaan OLDAT & Meubelair</li> -->
+                        <li class="nav-header font-weight-bold">Pemeliharaan</li>
                         <li class="nav-item">
-                            <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link {{ Request::is('super-user/oldat/dashboard') ? 'active' : '' }}">
+                            <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-laptop"></i>
                                 <p>
                                     Oldat & Meubelair
@@ -147,31 +148,31 @@
                             <ul class="nav nav-treeview ">
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-home"></i>
+                                        <i class="nav-icon fas fa-homes"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                        <i class="nav-icon fas fa-hand-holdings-usd"></i>
                                         <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/barang/daftar/seluruh-barang') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-boxes"></i>
+                                        <i class="nav-icon fas fa-boxess"></i>
                                         <p>Master Barang</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
+                                        <i class="nav-icon fas fa-copys"></i>
                                         <p>Rekapitulasi</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-bar"></i>
+                                        <i class="nav-icon fas fa-chart-bars"></i>
                                         <p>
                                             Laporan Oldat
                                             <i class="right fas fa-angle-left"></i>
@@ -180,13 +181,13 @@
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/oldat/laporan/pengadaan/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Pengadaan</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/oldat/laporan/perbaikan/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Perbaikan</p>
                                             </a>
                                         </li>
@@ -206,31 +207,31 @@
                             <ul class="nav nav-treeview ">
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-home"></i>
+                                        <i class="nav-icon fas fa-homes"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
                                         <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-car"></i>
+                                        <i class="nav-icon fas fa-cars"></i>
                                         <p>Master AADB</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/rekapitulasi') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-file"></i>
+                                        <i class="nav-icon fas fa-files"></i>
                                         <p>Rekapitulasi</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-bar"></i>
+                                        <i class="nav-icon fas fa-chart-bars"></i>
                                         <p>
                                             Laporan Aadb
                                             <i class="right fas fa-angle-left"></i>
@@ -239,13 +240,13 @@
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/aadb/laporan/pengadaan/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Pengadaan</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/aadb/laporan/servis/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Servis</p>
                                             </a>
                                         </li>
@@ -276,38 +277,39 @@
                             </a>
                             <ul class="nav nav-treeview ">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link font-weight-bold">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
-                                        <p>
-                                            Dashboard
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                    <a href="{{ url('super-user/atk/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Dashboard</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/atk/dashboard/distribusi') }}" class="nav-link">
-                                                <i class="nav-icon fas fa"></i>
-                                                <p>Distribusi</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('super-user/atk/dashboard/pengadaan') }}" class="nav-link">
-                                                <i class="nav-icon fas fa"></i>
-                                                <p>Pengadaan</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/atk/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
                                         <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/atk/barang/daftar/semua') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-pencil-ruler"></i>
+                                        <i class="nav-icon fas fa-pencil-rulers"></i>
                                         <p>Master ATK</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Gedung & Bangunan -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>
+                                    Gedung & Bangunan
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/gdn/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Dashboard</p>
                                     </a>
                                 </li>
                             </ul>
@@ -317,7 +319,7 @@
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-house-user"></i>
                                 <p>
-                                    Rumah Dinas
+                                    Rumah Dinas Negara
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>

@@ -77,11 +77,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ Auth::user()->pegawai->nama_pegawai }}</b>
+                        <b>Super Admin</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            {{ Auth::user()->pegawai->nama_pegawai }} <br> Super Admin
+                            Super Admin
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">

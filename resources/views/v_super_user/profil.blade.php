@@ -4,6 +4,7 @@
 
 <div class="container">
     <div class="row justify-content-center align-items-center h-70">
+        @if(Auth::user()->status_google2fa == 0)
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading font-weight-bold">Set up Google Authenticator</div>
@@ -28,6 +29,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 

@@ -80,7 +80,7 @@ class AuthController extends Controller
         }
         elseif (Auth::check() && Auth::user()->level_id == 4)
         {
-            return redirect('user/dashboard');
+            return redirect('unit-kerja/dashboard');
         }
     }
 

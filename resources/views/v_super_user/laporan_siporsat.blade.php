@@ -26,7 +26,7 @@
                                 <table id="table" class="table table-striped table-bordered text-center">
                                     <thead>
                                         <tr>
-                                            <td colspan="5">Bulan</td>
+                                            <td colspan="5">{{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="5">Total Usulan Penyediaan Barang / Jasa </td>
@@ -38,16 +38,16 @@
                                         </tr>
                                         <tr>
                                             <td>Ditolak</td>
-                                            <td>Sudah BAST (Selesai)</td>
                                             <td>Sedang Proses Pengadaan</td>
+                                            <td>Sudah BAST (Selesai)</td>
                                         </tr>
                                     </thead>
                                     @php $no = 1; @endphp
-                                    <tbody>
+                                    <tbody class="text-uppercase">
                                         @foreach($reportOldat as $report)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $report['usulan'] }}</td>
+                                            <td>{{ $report['usulan'] }} OLDAT</td>
                                             <td>{{ $report['ditolak'] }}</td>
                                             <td>{{ $report['proses'] }}</td>
                                             <td>{{ $report['selesai'] }}</td>
@@ -57,6 +57,15 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $report['usulan'] }}</td>
+                                            <td>{{ $report['ditolak'] }}</td>
+                                            <td>{{ $report['proses'] }}</td>
+                                            <td>{{ $report['selesai'] }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @foreach($reportAtk as $report)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $report['usulan'] }} ATK</td>
                                             <td>{{ $report['ditolak'] }}</td>
                                             <td>{{ $report['proses'] }}</td>
                                             <td>{{ $report['selesai'] }}</td>

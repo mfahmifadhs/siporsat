@@ -131,16 +131,19 @@
                                                 <label>Hak Akses :</label>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <input type="checkbox" name="is_oldat" value="{{ $row->is_oldat }}" <?php if ($row->is_oldat == 1) echo "checked"; ?>> Pengelola Olah Data (BMN)
+                                                        <input type="checkbox" name="is_oldat" value="1" <?php if ($row->is_oldat == 1) echo "checked"; ?>> Pengelola Olah Data (BMN)
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="checkbox" name="is_aadb" value="{{ $row->is_oldat }}" <?php if ($row->is_aadb == 1) echo "checked"; ?>> Pengelola AADB
+                                                        <input type="checkbox" name="is_aadb" value="1" <?php if ($row->is_aadb == 1) echo "checked"; ?>> Pengelola AADB
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="checkbox" name="is_atk" value="{{ $row->is_oldat }}" <?php if ($row->is_atk == 1) echo "checked"; ?>> Pengelola ATK
+                                                        <input type="checkbox" name="is_atk" value="1" <?php if ($row->is_atk == 1) echo "checked"; ?>> Pengelola ATK
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="checkbox" name="is_mtc" value="{{ $row->is_oldat }}" <?php if ($row->is_mtc == 1) echo "checked"; ?>> Pengelola Pemeliharaan
+                                                        <input type="checkbox" name="is_mtc" value="1" <?php if ($row->is_mtc == 1) echo "checked"; ?>> Pengelola Gedung / Bangunan
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="checkbox" name="is_rdn" value="1" <?php if ($row->is_rdn == 1) echo "checked"; ?>> Pengelola Rumah Dinas Negara
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,6 +235,9 @@
                             </div>
                             <div class="col-md-6">
                                 <input type="checkbox" name="is_mtc" value="1"> Pengelola Pemeliharaan
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_rdn" value="1"> Pengelola Rumah Dinas
                             </div>
                         </div>
                     </div>
