@@ -39,14 +39,15 @@
             <div class="card">
                 <div class="card-header font-weight-bold">
                     @if($id == 'pengadaan')
-                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Pengadaan Kendaraan </h3>
+                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Pengadaan Oldat </h3>
                     @else
-                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Perbaikan Kendaraan </h3>
+                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Perbaikan Oldat </h3>
                     @endif
                 </div>
                 <div class="card-body">
                     <form class="form-pengajuan" action="{{ url('super-user/oldat/pengajuan/proses-pengajuan/'. $id ) }}" method="POST">
                         <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
+                        <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                         <span id="kode_otp"></span>
                         @csrf
                         <div class="form-group row">
@@ -194,29 +195,10 @@
                             </div>
                         </div>
                         @endif
-                        <div class="form-group row mt-4">
-                            <label class="text-muted col-md-12">Verifikasi Pengajuan</label>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Verifikasi Kode OTP</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Verifikasi Melalui Email</label>
-                            <div class="col-sm-10">
-                                {{-- <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required> --}}
-                                {{-- <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a> --}}
-                                <a class="btn btn-primary btn mt-2" id="btn-kirim-email">Kirim Link Verifikasi</a>
-                            </div>
-                        </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">&nbsp;</label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
                                 <button type="reset" class="btn btn-default">BATAL</button>
                             </div>
                         </div>
@@ -452,16 +434,7 @@
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
             console.log(inputOTP)
-            if (inputOTP == '') {
-                alert('Mohon isi kode OTP yang diterima')
-            } else if (inputOTP == resOTP) {
-                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
-                alert('Kode OTP Benar')
-                $('#btnSubmit').prop('disabled', false)
-            } else {
-                alert('Kode OTP Salah')
-                $('#btnSubmit').prop('disabled', true)
-            }
+            $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
     });
 </script>

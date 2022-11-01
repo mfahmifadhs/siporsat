@@ -25,9 +25,9 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>surat pengajuan usulan</b></h5>
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_kerja.' '.$usulan->unit_utama }}</b></h5>
+                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                 </h2>
             </div>
             <div class="col-md-2">
@@ -71,7 +71,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsive">
+            <div class="col-12 table-responsive mb-5">
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -83,7 +83,7 @@
                             @if($usulan->jenis_form == 'pengadaan')
                             <th>Estimasi Biaya</th>
                             @else
-                            <th>Nilai Perolehan</th>
+                            <th>Tahun Perolehan</th>
                             @endif
                         </tr>
                     </thead>
@@ -97,7 +97,7 @@
                             <td>{{ $dataBarang->merk_barang }}</td>
                             <td>{{ $dataBarang->jumlah_barang }}</td>
                             <td>{{ $dataBarang->satuan_barang }}</td>
-                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                         </tr>
                         @endforeach
                         @else
@@ -115,22 +115,28 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10vh;">
-                <div class="text-center text-capitalize">
-                    <label>Yang Mengusulkan, <br> {{ $usulan->jabatan.' '.$usulan->tim_kerja }}</label>
-                    <p style="margin-top:2vh;">
-                        {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$usulan->kode_otp_bast) !!}
-                    </p>
-                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+            <div class="col-md-12">
+                <div class="row text-center">
+                    <label class="col-sm-6">Yang Mengusulkan, <br> Ketua Tim Kerja {{ $usulan->tim_kerja }}</label>
+                    @if ($usulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                    @endif
                 </div>
             </div>
-            <div class="col-md-6 form-group" style="margin-top: 10vh;">
-                <div class="text-center text-capitalize">
-                    <label>Disetujui Oleh, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
-                    <p style="margin-top:4vh;">
-                        {!! QrCode::size(100)->generate('https://www.siporsat-kemenkes.com/bast/'.$usulan->kode_otp_bast) !!}
-                    </p>
-                    <label class="text-underline">{{ $pimpinan->nama_pegawai }}</label>
+            <div class="col-md-12 mt-4">
+                <div class="row text-center">
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$usulan->otp_usulan_pengusul) !!}</label>
+                    @if ($usulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$usulan->otp_usulan_kabag) !!}</label>
+                    @endif
+                </div>
+            </div>
+            <div class="col-md-12 mt-4">
+                <div class="row text-center">
+                    <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
+                    @if ($usulan->otp_usulan_kabag != null)
+                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
+                    @endif
                 </div>
             </div>
         </div>

@@ -301,11 +301,11 @@ class SuperAdminController extends Controller
         if ($aksi == 'data') {
             $level     = Level::get();
             $unitKerja = UnitKerja::get();
-            $pegawai   = Pegawai::get();
+            $pegawai   = Pegawai::orderBy('nama_pegawai')->get();
             $pengguna  = UserAkses::rightjoin('users','users.id','tbl_users_akses.user_id')
-                ->join('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'users.pegawai_id')
-                ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-                ->join('tbl_unit_utama', 'tbl_unit_utama.id_unit_utama', 'tbl_unit_kerja.unit_utama_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'users.pegawai_id')
+                ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->leftjoin('tbl_unit_utama', 'tbl_unit_utama.id_unit_utama', 'tbl_unit_kerja.unit_utama_id')
                 ->join('tbl_level', 'tbl_level.id_level', 'users.level_id')
                 ->get();
             return view('v_super_admin.daftar_pengguna', compact('level', 'unitKerja', 'pegawai', 'pengguna'));
@@ -341,6 +341,7 @@ class SuperAdminController extends Controller
 
             }
         } elseif ($aksi == 'proses-ubah') {
+
             $cekData = User::where('username', $request->username)->where('id', $id)->count();
             if ($cekData == 0) {
                 $cekUsername  = Validator::make($request->all(), [
@@ -389,14 +390,17 @@ class SuperAdminController extends Controller
             $pegawai   = Pegawai::leftjoin('tbl_pegawai_jabatan', 'tbl_pegawai_jabatan.id_jabatan', 'tbl_pegawai.jabatan_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->orderBy('nama_pegawai')
                 ->get();
+
             return view('v_super_admin.daftar_pegawai', compact('jabatan', 'timKerja', 'unitKerja', 'pegawai'));
         } elseif ($aksi == 'proses-tambah') {
-            $cekData = Pegawai::count();
+            $cekData   = Pegawai::count();
+            $idPegawai = str_pad($cekData + 1, 4, 0, STR_PAD_LEFT);
             $pegawai = new Pegawai();
-            $pegawai->id_pegawai         = $cekData + 1;
+            $pegawai->id_pegawai         = '100122'.$idPegawai;
             $pegawai->nip_pegawai        = $request->input('nip');
-            $pegawai->nama_pegawai       = $request->input('nama_pegawai');
+            $pegawai->nama_pegawai       = strtoupper($request->input('nama_pegawai'));
             $pegawai->nohp_pegawai       = $request->input('nohp_pegawai');
             $pegawai->jabatan_id         = $request->input('id_jabatan');
             $pegawai->tim_kerja_id       = $request->input('id_tim_kerja');

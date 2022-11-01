@@ -18,8 +18,6 @@
     </div>
 </div>
 
-@if ($aksi == 'pengadaan')
-
 <section class="content">
     <div class="container">
         <div class="col-md-12 form-group">
@@ -35,7 +33,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Pengadaan ATK </h3>
+                <h3 class="card-title">Usulan Pengajuan {{ $aksi }} ATK </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/atk/usulan/proses/'. $aksi) }}" method="POST">
@@ -45,7 +43,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/pengadaan/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -75,7 +73,6 @@
         </div>
     </div>
 </section>
-@endif
 
 @section('js')
 <script>
@@ -84,14 +81,11 @@
     $(function() {
         let total = 1
         let j = 0
-
         // More Item
         $('#btn-total').click(function() {
             let aksi = "{{ $aksi }}"
             total = ($('#jumlahAtk').val())
             j = 1
-
-            if (aksi == 'pengadaan') {
                 $("#section-atk").empty()
                 for (let i = 1; i <= total; i++) {
                     $("#section-atk").append(
@@ -140,7 +134,11 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Jumlah (*)</label>
                             <div class="col-sm-4">
+                                @if ($aksi == 'pengadaan')
                                 <input type="number" class="form-control" name="jumlah[]" minLength="1" placeholder="MASUKAN JUMLAH BARANG" required>
+                                @else
+                                <span id="jumlahDistribusi`+ i +`"><input class="form-control" placeholder="MASUKAN JUMLAH BARANG" readonly></span>
+                                @endif
                             </div>
                             <label class="col-sm-2 col-form-label">Satuan</label>
                             <div class="col-sm-4">
@@ -149,7 +147,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
                             </div>
                         </div>
@@ -164,7 +162,7 @@
                         </div>
                     </div>`
                 )
-            }
+
 
             for (j = 1; j <= total; j++) {
                 for (let i = 1; i <= 4; i++) {
@@ -288,6 +286,7 @@
                                 $("#stok" + target).empty();
                                 $("#satuan1" + target).empty();
                                 $("#satuan2" + target).empty();
+                                $("#jumlahDistribusi" + target).empty();
                                 $.each(res, function(index, row) {
                                     $("#stok" + target).append(
                                         '<input type="number" class="form-control" value="' + row.stok + '" readonly>'
@@ -297,6 +296,9 @@
                                     )
                                     $("#satuan2" + target).append(
                                         '<input type="text" class="form-control" name="satuan[]" value="' + row.satuan + '" readonly>'
+                                    )
+                                    $("#jumlahDistribusi" + target).append(
+                                        '<input type="number" class="form-control" name="jumlah[]" min="1" max="'+ row.stok +'" required>'
                                     )
                                 });
                             } else {

@@ -26,7 +26,8 @@ class User extends Authenticatable
         'password',
         'google2fa_secret',
         'sess_modul',
-        'sess_form_id'
+        'sess_form_id',
+        'status_google2fa'
     ];
 
     public function pegawai() {

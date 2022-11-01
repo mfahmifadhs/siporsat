@@ -208,26 +208,12 @@
                                                 </div>
                                                 @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
                                                 <div class="col-md-12">
-                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <a href="{{ url('super-user/verif/usulan-oldat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah usulan ini disetujui ?')">Submit</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">BATAL</button>
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             </div>
@@ -323,59 +309,22 @@
                                                 </div>
                                                 @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id && $dataPengajuan->status_proses_id == 3)
                                                 <div class="col-md-12">
-                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="status_usulan" value="4">
-                                                        <div class="form-group row mt-4">
-                                                            <div class="col-sm-10">
-                                                                <label>Apakah semua barang telah diterima dengan baik ?</label><br>
-                                                                <input type="radio" name="konfirmasi" value="1"> Ya
-                                                                <input type="radio" name="konfirmasi" value="1"> Tidak
-                                                            </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <a href="{{ url('super-user/verif/usulan-oldat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah usulan ini disetujui ?')">Submit</a>
+                                                            <button type="reset" class="btn btn-default">BATAL</button>
                                                         </div>
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                                 @endif
                                                 @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 4)
                                                 <div class="col-md-12">
-                                                    <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="status_usulan" value="5">
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <a href="{{ url('super-user/verif/usulan-oldat/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah usulan ini disetujui ?')">Submit</a>
+                                                            <button type="reset" class="btn btn-default">BATAL</button>
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             </div>
@@ -500,16 +449,7 @@
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
             console.log(inputOTP)
-            if (inputOTP == '') {
-                alert('Mohon isi kode OTP yang diterima')
-            } else if (inputOTP == resOTP) {
-                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
-                alert('Kode OTP Benar')
-                $('#btnSubmit').prop('disabled', false)
-            } else {
-                alert('Kode OTP Salah')
-                $('#btnSubmit').prop('disabled', true)
-            }
+            $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
     })
 
@@ -549,9 +489,9 @@
     }
 
     $('body').on('click', '#searchChartData', function() {
-        let tahun       = $('input[name="tahun"').val()
-        let unit_kerja  = $('select[name="unit_kerja"').val()
-        let tim_kerja   = $('select[name="tim_kerja"').val()
+        let tahun = $('input[name="tahun"').val()
+        let unit_kerja = $('select[name="unit_kerja"').val()
+        let tim_kerja = $('select[name="tim_kerja"').val()
         let url = ''
         if (tahun || unit_kerja || tim_kerja) {
             url = '<?= url("/super-user/oldat/grafik?tahun='+tahun+'&unit_kerja='+unit_kerja+'&tim_kerja='+tim_kerja+'") ?>'

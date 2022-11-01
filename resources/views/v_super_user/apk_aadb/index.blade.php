@@ -82,7 +82,7 @@
                                     <label class="col-md-4 col-6">Pengusul</label>
                                     <div class="col-md-8 col-6">: {{ $dataPengajuan->nama_pegawai }}</div>
                                     <label class="col-md-4 col-6">Jumlah Usulan</label>
-                                    <div class="col-md-8 col-6">: {{ $dataPengajuan->total_pengajuan }} barang</div>
+                                    <div class="col-md-8 col-6">: {{ $dataPengajuan->total_pengajuan }} kendaraan</div>
                                     <div class="col-md-12 col-12">
                                         <small>
                                             <a class="btn btn-primary btn-sm mt-2" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
@@ -140,29 +140,29 @@
                                                 usulan {{ $dataPengajuan->jenis_form_usulan }} aadb
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                                <div class="col-md-2"><label>Nama Pengusul </label></div>
+                                                <div class="col-md-10">: {{ $dataPengajuan->nama_pegawai }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
+                                                <div class="col-md-2"><label>Jabatan Pengusul</label></div>
+                                                <div class="col-md-10">: {{ $dataPengajuan->jabatan }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
+                                                <div class="col-md-2"><label>Unit Kerja</label></div>
+                                                <div class="col-md-10">: {{ $dataPengajuan->unit_kerja }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
-                                                <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                                <div class="col-md-2"><label>Tanggal Usulan</label></div>
+                                                <div class="col-md-10">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                             </div>
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Total Pengajuan :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
+                                                <div class="col-md-2"><label>Total Pengajuan</label></div>
+                                                <div class="col-md-10">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
                                             </div>
                                             @if($dataPengajuan->jenis_form == 1)
                                             <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Rencana Pengguna :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
+                                                <div class="col-md-2"><label>Rencana Pengguna</label></div>
+                                                <div class="col-md-10">: {{ $dataPengajuan->rencana_pengguna }}</div>
                                             </div>
                                             @endif
                                             <div class="form-group row">
@@ -296,20 +296,9 @@
                                                             @endif
                                                         </table>
                                                         @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -321,20 +310,9 @@
                                                 <div class="col-md-12">
                                                     <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
                                                         @csrf
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -352,7 +330,7 @@
                                     <div class="modal-content">
                                         <div class="modal-body text-capitalize">
                                             <div class="text-uppercase text-center font-weight-bold mb-4">
-                                                konfirmasi penerimaan barang
+                                                konfirmasi penerimaan kendaraan
                                             </div>
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-4"><label>Nama Pengusul </label></div>
@@ -499,20 +477,9 @@
                                                                 <input type="radio" name="konfirmasi" value="1"> Tidak
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row mt-4">
-                                                            <label class="text-muted col-md-12">Verifikasi Pengajuan Diterima</label>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>
@@ -523,18 +490,9 @@
                                                 <div class="col-md-12">
                                                     <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
                                                         @csrf
-                                                        <input type="hidden" name="status_usulan" value="5">
-                                                        <div class="form-group row mt-4">
-                                                            <!-- <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label> -->
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control" name="kode_otp" id="inputOTP{{ $dataPengajuan->id_form_usulan }}" placeholder="Masukan Kode OTP" required>
-                                                                <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP" data-idtarget="{{ $dataPengajuan->id_form_usulan }}">Cek OTP</a>
-                                                                <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')" disabled>Submit</button>
+                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
                                                                 <button type="reset" class="btn btn-default">BATAL</button>
                                                             </div>
                                                         </div>

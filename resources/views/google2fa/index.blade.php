@@ -1,4 +1,17 @@
-@extends('v_super_user.layout.app')
+@php
+    if (Auth::user()->level_id == '2') {
+        $extend = 'v_admin_user.layout.app';
+        $url    = 'admin-user/verif/usulan/cek';
+    } elseif (Auth::user()->level_id == '3') {
+        $extend = 'v_super_user.layout.app';
+        $url     = 'super-user/verif/usulan/cek';
+    } elseif (Auth::user()->level_id == 4) {
+        $extend = 'v_user.layout.app';
+        $url     = 'unit-kerja/verif/usulan/cek';
+    }
+@endphp
+
+@extends($extend)
 
 @section('content')
 
@@ -21,7 +34,7 @@
                     <div class="panel-heading font-weight-bold">Verifikasi Dokumen</div>
                     <hr>
                     <div class="panel-body">
-                        <form class="form-horizontal" method="POST" action="{{ url('super-user/verif/usulan/cek') }}">
+                        <form class="form-horizontal" method="POST" action="{{ url($url) }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="modul" value="{{ Auth::user()->sess_modul }}">
                             <input type="hidden" name="form_id" value="{{ Auth::user()->sess_form_id }}">
@@ -36,13 +49,13 @@
 
 
                                 <div class="col-md-12">
-                                    <input id="one_time_password" type="number" class="form-control text-center" name="one_time_password" required autofocus>
+                                    <input id="one_time_password" type="number" class="form-control text-center" name="one_time_password" minLength="6" maxLength="6" required autofocus>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-12 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Verifikasi Dokumen ?')">
                                         Submit
                                     </button>
                                 </div>
@@ -53,6 +66,7 @@
             </div>
         </div>
     </section>
+</div>
 
 
 

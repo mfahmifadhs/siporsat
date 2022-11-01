@@ -14,8 +14,8 @@ $jabatan = $user->jabatan; ?>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#"> Dashboard OLDAT</a></li>
-                    <li class="breadcrumb-item active">Dashboard OLDAT</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active">Daftar Usulan Oldat</li>
                 </ol>
             </div>
         </div>
@@ -63,29 +63,43 @@ $jabatan = $user->jabatan; ?>
                             <td>{{ $row->rencana_pengguna }}</td>
                             <td class="text-center">
                                 @if($row->status_pengajuan_id == 1)
-                                <span class="border border-success text-success p-1">disetujui</span>
+                                <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                 @elseif($row->status_pengajuan_id == 2)
-                                <span class="border border-danger text-danger p-1">ditolak</span>
+                                <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
                                 @endif
                             </td>
                             <td class="text-center">
                                 @if($row->status_proses_id == 1)
-                                <span class="border border-warning text-warning p-1">menunggu persetujuan</span>
+                                <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
                                 @elseif ($row->status_proses_id == 2)
-                                <span class="border border-warning text-warning p-1">usulan sedang diproses</span>
+                                <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                 @elseif ($row->status_proses_id == 3)
-                                <span class="border border-success text-success p-1">menunggu konfirmasi pengusul</span>
+                                <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
                                 @elseif ($row->status_proses_id == 4)
-                                <span class="border border-success text-success p-1">menunggu konfirmasi kabag rt</span>
+                                <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi kabag rt</span>
                                 @elseif ($row->status_proses_id == 5)
-                                <span class="border border-success text-success p-1">selesai</span>
+                                <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                 @endif
                             </td>
                             <td>
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
+
                                 <div class="dropdown-menu">
+                                    @if (Auth::user()->pegawai->jabatan_id == 2 && $row->status_proses_id == 1)
+                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/pengajuan/persetujuan/'. $row->id_form_usulan) }}">
+                                        <i class="fas fa-arrow-alt-circle-right"></i> Proses
+                                    </a>
+                                    @elseif (Auth::user()->pegawai->jabatan_id == 5 && $row->status_proses_id == 2)
+                                    <a class="dropdown-item btn" href="{{ url('super-user/ppk/oldat/pengajuan/'. $row->jenis_form.'/'. $row->id_form_usulan) }}">
+                                        <i class="fas fa-arrow-alt-circle-right"></i> Proses Penyerahan
+                                    </a>
+                                    @elseif ($row->status_proses_id == 4)
+                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/surat-bast/'. $row->id_form_usulan) }}">
+                                        <i class="fas fa-arrow-alt-circle-right"></i> BAST
+                                    </a>
+                                    @endif
                                     <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $row->id_form_usulan }}">
                                         <i class="fas fa-info-circle"></i> Detail
                                     </a>
@@ -97,27 +111,27 @@ $jabatan = $user->jabatan; ?>
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         @if($row->status_pengajuan_id == '')
-                                            <span class="border border-warning">
-                                                <b class="text-warning p-3">menunggu persetujuan</b>
-                                            </span>
+                                        <span class="border border-warning">
+                                            <b class="text-warning p-3">menunggu persetujuan</b>
+                                        </span>
                                         @elseif ($row->status_pengajuan_id == 1)
-                                            @if($row->status_proses_id == 2)
-                                            <span class="border border-warning">
-                                                <b class="text-warning p-3">usulan sedang diproses</b>
-                                            </span>
-                                            @elseif($row->status_proses_id == 3)
-                                            <span class="border border-warning">
-                                                <b class="text-warning p-3">menunggu konfirmasi pengusul</b>
-                                            </span>
-                                            @elseif($row->status_proses_id == 4)
-                                            <span class="border border-warning">
-                                                <b class="text-warning p-3">menunggu konfirmasi kabag rt</b>
-                                            </span>
-                                            @elseif($row->status_proses_id == 5)
-                                            <span class="border border-warning">
-                                                <b class="text-warning p-3">selesai</b>
-                                            </span>
-                                            @endif
+                                        @if($row->status_proses_id == 2)
+                                        <span class="border border-warning">
+                                            <b class="text-warning p-3">usulan sedang diproses</b>
+                                        </span>
+                                        @elseif($row->status_proses_id == 3)
+                                        <span class="border border-warning">
+                                            <b class="text-warning p-3">menunggu konfirmasi pengusul</b>
+                                        </span>
+                                        @elseif($row->status_proses_id == 4)
+                                        <span class="border border-warning">
+                                            <b class="text-warning p-3">menunggu konfirmasi kabag rt</b>
+                                        </span>
+                                        @elseif($row->status_proses_id == 5)
+                                        <span class="border border-warning">
+                                            <b class="text-warning p-3">selesai</b>
+                                        </span>
+                                        @endif
                                         @endif
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -206,13 +220,13 @@ $jabatan = $user->jabatan; ?>
                                         <div class="col-md-12">
                                             <span style="float: left;">
                                                 @if($row->status_proses_id == 5)
-                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->otp_bast_ppk) }}" class="btn btn-primary">
+                                                <a href="{{ url('super-user/oldat/surat/surat-bast/'. $row->id_form_usulan) }}" class="btn btn-primary">
                                                     <i class="fas fa-file"></i> Surat BAST
                                                 </a>
                                                 @endif
                                             </span>
                                             <span style="float: right;">
-                                                <a href="{{ url('super-user/oldat/surat/surat-usulan/'. $row->otp_usulan_pengusul) }}" class="btn btn-primary">
+                                                <a href="{{ url('super-user/oldat/surat/surat-usulan/'. $row->id_form_usulan) }}" class="btn btn-primary">
                                                     <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                 </a>
                                             </span>

@@ -24,8 +24,8 @@ class RumahDinas extends Model
         'penghuni_id'
     ];
 
-    public function PenghuniRumah() {
+    public function penghuniRumah() {
         return $this->hasMany(PenghuniRumah::class, 'rumah_dinas_id','id_rumah_dinas')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id');
+            ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id');
     }
 }

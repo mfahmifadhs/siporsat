@@ -83,7 +83,7 @@
                             @endif
                         </span>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a href="{{ url('admin-user/profil/user/'. Auth::user()->id) }}" class="dropdown-item">
                             <i class="fas fa-user mr-2"></i> Profil
                         </a>
                         <div class="dropdown-divider"></div>
@@ -125,12 +125,6 @@
                             <a href="{{ url('admin-user/dashboard') }}" class="nav-link {{ Request::is('admin-user/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link {{ Request::is('admin-user/pegawai/data/semua') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Daftar Pegawai</p>
                             </a>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">DATA BMN</li> -->

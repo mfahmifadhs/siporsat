@@ -105,18 +105,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 text-muted">Verifikasi Dokumen</label>
-                        <label class="col-sm-2 col-form-label">Kode OTP (*)</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_otp_usulan" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">&nbsp;</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -180,7 +171,7 @@
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
+                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -214,18 +205,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 text-muted">Verifikasi Dokumen</label>
-                        <label class="col-sm-3 col-form-label">Kode OTP</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="kode_otp_usulan" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -299,23 +281,10 @@
                             <span id="mb-stnk1" class="col-sm-9"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Verifikasi</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Verifikasi Kode OTP</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="kode_otp_usulan" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -410,23 +379,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Verifikasi Dokumen</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Kode OTP</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_otp_usulan" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">&nbsp;</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')" disabled>Submit</button>
+                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -588,7 +544,7 @@
                                         <option value="">-- Pilih Kendaraan --</option>
                                         @foreach($kendaraan as $dataKendaraan)
                                         <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                            {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
+                                            {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}
                                         </option>
                                         @endforeach
                                     </select>
@@ -700,16 +656,7 @@
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
             console.log(inputOTP)
-            if (inputOTP == '') {
-                alert('Mohon isi kode OTP yang diterima')
-            } else if (inputOTP == resOTP) {
-                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
-                alert('Kode OTP Benar')
-                $('#btnSubmit').prop('disabled', false)
-            } else {
-                alert('Kode OTP Salah')
-                $('#btnSubmit').prop('disabled', true)
-            }
+            $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
     });
 </script>

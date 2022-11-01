@@ -29,33 +29,81 @@
             </div>
             <div class="col-md-12 form-group">
                 <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Daftar Rumah Dinas Negara</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <table id="table-rumah" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Golongan</th>
-                                    <th>NUP</th>
-                                    <th>Kota</th>
+                                    <th>Foto</th>
                                     <th>Alamat Lengkap</th>
-                                    <th>Luas Bangunan</th>
-                                    <th>Luas Tanah</th>
+                                    <th>LB / LT</th>
                                     <th>Kondisi</th>
+                                    <th>Penghuni</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $no = 1; @endphp
                                 @foreach ($rumah as $dataRumah)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $dataRumah->golongan_rumah }}</td>
-                                    <td>{{ $dataRumah->nup_rumah }}</td>
-                                    <td>{{ $dataRumah->lokasi_kota }}</td>
-                                    <td>{{ $dataRumah->alamat_rumah }}</td>
-                                    <td>{{ $dataRumah->luas_bangunan }} m<sup>2</sup></td>
-                                    <td>{{ $dataRumah->luas_tanah }} m<sup>2</sup></td>
+                                    <td class="text-center">{{ $no++ }}</td>
+                                    <td class="text-center">
+                                        <a type="button" data-toggle="modal" data-target="#detailFoto{{ $dataRumah->id_rumah_dinas }}">
+                                            <img src="{{ asset('gambar/rumah_dinas/'. $dataRumah->foto_rumah) }}" alt="{{ $dataRumah->foto_rumah }}" width="150">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            Gol. {{ $dataRumah->golongan_rumah }} /
+                                            NUP. {{ $dataRumah->nup_rumah }} /
+                                            {{ $dataRumah->lokasi_kota }}
+                                        </b> <br>
+                                        {{ $dataRumah->alamat_rumah }}
+                                    </td>
+                                    <td>
+                                        {{ $dataRumah->luas_bangunan }} m<sup>2</sup> /
+                                        {{ $dataRumah->luas_tanah }} m<sup>2</sup>
+                                    </td>
                                     <td>{{ $dataRumah->kondisi_rumah }}</td>
+                                    <td>
+                                        @foreach ($dataRumah->penghuniRumah as $dataPenghuni)
+                                        <label>{{ $dataPenghuni->nama_pegawai }}</label> <br>
+                                        {{ $dataPenghuni->keterangan_pegawai }} <br>
+                                        No. SIP : {{ $dataPenghuni->nomor_sip }} <br>
+                                        @if($dataPenghuni->masa_berakhir_sip != null)
+                                        Masa Berakhir SIP : {{ \Carbon\Carbon::parse($dataPenghuni->masa_berakhir_sip)->isoFormat('DD MMMM Y') }} <br>
+                                        @endif
+                                        Jenis Sertifikat : {{ $dataPenghuni->jenis_sertifikat }}
+                                        @endforeach
+                                    </td>
+                                    <td class="text-center">
+                                        <a type="button" class="btn btn-primary" data-toggle="dropdown">
+                                            <i class="fas fa-bars"></i>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="{{ url('admin-user/rdn/rumah-dinas/detail/'. $dataRumah->id_rumah_dinas) }}">
+                                                <i class="fas fa-info-circle"></i> Detail
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
+                                <div class="modal fade" id="detailFoto{{ $dataRumah->id_rumah_dinas }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <img src="{{ asset('gambar/rumah_dinas/'. $dataRumah->foto_rumah) }}" alt="{{ $dataRumah->foto_rumah }}" width="100%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endforeach
                             </tbody>
                         </table>

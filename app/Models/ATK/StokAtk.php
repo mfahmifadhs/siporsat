@@ -14,6 +14,8 @@ class StokAtk extends Model
 
     protected $fillable = [
         'id_stok',
+        'tanggal_stok',
+        'form_usulan_id',
         'atk_id',
         'stok_atk',
         'satuan'

@@ -68,7 +68,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Unit Kerja </label>
                         <div class="col-sm-10">
-                            <input type="hidden" name="unit_kerja_id" value="{{ $dataPengajuan->unit_kerja_id }}">
+                            <input type="hidden" name="unit_kerja_id" value="{{ $dataPengajuan->id_unit_kerja }}">
                             <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->unit_kerja }}" readonly>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Merk Barang </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_tipe_barang }}" readonly>
+                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -188,7 +188,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Merk Barang </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_tipe_barang }}" readonly>
+                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -209,7 +209,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Total Biaya (*)</label>
                         <div class="col-sm-10">
-                            <input type="number" name="total_biaya" class="form-control" placeholder="Nominal Biaya Perpanjangan STNK" required>
+                            <input type="number" name="total_biaya" class="form-control" placeholder="Nominal Biaya Perbaikan" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -233,22 +233,11 @@
                         </div>
                     </div>
                     @endif
-                    <div class="form-group row">
-                        <label class="text-muted col-md-12">Verifikasi</label>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Verifikasi BAST</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="otp_bast_ppk" id="inputOTP" placeholder="Masukan Kode OTP" required>
-                            <a class="btn btn-success btn-xs mt-2" id="btnCheckOTP">Cek OTP</a>
-                            <a class="btn btn-primary btn-xs mt-2" id="btnKirimOTP">Kirim OTP</a>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="card-footer">
                     <button type="reset" class="btn btn-default btn-md">BATAL</button>
-                    <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')" disabled>SUBMIT</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
                 </div>
             </form>
             @endforeach
@@ -288,16 +277,7 @@
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
             console.log(inputOTP)
-            if (inputOTP == '') {
-                alert('Mohon isi kode OTP yang diterima')
-            } else if (inputOTP == resOTP) {
-                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
-                alert('Kode OTP Benar')
-                $('#btnSubmit').prop('disabled', false)
-            } else {
-                alert('Kode OTP Salah')
-                $('#btnSubmit').prop('disabled', true)
-            }
+            $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
 
         $("#table-barang").DataTable({

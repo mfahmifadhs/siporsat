@@ -30,8 +30,6 @@
                             <thead>
                                 <th>No</th>
                                 <th>Tanggal</th>
-                                <th>ID Form</th>
-                                <th>Kode Form</th>
                                 <th>Pengusul</th>
                                 <th>Jenis Pengajuan</th>
                                 <th>Rencana Pengguna</th>
@@ -45,29 +43,27 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $dataPengajuan->id_form_usulan }}</td>
-                                    <td>{{ $dataPengajuan->kode_form }}</td>
                                     <td>{{ $dataPengajuan->nama_pegawai }}</td>
                                     <td>{{ $dataPengajuan->jenis_form_usulan }}</td>
                                     <td>{{ $dataPengajuan->rencana_pengguna }}</td>
                                     <td class="text-center">
                                         @if($dataPengajuan->status_pengajuan_id == 1)
-                                        <span class="border border-success text-success p-1">disetujui</span>
+                                        <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                         @elseif($dataPengajuan->status_pengajuan_id == 2)
-                                        <span class="border border-danger text-danger p-1">ditolak</span>
+                                        <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center text-capitalize  ">
                                         @if($dataPengajuan->status_proses_id == 1)
-                                        <span class="border border-warning text-warning p-1">menunggu persetujuan</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
                                         @elseif ($dataPengajuan->status_proses_id == 2)
-                                        <span class="border border-warning text-warning p-1">usulan sedang diproses</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                         @elseif ($dataPengajuan->status_proses_id == 3)
-                                        <span class="border border-success text-success p-1">menunggu konfirmasi pengusul</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
                                         @elseif ($dataPengajuan->status_proses_id == 4)
-                                        <span class="border border-success text-success p-1">menunggu konfirmasi kabag rt</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi kabag rt</span>
                                         @elseif ($dataPengajuan->status_proses_id == 5)
-                                        <span class="border border-success text-success p-1">selesai</span>
+                                        <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                         @endif
                                     </td>
                                     <td>
@@ -75,6 +71,19 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/persetujuan/'. $dataPengajuan->id_form_usulan) }}">
+                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses
+                                            </a>
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataPengajuan->status_proses_id == 2)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/aadb/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}">
+                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses Penyerahan
+                                            </a>
+                                            @elseif ($dataPengajuan->status_proses_id == 4)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
+                                                <i class="fas fa-arrow-alt-circle-right"></i> BAST
+                                            </a>
+                                            @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
@@ -123,7 +132,7 @@
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataPengajuan->jabatan.' '.$dataPengajuan->keterangan_pegawai }}</div>
+                                                    <div class="col-md-8">: {{ $dataPengajuan->keterangan_pegawai }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Unit Kerja</label></div>
@@ -204,7 +213,7 @@
                                                         <div class="col-md-4"><label>Voucher 50 </label></div>
                                                         <div class="col-md-8">: {{ $dataVoucher->voucher_50 }}</div>
                                                         <div class="col-md-4"><label>Voucher 100 </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_100 }} L</div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_100 }}</div>
                                                         <div class="col-md-4"><label>Total </label></div>
                                                         <div class="col-md-8">: Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</div>
                                                         <div class="col-md-4"><label>Bulan Pengadaan </label></div>
@@ -218,7 +227,7 @@
                                                 <div class="col-md-12">
                                                     <span style="float: left;">
                                                         @if($dataPengajuan->status_proses_id == 5)
-                                                        <a href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->otp_bast_ppk) }}" class="btn btn-primary">
+                                                        <a href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                         @endif
