@@ -151,127 +151,82 @@
         });
 
 
-        function showTable() {
-            let dataTable = $('#table-barang').DataTable()
-            console.log('start')
-            let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
-            // console.log($('#table-barang').find('tbody'))
+        // function showTable() {
+        //     let dataTable = $('#table-barang').DataTable()
+        //     console.log('start')
+        //     let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
+        //     // console.log($('#table-barang').find('tbody'))
 
-            dataTable.clear()
-            // dataTable.draw()
-            // console.log('tes')
-            // console.log(parseInt(dataBarang.length / 4))
-            // let progress = $('.progress-bar')
-            let no = 1
-            dataBarang.forEach(element => {
-                dataTable.row.add([
-                    element.id_barang,
-                    no,
-                    element.kode_barang,
-                    element.nup_barang,
-                    element.jumlah_barang + ' ' + element.satuan_barang,
-                    element.nilai_perolehan,
-                    element.tahun_perolehan,
-                    element.kondisi_barang,
-                    element.nama_pegawai
-                ])
-                // if (no == parseInt(dataBarang.length / 4 * 100)) {
-                //     console.log(no)
-                //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 4 * 100))
-                // } else if (no == parseInt(dataBarang.length / 2)) {
-                //     console.log(no)
-                //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 2 * 100))
-                // } else if (no == parseInt(dataBarang.length * 3 / 4)) {
-                //     console.log(no)
-                //     $('.progress-bar').css('width' , parseInt(dataBarang.length * 3 / 4 * 100))
-                // }
-                no++
-                // console.log('data ke - ' + no)
-            });
-            dataTable.draw()
-            // console.log(dataBarang)
-            // let listBarang = ''
-            // dataBarang.forEach(element => {
-            //     listBarang += `<tr>
-        //                 <td class="text-center">${no}</td>
-        //                 <td>${element.kode_barang}</td>
-        //                 <td>${element.nup_barang}</td>
-        //                 <td>${element.jumlah_barang} ${element.satuan_barang}</td>
-        //                 <td>Rp ${element.nilai_perolehan}</td>
-        //                 <td>${element.tahun_perolehan}</td>
-        //                 <td>${element.kondisi_barang}</td>
-        //                 <td>${element.nama_pegawai}</td>
-        //             </tr>`
-            //     console.log('data ke - ' + no)
-            //     no++
-            // });
-            // dataTable.destroy()
-            // // $('#table-barang').DataTable().destroy();
-            // // $('#list-barang').append(listBarang)
-            // dataTable.table().body().append(listBarang);
-            // // $('#table-barang').find('tbody').append(listBarang);
-            // dataTable.draw()
-            // $('#table-barang').DataTable({
-            //     "responsive": true,
-            //     "lengthChange": true,
-            //     "autoWidth": false,
-            //     "lengthMenu": [
-            //         [10, 25, 50, -1],
-            //         [10, 25, 50, "Semua"]
-            //     ],
-            //     buttons: [{
-            //             extend: 'pdf',
-            //             text: ' PDF',
-            //             className: 'fas fa-file btn btn-primary mr-2 rounded',
-            //             title: 'Data Master Barang',
-            //             exportOptions: {
-            //                 columns: [0, 3, 4, 5, 6, 7, 8, 9]
-            //             }
-            //         },
-            //         {
-            //             extend: 'excel',
-            //             text: ' Excel',
-            //             className: 'fas fa-file btn btn-primary mr-2 rounded',
-            //             title: 'Data Master Barang',
-            //             exportOptions: {
-            //                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            //             }
-            //         }
-            //     ],
-            //     "bDestroy": true
-            // }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
+        //     dataTable.clear()
+        //     // dataTable.draw()
+        //     // console.log('tes')
+        //     // console.log(parseInt(dataBarang.length / 4))
+        //     // let progress = $('.progress-bar')
+        //     let no = 1
+        //     dataBarang.forEach(element => {
+        //         dataTable.row.add([
+        //             element.id_barang,
+        //             no,
+        //             element.kode_barang,
+        //             element.nup_barang,
+        //             element.jumlah_barang + ' ' + element.satuan_barang,
+        //             element.nilai_perolehan,
+        //             element.tahun_perolehan,
+        //             element.kondisi_barang,
+        //             element.nama_pegawai
+        //         ])
+        //         // if (no == parseInt(dataBarang.length / 4 * 100)) {
+        //         //     console.log(no)
+        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 4 * 100))
+        //         // } else if (no == parseInt(dataBarang.length / 2)) {
+        //         //     console.log(no)
+        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 2 * 100))
+        //         // } else if (no == parseInt(dataBarang.length * 3 / 4)) {
+        //         //     console.log(no)
+        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length * 3 / 4 * 100))
+        //         // }
+        //         no++
+        //         // console.log('data ke - ' + no)
+        //     });
+        //     dataTable.draw()
+        //     // }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
+        // }
 
+            function showTable() {
+                let dataTable = $('#table-barang').DataTable()
+                console.log('start')
+                let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
+                // console.log($('#table-barang').find('tbody'))
 
-            // $(document).ready(function() {
-            //     let dataTable = $('#table-barang').DataTable()
-            //     let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
+                dataTable.clear()
+                // dataTable.draw()
+                let no = 1
+                dataBarang.forEach(element => {
+                    dataTable.row.add([
+                        element.id_barang,
+                        no,
+                        element.kode_barang,
+                        element.nup_barang,
+                        element.jumlah_barang + ' ' + element.satuan_barang,
+                        element.nilai_perolehan,
+                        element.tahun_perolehan,
+                        element.kondisi_barang,
+                        element.nama_pegawai
+                    ])
+                    no++
+                    // console.log('data ke - ' + no)
+                });
+                dataTable.draw()
+                $('.loading').hide()
+                console.log('finish')
+            }
 
-            // dataTable.clear()
-            // dataTable.draw()
-            // let no = 1
-            // dataBarang.forEach(element => {
-            //     dataTable.row.add([
-            //         no++,
-            //         element.kode_barang,
-            //         element.nup_barang,
-            //         element.jumlah_barang + ' ' + element.satuan_barang,
-            //         element.nilai_perolehan,
-            //         element.tahun_perolehan,
-            //         element.kondisi_barang,
-            //         element.nama_pegawai
-            //     ]).draw(false)
-            // });
-            // });
-            $('.loading').hide()
-            // $('.table-container').show()
-            console.log('finish')
-        }
-        $('#table-barang tbody').on('click', '.btn-detail', function() {
-            let dataTable = $('#table-barang').DataTable()
-            let row = dataTable.row($(this).parents('tr')).data()
-            // console.log(row)
-            window.location.href = "/super-user/oldat/barang/detail/" + row[0];
-        })
+            $('#table-barang tbody').on('click', '.btn-detail', function() {
+                let dataTable = $('#table-barang').DataTable()
+                let row = dataTable.row($(this).parents('tr')).data()
+                // console.log(row)
+                window.location.href = "/super-user/oldat/barang/detail/" + row[0];
+            })
     </script>
 @endsection
 @endsection
