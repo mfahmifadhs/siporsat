@@ -72,7 +72,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nama Barang</label>
                         <div class="col-sm-4">
-                            <input type="hidden" class="form-control" name="form_detail_id" value="{{ $detailUsulan->id_form_usulan_detail }}" readonly>
+                            <input type="hidden" class="form-control" name="form_detail_id[]" value="{{ $detailUsulan->id_form_usulan_detail }}" readonly>
                             <input type="text" class="form-control" value="{{ $detailUsulan->kategori_atk }}" readonly>
                         </div>
                         <label class="col-sm-1 col-form-label">Merk/Tipe</label>

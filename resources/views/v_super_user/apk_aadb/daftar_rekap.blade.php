@@ -75,21 +75,7 @@
         $("#table-rekap").DataTable({
             "responsive": true,
             "lengthChange": true,
-            "autoWidth": false,
-            buttons: [
-                {
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'rekapitulasi_aadb'
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'rekapitulasi_aadb'
-                }
-            ]
+            "autoWidth": false
         }).buttons().container().appendTo('#table-rekap_wrapper .col-md-6:eq(0)');
     });
 </script>

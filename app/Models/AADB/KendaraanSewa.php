@@ -16,6 +16,7 @@ class KendaraanSewa extends Model
         'id_kendaraan_sewa',
         'kendaraan_id',
         'mulai_sewa',
-        'penyedia'
+        'penyedia',
+        'status_sewa'
     ];
 }

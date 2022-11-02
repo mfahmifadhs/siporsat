@@ -26,10 +26,10 @@ Route::get('/send-email',[MailController::class, 'index']);
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
-Route::get('dashboard',     [AuthController::class, 'dashboard']);
-Route::get('masuk',         [AuthController::class, 'index'])->name('masuk');
-Route::get('daftar',  [AuthController::class, 'daftar'])->name('daftar-user');
-Route::get('keluar',        [AuthController::class, 'keluar'])->name('keluar');
+Route::get('dashboard', [AuthController::class, 'dashboard']);
+Route::get('masuk', [AuthController::class, 'index'])->name('masuk');
+Route::get('daftar', [AuthController::class, 'daftar'])->name('daftar-user');
+Route::get('keluar', [AuthController::class, 'keluar'])->name('keluar');
 Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.post');
 Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.post');
 
@@ -106,7 +106,9 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterAtk']);
+        Route::get('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
 
+        Route::post('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
     });
 
@@ -174,6 +176,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAtk']);
         Route::get('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
+        Route::get('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AtkDashboard']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
 
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
@@ -227,19 +230,44 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
 Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 'unit-kerja.'], function () {
     Route::get('dashboard', [UserController::class, 'Index'])->name('user.index');
     Route::get('profil/{aksi}/{id}', [UserController::class, 'Profile']);
-    Route::get('gdn', [UserController::class, 'Building']);
     Route::get('verif/{aksi}/{id}', [UserController::class, 'Verification']);
     Route::get('surat/{aksi}/{id}', [UserController::class, 'Letter']);
+    Route::get('cetak-surat/{modul}/{id}', [UserController::class, 'PrintLetter']);
 
 
     Route::post('profil/{aksi}/{id}', [UserController::class, 'Profile']);
     Route::post('verif/{aksi}/{id}', [UserController::class, 'Verification'])->middleware('2fa');
 
+    // Gedung dan Bangunan
     Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function () {
+        Route::get('dashboard/{aksi}', [UserController::class, 'Building']);
         Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
         Route::get('js/{aksi}/{id}', [UserController::class, 'JsGdn']);
 
         Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
+    });
+
+    // Rumah Dinas Negara
+    Route::group(['prefix' => 'rdn', 'as' => 'gdn'], function () {
+        Route::get('rumah/{aksi}/{id}', [UserController::class, 'OfficialResidence']);
+    });
+
+    // ATK
+    // atk
+    Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
+        Route::get('dashboard', [UserController::class, 'Atk']);
+        Route::get('barang/{aksi}/{id}', [UserController::class, 'OfficeStationery']);
+        Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAtk']);
+        Route::get('/select2/{aksi}/{id}', [UserController::class, 'Select2Atk']);
+        Route::get('surat/{aksi}/{id}', [UserController::class, 'LetterAtk']);
+        Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AtkDashboard']);
+
+        Route::post('surat/{aksi}/{id}', [UserController::class, 'LetterAtk']);
+        Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAtk']);
+        Route::post('/select2/{aksi}/{id}', [UserController::class, 'Select2Atk']);
+        Route::post('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AtkDashboard']);
+
+        Route::get('/grafik', [UserController::class, 'SearchChartDataAtk']);
     });
 
 });

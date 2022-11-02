@@ -192,64 +192,28 @@
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold">
+                            <a href="{{ url('unit-kerja/atk/dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-pencil-ruler"></i>
                                 <p>
                                     Alat Tulis Kantor
-                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/atk/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/atk/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Usulan Pengajuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/atk/barang/daftar/semua') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-pencil-rulers"></i>
-                                        <p>Master ATK</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <!-- Gedung & Bangunan -->
                         <li class="nav-item">
-                            <a href="{{ url('unit-kerja/gdn/') }}" class="nav-link font-weight-bold">
+                            <a href="{{ url('unit-kerja/gdn/dashboard/daftar') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-building"></i>
                                 <p>Gedung & Bangunan</p>
                             </a>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas Negara</li> -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold">
+                            <a href="{{ url('unit-kerja/rdn/rumah/daftar/seluruh-rumah') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-house-user"></i>
                                 <p>
                                     Rumah Dinas Negara
-                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/rdn/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-house-user"></i>
-                                        <p>Master Rumah Dinas</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>

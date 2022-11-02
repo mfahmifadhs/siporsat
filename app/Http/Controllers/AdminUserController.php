@@ -213,8 +213,9 @@ class AdminUserController extends Controller
             $kelompokAtk    = KelompokATK::get();
             $atk = ATK::get();
             return view('v_admin_user.apk_atk.daftar_atk', compact('kategoriAtk','jenisAtk','subkelompokAtk','kelompokAtk','atk'));
-        } elseif ($aksi == 'tambah') {
-            return view('v_admin_user.apk_atk.tambah_atk');
+        } elseif ($aksi == 'tambah-atk') {
+            $kategori = 'atk';
+            return view('v_admin_user.apk_atk.tambah_atk', compact('kategori'));
         }
     }
 
@@ -222,9 +223,9 @@ class AdminUserController extends Controller
     {
         if ($aksi == 'surat-usulan') {
 
-            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+            if(Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $ppk = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id',1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id',465930)->first();
             } else {
                 $ppk = null;
             }
@@ -239,9 +240,9 @@ class AdminUserController extends Controller
             return view('v_admin_user/apk_atk/surat_usulan', compact('ppk','usulan'));
 
         } elseif ($aksi == 'surat-bast') {
-            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+            if(Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id',1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id',465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -257,9 +258,9 @@ class AdminUserController extends Controller
             return view('v_admin_user/apk_atk/surat_bast', compact('pimpinan','bast','id'));
 
         } elseif ($aksi == 'print-surat-usulan') {
-            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+            if(Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $ppk = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id',1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id',465930)->first();
             } else {
                 $ppk = null;
             }
@@ -324,9 +325,9 @@ class AdminUserController extends Controller
             return redirect('super-user/aadb/usulan/bast/'. $id);
 
         } elseif ($aksi == 'print-surat-bast') {
-            if(Auth::user()->pegawai->unit_kerja_id == 1) {
+            if(Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id',1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id',465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -360,18 +361,18 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.pgudang_input', compact('id','idBast', 'usulan'));
         } elseif ($aksi == 'proses-input' && $id == 'pengadaan') {
             // Update form usulan
-            UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+            UsulanAtk::where('id_form_usulan', $request->form_id)->update([
                 'no_surat_bast'     => $request->no_surat_bast,
                 'tanggal_bast'      => Carbon::now()
             ]);
+
             // Tambah Lampiran
             $idLampiran = UsulanAtkLampiran::count();
             $lampiran = new UsulanAtkLampiran();
             $lampiran->id_lampiran    = $idLampiran + 1;
-            $lampiran->form_usulan_id = Auth::user()->sess_form_id;
+            $lampiran->form_usulan_id = $request->form_id;
             $lampiran->nomor_kontrak  = $request->nomor_kontrak;
             $lampiran->nomor_kwitansi = $request->nomor_kwitansi;
-            $lampiran->nilai_kwitansi = $request->nilai_kwitansi;
             $lampiran->nilai_kwitansi = $request->nilai_kwitansi;
 
             if ($request->file_kwitansi != null) {
@@ -387,17 +388,16 @@ class AdminUserController extends Controller
             foreach ($atk as $i => $atk_id)
             {
                 // Riwayat stok barang
-                $totalStok  = StokAtk::count();
-                $idStok     = str_pad($totalStok + ($i + 1), 6, 0, STR_PAD_LEFT);
-                $stok       = new StokAtk();
-                $stok->id_stok        = $idStok;
+                $totalStok            = StokAtk::count();
+                $stok                 = new StokAtk();
+                $stok->id_stok        = $totalStok + 1;
                 $stok->atk_id         = $atk_id;
                 $stok->form_usulan_id = Auth::user()->sess_form_id;
                 $stok->stok_atk       = $request->jumlah[$i];
                 $stok->satuan         = $request->satuan[$i];
                 $stok->save();
                 // Update Harga Barang
-                UsulanAtkDetail::where('id_form_usulan_detail', $request->form_detail_id)
+                UsulanAtkDetail::where('id_form_usulan_detail', $request->form_detail_id[$i])
                 ->update([
                     'harga' => $request->harga[$i]
                 ]);
@@ -412,7 +412,7 @@ class AdminUserController extends Controller
 
         } elseif ($aksi == 'proses-input' && $id == 'distribusi') {
             // Update form usulan
-            UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+            UsulanAtk::where('id_form_usulan', $request->form_id)->update([
                 'no_surat_bast'     => $request->no_surat_bast,
                 'tanggal_bast'      => Carbon::now()
             ]);
@@ -426,7 +426,7 @@ class AdminUserController extends Controller
                 $stok       = new StokAtk();
                 $stok->id_stok        = $idStok;
                 $stok->atk_id         = $atk_id;
-                $stok->form_usulan_id = Auth::user()->sess_form_id;
+                $stok->form_usulan_id = $request->form_id;
                 $stok->stok_atk       = $request->jumlah[$i];
                 $stok->satuan         = $request->satuan[$i];
                 $stok->save();
@@ -441,6 +441,65 @@ class AdminUserController extends Controller
             // return redirect('admin-user/atk/surat/surat-bast/'. $id)->with('success', 'Pembelian barang telah selesai dilakukan');
 
         }
+    }
+
+    public function Select2Atk(Request $request, $aksi, $id)
+    {
+        $search = $request->search;
+        if ($aksi == '1') {
+            if ($search == '') {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->get();
+            } else {
+                $atk  = SubKelompokAtk::select('id_subkelompok_atk', 'subkelompok_atk')
+                    ->orderby('id_subkelompok_atk', 'asc')
+                    ->where('id_subkelompok_atk', 'like', '%' . $search . '%')
+                    ->orWhere('subkelompok_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 2) {
+            if ($search == '') {
+                $atk  = JenisAtk::select('id_jenis_atk as id', 'subkelompok_atk_id', 'jenis_atk as nama')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->where('subkelompok_atk_id', $id)
+                    ->get();
+            } else {
+                $atk  = JenisAtk::select('id_jenis_atk', 'subkelompok_atk_id', 'jenis_atk')
+                    ->orderby('id_jenis_atk', 'asc')
+                    ->where('subkelompok_atk_id', $id)
+                    ->where('id_jenis_atk', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 3) {
+            if ($search == '') {
+                $atk  = KategoriAtk::select('id_kategori_atk as id', 'jenis_atk_id', 'kategori_atk as nama')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->where('jenis_atk_id', $id)
+                    ->get();
+            } else {
+                $atk  = KategoriAtk::select('id_kategori_atk', 'jenis_atk_id', 'kategori_atk')
+                    ->orderby('id_kategori_atk', 'asc')
+                    ->where('jenis_atk_id', $id)
+                    ->where('id_kategori_atk', 'like', '%' . $search . '%')
+                    ->orWhere('kategori_atk', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 4) {
+            $totalKategori = KategoriATK::where('id_kategori_atk', $id)->count();
+            $idAtk         = array($id.str_pad($totalKategori + 1, 5, 0, STR_PAD_LEFT));
+        }
+
+        $response = array();
+        foreach ($atk as $data) {
+            $response[] = array(
+                "id"     =>  $data->id,
+                "text"   =>  $data->id . ' - ' . $data->nama
+            );
+        }
+
+        return response()->json($response);
     }
 
     // ====================================================
@@ -485,17 +544,18 @@ class AdminUserController extends Controller
     public function showItem(Request $request, $aksi, $id)
     {
         if ($aksi == 'data') {
-            $kategoriBarang = KategoriBarang::get();
-            $kondisiBarang  = KondisiBarang::get();
-            $pegawai        = Pegawai::get();
-            $barang         = Barang::join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
+            $char = '"';
+            $barang = Barang::select('id_barang','kode_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
+                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
+                ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->orderBy('tahun_perolehan','DESC')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->orderBy('tahun_perolehan', 'DESC')
                 ->get();
 
-            return view('v_admin_user.apk_oldat.daftar_barang', compact('kategoriBarang', 'kondisiBarang','pegawai', 'barang'));
+            $result = json_decode($barang);
+            return view('v_admin_user.apk_oldat.daftar_barang', compact('barang'));
 
         } elseif ($aksi == 'detail') {
             $kategoriBarang = KategoriBarang::get();

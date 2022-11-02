@@ -27,30 +27,39 @@
                 </div>
                 @endif
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <div class="col-12">
-                    <div class="small-box bg-primary">
-                        <div class="inner text-center">
-                            <h3>150</h3>
-                            <p>Usulan Perbaikan</p>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title font-weight-bold">Usulan Perbaikan Gedung/Bangunan</h3>
+                            <div class="card-tools"></div>
                         </div>
-                        <a href="{{ url('unit-kerja/gdn/usulan/perbaikan/baru') }}" class="small-box-footer"><i class="fas fa-plus-circle"></i> Buat Usulan </a>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="small-box bg-primary">
-                        <div class="inner text-center">
-                            <h3>53</h3>
-                            <p>Usulan Struktural</p>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8 form-group small">Menunggu Persetujuan</div>
+                                <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 1)->count() }}</div>
+                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-8 form-group small">Sedang Diproses</div>
+                                <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 2)->count() }}</div>
+                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-8 form-group small">Menunggu Konfirmasi</div>
+                                <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 4)->count() }}</div>
+                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-8 form-group small">Selesai</div>
+                                <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 5)->count() }}</div>
+                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                            </div>
                         </div>
-                        <a href="{{ url('unit-kerja/gdn/usulan/struktural/baru') }}" class="small-box-footer"><i class="fas fa-plus-circle"></i> Buat Usulan </a>
+                        <div class="card-footer text-center">
+                            <a href="{{ url('unit-kerja/gdn/usulan/perbaikan/baru') }}" class="small-box-footer"><i class="fas fa-plus-circle"></i> Buat Usulan </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-10">
+            <div class="col-9">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Daftar Usulan Pengajuan</h4>
+                        <h4 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h4>
                     </div>
                     <div class="card-body">
                         <table id="table-usulan" class="table table-bordered m-0">

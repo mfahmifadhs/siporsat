@@ -161,10 +161,8 @@
                                                         <div class="col-md-8">: {{ $dataKendaraan->jenis_aadb }}</div>
                                                         <div class="col-md-4"><label>Jenis Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->jenis_kendaraan }}</div>
-                                                        <div class="col-md-4"><label>Merk </label></div>
-                                                        <div class="col-md-8">: {{ $dataKendaraan->merk_kendaraan }}</div>
-                                                        <div class="col-md-4"><label>Tipe </label></div>
-                                                        <div class="col-md-8">: {{ $dataKendaraan->tipe_kendaraan }}</div>
+                                                        <div class="col-md-4"><label>Merk/Tipe </label></div>
+                                                        <div class="col-md-8">: {{ $dataKendaraan->merk_tipe_kendaraan }}</div>
                                                         <div class="col-md-4"><label>Tahun Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataKendaraan->tahun_kendaraan }}</div>
                                                     </div>
@@ -174,18 +172,18 @@
                                                 @foreach($dataPengajuan -> usulanServis as $dataServis)
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-md-5"><label>Kendaraan </label></div>
-                                                        <div class="col-md-7">: {{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</div>
-                                                        <div class="col-md-5"><label>Kilometer Terakhir </label></div>
-                                                        <div class="col-md-7">: {{ $dataServis->kilometer_terakhir }} KM</div>
-                                                        <div class="col-md-5"><label>Tgl. Terakhir Servis </label></div>
-                                                        <div class="col-md-7">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_servis)->isoFormat('DD MMMM Y') }}</div>
-                                                        <div class="col-md-5"><label>Jatuh Tempo Servis </label></div>
-                                                        <div class="col-md-7">: {{ $dataServis->jatuh_tempo_servis }} KM</div>
-                                                        <div class="col-md-5"><label>Tgl. Terakhir Ganti Oli </label></div>
-                                                        <div class="col-md-7">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_ganti_oli)->isoFormat('DD MMMM Y') }}</div>
-                                                        <div class="col-md-5"><label>Jatuh Tempo Ganti Oli </label></div>
-                                                        <div class="col-md-7">: {{ $dataServis->jatuh_tempo_ganti_oli }} KM</div>
+                                                        <div class="col-md-4"><label>Kendaraan </label></div>
+                                                        <div class="col-md-8">: {{ $dataServis->merk_tipe_kendaraan }}</div>
+                                                        <div class="col-md-4"><label>Kilometer Terakhir </label></div>
+                                                        <div class="col-md-8">: {{ $dataServis->kilometer_terakhir }} KM</div>
+                                                        <div class="col-md-4"><label>Tgl. Terakhir Servis </label></div>
+                                                        <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_servis)->isoFormat('DD MMMM Y') }}</div>
+                                                        <div class="col-md-4"><label>Jatuh Tempo Servis </label></div>
+                                                        <div class="col-md-8">: {{ $dataServis->jatuh_tempo_servis }} KM</div>
+                                                        <div class="col-md-4"><label>Tgl. Terakhir Ganti Oli </label></div>
+                                                        <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataServis->tgl_terakhir_ganti_oli)->isoFormat('DD MMMM Y') }}</div>
+                                                        <div class="col-md-4"><label>Jatuh Tempo Ganti Oli </label></div>
+                                                        <div class="col-md-8">: {{ $dataServis->jatuh_tempo_ganti_oli }} KM</div>
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -194,7 +192,7 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-4"><label>Kendaraan </label></div>
-                                                        <div class="col-md-8">: {{ $dataSTNK->merk_kendaraan.' '.$dataSTNK->tipe_kendaraan }}</div>
+                                                        <div class="col-md-8">: {{ $dataSTNK->merk_tipe_kendaraan }}</div>
                                                         <div class="col-md-4"><label>No Plat BBM </label></div>
                                                         <div class="col-md-8">: {{ $dataSTNK->no_plat_kendaraan }}</div>
                                                         <div class="col-md-4"><label>Masa Berlaku STNK</label></div>
@@ -207,7 +205,7 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-4"><label>Kendaraan </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</div>
+                                                        <div class="col-md-8">: {{ $dataVoucher->merk_tipe_kendaraan }}</div>
                                                         <div class="col-md-4"><label>Voucher 25 </label></div>
                                                         <div class="col-md-8">: {{ $dataVoucher->voucher_25 }}</div>
                                                         <div class="col-md-4"><label>Voucher 50 </label></div>

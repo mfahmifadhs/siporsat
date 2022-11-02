@@ -69,7 +69,7 @@
                     <i class="fas fa-home"></i>
                 </a>
                 @if($usulan->otp_usulan_kabag != null)
-                <a href="{{ url('unit-kerja/atk/surat/print-surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                <a href="{{ url('unit-kerja/cetak-surat/'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
                 @endif
@@ -157,15 +157,15 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ $usulan->keterangan_pegawai }}</label>
+                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
                                     @if ($usulan->otp_usulan_kabag != null)
-                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ $pimpinan->keterangan_pegawai }}</label>
+                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4">
+                            <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
                                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
                                     @if ($usulan->otp_usulan_kabag != null)
@@ -173,11 +173,11 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4">
+                            <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
                                     @if ($usulan->otp_usulan_kabag != null )
-                                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>

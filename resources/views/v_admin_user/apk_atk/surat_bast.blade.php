@@ -81,9 +81,9 @@
                             </div>
                             <div class="col-md-8 text-center">
                                 <h2 class="page-header">
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_kerja.' '.$bast->unit_utama }}</b></h5>
-                                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
+                                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                                 </h2>
                             </div>
                             <div class="col-md-2">
@@ -103,15 +103,15 @@
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
-                                    <div class="col-md-10">: {{ $bast->nama_pegawai }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-9">: {{ $bast->jabatan.' '.$bast->keterangan_pegawai }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-9">: {{ $bast->unit_kerja }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
@@ -133,8 +133,8 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis AADB</th>
-                                            <th>Jenis Kendaraan</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             @if ($bast->jenis_form == 'pengadaan')
@@ -161,25 +161,25 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
-                                    <label class="col-sm-4">Yang Menerima, <br> {{ $bast->keterangan_pegawai }}</label>
-                                    <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->keterangan_pegawai }}</label>
+                                    <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
-                                    <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
-                                    <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                 </div>
                             </div>
                         </div>

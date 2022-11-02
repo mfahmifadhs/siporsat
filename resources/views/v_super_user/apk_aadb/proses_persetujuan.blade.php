@@ -20,7 +20,7 @@
 </div>
 
 
-<section class="content">
+<section class="content text-capitalize">
     <div class="container">
         <div class="col-md-12 form-group">
             @if ($message = Session::get('success'))
@@ -35,7 +35,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Pengadaan Voucher BBM </h3>
+                <h3 class="card-title">Proses Persetujuan Usulan AADB </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
@@ -62,12 +62,14 @@
                             <input type="date" class="form-control" value="{{ $usulan->tanggal_usulan }}" readonly>
                         </div>
                     </div>
+                    @if ($usulan->jenis_form == 4)
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('MMMM Y') }}" readonly>
                         </div>
                     </div>
+                    @endif
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jumlah Kendaraan</label>
                         <div class="col-sm-10">
@@ -88,8 +90,7 @@
                                     <tr>
                                         <th>No</td>
                                         <th>Jenis AADB</td>
-                                        <th>Merk Kendaraan</td>
-                                        <th>Tipe Kendaraan</td>
+                                        <th>Merk/Tipe Kendaraan</td>
                                         <th>Tahun Kendaraan</td>
                                     </tr>
                                 </thead>
@@ -99,8 +100,7 @@
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $dataKendaraan->jenis_aadb }}</td>
-                                        <td>{{ $dataKendaraan->merk_kendaraan }}</td>
-                                        <td>{{ $dataKendaraan->tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                     </tr>
                                     @endforeach
@@ -126,7 +126,7 @@
                                     @foreach($usulan->usulanServis as $dataServis)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
+                                        <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
                                         <td>{{ $dataServis->kilometer_terakhir }}</td>
                                         <td>{{ $dataServis->tgl_servis_terakhir }}</td>
                                         <td>{{ $dataServis->jatuh_tempo_servis }}</td>
@@ -152,7 +152,7 @@
                                     @foreach($usulan->usulanSTNK as $dataServis)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
+                                        <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
                                         <td>{{ $dataServis->mb_stnk_lama }}</td>
                                     </tr>
                                     @endforeach
@@ -180,7 +180,7 @@
                                         <td>{{ $no++ }}</td>
                                         <td>
                                             <input type="hidden" name="detail_usulan_id[]" value="{{ $dataVoucher->id_form_usulan_voucher_bbm  }}">
-                                            {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}
+                                            {{ $dataVoucher->merk_tipe_kendaraan }}
                                         </td>
                                         <td><input type="text" class="form-control text-center" name="voucher_25[]" value="{{ $dataVoucher->voucher_25 }}"></td>
                                         <td><input type="text" class="form-control text-center" name="voucher_50[]" value="{{ $dataVoucher->voucher_50 }}"></td>

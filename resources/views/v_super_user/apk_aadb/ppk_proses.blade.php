@@ -31,8 +31,7 @@
                 <form action="{{ url('super-user/ppk/aadb/proses-usulan/pengadaan/'. $pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id_form_usulan" value="{{ $pengajuan->id_form_usulan }}">
-                    <input type="hidden" name="jenis_form" value="1">
-                    <input type="hidden" name="total_pengajuan" value="1">
+                    <input type="hidden" name="unit_kerja_id" value="{{ $pengajuan->id_unit_kerja }}">
                     <input type="hidden" name="id_kendaraan" value="{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor BAST</label>
@@ -70,7 +69,7 @@
                         <label class="col-sm-12 form-group text-muted">Informasi Kendaraan</label>
                         <label class="col-sm-2 col-form-label">Kode Barang</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_barang" placeholder="Mohon Masukan Kode Barang Kendaraan">
+                            <input type="text" class="form-control" name="kode_barang" value="{{ $dataPengajuan->id_jenis_kendaraan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -82,15 +81,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Merk</label>
+                        <label class="col-sm-2 col-form-label">Merk/Tipe</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="merk_kendaraan" value="{{ $dataPengajuan->merk_kendaraan }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tipe</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="tipe_kendaraan" value="{{ $dataPengajuan->tipe_kendaraan }}" readonly>
+                            <input type="text" class="form-control" name="merk_tipe_kendaraan" value="{{ $dataPengajuan->merk_tipe_kendaraan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -205,7 +198,7 @@
                         <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
                         <label class="col-sm-3 col-form-label">Nama Kendaraan</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" value="{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}" readonly>
+                            <input type="text" class="form-control" value="{{ $dataServis->merk_tipe_kendaraan }}" readonly>
                         </div>
                         <label class="col-sm-3 col-form-label">Nomor Plat</label>
                         <div class="col-sm-3">
@@ -335,7 +328,7 @@
                             <label class="col-sm-3 col-form-label">Nama Kendaraan</label>
                             <div class="col-sm-3">
                                 <input type="hidden" name="detail_usulan_id[]" value="{{  $dataStnk->id_form_usulan_perpanjangan_stnk }}">
-                                <input type="text" class="form-control" value="{{ $dataStnk->merk_kendaraan.' '.$dataStnk->tipe_kendaraan }}" readonly>
+                                <input type="text" class="form-control" value="{{ $dataStnk->merk_tipe_kendaraan }}" readonly>
                             </div>
                             <label class="col-sm-3 col-form-label">Masa Berlaku STNK</label>
                             <span id="mb-stnk1" class="col-sm-3"><input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($dataStnk->masa_berlaku_stnk)->isoFormat('Y-MM-DD') }}" readonly></span>
@@ -428,7 +421,7 @@
                             <label class="col-sm-2 col-form-label">Nama Kendaraan</label>
                             <div class="col-sm-10">
                                 <input type="hidden" name="detail_usulan_id[]" value="{{  $dataVoucher->id_form_usulan_voucher_bbm }}">
-                                <input type="text" class="form-control" value="{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}" readonly>
+                                <input type="text" class="form-control" value="{{ $dataVoucher->merk_tipe_kendaraan }}" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
