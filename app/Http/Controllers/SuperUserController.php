@@ -2323,7 +2323,7 @@ class SuperUserController extends Controller
 
     public function ChartDataOldat()
     {
-        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id', 'tim_kerja', 'tahun_perolehan', 'merk_tipe_barang', 'spesifikasi_barang', 'kondisi_barang', 'nama_pegawai')
+        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id', 'tim_kerja', 'tahun_perolehan', 'kondisi_barang', 'nama_pegawai')
             ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
