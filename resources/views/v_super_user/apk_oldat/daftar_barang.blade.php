@@ -30,7 +30,15 @@
                     </div>
                 @endif
             </div>
-            <div class="card">
+            {{-- <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%">
+                    75%</div>
+            </div> --}}
+            <div class="alert alert-secondary loading" role="alert">
+                Sedang menyiapkan data ...
+            </div>
+            <br>
+            <div class="card table-container">
                 <div class="card-body">
                     <table id="table-barang" class="table table-bordered">
                         <thead>
@@ -80,6 +88,8 @@
         </div>
     </section>
 
+
+
 @section('js')
     <script>
         $(document).ready(function() {
@@ -110,7 +120,9 @@
                             "aTargets": [0]
                         },
                     ],
-                    order: [[1, 'asc']],
+                    order: [
+                        [1, 'asc']
+                    ],
                     buttons: [{
                             extend: 'pdf',
                             text: ' PDF',
@@ -134,9 +146,10 @@
                     "bDestroy": true
                 }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
             });
+            // $('.table-container').hide()
             setTimeout(showTable, 1000);
         });
-        
+
 
         function showTable() {
             let dataTable = $('#table-barang').DataTable()
@@ -146,6 +159,9 @@
 
             dataTable.clear()
             // dataTable.draw()
+            // console.log('tes')
+            // console.log(parseInt(dataBarang.length / 4))
+            // let progress = $('.progress-bar')
             let no = 1
             dataBarang.forEach(element => {
                 dataTable.row.add([
@@ -159,6 +175,16 @@
                     element.kondisi_barang,
                     element.nama_pegawai
                 ])
+                // if (no == parseInt(dataBarang.length / 4 * 100)) {
+                //     console.log(no)
+                //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 4 * 100))
+                // } else if (no == parseInt(dataBarang.length / 2)) {
+                //     console.log(no)
+                //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 2 * 100))
+                // } else if (no == parseInt(dataBarang.length * 3 / 4)) {
+                //     console.log(no)
+                //     $('.progress-bar').css('width' , parseInt(dataBarang.length * 3 / 4 * 100))
+                // }
                 no++
                 // console.log('data ke - ' + no)
             });
@@ -236,14 +262,15 @@
             //     ]).draw(false)
             // });
             // });
-
+            $('.loading').hide()
+            // $('.table-container').show()
             console.log('finish')
         }
         $('#table-barang tbody').on('click', '.btn-detail', function() {
             let dataTable = $('#table-barang').DataTable()
-            let row = dataTable.row($(this).parents('tr') ).data()
+            let row = dataTable.row($(this).parents('tr')).data()
             // console.log(row)
-            window.location.href = "/super-user/oldat/barang/detail/"+ row[0];
+            window.location.href = "/super-user/oldat/barang/detail/" + row[0];
         })
     </script>
 @endsection
