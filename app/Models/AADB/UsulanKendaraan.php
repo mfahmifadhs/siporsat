@@ -17,7 +17,7 @@ class UsulanKendaraan extends Model
         'form_usulan_id',
         'jenis_aadb',
         'jenis_kendaraan_id',
-        'merk_kendaraan',
+        'merk_tipe_kendaraan',
         'tipe_kendaraan',
         'tahun_kendaraan'
     ];

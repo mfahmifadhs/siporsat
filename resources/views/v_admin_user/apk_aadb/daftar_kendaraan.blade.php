@@ -32,42 +32,16 @@
             @endif
         </div>
         <div class="card">
-            <div class="card-header">
-            <div class="card-tools">
-                    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload" title="Upload Data Kendaraan">
-                        <i class="fas fa-file-upload"></i>
-                    </a>
-                    <!-- <a href="{{ url('admin-user/aadb/kendaraan/download/data') }}" class="btn btn-primary" title="Download File" onclick="return confirm('Download data kendaraan ?')">
-                        <i class="fas fa-file-download"></i>
-                    </a> -->
-                    <!-- <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add" title="Tambah Kategori Kendaraan">
-                        <i class="fas fa-plus-circle"></i>
-                    </a> -->
-                </div>
-            </div>
             <div class="card-body">
                 <table id="table-aadb" class="table table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Unit Kerja</th>
-                            <th>Jenis AADB</th>
-                            <th>Kode Barang</th>
-                            <th>Jenis Kendaraan</th>
-                            <th>Merk</th>
-                            <th>Tipe</th>
+                            <th>Kendaraan</th>
                             <th>No. Plat</th>
-                            <th>Masa Berlaku STNK</th>
-                            <th>No. Plat RHS</th>
-                            <th>Masa Berlaku STNK</th>
-                            <th>No. BPKB</th>
-                            <th>No. Rangka</th>
-                            <th>No. Mesin</th>
-                            <th>Tahun Kendaraan</th>
-                            <th>Kondisi</th>
+                            <th>Detail</th>
                             <th>Pengguna</th>
-                            <th>Jabatan</th>
-                            <th>Pengemudi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -77,23 +51,30 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row->unit_kerja }}</td>
-                            <td>{{ $row->jenis_aadb }}</td>
-                            <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->jenis_kendaraan }}</td>
-                            <td>{{ $row->merk_kendaraan }}</td>
-                            <td>{{ $row->tipe_kendaraan }}</td>
-                            <td>{{ $row->no_plat_kendaraan }}</td>
-                            <td>{{ $row->mb_stnk_plat_kendaraan }}</td>
-                            <td>{{ $row->no_plat_rhs }}</td>
-                            <td>{{ $row->mb_stnk_plat_rhs }}</td>
-                            <td>{{ $row->no_bpkb }}</td>
-                            <td>{{ $row->no_rangka }}</td>
-                            <td>{{ $row->no_mesin }}</td>
-                            <td>{{ $row->tahun_kendaraan }}</td>
-                            <td>{{ $row->kondisi_kendaraan }}</td>
-                            <td>{{ $row->pengguna }}</td>
-                            <td>{{ $row->jabatan }}</td>
-                            <td>{{ $row->pengemudi }}</td>
+                            <td>
+                                <label>{{ $row->merk_tipe_kendaraan.' Tahun '.$row->tahun_kendaraan }}</label> <br>
+                                No. Polisi : {{ $row->no_plat_kendaraan }} <br>
+                                {{ $row->kode_barang.' / NUP. '.$row->nup_barang }} <br>
+                                {{ $row->jenis_kendaraan }} <br>
+                            </td>
+                            <td>
+                                <label>No. Plat</label> <br>
+                                No. Polisi : {{ $row->no_plat_kendaraan }} <br>
+                                Masa Berlaku : {{ $row->mb_stnk_plat_kendaraan }} <br>
+                                <label>No. Plat RHS</label> <br>
+                                No. Polisi : {{ $row->no_plat_rhs }} <br>
+                                Masa Berlaku : {{ $row->mb_stnk_plat_rhs }}
+                            </td>
+                            <td>
+                                No. BPKB: {{ $row->no_bpkb }} <br>
+                                No. Rangka: {{ $row->no_rangka }} <br>
+                                No. Mesin: {{ $row->no_mesin }} <br>
+                                Nilai Perolehan: Rp {{ number_format($row->nilai_perolehan, 0, ',', '.') }} <br>
+                            </td>
+                            <td>
+                                Pengguna : {{ $row->pengguna }} <br>
+                                Jabatan  : {{ $row->jabatan }} <br>
+                            </td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
@@ -199,7 +180,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Data Master Kendaraan',
                     exportOptions: {
-                        columns: [0,3,4,5,6,8,9,10]
+                        columns: [0,1,2,3,4,5]
                     },
                     messageTop: datetime
                 },

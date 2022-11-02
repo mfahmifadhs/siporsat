@@ -10,9 +10,9 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/aadb/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/aadb/kendaraan') }}">Kendaraan</a></li>
-                    <li class="breadcrumb-item active">Barang</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}">Master Kendaraan</a></li>
+                    <li class="breadcrumb-item active">Detail Kendaraan</li>
                 </ol>
             </div>
         </div>
@@ -26,9 +26,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-4 order-2 order-md-1">
-                    <h3 class="font-weight-bold"> {{ $kendaraan->merk_kendaraan.' '.$kendaraan->tipe_kendaraan }}</h3>
+                    <h3 class="font-weight-bold"> {{ $kendaraan->merk_tipe_kendaraan }}</h3>
                     <p class="text-muted text-capitalize">
-                        {{ $kendaraan->jenis_kendaraan.' '.$kendaraan->merk_kendaraan.' '.$kendaraan->tipe_kendaraan }}
+                        {{ $kendaraan->jenis_kendaraan.' '.$kendaraan->merk_tipe_kendaraan.' '. $kendaraan->tahun_kendaraan }}
                     </p>
                     <br>
                     <div class="text-muted">
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-md-6">
                                 <p class="text-sm">Tahun Kendaraan
-                                    <b class="d-block">{{ $kendaraan->tahun_kendaraan }}</b>
+                                    <b class="d-block">{{ \Carbon\Carbon::parse($kendaraan->tahun_kendaraan)->isoFormat('Y') }}</b>
                                 </p>
                             </div>
                         </div>

@@ -411,12 +411,12 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'surat-usulan') {
             $form = UsulanGdn::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
             $usulan = UsulanGdn::where('id_form_usulan', $id)
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -428,12 +428,12 @@ class SuperUserController extends Controller
             return view('v_super_user/apk_gdn/surat_usulan', compact('pimpinan', 'usulan'));
         } elseif ($aksi == 'print-surat-usulan') {
             $form = UsulanGdn::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
             $usulan = UsulanGdn::where('id_form_usulan', $id)
@@ -457,8 +457,7 @@ class SuperUserController extends Controller
                 $pengadaanBaru->unit_kerja_id           = Auth::user()->pegawai->unit_kerja_id;
                 $pengadaanBaru->kode_barang             = $request->kode_barang;
                 $pengadaanBaru->jenis_kendaraan_id      = $request->jenis_kendaraan_id;
-                $pengadaanBaru->merk_kendaraan          = $request->merk_kendaraan;
-                $pengadaanBaru->tipe_kendaraan          = $request->tipe_kendaraan;
+                $pengadaanBaru->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
                 $pengadaanBaru->no_plat_kendaraan       = $request->no_plat_kendaraan;
                 $pengadaanBaru->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
                 $pengadaanBaru->no_plat_rhs             = $request->no_plat_rhs;
@@ -564,23 +563,6 @@ class SuperUserController extends Controller
 
     public function Atk(Request $request)
     {
-        // $stok = StokAtk::select('id_kategori_atk', 'kategori_atk', DB::raw('sum(stok_atk) as total_stok'))
-        //                 ->join('atk_tbl','id_atk','atk_id')
-        //                 ->join('atk_tbl_kelompok_sub_kategori','id_kategori_atk','kategori_atk_id')
-        //                 ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-        //                 ->groupBy('id_kategori_atk', 'kategori_atk')
-        //                 ->get();
-        // dd($stok);
-
-        // UsulanAtk::select('jenis_form')->groupBy('jenis_form')->get();
-        // foreach ($jenisForm as $data) {
-        //     $dataArray[] = $data->jenis_form;
-        //     $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
-        //     $dataArray[] = $totalStok[0]->stok;
-        //     $dataChart['all'][] = $dataArray;
-        //     unset($dataArray);
-        // }
-        // dd($jenisForm);
 
         $googleChartData = $this->ChartDataAtk();
         $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
@@ -651,10 +633,10 @@ class SuperUserController extends Controller
             $usulan->save();
 
             $atk   = $request->atk_id;
-            $idAtk = UsulanAtkDetail::count();
             foreach ($atk as $i => $atk_id) {
+                $idDetail = UsulanAtkDetail::count();
                 $detail = new UsulanAtkDetail();
-                $detail->id_form_usulan_detail = ($idAtk + 1) + $i;
+                $detail->id_form_usulan_detail = $idDetail + 1;
                 $detail->form_usulan_id        = $idFormUsulan;
                 $detail->atk_id                = $atk_id;
                 $detail->jumlah_pengajuan      = $request->jumlah[$i];
@@ -699,12 +681,12 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'surat-usulan') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
             $usulan = UsulanAtk::where('id_form_usulan', $id)
@@ -718,12 +700,12 @@ class SuperUserController extends Controller
             return view('v_super_user/apk_atk/surat_usulan', compact('pimpinan', 'usulan'));
         } elseif ($aksi == 'surat-bast') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
             $bast = UsulanAtk::where('id_form_usulan', $id)
@@ -737,12 +719,12 @@ class SuperUserController extends Controller
             return view('v_super_user/apk_atk/surat_bast', compact('pimpinan', 'bast', 'id'));
         } elseif ($aksi == 'print-surat-usulan') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
             $usulan = UsulanAtk::where('id_form_usulan', $id)
@@ -750,6 +732,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->get();
 
             return view('v_super_user/apk_atk/print_surat_usulan', compact('pimpinan', 'usulan'));
@@ -769,8 +752,7 @@ class SuperUserController extends Controller
                 $pengadaanBaru->unit_kerja_id           = Auth::user()->pegawai->unit_kerja_id;
                 $pengadaanBaru->kode_barang             = $request->kode_barang;
                 $pengadaanBaru->jenis_kendaraan_id      = $request->jenis_kendaraan_id;
-                $pengadaanBaru->merk_kendaraan          = $request->merk_kendaraan;
-                $pengadaanBaru->tipe_kendaraan          = $request->tipe_kendaraan;
+                $pengadaanBaru->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
                 $pengadaanBaru->no_plat_kendaraan       = $request->no_plat_kendaraan;
                 $pengadaanBaru->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
                 $pengadaanBaru->no_plat_rhs             = $request->no_plat_rhs;
@@ -801,12 +783,12 @@ class SuperUserController extends Controller
             return redirect('super-user/aadb/usulan/bast/' . $id);
         } elseif ($aksi == 'print-surat-bast') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 1 && $form->jenis_form == 'pengadaan') {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
             $bast = UsulanAtk::where('otp_bast_pengusul', $id)
@@ -1063,12 +1045,17 @@ class SuperUserController extends Controller
     {
         $unitKerja       = UnitKerja::get();
         $jenisKendaraan  = JenisKendaraan::get();
-        $merk            = Kendaraan::select('merk_kendaraan')->groupBy('merk_kendaraan')->get();
+        $merk            = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
         $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
         $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
         $kendaraan       = Kendaraan::orderBy('jenis_aadb', 'ASC')
             ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+        $stnk      = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->leftjoin('tbl_unit_kerja','id_unit_kerja', 'unit_kerja_id')
+            ->where(DB::raw("(DATE_FORMAT(mb_stnk_plat_kendaraan, '%Y-%m'))"),'>',Carbon::now()->format('Y-m'))
+            ->orderBy('mb_stnk_plat_kendaraan','ASC')
             ->get();
         $googleChartData = $this->ChartDataAADB();
 
@@ -1091,7 +1078,8 @@ class SuperUserController extends Controller
                 ->paginate(5);
         }
 
-        return view('v_super_user.apk_aadb.index', compact('unitKerja', 'jenisKendaraan', 'merk', 'tahun', 'pengguna', 'googleChartData', 'kendaraan', 'pengajuan'));
+        return view('v_super_user.apk_aadb.index', compact('unitKerja', 'jenisKendaraan', 'merk', 'tahun', 'pengguna',
+        'googleChartData', 'kendaraan', 'pengajuan','stnk'));
     }
 
     public function SubmissionAadb(Request $request, $aksi, $id)
@@ -1156,14 +1144,13 @@ class SuperUserController extends Controller
                 $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                 $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                 $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
-                $usulanPengadaan->merk_kendaraan            = $request->merk_kendaraan;
-                $usulanPengadaan->tipe_kendaraan            = $request->tipe_kendaraan;
+                $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_kendaraan.' '.$request->tipe_kendaraan;
                 $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
                 $usulanPengadaan->save();
             } elseif ($id == 'servis') {
                 $totalUsulan    = UsulanServis::count();
                 $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-                $kendaraan = $request->kendaraan_id;
+                $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $usulanServis   = new UsulanServis();
                     $usulanServis->id_form_usulan_servis    = $idUsulan + $i;
@@ -1272,10 +1259,9 @@ class SuperUserController extends Controller
     public function LetterAadb(Request $request, $aksi, $id)
     {
         if ($aksi == 'surat-usulan') {
-
-            if (Auth::user()->pegawai->unit_kerja_id == 1) {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -1291,9 +1277,9 @@ class SuperUserController extends Controller
 
             return view('v_super_user/apk_aadb/surat_usulan', compact('pimpinan', 'usulan'));
         } elseif ($aksi == 'surat-bast') {
-            if (Auth::user()->pegawai->unit_kerja_id == 1) {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -1315,9 +1301,9 @@ class SuperUserController extends Controller
 
             return view('v_super_user/apk_aadb/surat_bast', compact('pimpinan', 'jenisAadb', 'bast', 'kendaraan', 'id'));
         } elseif ($aksi == 'print-surat-usulan') {
-            if (Auth::user()->pegawai->unit_kerja_id == 1) {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -1347,8 +1333,7 @@ class SuperUserController extends Controller
                 $pengadaanBaru->unit_kerja_id           = Auth::user()->pegawai->unit_kerja_id;
                 $pengadaanBaru->kode_barang             = $request->kode_barang;
                 $pengadaanBaru->jenis_kendaraan_id      = $request->jenis_kendaraan_id;
-                $pengadaanBaru->merk_kendaraan          = $request->merk_kendaraan;
-                $pengadaanBaru->tipe_kendaraan          = $request->tipe_kendaraan;
+                $pengadaanBaru->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
                 $pengadaanBaru->no_plat_kendaraan       = $request->no_plat_kendaraan;
                 $pengadaanBaru->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
                 $pengadaanBaru->no_plat_rhs             = $request->no_plat_rhs;
@@ -1378,9 +1363,9 @@ class SuperUserController extends Controller
 
             return redirect('super-user/aadb/usulan/bast/' . $id);
         } elseif ($aksi == 'print-surat-bast') {
-            if (Auth::user()->pegawai->unit_kerja_id == 1) {
+            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -1409,6 +1394,7 @@ class SuperUserController extends Controller
         if ($aksi == 'daftar') {
             $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->join('aadb_tbl_kondisi_kendaraan', 'id_kondisi_kendaraan', 'kondisi_kendaraan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->orderBy('jenis_aadb', 'ASC')
                 ->get();
 
@@ -1432,15 +1418,15 @@ class SuperUserController extends Controller
             if ($search == '') {
                 $kendaraan  = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                    ->orderBy('merk_kendaraan', 'ASC')
+                    ->orderBy('merk_tipe_kendaraan', 'ASC')
                     ->get();
             } else {
                 $kendaraan  = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                    ->where('merk_kendaraan', 'like', '%' . $search . '%')
+                    ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('tahun_kendaraan', 'like', '%' . $search . '%')
-                    ->orderBy('merk_kendaraan', 'ASC')
+                    ->orderBy('merk_tipe_kendaraan', 'ASC')
                     ->get();
             }
 
@@ -1448,7 +1434,7 @@ class SuperUserController extends Controller
             foreach ($kendaraan as $data) {
                 $response[] = array(
                     "id"    =>  $data->id_kendaraan,
-                    "text"  =>  $data->merk_kendaraan . ' ' . $data->tipe_kendaraan . ' tahun ' . $data->tahun_kendaraan
+                    "text"  =>  $data->merk_tipe_kendaraan. ' tahun ' . $data->tahun_kendaraan
                 );
             }
 
@@ -1620,7 +1606,7 @@ class SuperUserController extends Controller
 
     public function ChartDataAadb()
     {
-        $dataKendaraan = Kendaraan::select('id_kendaraan', 'unit_kerja_id', 'unit_kerja', 'jenis_aadb', 'jenis_kendaraan_id', 'jenis_kendaraan', 'merk_kendaraan', 'tipe_kendaraan', 'tahun_kendaraan', 'pengguna')
+        $dataKendaraan = Kendaraan::select('id_kendaraan', 'unit_kerja_id', 'unit_kerja', 'jenis_aadb', 'jenis_kendaraan_id', 'jenis_kendaraan', 'merk_tipe_kendaraan','tahun_kendaraan', 'pengguna')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan')
             ->get();
@@ -1645,7 +1631,7 @@ class SuperUserController extends Controller
 
         $dataJenisKendaraan = JenisKendaraan::get();
 
-        if ($request->hasAny(['jenis_aadb', 'unit_kerja', 'jenis_kendaraan', 'merk_kendaraan', 'tahun_kendaraan', 'pengguna'])) {
+        if ($request->hasAny(['jenis_aadb', 'unit_kerja', 'jenis_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan', 'pengguna'])) {
             if ($request->jenis_aadb) {
                 $dataSearch = $dataKendaraan->where('jenis_aadb', $request->jenis_aadb);
             }
@@ -1655,8 +1641,8 @@ class SuperUserController extends Controller
             if ($request->jenis_kendaraan) {
                 $dataSearch = $dataKendaraan->where('jenis_kendaraan_id', $request->jenis_kendaraan);
             }
-            if ($request->merk_kendaraan) {
-                $dataSearch = $dataKendaraan->where('merk_kendaraan', $request->merk_kendaraan);
+            if ($request->merk_tipe_kendaraan) {
+                $dataSearch = $dataKendaraan->where('merk_tipe_kendaraan', $request->merk_tipe_kendaraan);
             }
             if ($request->tahun_kendaraan) {
                 $dataSearch = $dataKendaraan->where('tahun_kendaraan', $request->tahun_kendaraan);
@@ -1703,15 +1689,14 @@ class SuperUserController extends Controller
             $search = $request->search;
 
             if ($search == '') {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan) AS nama_kendaraan'))
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_tipe_kendaraan, " / ", pengguna) AS nama_kendaraan'))
                     ->orderby('nama_kendaraan', 'asc')
                     ->get();
             } else {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan) AS nama_kendaraan'))
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_tipe_kendaraan, " / ", pengguna) AS nama_kendaraan'))
                     ->orderby('nama_kendaraan', 'asc')
-                    ->where('merk_kendaraan', 'like', '%' . $search . '%')
+                    ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('no_plat_kendaraan', 'like', '%' . $search . '%')
-                    ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('pengguna', 'like', '%' . $search . '%')
                     ->get();
             }
@@ -1757,7 +1742,9 @@ class SuperUserController extends Controller
     public function Items(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $barang = Barang::select('id_barang','kode_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan', 'kondisi_barang', 'nama_pegawai' )
+            $char = '"';
+            $barang = Barang::select('id_barang','kode_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
+                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
                 ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -1765,6 +1752,7 @@ class SuperUserController extends Controller
                 ->orderBy('tahun_perolehan', 'DESC')
                 ->get();
 
+            $result = json_decode($barang);
             return view('v_super_user.apk_oldat.daftar_barang', compact('barang'));
         } elseif ($aksi == 'detail') {
             $barang = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
@@ -2068,9 +2056,9 @@ class SuperUserController extends Controller
             return redirect('super-user/oldat/surat/surat-bast/' . $request->kode_otp)->with('success', 'Berhasil membuat BAST');
         } elseif ($aksi == 'print-surat-bast') {
             $pegawai    = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-            if ($pegawai->unit_kerja_id == 1) {
+            if ($pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -2086,9 +2074,9 @@ class SuperUserController extends Controller
             return view('v_super_user.apk_oldat.print_surat_bast', compact('pimpinan', 'bast'));
         } elseif ($aksi == 'surat-bast') {
             $pegawai    = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-            if ($pegawai->unit_kerja_id == 1) {
+            if ($pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -2104,9 +2092,9 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'surat-usulan') {
             $pegawai        = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
 
-            if ($pegawai->unit_kerja_id == 1) {
+            if ($pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -2123,9 +2111,9 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'print-surat-usulan') {
             $pegawai        = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
 
-            if ($pegawai->unit_kerja_id == 1) {
+            if ($pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 1)->first();
+                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             } else {
                 $pimpinan = null;
             }
@@ -2154,9 +2142,9 @@ class SuperUserController extends Controller
                     ->where('kategori_barang_id', $request->kategori)
                     ->pluck('id_barang', 'merk_tipe_barang');
             } else {
-                $result  = Kendaraan::select('id_barang', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_kendaraan," ",tipe_kendaraan," / ",pengguna) AS nama_kendaraan'))
+                $result  = Kendaraan::select('id_barang', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_tipe_kendaraan," / ",pengguna) AS nama_kendaraan'))
                     ->orderby('nama_kendaraan', 'asc')
-                    ->where('merk_kendaraan', 'like', '%' . $search . '%')
+                    ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
                     ->where('no_plat_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('pengguna', 'like', '%' . $search . '%')
@@ -2532,6 +2520,7 @@ class SuperUserController extends Controller
                     ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                     ->where('id_form_usulan', $id)
                     ->first();
+
                 return view('v_super_user.apk_aadb.ppk_proses', compact('idBast', 'tujuan', 'pengajuan', 'aksi', 'id', 'form'));
             }
 
@@ -2567,18 +2556,18 @@ class SuperUserController extends Controller
                     $kendaraan = new Kendaraan();
                     $kendaraan->id_kendaraan            = $request->id_kendaraan;
                     $kendaraan->form_usulan_id          = $request->id_form_usulan;
-                    $kendaraan->unit_kerja_id           = 1;
+                    $kendaraan->unit_kerja_id           = $request->unit_kerja_id;
                     $kendaraan->jenis_aadb              = $request->jenis_aadb;
                     $kendaraan->kode_barang             = $request->kode_barang;
                     $kendaraan->jenis_kendaraan_id      = $request->jenis_kendaraan;
-                    $kendaraan->merk_kendaraan          = $request->merk_kendaraan;
-                    $kendaraan->tipe_kendaraan          = $request->tipe_kendaraan;
+                    $kendaraan->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
                     $kendaraan->no_plat_kendaraan       = $request->no_plat_kendaraan;
                     $kendaraan->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
                     $kendaraan->no_plat_rhs             = $request->no_plat_rhs;
                     $kendaraan->mb_stnk_plat_rhs        = $request->mb_stnk_plat_rhs;
                     $kendaraan->tahun_kendaraan         = $request->tahun_kendaraan;
                     $kendaraan->kondisi_kendaraan_id    = 1;
+                    $kendaraan->pengguna                = '-';
                     $kendaraan->save();
 
                     if ($request->jenis_aadb == 'sewa') {
@@ -2588,6 +2577,7 @@ class SuperUserController extends Controller
                         $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
                         $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
                         $kendaraanSewa->penyedia            = $request->penyedia;
+                        $kendaraanSewa->status_sewa         = 1;
                         $kendaraanSewa->save();
                     }
 

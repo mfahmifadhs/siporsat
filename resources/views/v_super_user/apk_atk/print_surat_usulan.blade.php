@@ -26,8 +26,8 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>surat pengajuan usulan</b></h5>
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $dataUsulan->unit_kerja.' '.$dataUsulan->unit_utama }}</b></h5>
+                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
+                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $dataUsulan->unit_utama }}</b></h5>
                     <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                 </h2>
             </div>
@@ -48,15 +48,15 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
-                    <div class="col-md-9">: {{ $dataUsulan->nama_pegawai }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Jabatan</div>
-                    <div class="col-md-9">: {{ $dataUsulan->jabatan.' '.$dataUsulan->keterangan_pegawai }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Unit Kerja</div>
-                    <div class="col-md-9">: {{ $dataUsulan->unit_kerja }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Tanggal Usulan</div>
@@ -76,8 +76,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Jenis AADB</th>
-                            <th>Jenis Kendaraan</th>
+                            <th>Nama Barang</th>
+                            <th>Merk/Tipe</th>
                             <th>Jumlah</th>
                             <th>Satuan</th>
                             <th>Keterangan</th>
@@ -98,15 +98,15 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
-                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ $dataUsulan->keterangan_pegawai }}</label>
+                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</label>
                     @if ($dataUsulan->otp_usulan_pimpinan != null)
-                    <label class="col-sm-6">Disetujui Oleh, <br> {{ $pimpinan->keterangan_pegawai }}</label>
+                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->jabatan)) }}</label>
                     @endif
                 </div>
             </div>
-            <div class="col-md-12 mt-4">
+            <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
                     @if ($dataUsulan->otp_usulan_pimpinan != null)
@@ -114,11 +114,11 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-12 mt-4">
+            <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
-                    <label class="col-sm-6">{{ $dataUsulan->nama_pegawai }}</label>
+                    <label class="col-sm-6">{{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</label>
                     @if ($dataUsulan->otp_usulan_pimpinan != null )
-                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
+                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                     @endif
                 </div>
             </div>

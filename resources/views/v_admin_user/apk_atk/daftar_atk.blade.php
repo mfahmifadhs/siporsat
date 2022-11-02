@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-8">
-                <h1 class="m-0">Daftar ATK</h1>
+                <h4 class="m-0">Daftar ATK</h4>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">4)  Barang</h3>
                         <div class="card-tools">
-                            <a href="{{ url('super-user/atk/barang/tambah/4') }}" type="button" class="btn btn-tool">
+                            <a href="{{ url('admin-user/atk/barang/tambah-atk/4') }}" type="button" class="btn btn-tool">
                                 <i class="fas fa-plus-square"></i>
                             </a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -91,7 +91,7 @@
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">3) Jenis Barang</h3>
                         <div class="card-tools">
-                            <a href="{{ url('super-user/atk/barang/tambah/3') }}" type="button" class="btn btn-tool">
+                            <a href="{{ url('admin-user/atk/barang/tambah/3') }}" type="button" class="btn btn-tool">
                                 <i class="fas fa-plus-square"></i>
                             </a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">

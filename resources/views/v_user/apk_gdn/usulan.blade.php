@@ -36,7 +36,7 @@
                 <form action="{{ url('unit-kerja/gdn/usulan/proses/pengajuan') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                    <input type="hidden" name="jenis_form" value="{{ $id }}">
+                    <input type="hidden" name="jenis_form" value="{{ $aksi }}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">

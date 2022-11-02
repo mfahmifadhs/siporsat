@@ -35,19 +35,12 @@
                 <table id="table-aadb" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center">No</th>
-                            <th>Jenis AADB</th>
-                            <th>Kode Barang</th>
-                            <th>Jenis Kendaraan</th>
-                            <th style="width: 10%;">Merk / Tipe</th>
-                            <th style="width: 8%;">No. Plat</th>
-                            <th>Masa Berlaku STNK</th>
-                            <th>No. Plat RHS</th>
-                            <th>Masa Berlaku STNK</th>
-                            <th>Kondisi</th>
+                            <th>No</th>
+                            <th>Unit Kerja</th>
+                            <th>Kendaraan</th>
+                            <th>No. Plat</th>
+                            <th>Detail</th>
                             <th>Pengguna</th>
-                            <th>Jabatan</th>
-                            <th>Pengemudi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -55,25 +48,38 @@
                     <tbody>
                         @foreach($kendaraan as $row)
                         <tr>
-                            <td class="text-center">{{ $no++ }}</td>
-                            <td>{{ $row->jenis_aadb }}</td>
-                            <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->jenis_kendaraan }}</td>
-                            <td>{{ $row->merk_kendaraan.' '.$row->tipe_kendaraan }}</td>
-                            <td>{{ $row->no_plat_kendaraan }}</td>
-                            <td>{{ $row->mb_stnk_plat_kendaraan }}</td>
-                            <td>{{ $row->no_plat_rhs }}</td>
-                            <td>{{ $row->mb_stnk_plat_rhs }}</td>
-                            <td>{{ $row->kondisi_kendaraan }}</td>
-                            <td>{{ $row->pengguna }}</td>
-                            <td>{{ $row->jabatan }}</td>
-                            <td>{{ $row->pengemudi }}</td>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $row->unit_kerja }}</td>
                             <td>
+                                <label>{{ $row->merk_tipe_kendaraan.' Tahun '.$row->tahun_kendaraan }}</label> <br>
+                                No. Polisi : {{ $row->no_plat_kendaraan }} <br>
+                                {{ $row->kode_barang.' / NUP. '.$row->nup_barang }} <br>
+                                {{ $row->jenis_kendaraan }} <br>
+                            </td>
+                            <td>
+                                <label>No. Plat</label> <br>
+                                No. Polisi : {{ $row->no_plat_kendaraan }} <br>
+                                Masa Berlaku : {{ $row->mb_stnk_plat_kendaraan }} <br>
+                                <label>No. Plat RHS</label> <br>
+                                No. Polisi : {{ $row->no_plat_rhs }} <br>
+                                Masa Berlaku : {{ $row->mb_stnk_plat_rhs }}
+                            </td>
+                            <td>
+                                No. BPKB: {{ $row->no_bpkb }} <br>
+                                No. Rangka: {{ $row->no_rangka }} <br>
+                                No. Mesin: {{ $row->no_mesin }} <br>
+                                Nilai Perolehan: Rp {{ number_format($row->nilai_perolehan, 0, ',', '.') }} <br>
+                            </td>
+                            <td>
+                                Pengguna : {{ $row->pengguna }} <br>
+                                Jabatan : {{ $row->jabatan }} <br>
+                            </td>
+                            <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item btn" href="{{ url('super-user/aadb/kendaraan/detail/'. $row->id_kendaraan) }}">
+                                    <a class="dropdown-item" href="{{ url('super-user/aadb/kendaraan/detail/'. $row->id_kendaraan) }}">
                                         <i class="fas fa-info-circle"></i> Detail
                                     </a>
                                 </div>
@@ -125,26 +131,6 @@
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ],
-            buttons: [
-                {
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'laporan_kendaraan',
-                    exportOptions: {
-                        columns: [0, 3, 4, 5, 10, 11,12]
-                    }
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'laporan_kendaraan',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12]
-                    }
-                }
             ]
         }).buttons().container().appendTo('#table-aadb_wrapper .col-md-6:eq(0)');
     });

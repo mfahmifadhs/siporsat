@@ -1,21 +1,21 @@
 @extends('v_super_user.layout.app')
 
 @section('content')
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Data Master Barang</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Barang</li>
-                    </ol>
-                </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Data Master Barang</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Barang</li>
+                </ol>
             </div>
         </div>
     </div>
+</div>
 
     <section class="content">
         <div class="container-fluid">
@@ -91,22 +91,22 @@
 
 
 @section('js')
-    <script>
-        $(document).ready(function() {
-            console.log("ready!");
-            $(function() {
-                $("#table-barang").DataTable({
-                    "responsive": true,
-                    "lengthChange": true,
-                    "autoWidth": false,
-                    "lengthMenu": [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "Semua"]
-                    ],
-                    columnDefs: [{
-                            targets: -1,
-                            data: null,
-                            defaultContent: `<a type="button" class="btn btn-primary" data-toggle="dropdown">
+<script>
+    $(document).ready(function() {
+        console.log("ready!");
+        $(function() {
+            $("#table-barang").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "Semua"]
+                ],
+                columnDefs: [{
+                        targets: -1,
+                        data: null,
+                        defaultContent: `<a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
@@ -229,4 +229,5 @@
             })
     </script>
 @endsection
+
 @endsection

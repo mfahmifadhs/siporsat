@@ -11,7 +11,6 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-admin/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-admin/oldat/kategori-barang/data/semua') }}">Kategori Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -50,49 +49,21 @@
                 <table id="table-barang" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th>Id Barang</th>
+                            <th class="text-center">No</th>
                             <th>Kode Barang</th>
                             <th>NUP</th>
-                            <th>Nama Barang</th>
-                            <th>Spesifikasi</th>
+                            <th>Merk / Tipe</th>
                             <th>Jumlah</th>
                             <th>Nilai Perolehan</th>
                             <th>Tahun Perolehan</th>
+                            <th>Kondisi</th>
                             <th>Pengguna</th>
-                            <th>Unit Kerja</th>
-                            <th class="text-center">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody>
-                        @foreach($barang as $row)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->nup_barang }}</td>
-                            <td>{{ $row->kategori_barang }}</td>
-                            <td>{{ $row->spesifikasi_barang }}</td>
-                            <td>{{ $row->jumlah_barang.' '.$row->satuan_barang }}</td>
-                            <td>Rp {{ number_format($row->nilai_perolehan, 0, ',', '.') }}</td>
-                            <td>{{ $row->tahun_perolehan }}</td>
-                            <td>{{ $row->nama_pegawai }}</td>
-                            <td>{{ $row->unit_kerja }}</td>
-                            <td class="text-center">
-                                <a type="button" class="btn btn-primary" data-toggle="dropdown">
-                                    <i class="fas fa-bars"></i>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url('admin-user/oldat/barang/detail/'. $row->id_barang) }}">
-                                        <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                    <!-- <a class="dropdown-item" href="{{ url('admin-user/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </a> -->
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -110,7 +81,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ url('super-admin/oldat/kategori-barang/proses-tambah/data') }}" method="post">
+                <form action="{{ url('admin-user    /oldat/kategori-barang/proses-tambah/data') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="level">Kategori Barang :</label>
@@ -161,47 +132,98 @@
 
 @section('js')
 <script>
-    $(function() {
-        var currentdate = new Date();
-        var datetime = "Tanggal: " + currentdate.getDate() + "/"
-            + (currentdate.getMonth()+1)  + "/"
-            + currentdate.getFullYear() + " \n Pukul: "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
-            + currentdate.getSeconds()
-
-        $("#table-barang").DataTable({
-            "responsive": true,
-            "lengthChange": true,
-            "autoWidth": false,
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Semua"]
-            ],
-            buttons: [
-                {
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0,3,4,5,6,7,9]
+    $(document).ready(function() {
+        console.log("ready!");
+        $(function() {
+            $("#table-barang").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "Semua"]
+                ],
+                columnDefs: [{
+                        targets: -1,
+                        data: null,
+                        defaultContent: `<a type="button" class="btn btn-primary" data-toggle="dropdown">
+                                    <i class="fas fa-bars"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item btn btn-detail">
+                                        <i class="fas fa-info-circle"></i> Detail
+                                    </a>
+                                </div>`,
                     },
-                    messageTop: datetime
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0,1,2,3,4,5,6,7,8,9]
+                    {
+                        "bVisible": false,
+                        "aTargets": [0]
                     },
-                    messageTop: datetime
-                }
-            ]
-        }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
+                ],
+                order: [
+                    [1, 'asc']
+                ],
+                buttons: [{
+                        extend: 'pdf',
+                        text: ' PDF',
+                        className: 'fas fa-file btn btn-primary mr-2 rounded',
+                        title: 'Data Master Barang',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                            // columns: [0, 3, 4, 5, 6, 7, 8, 9]
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: ' Excel',
+                        className: 'fas fa-file btn btn-primary mr-2 rounded',
+                        title: 'Data Master Barang',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        }
+                    }
+                ],
+                "bDestroy": true
+            }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
+        });
+        setTimeout(showTable, 1000);
     });
+
+
+    function showTable() {
+        let dataTable = $('#table-barang').DataTable()
+        console.log('start')
+        let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
+        // console.log($('#table-barang').find('tbody'))
+
+        dataTable.clear()
+        // dataTable.draw()
+        let no = 1
+        dataBarang.forEach(element => {
+            dataTable.row.add([
+                element.id_barang,
+                no,
+                element.kode_barang,
+                element.nup_barang,
+                element.barang,
+                element.jumlah_barang + ' ' + element.satuan_barang,
+                element.nilai_perolehan,
+                element.tahun_perolehan,
+                element.kondisi_barang,
+                element.nama_pegawai
+            ])
+            no++
+            // console.log('data ke - ' + no)
+        });
+        dataTable.draw()
+        console.log('finish')
+    }
+    $('#table-barang tbody').on('click', '.btn-detail', function() {
+        let dataTable = $('#table-barang').DataTable()
+        let row = dataTable.row($(this).parents('tr')).data()
+        // console.log(row)
+        window.location.href = "/admin-user/oldat/barang/detail/" + row[0];
+    })
 </script>
 @endsection
 

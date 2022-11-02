@@ -76,11 +76,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            @if( Auth::user()->pegawai->jabatan_id == '4' || Auth::user()->pegawai->jabatan_id == '6' && Auth::user()->pegawai->tim_kerja_id != null)
-                                {{  Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->jabatan->jabatan }} <br> {{ $timKerja->tim_kerja }}
-                            @else
-                                {{  Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->jabatan->jabatan }} {{ Auth::user()->pegawai->keterangan_pegawai }}
-                            @endif
+                            {{  Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->keterangan_pegawai }}
                         </span>
                         <div class="dropdown-divider"></div>
                         <a href="{{ url('admin-user/profil/user/'. Auth::user()->id) }}" class="dropdown-item">

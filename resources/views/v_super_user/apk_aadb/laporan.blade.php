@@ -167,25 +167,6 @@
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ],
-            buttons: [{
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0, 2, 3, 4, 5, 6]
-                    }
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6]
-                    }
-                }
             ]
         }).buttons().container().appendTo('#table-pengajuan_wrapper .col-md-6:eq(0)');
 
@@ -199,19 +180,6 @@
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ],
-            buttons: [{
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Laporan Usulan Pengajuan OLDAT'
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Laporan Usulan Pengajuan OLDAT'
-                }
             ]
         }).buttons().container().appendTo('#table-laporan_wrapper .col-md-6:eq(0)');
     });

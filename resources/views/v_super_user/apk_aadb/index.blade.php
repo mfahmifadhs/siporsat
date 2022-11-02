@@ -54,474 +54,50 @@
                         </a>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6 form-group">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <h4 class="card-title font-weight-bold">DAFTAR USULAN PENGAJUAN</h4>
+                        <h4 class="card-title font-weight-bold small">Masa Jatuh Tempo STNK</h4>
                     </div>
                     <div class="card-body">
-                        <div class="col-md-12">
-                            @foreach($pengajuan as $dataPengajuan)
-                            <small>
-                                <div class="form-group row">
-                                    <label class="col-md-5 col-6">{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</label>
-                                    <div class="col-md-7 col-6 text-right">
-                                        @if($dataPengajuan->status_proses_id == 1)
-                                        <span class="badge badge-warning py-1">menunggu persetujuan</span>
-                                        @elseif($dataPengajuan->status_proses_id == 2)
-                                        <span class="badge badge-warning py-1">usulan diproses</span>
-                                        @elseif($dataPengajuan->status_proses_id == 3)
-                                        <span class="badge badge-warning py-1">konfirmasi penerimaan</span>
-                                        @elseif($dataPengajuan->status_proses_id == 4)
-                                        <span class="badge badge-warning py-1">konfirmasi kabag rt</span>
-                                        @endif
-                                    </div>
-                                    <label class="col-md-4 col-6">ID Usulan</label>
-                                    <div class="col-md-8 col-6">: {{ $dataPengajuan->id_form_usulan }}</div>
-                                    <label class="col-md-4 col-6">Tujuan</label>
-                                    <div class="col-md-8 col-6 text-capitalize">: {{ $dataPengajuan->jenis_form_usulan }}</div>
-                                    <label class="col-md-4 col-6">Pengusul</label>
-                                    <div class="col-md-8 col-6">: {{ $dataPengajuan->nama_pegawai }}</div>
-                                    <label class="col-md-4 col-6">Jumlah Usulan</label>
-                                    <div class="col-md-8 col-6">: {{ $dataPengajuan->total_pengajuan }} kendaraan</div>
-                                    <div class="col-md-12 col-12">
-                                        <small>
-                                            <a class="btn btn-primary btn-sm mt-2" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
-                                            <!-- Aksi untuk Kepala Bagian RT -->
-                                            @if($dataPengajuan->status_proses_id == 1)
-                                            @if(Auth::user()->pegawai->jabatan_id == 2)
-                                            <a type="button" class="btn btn-success btn-sm text-white mt-2" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}">
-                                                <i class="fas fa-check-circle"></i>
-                                            </a>
-                                            <a href="{{ url('super-user/aadb/usulan/proses-ditolak/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-danger btn-sm text-white mt-2" onclick="return confirm('Apakah pengajuan ini ditolak ?')">
-                                                <i class="fas fa-times-circle"></i>
-                                            </a>
-                                            @endif
-                                            @endif
-
-                                            @if($dataPengajuan->status_proses_id == 2)
-                                            @if(Auth::user()->pegawai->jabatan_id == 5)
-                                            <a class="btn btn-success btn-sm text-white mt-2" href="{{ url('super-user/ppk/aadb/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Usulan Selesai Di Proses ?')">
-                                                <i class="fas fa-people-carry"></i> Menyerahkan Barang
-                                            </a>
-                                            @endif
-                                            @endif
-
-                                            @if($dataPengajuan->status_proses_id == 3)
-                                            @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id)
-                                            <a class="btn btn-success btn-sm mt-2" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
-                                                <i class="fas fa-check-circle"></i> <small>barang diterima</small>
-                                            </a>
-                                            @endif
-                                            @endif
-
-                                            @if($dataPengajuan->status_proses_id == 4)
-                                            @if(Auth::user()->pegawai->jabatan_id == 2)
-                                            <a class="btn btn-success btn-sm mt-2" data-toggle="modal" data-target="#konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}" title="Detail Usulan">
-                                                <i class="fas fa-check-circle"></i> <small>usulan diterima</small>
-                                            </a>
-                                            @endif
-                                            @endif
-
-                                        </small>
-                                    </div>
-                                </div>
-                            </small>
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                            <!-- Modal Detail Pengajuan -->
-                            <div class="modal fade" id="modal-info-{{ $dataPengajuan->id_form_usulan }}">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-body text-capitalize">
-                                            <div class="text-uppercase text-center font-weight-bold mb-4">
-                                                usulan {{ $dataPengajuan->jenis_form_usulan }} aadb
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Nama Pengusul </label></div>
-                                                <div class="col-md-10">: {{ $dataPengajuan->nama_pegawai }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Jabatan Pengusul</label></div>
-                                                <div class="col-md-10">: {{ $dataPengajuan->jabatan }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Unit Kerja</label></div>
-                                                <div class="col-md-10">: {{ $dataPengajuan->unit_kerja }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Tanggal Usulan</label></div>
-                                                <div class="col-md-10">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Total Pengajuan</label></div>
-                                                <div class="col-md-10">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
-                                            </div>
-                                            @if($dataPengajuan->jenis_form == 1)
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-2"><label>Rencana Pengguna</label></div>
-                                                <div class="col-md-10">: {{ $dataPengajuan->rencana_pengguna }}</div>
-                                            </div>
-                                            @endif
-                                            <div class="form-group row">
-                                                <div class="col-md-12">
-                                                    <!-- Informasi Kendaraan : Pengajuan Usulan Pengadaan -->
-                                                    @if($dataPengajuan->jenis_form == 1)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>No</td>
-                                                                <td style="width: 20%;">Jenis AADB</td>
-                                                                <td style="width: 30%;">Merk Kendaraan</td>
-                                                                <td style="width: 30%;">Tipe Kendaraan</td>
-                                                                <td style="width: 20%;">Tahun Kendaraan</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->usulanKendaraan as $dataPengadaan)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataPengadaan->jenis_aadb }}</td>
-                                                                <td>{{ $dataPengadaan->merk_kendaraan }}</td>
-                                                                <td>{{ $dataPengadaan->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataPengadaan->tahun_kendaraan }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    <!-- Informasi Kendaraan : Pengajuan Servis -->
-                                                    @if($dataPengajuan->jenis_form == 2)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td style="width: 5%;">No</td>
-                                                                <td>Kendaraan</td>
-                                                                <td style="width: 12%;">Kilometer Terakhir</td>
-                                                                <td style="width: 12%;">Tanggal Terakhir Servis</td>
-                                                                <td style="width: 15%;">Tanggal Jatuh Tempo Servis</td>
-                                                                <td style="width: 12%;">Tanggal Terakhir Ganti Oli</td>
-                                                                <td style="width: 12%;">Jatuh Tempo Ganti Oli</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody class="text-capitalize">
-                                                            @foreach($dataPengajuan->usulanServis as $dataServis)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataServis->kilometer_terakhir }}</td>
-                                                                <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                                                <td>{{ $dataServis->jatuh_tempo_servis }}</td>
-                                                                <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                                                <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    <!-- Informasi Kendaraan : Pengajuan Perpanjangan STNK -->
-                                                    @if($dataPengajuan->jenis_form == 3)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td style="width: 5%;">No</td>
-                                                                <td>Kendaraan</td>
-                                                                <td style="width: 12%;">Masa Berlaku STNK</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->usulanSTNK as $dataServis)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataServis->mb_stnk_lama }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    <!-- Informasi Kendaraan : Pengajuan Voucher BBM -->
-                                                    @if($dataPengajuan->jenis_form == 4)
-                                                    <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <table class="table table-responsive table-bordered text-center">
-                                                            <thead>
-                                                                <tr>
-                                                                    <td style="width: 5%;">No</td>
-                                                                    <td>Kendaraan</td>
-                                                                    <td style="width: 12%;">Voucer 25</td>
-                                                                    <td style="width: 12%;">Voucer 50</td>
-                                                                    <td style="width: 12%;">Voucer 100</td>
-                                                                    <td style="width: 12%;">Total Biaya</td>
-                                                                    <td style="width: 12%;">Bulan Pengadaan</td>
-                                                                </tr>
-                                                            </thead>
-                                                            <?php $no = 1; ?>
-                                                            @if($dataPengajuan->status_proses_id == 1)
-                                                            <tbody>
-                                                                @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
-                                                                <tr>
-                                                                    <td>{{ $no++ }}</td>
-                                                                    <td>
-                                                                        <input type="hidden" name="detail_usulan_id[]" value="{{ $dataVoucher->id_form_usulan_voucher_bbm  }}">
-                                                                        {{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}
-                                                                    </td>
-                                                                    <td><input type="text" class="form-control text-center" name="voucher_25[]" value="{{ $dataVoucher->voucher_25 }}"></td>
-                                                                    <td><input type="text" class="form-control text-center" name="voucher_50[]" value="{{ $dataVoucher->voucher_50 }}"></td>
-                                                                    <td><input type="text" class="form-control text-center" name="voucher_100[]" value="{{ $dataVoucher->voucher_100 }}"></td>
-                                                                    <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                                                </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            @else
-                                                            <tbody>
-                                                                @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
-                                                                <tr>
-                                                                    <td>{{ $no++ }}</td>
-                                                                    <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
-                                                                    <td>{{ $dataVoucher->voucher_25 }}</td>
-                                                                    <td>{{ $dataVoucher->voucher_50 }}</td>
-                                                                    <td>{{ $dataVoucher->voucher_100 }}</td>
-                                                                    <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                                                </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            @endif
-                                                        </table>
-                                                        @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-                                                    </form>
-                                                    @endif
-                                                </div>
-                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1 && $dataPengajuan->jenis_form != 4)
-                                                <div class="col-md-12">
-                                                    <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Modal Detail Barang -->
-                            <div class="modal fade" id="konfirmasi_pengusul{{ $dataPengajuan->id_form_usulan }}">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-body text-capitalize">
-                                            <div class="text-uppercase text-center font-weight-bold mb-4">
-                                                konfirmasi penerimaan kendaraan
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Jabatan Pengusul :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->jabatan }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Unit Kerja :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Tanggal Usulan :</label></div>
-                                                <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Total Pengajuan :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->total_pengajuan }} Kendaraan</div>
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-md-4"><label>Rencana Pengguna :</label></div>
-                                                <div class="col-md-8">: {{ $dataPengajuan->rencana_pengguna }}</div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-12">
-                                                @if($dataPengajuan->jenis_form == 1)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>No</td>
-                                                                <td style="width: 15%;">Jenis AADB</td>
-                                                                <td style="width: 30%;">Merk Kendaraan</td>
-                                                                <td style="width: 30%;">Tipe Kendaraan</td>
-                                                                <td style="width: 20%;">Tahun Kendaraan</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->kendaraan as $dataKendaraan)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataKendaraan->jenis_aadb }}</td>
-                                                                <td>{{ $dataKendaraan->merk_kendaraan }}</td>
-                                                                <td>{{ $dataKendaraan->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    <!-- Informasi Kendaraan : Pengajuan Servis -->
-                                                    @if($dataPengajuan->jenis_form == 2)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td style="width: 5%;">No</td>
-                                                                <td>Kendaraan</td>
-                                                                <td style="width: 12%;">Kilometer Terakhir</td>
-                                                                <td style="width: 12%;">Tanggal Terakhir Servis</td>
-                                                                <td style="width: 15%;">Tanggal Jatuh Tempo Servis</td>
-                                                                <td style="width: 12%;">Tanggal Terakhir Ganti Oli</td>
-                                                                <td style="width: 12%;">Jatuh Tempo Ganti Oli</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody class="text-capitalize">
-                                                            @foreach($dataPengajuan->usulanServis as $dataServis)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataServis->kilometer_terakhir }}</td>
-                                                                <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                                                <td>{{ $dataServis->jatuh_tempo_servis }}</td>
-                                                                <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                                                <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    <!-- Informasi Kendaraan : Pengajuan Perpanjangan STNK -->
-                                                    @if($dataPengajuan->jenis_form == 3)
-                                                    <table class="table table-responsive table-bordered text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <td style="width: 5%;">No</td>
-                                                                <td>Kendaraan</td>
-                                                                <td style="width: 12%;">Masa Berlaku STNK</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->usulanSTNK as $dataServis)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataServis->merk_kendaraan.' '.$dataServis->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataServis->mb_stnk_lama }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                    @if($dataPengajuan->jenis_form == 4)
-                                                    <table class="table table-bordered m-0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Kendaraan</th>
-                                                                <th>Voucher 25</th>
-                                                                <th>Voucher 50</th>
-                                                                <th>Voucher 100</th>
-                                                                <th>Total</th>
-                                                                <th>Bulan Pengadaan</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php $no = 1; ?>
-                                                        <tbody>
-                                                            @foreach($dataPengajuan->usulanVoucher as $dataVoucher)
-                                                            <tr>
-                                                                <td>{{ $no++ }}</td>
-                                                                <td>{{ $dataVoucher->merk_kendaraan.' '.$dataVoucher->tipe_kendaraan }}</td>
-                                                                <td>{{ $dataVoucher->voucher_25 }}</td>
-                                                                <td>{{ $dataVoucher->voucher_50 }}</td>
-                                                                <td>{{ $dataVoucher->voucher_100 }}</td>
-                                                                <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    @endif
-                                                </div>
-                                                @if(Auth::user()->pegawai_id == $dataPengajuan->pegawai_id && $dataPengajuan->status_proses_id == 3)
-                                                <div class="col-md-12">
-                                                    <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="status_usulan" value="4">
-                                                        <div class="form-group row mt-4">
-                                                            <div class="col-sm-10">
-                                                                <label>Apakah semua barang telah diterima dengan baik ?</label><br>
-                                                                <input type="radio" name="konfirmasi" value="1"> Ya
-                                                                <input type="radio" name="konfirmasi" value="1"> Tidak
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                @endif
-                                                @if(Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 4)
-                                                <div class="col-md-12">
-                                                    <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $dataPengajuan->id_form_usulan) }}" method="POST">
-                                                        @csrf
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-6">
-                                                                <button class="btn btn-primary" id="btnSubmit{{ $dataPengajuan->id_form_usulan }}" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
-                                                                <button type="reset" class="btn btn-default">BATAL</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                            {{ $pengajuan->links("pagination::bootstrap-4") }}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ url('super-user/aadb/pengajuan/daftar/seluruh-pengajuan') }}">
-                            <i class="fas fa-arrow-circle-right"></i> Seluruh pengajuan
-                        </a>
-                    </div>
-                </div>
-                <div class="card card-outline card-primary">
-                    <div class="card-header">
-                        <h4 class="card-title font-weight-bold">MASA JATUH TEMPO STNK</h4>
+                        <table id="table-jatuh-tempo" class="table table-striped m-0">
+                            <thead>
+                                <tr>
+                                    <td>No</td>
+                                    <td>Kendaraan</td>
+                                    <td>Pengguna</td>
+                                    <td>Masa Jatuh Tempo STNK</td>
+                                </tr>
+                            </thead>
+                            <?php $no = 1; ?>
+                            <tbody>
+                                @foreach ($stnk as $jatuhTempo)
+                                @if(\Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)) < 365) <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>
+                                        {{ $jatuhTempo->no_plat_kendaraan }} <br>
+                                        <b>{{ $jatuhTempo->merk_tipe_kendaraan }}</b>
+                                    </td>
+                                    <td>
+                                        {{ $jatuhTempo->pengguna }} <br>
+                                        {{ $jatuhTempo->jabatan }}
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-sm badge-pill badge-danger">
+                                            {{ \Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)->isoFormat('DD MMMM Y') }}
+                                        </span>
+                                    </td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 form-group">
+            <div class="col-md-12 form-group">
                 <div class="card card-outline card-primary text-center" style="height: 100%;">
                     <div class="card-header">
                         <div class="row">
@@ -534,7 +110,7 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <select id="" class="form-control" name="unit_kerja">
-                                    <option value="">-- Pilih Unit Kerja --</option>
+                                    <option value="">Semua Unit Kerja</option>
                                     @foreach ($unitKerja as $item)
                                     <option value="{{$item->id_unit_kerja}}">{{$item->unit_kerja}}</option>
                                     @endforeach
@@ -542,31 +118,31 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <select id="" class="form-control" name="jenis_kendaraan">
-                                    <option value="">-- Pilih Jenis Kendaraan --</option>
+                                    <option value="">Semua Jenis Kendaraan</option>
                                     @foreach ($jenisKendaraan as $item)
                                     <option value="{{$item->id_jenis_kendaraan}}">{{$item->jenis_kendaraan}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="merk_kendaraan">
-                                    <option value="">-- Pilih Merk Kendaraan --</option>
+                                <select id="" class="form-control" name="merk_tipe_kendaraan">
+                                    <option value="">Semua Merk Kendaraan</option>
                                     @foreach ($merk as $item)
-                                    <option value="{{$item->merk_kendaraan}}">{{$item->merk_kendaraan}}</option>
+                                    <option value="{{$item->merk_tipe_kendaraan}}">{{$item->merk_tipe_kendaraan}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
                                 <select id="" class="form-control" name="tahun_kendaraan">
-                                    <option value="">-- Pilih Tahun Kendaraan --</option>
+                                    <option value="">Semua Tahun Kendaraan</option>
                                     @foreach ($tahun as $item)
-                                    <option value="{{$item->tahun_kendaraan}}">{{$item->tahun_kendaraan}}</option>
+                                    <option value="{{$item->tahun_kendaraan}}">{{ $item->tahun_kendaraan }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
                                 <select id="" class="form-control" name="pengguna">
-                                    <option value="">-- Pilih Pengguna --</option>
+                                    <option value="">Semua Pengguna</option>
                                     @foreach ($pengguna as $item)
                                     <option value="{{$item->pengguna}}">{{$item->pengguna}}</option>
                                     @endforeach
@@ -610,7 +186,7 @@
                                         <td>{{ $dataKendaraan->jenis_aadb }}</td>
                                         <td>{{ $dataKendaraan->unit_kerja }}</td>
                                         <td>{{ $dataKendaraan->jenis_kendaraan }}</td>
-                                        <td>{{ $dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                         <td>{{ $dataKendaraan->pengguna }}</td>
                                     </tr>
@@ -632,6 +208,17 @@
 
 <script>
     $(function() {
+        $("#table-jatuh-tempo").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": false,
+            pageLength : 4,
+            lengthMenu: [[4, 10, 20, -1], [4, 10, 20, 'Semua']]
+        })
+
         $("#table-kendaraan").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -695,9 +282,13 @@
 
         var options = {
             title: 'Total Kendaraan',
+            titlePosition: 'none',
+            is3D: false,
+            height: 500,
             legend: {
-                'position': 'left',
-                'alignment': 'center'
+                'position': 'top',
+                'alignment': 'center',
+                'maxLines': '2'
             },
         }
 
@@ -710,14 +301,14 @@
         let jenis_aadb = $('select[name="jenis_aadb"').val()
         let unit_kerja = $('select[name="unit_kerja"').val()
         let jenis_kendaraan = $('select[name="jenis_kendaraan"').val()
-        let merk_kendaraan = $('select[name="merk_kendaraan"').val()
+        let merk_tipe_kendaraan = $('select[name="merk_tipe_kendaraan"').val()
         let tahun_kendaraan = $('select[name="tahun_kendaraan"').val()
         let pengguna = $('select[name="pengguna"').val()
         let table = $('#table-kendaraan').DataTable();
         let url = ''
 
-        if (jenis_aadb || unit_kerja || jenis_kendaraan || merk_kendaraan || merk_kendaraan || tahun_kendaraan || pengguna) {
-            url = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_kendaraan='+merk_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
+        if (jenis_aadb || unit_kerja || jenis_kendaraan || merk_tipe_kendaraan || tahun_kendaraan || pengguna) {
+            url = '<?= url("/super-user/aadb/dashboard/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'&merk_tipe_kendaraan='+merk_tipe_kendaraan+'&tahun_kendaraan='+tahun_kendaraan+'&pengguna='+pengguna+'") ?>'
         } else {
             url = '<?= url("/super-user/aadb/dashboard/grafik") ?>'
         }
@@ -744,7 +335,7 @@
                             element.jenis_aadb,
                             element.unit_kerja,
                             element.jenis_kendaraan,
-                            element.merk_kendaraan,
+                            element.merk_tipe_kendaraan,
                             element.tahun_kendaraan,
                             element.pengguna
                         ]).draw(false)
