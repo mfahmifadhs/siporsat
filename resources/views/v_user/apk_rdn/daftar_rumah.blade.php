@@ -81,7 +81,7 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ url('admin-user/rdn/rumah-dinas/detail/'. $dataRumah->id_rumah_dinas) }}">
+                                            <a class="dropdown-item" href="{{ url('unit-kerja/rdn/rumah/detail/'. $dataRumah->id_rumah_dinas) }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
                                         </div>

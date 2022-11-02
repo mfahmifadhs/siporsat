@@ -53,7 +53,7 @@
 </section>
 <!-- Content Header -->
 
-<section class="content">
+<section class="content text-capitalize">
     <div class="container">
         <div class="row">
             <div class="col-md-12 form-group">
@@ -103,22 +103,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group text-capitalize">
+                            <div class="col-md-12 form-group">
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Nomor Surat</div>
                                     <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
-                                    <div class="col-md-10">: {{ $usulan->nama_pegawai }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-9">: {{ $usulan->keterangan_pegawai }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-9">: {{ $usulan->unit_kerja }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
@@ -153,7 +153,7 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataGdn->lokasi_bangunan }}</td>
                                             <td>{{ $dataGdn->lokasi_spesifik }}</td>
-                                            <td>{{ $dataGdn->bid_kerusakan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
                                             <td>{{ $dataGdn->keterangan }}</td>
                                         </tr>
                                         @endforeach
@@ -162,9 +162,9 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ $usulan->keterangan_pegawai }}</label>
+                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
                                     @if ($usulan->otp_usulan_kabag != null)
-                                    <label class="col-sm-6">Disetujui Oleh, <br> Kepala Bagian Rumah Tangga</label>
+                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>
@@ -178,9 +178,9 @@
                             </div>
                             <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
                                     @if ($usulan->otp_usulan_kabag != null )
-                                    <label class="col-sm-6">Muhammad Edwin Arafat</label>
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>

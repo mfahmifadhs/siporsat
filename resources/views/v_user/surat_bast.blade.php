@@ -41,9 +41,16 @@
 <!-- Content Header -->
 <section class="content-header">
     <div class="container">
-        <div class="row text-capitalize">
-            <div class="col-sm-12">
-                <h4>Surat Usulan Pengajuan</h4>
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Berita Acara Serah Terima</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('admin-user/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="#">Daftar Pengajuan Barang</a></li>
+                    <li class="breadcrumb-item active">BAST {{ $bast->otp_bast_pengusul }}</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -54,22 +61,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 form-group">
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    <p style="color:white;margin: auto;">{{ $message }}</p>
-                </div>
-                @elseif ($message = Session::get('failed'))
-                <div class="alert alert-danger">
-                    <p style="color:white;margin: auto;">{{ $message }}</p>
-                </div>
-                @endif
-            </div>
-            <div class="col-md-12 form-group">
                 <a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                <a href="{{ url('unit-kerja/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                @if($bast->otp_usulan_kabag != null || $bast->otp_usulan_pimpinan != null)
+                <a href="{{ url('unit-kerja/cetak-surat/bast-'. $modul.'/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
                 @endif
@@ -85,9 +81,9 @@
                             </div>
                             <div class="col-md-8 text-center">
                                 <h2 class="page-header">
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
-                                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
+                                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                                 </h2>
                             </div>
                             <div class="col-md-2">
@@ -99,41 +95,40 @@
                                 <hr style="border-width: medium;border-color: black;">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 form-group text-capitalize">
+                        <div class="row text-capitalize">
+                            <div class="col-md-12 form-group">
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
-                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} ruangan</div>
+                                    <div class="col-md-9">: {{ $bast->total_pengajuan }} kendaraan</div>
                                 </div>
-                                @if($usulan->rencana_pengguna != null)
+                                @if($bast->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
+                                    <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
                                 </div>
                                 @endif
                             </div>
-                            <div class="col-12 mt-4 mb-5">
-                                @if ($modul == 'atk')
+                            <div class="col-12 table-responsiv mb-5">
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
@@ -142,69 +137,49 @@
                                             <th>Merk/Tipe</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
+                                            @if ($bast->jenis_form == 'pengadaan')
+                                            <th>Harga</th>
+                                            @endif
+                                            <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
-                                        @foreach($usulan->detailUsulanAtk as $dataAtk)
+                                        @foreach($bast->detailUsulanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataAtk->kategori_atk }}</td>
                                             <td>{{ $dataAtk->merk_atk }}</td>
                                             <td>{{ $dataAtk->jumlah_pengajuan }}</td>
                                             <td>{{ $dataAtk->satuan }}</td>
+                                            @if ($bast->jenis_form == 'pengadaan')
+                                            <td>Rp {{ number_format($dataAtk->harga, 0, ',', '.') }}</td>
+                                            @endif
+                                            <td>{{ $dataAtk->keterangan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @elseif ($modul == 'gdn')
-                                <table class="table table-bordered m-0">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Lokasi Perbaikan</th>
-                                            <th>Lokasi Spesifik</th>
-                                            <th>Bidang Kerusakan</th>
-                                            <th>Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <?php $no = 1; ?>
-                                    <tbody>
-                                        @foreach($usulan->detailUsulanGdn as $dataGdn)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                                            <td>{{ $dataGdn->lokasi_spesifik }}</td>
-                                            <td>{{ $dataGdn->bid_kerusakan }}</td>
-                                            <td>{{ $dataGdn->keterangan }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                @endif
                             </div>
                             <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
-                                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
-                                    @endif
+                                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                                    <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4 text-capitalize">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
-                                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
-                                    @endif
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4 text-capitalize">
+                            <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
-                                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )
-                                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
-                                    @endif
+                                    <label class="col-sm-4">Marten Avero, Skm</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                 </div>
                             </div>
                         </div>

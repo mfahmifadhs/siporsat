@@ -240,7 +240,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
 
     // Gedung dan Bangunan
     Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function () {
-        Route::get('dashboard/{aksi}', [UserController::class, 'Building']);
+        Route::get('dashboard', [UserController::class, 'Gdn']);
         Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
         Route::get('js/{aksi}/{id}', [UserController::class, 'JsGdn']);
 
@@ -248,7 +248,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     });
 
     // Rumah Dinas Negara
-    Route::group(['prefix' => 'rdn', 'as' => 'gdn'], function () {
+    Route::group(['prefix' => 'rdn', 'as' => 'rdn'], function () {
         Route::get('rumah/{aksi}/{id}', [UserController::class, 'OfficialResidence']);
     });
 

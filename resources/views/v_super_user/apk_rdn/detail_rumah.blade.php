@@ -1,4 +1,4 @@
-@extends('v_user.layout.app')
+@extends('v_super_user.layout.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/rdn/rumah/daftar/seluruh-rumah') }}">Daftar Rumah</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}">Daftar Rumah</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>

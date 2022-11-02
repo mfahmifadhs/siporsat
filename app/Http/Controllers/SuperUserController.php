@@ -31,6 +31,7 @@ use App\Models\RDN\RumahDinas;
 use App\Models\UnitKerja;
 use App\Models\TimKerja;
 use App\Models\Pegawai;
+use App\Models\RDN\KondisiRumah;
 use App\Models\RDN\PenghuniRumah;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -316,11 +317,17 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_rdn.daftar_rumah', compact('rumah'));
         } elseif ($aksi == 'detail') {
-            $rumah = RumahDinas::where('id_rumah', $id)
-                ->join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah', 'kondisi_rumah_id')
+            $pegawai  = Pegawai::join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->get();
+            $penghuni = PenghuniRumah::leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
+                ->where('rumah_dinas_id', $id)
+                ->orderBy('id_penghuni','DESC')
                 ->first();
+            $rumah    = RumahDinas::where('id_rumah_dinas', $id)
+                ->join('rdn_tbl_kondisi_rumah', 'id_kondisi_rumah','kondisi_rumah_id')
+                ->first();
+            $kondisi  = KondisiRumah::get();
 
-            return view('v_super_user.apk_rdn.detail_rumah', compact('rumah'));
+            return view('v_super_user.apk_rdn.detail_rumah', compact('pegawai','rumah','penghuni','kondisi'));
         }
     }
 
@@ -402,9 +409,13 @@ class SuperUserController extends Controller
 
     public function Gdn(Request $request)
     {
-        $googleChartData = $this->ChartDataRdn();
+        $usulan = UsulanGdn::join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            // ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->get();
+        $googleChartData = $this->ChartDataAtk();
 
-        return view('v_super_user.apk_gdn.index', compact('googleChartData'));
+        return view('v_super_user.apk_gdn.index', compact('googleChartData', 'usulan'));
     }
 
     public function LetterGdn(Request $request, $aksi, $id)

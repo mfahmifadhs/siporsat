@@ -46,15 +46,15 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
-                    <div class="col-md-9">: {{ $usulan->nama_pegawai }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Jabatan</div>
-                    <div class="col-md-9">: {{ $usulan->jabatan.' '.$usulan->keterangan_pegawai }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Unit Kerja</div>
-                    <div class="col-md-9">: {{ $usulan->unit_kerja }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Tanggal Usulan</div>
@@ -70,7 +70,31 @@
                 </div>
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
-                @if ($modul == 'gdn')
+                @if ($modul == 'atk')
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Barang</th>
+                            <th>Merk/Tipe</th>
+                            <th>Jumlah</th>
+                            <th>Satuan</th>
+                        </tr>
+                    </thead>
+                    <?php $no = 1; ?>
+                    <tbody>
+                        @foreach($usulan->detailUsulanAtk as $dataAtk)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataAtk->kategori_atk }}</td>
+                            <td>{{ $dataAtk->merk_atk }}</td>
+                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
+                            <td>{{ $dataAtk->satuan }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @elseif ($modul == 'gdn')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -99,7 +123,7 @@
             <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
-                    @if ($usulan->otp_usulan_kabag != null)
+                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                     <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                     @endif
                 </div>
@@ -107,7 +131,7 @@
             <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
-                    @if ($usulan->otp_usulan_kabag != null)
+                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
                     @endif
                 </div>
@@ -115,7 +139,7 @@
             <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
-                    @if ($usulan->otp_usulan_kabag != null )
+                    @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )
                     <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                     @endif
                 </div>

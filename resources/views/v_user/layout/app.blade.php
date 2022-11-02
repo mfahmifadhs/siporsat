@@ -201,7 +201,7 @@
                         </li>
                         <!-- Gedung & Bangunan -->
                         <li class="nav-item">
-                            <a href="{{ url('unit-kerja/gdn/dashboard/daftar') }}" class="nav-link font-weight-bold">
+                            <a href="{{ url('unit-kerja/gdn/dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-building"></i>
                                 <p>Gedung & Bangunan</p>
                             </a>
