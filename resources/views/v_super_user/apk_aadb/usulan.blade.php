@@ -167,11 +167,11 @@
                             <label class="col-sm-12 mb-3 text-muted">Informasi Kendaraan</label>
                             <label class="col-sm-3 col-form-label">Pilih Kendaraan</label>
                             <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan" data-idtarget="1">
+                                <select name="kendaraan_id[]" class="form-control text-uppercase select2-kendaraan" data-idtarget="1">
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}
+                                        {{ $dataKendaraan->no_plat_kendaraan.' - '. $dataKendaraan->merk_tipe_kendaraan }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -270,7 +270,7 @@
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
+                                        {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -441,7 +441,7 @@
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
+                                        {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -489,14 +489,14 @@
                 for (i = 1; i <= total; i++) {
                     ++j
                     $("#section-kendaraan").append(
-                        `<div class="row section-kendaraan">
+                        `<div class="form-group row section-kendaraan">
                             <label class="col-sm-3 col-form-label form-group">Pilih Kendaraan</label>
                             <div class="col-sm-9">
                                 <select name="kendaraan_id[]" class="form-control text-capitalize aadb select2-kendaraan` + j + `" data-idtarget="` + j + `">
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
+                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->merk_tipe_kendaraan }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -544,7 +544,7 @@
                                         <option value="">-- Pilih Kendaraan --</option>
                                         @foreach($kendaraan as $dataKendaraan)
                                         <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                            {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->jenis_kendaraan.' '.$dataKendaraan->merk_kendaraan.' '.$dataKendaraan->tipe_kendaraan }}
+                                            {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
                                         </option>
                                         @endforeach
                                     </select>

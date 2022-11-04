@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h4 class="m-0 ml-2">GEDUNG DAN BANGUNAN</h4>
+                <h4 class="m-0 ml-2">PEMELIHARAAN GEDUNG DAN BANGUNAN</h4>
             </div>
         </div>
     </div>

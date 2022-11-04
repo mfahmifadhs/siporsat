@@ -34,21 +34,24 @@
             </div>
             <div class="col-md-12 float-right form-group">
                 <div class="float-right">
-                    <div class="card-tools">
-                        <a class="btn btn-primary" href="{{ url('super-user/atk/usulan/pengadaan/barang') }}">
-                            <i class="fa fa-shopping-cart fa-2x"></i> <br>
-                            Usulan Pengadaan
-                        </a>
-                        <a class="btn btn-primary" href="{{ url('super-user/atk/usulan/distribusi/barang') }}">
-                            <i class="fa fa-people-carry fa-2x"></i> <br>
-                            Usulan Distribusi
-                        </a>
-                    </div>
+
                 </div>
 
             </div>
             <div class="col-md-12 form-group">
                 <div class="card">
+                    <div class="card-header">
+                        <div class="card-tools">
+                            <a class="btn btn-primary btn-xs" href="{{ url('super-user/atk/usulan/pengadaan/barang') }}">
+                                <i class="fa fa-shopping-cart fa-2x py-1"></i> <br>
+                                Usulan Pengadaan
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="{{ url('super-user/atk/usulan/distribusi/barang') }}">
+                                <i class="fa fa-people-carry fa-2x py-1"></i> <br>
+                                Usulan Distribusi
+                            </a>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <table id="table-usulan" class="table table-bordered">
                             <thead>

@@ -406,6 +406,8 @@
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('dist_admin/plugins/select2/js/select2.full.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     @yield('js')
     <script>
         $(function() {

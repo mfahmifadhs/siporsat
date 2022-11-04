@@ -61,15 +61,14 @@
                     <div class="card-header">
                         <h4 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body text-capitalize">
                         <table id="table-usulan" class="table table-bordered m-0">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal</th>
+                                    <th>Surat Usulan</th>
                                     <th>Lokasi Perbaikan</th>
-                                    <th>Status Pengajuan</th>
-                                    <th>Status Proses</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -77,42 +76,60 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td class="pt-4">{{ $no++ }}</td>
-                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y') }}</td>
-                                    <td class="text-uppercase">
-                                        <p class="font-weight-bold">No. Surat : {{ $dataUsulan->no_surat_usulan }}</p>
-                                        @foreach($dataUsulan->detailUsulanGdn as $dataGdn)
+                                    <td class="pt-4 text-center">{{ $no++ }}</td>
+                                    <td class="pt-3 small">
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
+                                        No. Surat : {{ $dataUsulan->no_surat_usulan }} <br>
+                                        Pengusul :  {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
+                                        Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
+                                    </td>
+                                    <td class="small">
+                                        <p class="font-weight-bold"></p>
+                                        @foreach($dataUsulan->detailUsulanGdn as $i =>$dataGdn)
                                             <p>
-                                                <label for=""> {{ $no2++.'. '.$dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label><br>
-                                                <span class="pl-3">○ {{ $dataGdn->bid_kerusakan.' : '.$dataGdn->keterangan  }}</span>
+                                                <label>{{ $no = $i + 1 }}. {{ $dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label> <br>
+                                                <span class="pl-2">{{ ucfirst(strtolower($dataGdn->bid_kerusakan.' : '.$dataGdn->keterangan))  }}</span>
                                             </p>
                                         @endforeach
                                     </td>
-                                    <td class="text-center pt-4">
+                                    <td class="pt-2 small text-center">
+                                        Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-success">disetujui</span>
+                                        <span class="badge badge-sm badge-pill badge-success py-2">disetujui</span>
                                         @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center text-capitalize pt-4">
+                                        <span class="badge badge-sm badge-pill badge-danger py-2">ditolak</span>
+                                        @endif <br>
+                                        Status Proses : <br>
                                         @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
+                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu persetujuan</span>
                                         @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                        <span class="badge badge-sm badge-pill badge-warning py-2">sedang diproses ppk</span>
                                         @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu <br> konfirmasi pengusul</span>
                                         @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
+                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu <br> konfirmasi kabag rt</span>
                                         @elseif ($dataUsulan->status_proses_id == 5)
-                                        <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                        <span class="badge badge-sm badge-pill badge-success py-2">selesai</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center pt-4">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses
+                                            </a>
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2   )
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/'. $dataUsulan->jenis_form.'/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
+                                                <i class="fas fa-check-circle"></i> Selesai Proses
+                                            </a>
+                                            @elseif ($dataUsulan->status_proses_id == 4 || $dataUsulan->status_proses_id == 5)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file"></i> BAST
+                                            </a>
+                                            @endif
                                             <a class="dropdown-item btn" href="{{ url('super-user/gdn/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>

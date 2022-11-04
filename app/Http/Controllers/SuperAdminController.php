@@ -72,38 +72,150 @@ class SuperAdminController extends Controller
     //                       OLDAT
     // ====================================================
 
-    public function oldat()
+    public function Oldat()
     {
-        $timKerja   = TimKerja::get();
-        $unitKerja  = UnitKerja::get();
-        $chartData  = $this->getChartData();
-        if(Auth::user()->pegawai->jabatan_id == 1 || Auth::user()->pegawai->jabatan_id == 2) {
-            $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->where('jenis_form','pengadaan')->where('status_proses_id','!=','selesai')
-                ->orderBy('tanggal_usulan', 'DESC')->limit(5)
-                ->get();
-            $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
-                ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
-                ->where('status_proses_id','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
-                ->limit(5)->get();
-        } else {
-            $pengajuanPengadaan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->where('jenis_form','pengadaan')->where('status_proses_id','!=','selesai')
-                ->where('id_pegawai', Auth::user()->pegawai_id)
-                ->orderBy('tanggal_usulan', 'DESC')->limit(5)
-                ->get();
-            $pengajuanPerbaikan  = FormUsulan::with('detailPerbaikan')
-                ->join('tbl_pegawai','id_pegawai','pegawai_id')->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')->where('jenis_form','perbaikan')
-                ->where('status_proses_id','!=','selesai')->orderBy('tanggal_usulan', 'DESC')
-                ->where('id_pegawai', Auth::user()->pegawai_id)
-                ->limit(5)->get();
+        $googleChartData = $this->ChartDataOldat();
+        $usulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_super_admin.apk_oldat.index', compact('googleChartData', 'usulan'));
+    }
+
+    public function Select2OldatDashboard(Request $request, $aksi, $id)
+    {
+        $search = $request->search;
+        if ($aksi == 1) {
+            if ($search == '') {
+                $oldat  = KategoriBarang::select('id_kategori_barang as id', 'kategori_barang as nama')
+                    ->orderby('kategori_barang', 'asc')
+                    ->get();
+            } else {
+                $oldat  = KategoriBarang::select('id_kategori_barang as id', 'kategori_barang as nama')
+                    ->orderby('kategori_barang', 'asc')
+                    ->where('id_kategori_barang', 'like', '%' . $search . '%')
+                    ->orWhere('kategori_barang', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 2) {
+            if ($search == '') {
+                $oldat  = UnitKerja::select('id_unit_kerja as id', 'unit_kerja as nama')
+                    ->orderby('unit_kerja', 'asc')
+                    ->get();
+            } else {
+                $oldat  = UnitKerja::select('id_unit_kerja as id', 'unit_kerja as nama')
+                    ->orderby('unit_kerja', 'asc')
+                    ->where('id_unit_kerja', 'like', '%' . $search . '%')
+                    ->orWhere('unit_kerja', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 3) {
+            if ($search == '') {
+                $oldat  = KondisiBarang::select('id_kondisi_barang as id', 'kondisi_barang as nama')
+                    ->orderby('id_kondisi_barang', 'asc')
+                    ->get();
+            } else {
+                $oldat  = KondisiBarang::select('id_kondisi_barang as id', 'kondisi_barang as nama')
+                    ->orderby('id_kondisi_barang', 'asc')
+                    ->where('id_kondisi_barang', 'like', '%' . $search . '%')
+                    ->orWhere('kondisi_barang', 'like', '%' . $search . '%')
+                    ->get();
+            }
         }
 
-        return view('v_super_admin.apk_oldat.index', compact('chartData','unitKerja','timKerja','pengajuanPengadaan', 'pengajuanPerbaikan'));
+        $response = array();
+        foreach ($oldat as $data) {
+            $response[] = array(
+                "id"     =>  $data->id,
+                "text"   =>  $data->id . ' - ' . $data->nama
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function ChartDataOldat()
+    {
+        $char = '"';
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
+                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
+                ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
+                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
+                ->orderBy('tahun_perolehan', 'DESC')
+                ->get();
+
+        $dataKategoriBarang = KategoriBarang::get();
+        foreach ($dataKategoriBarang as $data) {
+            $dataArray[] = $data->kategori_barang;
+            $dataArray[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataChart['all'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['barang'] = $dataBarang;
+        $chart = json_encode($dataChart);
+        return $chart;
+    }
+
+    public function SearchChartDataOldat(Request $request)
+    {
+        $char = '"';
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
+                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
+                ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
+                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
+                ->orderBy('tahun_perolehan', 'DESC');
+
+        $dataKategoriBarang = KategoriBarang::get();
+
+        if ($request->hasAny(['barang', 'unit_kerja', 'kondisi'])) {
+            if ($request->barang) {
+                $dataSearchBarang = $dataBarang->where('kode_barang', $request->barang);
+            }
+            if ($request->unit_kerja) {
+                $dataSearchBarang = $dataBarang->where('oldat_tbl_barang.unit_kerja_id', $request->unit_kerja);
+            }
+            if ($request->kondisi) {
+                $dataSearchBarang = $dataBarang->where('kondisi_barang_id', $request->kondisi);
+            }
+
+            $dataSearchBarang = $dataSearchBarang->get();
+        } else {
+            $dataSearchBarang = $dataBarang->get();
+        }
+
+        foreach ($dataKategoriBarang as $data) {
+            $dataArray[] = $data->kategori_barang;
+            $dataArray[] = $dataSearchBarang->where('kategori_barang', $data->kategori_barang)->count();
+            $dataChart['chart'][] = $dataArray;
+            unset($dataArray);
+        }
+        // dd($dataChart);
+        $dataChart['table'] = $dataSearchBarang;
+        $chart = json_encode($dataChart);
+
+        if (count($dataSearchBarang) > 0) {
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'success',
+                'data' => $chart
+            ], 200);
+        } else {
+            return response([
+                'status' => true,
+                'total' => count($dataSearchBarang),
+                'message' => 'not found'
+            ], 200);
+        }
     }
 
     public function submission(Request $request, $aksi, $id)
@@ -197,79 +309,7 @@ class SuperAdminController extends Controller
         }
     }
 
-    public function getChartData()
-    {
-        $dataBarang = Barang::select('id_barang', 'kategori_barang', 'unit_kerja', 'pegawai_id','tim_kerja')
-            ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
-            ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
-            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
-            ->get();
 
-        $dataKategoriBarang = KategoriBarang::get();
-        foreach ($dataKategoriBarang as $data) {
-            $labelChart[] = $data->kategori_barang;
-            $dataChart[] = $dataBarang->where('kategori_barang', $data->kategori_barang)->count();
-        }
-        $resultChart['label'] = $labelChart;
-        $resultChart['data'] = $dataChart;
-        $chart = json_encode($resultChart);
-
-        // dd($chart);
-        return $chart;
-    }
-
-    public function searchChartData(Request $request){
-        $dataBarang = Barang::select('id_barang','kategori_barang','pegawai_id','id_unit_kerja','oldat_tbl_barang.unit_kerja_id','id_tim_kerja','tim_kerja','tahun_perolehan')
-            ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
-            ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
-            ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id');
-
-
-        $dataKategoriBarang = KategoriBarang::get();
-
-        if($request->hasAny(['tahun', 'unit_kerja','tim_kerja'])){
-            if($request->tahun){
-                $dataSearchBarang = $dataBarang->where('tahun_perolehan',$request->tahun);
-            }
-            if($request->unit_kerja){
-                $dataSearchBarang = $dataBarang->where('oldat_tbl_barang.unit_kerja_id',$request->unit_kerja);
-            }
-            if($request->tim_kerja){
-                $dataSearchBarang = $dataBarang->where('id_tim_kerja',$request->tim_kerja);
-            }
-
-            $dataSearchBarang = $dataSearchBarang->get();
-
-        }else {
-            $dataSearchBarang = $dataBarang->get();
-        }
-
-        foreach($dataKategoriBarang as $data){
-            $labelChart[] = $data->kategori_barang;
-            $dataChart[] = $dataSearchBarang->where('kategori_barang',$data->kategori_barang)->count();
-        }
-
-        $resultChart['label'] = $labelChart;
-        $resultChart['data'] = $dataChart;
-        $chart = json_encode($resultChart);
-
-        if(count($dataSearchBarang)>0){
-            return response([
-                'status' => true,
-                'total' => count($dataSearchBarang),
-                'message' => 'success',
-                'data' => $chart
-            ], 200);
-        }else {
-            return response([
-                'status' => true,
-                'total' => count($dataSearchBarang),
-                'message' => 'not found'
-            ], 200);
-        }
-    }
 
     // ====================================================
     //                    KEWENANGAN

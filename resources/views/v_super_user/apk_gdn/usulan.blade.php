@@ -4,7 +4,7 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
                     <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
@@ -100,7 +100,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
                             <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold">SUBMIT</button>
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin mengajukan usulan perbaikan ?')">SUBMIT</button>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
             if (jenisKerusakan) {
                 $.ajax({
                     type: "GET",
-                    url: `{{ url('unit-kerja/gdn/js/bidang-kerusakan/` + jenisKerusakan + `') }}`,
+                    url: `{{ url('super-user/gdn/js/bidang-kerusakan/` + jenisKerusakan + `') }}`,
                     dataType: 'JSON',
                     success: function(res) {
                         if (res) {

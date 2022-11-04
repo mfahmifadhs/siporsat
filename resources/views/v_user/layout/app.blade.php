@@ -136,59 +136,17 @@
                                 <i class="nav-icon fas fa-laptop"></i>
                                 <p>
                                     Oldat & Meubelair
-                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/oldat/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-homes"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holdings-usd"></i>
-                                        <p>Usulan Pengajuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/oldat/barang/daftar/seluruh-barang') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-boxess"></i>
-                                        <p>Master Barang</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan AADB</li> -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold">
+                            <a href="{{ url('unit-kerja/aadb/dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-car-side"></i>
                                 <p>
                                     AADB
-                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/aadb/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-homes"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/aadb/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Usulan Pengajuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('unit-kerja/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-cars"></i>
-                                        <p>Master AADB</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
                         <li class="nav-item">

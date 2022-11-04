@@ -67,20 +67,20 @@
                 </li>
 
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown text-capitalize">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle"></i>
-                        <b>{{ Auth::user()->pegawai->nama_pegawai }}</b>
+                        <b>{{ ucfirst(strtolower(Auth::user()->pegawai->nama_pegawai)) }}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">
-                            <p class="text-capitalize">
+                            <p>
                                 @if( Auth::user()->pegawai->jabatan_id == '1' || Auth::user()->pegawai->jabatan_id == '2')
-                                {{ Auth::user()->pegawai->nama_pegawai }} <br>
-                                {{ Auth::user()->pegawai->jabatan->jabatan }} {{ Auth::user()->pegawai->keterangan_pegawai }}
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->nama_pegawai)) }} <br>
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->keterangan_pegawai)) }}
                                 @else
-                                {{ Auth::user()->pegawai->nama_pegawai }} <br>
-                                {{ Auth::user()->pegawai->jabatan->jabatan }} <br> {{ Auth::user()->pegawai->timKerja->tim_kerja }}
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->nama_pegawai)) }} <br>
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->keterangan_pegawai)) }} <br>
                                 @endif
                             </p>
                         </span>
@@ -129,13 +129,12 @@
                                 <p>Home</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="{{ url('super-user/laporan-siporsat') }}" class="nav-link">
                                 <i class="nav-icon fas fa-chart-bar"></i>
                                 <p>Laporan</p>
                             </a>
-                        </li>
-
+                        </li> -->
                         <li class="nav-header font-weight-bold">Pemeliharaan</li>
                         <li class="nav-item">
                             <a href="{{ url('super-user/oldat/dashboard') }}" class="nav-link font-weight-bold">

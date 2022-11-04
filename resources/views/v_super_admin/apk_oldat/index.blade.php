@@ -20,39 +20,47 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-7 form-group">
-                <div class="card card-outline card-primary text-center" style="width: 100%;">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <input type="number" class="form-control" name="tahun" placeholder="Tahun">
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="unit_kerja">
-                                    <option value="">-- Pilih Unit Kerja --</option>
-                                    @foreach ($unitKerja as $item)
-                                    <option value="{{$item->id_unit_kerja}}">{{$item->unit_kerja}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <select id="" class="form-control" name="tim_kerja">
-                                    <option value="">-- Pilih Tim Kerja --</option>
-                                    @foreach ($timKerja as $item)
-                                    <option value="{{$item->id_tim_kerja}}">{{$item->tim_kerja}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <button id="searchChartData" class="btn btn-primary form-control">
-                                    <i class="fas fa-search"></i> Cari
-                                </button>
+            <div class="col-md-12">
+                <div class="card card-primary card-outline" id="accordion">
+                    <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                        <div class="card-header">
+                            <div class="card-tools">
+                                <span class="btn btn-primary btn-sm">
+                                    <i class="fas fa-filter"></i> Filter
+                                </span>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body" id="konten-statistik">
-                        <div id="konten-chart">
-                            <canvas id="pie-chart" width="800" height="450"></canvas>
+                    </a>
+                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label>Nama Barang</label> <br>
+                                    <select name="barang" id="barang`+ i +`" class="form-control text-capitalize select2-1" style="width: 100%;">
+                                        <option value="">-- NAMA BARANG --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Unit Kerja</label> <br>
+                                    <select name="unitkerja" id="unitkerja`+ i +`" class="form-control text-capitalize select2-2" style="width: 100%;">
+                                        <option value="">-- UNIT KERJA --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Kondisi</label> <br>
+                                    <select name="kondisi" id="kondisi`+ i +`" class="form-control text-capitalize select2-3" style="width: 100%;">
+                                        <option value="">-- KONDISI BARANG --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 mt-2 text-right">
+                                    <button id="searchChartData" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
+                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="btn btn-danger">
+                                        <i class="fas fa-undo"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,69 +69,207 @@
     </div>
 </section>
 
+<section class="content text-capitalize">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div id="notif-konten-chart"></div>
+            </div>
+            <div class="col-md-4 col-12">
+                <div class="card">
+                    <div id="konten-chart-google-chart">
+                        <div id="piechart" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-secondary loading" role="alert">
+                            Sedang menyiapkan data ...
+                        </div>
+                        <table id="table-barang" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Barang</th>
+                                    <th>Merk/Tipe</th>
+                                    <th>Pengguna</th>
+                                    <th>Kondisi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 @section('js')
-<!-- ChartJS -->
-<script src="{{ asset('assets/plugins/chart.js/Chart.min.js')}}"></script>
 <script>
-    let ChartData = JSON.parse(`<?php echo $chartData; ?>`)
-    let chart
-    loadChart(ChartData)
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+    $(function() {
+        $("#table-usulan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+        })
 
+        $("#table-barang").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            order: [
+                [0, 'asc']
+            ],
+            "bDestroy": true
+        }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
 
-    function loadChart(ChartData) {
-        chart = new Chart(document.getElementById("pie-chart"), {
-            type: 'pie',
-            data: {
-                labels: ChartData.label,
-                datasets: [{
-                    label: "qts",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: ChartData.data
-                }]
-            },
-            options: {
+        setTimeout(showTable(JSON.parse(`<?php echo $googleChartData; ?>`)), 1000);
+    })
 
-                legend: {
-                    position: "left",
-                    align: "center"
+    let j = 0
+
+    for (let i = 1; i <= 3; i++) {
+        $(".select2-" + i).select2({
+            ajax: {
+                url: `{{ url('super-admin/oldat/select2-dashboard/` + i + `/barang') }}`,
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        _token: CSRF_TOKEN,
+                        search: params.term // search term
+                    };
                 },
-                maintainAspectRatio: false,
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Total Pengadaan Barang'
-                }
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
             }
-
-        });
-
+        })
     }
+
+    function showTable(data) {
+        let dataTable = $('#table-barang').DataTable()
+        console.log('start')
+        let dataBarang = data.barang
+        // console.log(dataBarang)
+
+        dataTable.clear()
+        let no = 1
+        dataBarang.forEach(element => {
+            dataTable.row.add([
+                no++,
+                element.kategori_barang,
+                element.barang,
+                element.unit_kerja,
+                element.kondisi_barang
+            ])
+        });
+        dataTable.draw()
+        $('.loading').hide()
+        console.log('finish')
+    }
+
+    let chart
+    let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
+    let dataChart = chartData.all
+    google.charts.load('current', {
+        'packages': ['corechart']
+    })
+    google.charts.setOnLoadCallback(function() {
+        drawChart(dataChart)
+    })
+
+    function drawChart(dataChart) {
+
+        chartData = [
+            ['Kategori Barang', 'Jumlah']
+        ]
+        console.log(dataChart)
+        dataChart.forEach(data => {
+            chartData.push(data)
+        })
+
+        var data = google.visualization.arrayToDataTable(chartData);
+
+        var options = {
+            title: 'Total Barang',
+            legend: {
+                'position': 'left',
+                'alignment': 'center'
+            },
+        }
+
+        chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+
     $('body').on('click', '#searchChartData', function() {
-        let tahun = $('input[name="tahun"').val()
-        let unit_kerja = $('select[name="unit_kerja"').val()
-        let tim_kerja = $('select[name="tim_kerja"').val()
+        let barang = $('select[name="barang"').val()
+        let unit_kerja = $('select[name="unitkerja"').val()
+        let kondisi = $('select[name="kondisi"').val()
         let url = ''
-        if (tahun || unit_kerja || tim_kerja) {
-            url = '<?= url("/super-admin/oldat/grafik?tahun='+tahun+'&unit_kerja='+unit_kerja+'&tim_kerja='+tim_kerja+'") ?>'
+        console.log(barang)
+        if (barang || unit_kerja || kondisi) {
+            url =
+                '<?= url("/super-admin/oldat/grafik?barang='+barang+'&unit_kerja='+unit_kerja+'&kondisi='+kondisi+'") ?>'
         } else {
-            url = '<?= url("/super-admin/oldat/grafik") ?>'
+            url = '<?= url('/super-admin/oldat/grafik') ?>'
         }
 
         jQuery.ajax({
             url: url,
             type: "GET",
             success: function(res) {
-                console.log(res.message);
+                // console.log(res.message);
+                let dataTable = $('#table-barang').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').show();
+                    $('#konten-chart-google-chart').show();
                     let data = JSON.parse(res.data)
-                    chart.destroy()
-                    loadChart(data)
+                    drawChart(data.chart)
+
+                    dataTable.clear()
+                    dataTable.draw()
+                    let no = 1
+                    console.log(res)
+                    data.table.forEach(element => {
+                        dataTable.row.add([
+                            no++,
+                            element.kategori_barang,
+                            element.barang,
+                            element.unit_kerja,
+                            element.kondisi_barang
+                        ]).draw(false)
+                    });
+
                 } else {
+                    dataTable.clear()
+                    dataTable.draw()
                     $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart').hide();
-                    var html = '';
+                    $('#konten-chart-google-chart').hide();
+                    var html = ''
                     html += '<div class="notif-tidak-ditemukan">'
                     html += '<div class="card bg-secondary py-4">'
                     html += '<div class="card-body text-white">'
@@ -133,11 +279,9 @@
                     html += '</div>'
                     html += '</div>'
                     html += '</div>'
-                    $('#konten-statistik').append(html);
-
+                    $('#notif-konten-chart').append(html)
                 }
             },
-
         })
     })
 </script>

@@ -122,6 +122,10 @@
                                     <div class="col-md-2">Tanggal Usulan</div>
                                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Total Pengajuan</div>
+                                    <div class="col-md-9">: {{ $bast->total_pengajuan }} kendaraan</div>
+                                </div>
                                 @if($bast->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>

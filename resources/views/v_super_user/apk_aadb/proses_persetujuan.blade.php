@@ -77,12 +77,7 @@
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Informasi Kendaraan</label>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <div class="col-sm-2">&nbsp;</div>
+                        <label class="col-sm-2 col-form-label">Informasi Kendaraan</label>
                         @if ($usulan->jenis_form == 1)
                         <div class="col-sm-10">
                             <table class="table table-bordered text-center">

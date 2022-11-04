@@ -58,7 +58,7 @@
 <!-- Content Header -->
 
 <section class="content">
-    <div class="container">
+    <div class="container text-capitalize">
         <div class="row">
             <div class="col-md-12 form-group">
                 <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-primary print mr-2">
@@ -86,9 +86,9 @@
                             </div>
                             <div class="col-md-8 text-center">
                                 <h2 class="page-header">
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_kerja.' '.$bast->unit_utama }}</b></h5>
-                                    <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
+                                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                                 </h2>
                             </div>
                             <div class="col-md-2">
@@ -102,48 +102,61 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <div class="form-group row mb-4">
-                                    <div class="col-md-12 text-uppercase text-center">{{ $bast->no_surat_bast }}</div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Nomor Surat</div>
+                                    <div class="col-md-10 text-uppercase">: {{ ucfirst(strtolower($bast->no_surat_bast)) }}</div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2">Pengusul</label>
-                                    <div class="col-sm-10">:{{ $bast->nama_pegawai }}</div>
-                                    <label class="col-sm-2">Jabatan</label>
-                                    <div class="col-sm-10">: {{ $bast->keterangan_pegawai.' '.$bast->tim_kerja }}</div>
-                                    <label class="col-sm-2">Unit Kerja</label>
-                                    <div class="col-sm-10">: {{ $bast->unit_kerja }}</div>
-                                    <label class="col-sm-2">Tanggal Bast</label>
-                                    <div class="col-sm-10">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
-                                    @if($bast->jenis_form == 'pengadaan')
-                                    <div class="col-md-2"><label>Rencana Pengguna </label></div>
-                                    <div class="col-md-10">: {{ $bast->rencana_pengguna }}</div>
-                                    @else
-                                    <div class="col-md-2"><label>Biaya Perbaikan </label></div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Pengusul</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Jabatan</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Unit Kerja</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Tanggal Usulan</div>
+                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Total Pengajuan</div>
+                                    <div class="col-md-10">: {{ $bast->total_pengajuan }} barang</div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Total Biaya</div>
                                     <div class="col-md-10">: Rp {{ number_format($bast->total_biaya, 0, ',', '.') }}</div>
-                                    @endif
                                 </div>
-                                <p class="text-justify mt-4">
+                                @if($bast->rencana_pengguna != null)
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Rencana Pengguna</div>
+                                    <div class="col-md-10">: {{ $bast->rencana_pengguna }}</div>
+                                </div>
+                                @endif
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-12 text-justify mt-4">
                                     Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                                     dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
                                     berfungsi normal sebagaimana mestinya.
-                                </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 table-responsiv mb-5">
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
-                                            <td>No</td>
-                                            <td style="width: 15%;">Jenis Barang</td>
-                                            <td style="width: 20%;">Merk Barang</td>
+                                            <th>No</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe Barang</th>
                                             @if($bast->jenis_form == 'pengadaan')
-                                            <td style="width: 40%;">Spesifikasi</td>
-                                            <td>Jumlah</td>
-                                            <td>Satuan</td>
-                                            <td style="width: 25%;">Tahun Perolehan </td>
+                                            <th>Spesifikasi</th>
+                                            <th>Tahun Perolehan </th>
                                             @else
-                                            <td style="width: 25%;">Pengguna</td>
-                                            <td style="width: 25%;">Unit Kerja</td>
-                                            <td style="width: 25%;">Tahun Perolehan</td>
+                                            <th>Unit Kerja</th>
+                                            <th>Tahun Perolehan</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -156,8 +169,6 @@
                                             <td>{{ $dataBarang->kategori_barang }}</td>
                                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
                                             <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                            <td>{{ $dataBarang->jumlah_barang }}</td>
-                                            <td>{{ $dataBarang->satuan_barang }}</td>
                                             <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
                                         </tr>
                                         @endforeach
@@ -167,7 +178,6 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataBarang->kategori_barang }}</td>
                                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                                            <td>{{ $dataBarang->nama_pegawai }}</td>
                                             <td>{{ $dataBarang->unit_kerja }}</td>
                                             <td>{{ $dataBarang->tahun_perolehan }}</td>
                                         </tr>
@@ -179,9 +189,9 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
-                                    <label class="col-sm-4">Yang Menerima, <br> Pengusul</label>
+                                    <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
                                     @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->jabatan.' '.$pimpinan->keterangan_pegawai }}</label>
+                                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>
@@ -197,9 +207,9 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
-                                    <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
                                     @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
+                                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>

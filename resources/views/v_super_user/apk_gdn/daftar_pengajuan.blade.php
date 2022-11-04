@@ -86,7 +86,7 @@
                                         @elseif ($dataUsulan->status_proses_id == 3)
                                         <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
                                         @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi <br> kabag rt</span>
                                         @elseif ($dataUsulan->status_proses_id == 5)
                                         <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                         @endif
@@ -100,13 +100,13 @@
                                             <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2   )
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
-                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            @elseif ($dataUsulan->status_proses_id == 4 || $dataUsulan->status_proses_id == 5)
                                             <a class="dropdown-item btn" href="{{ url('super-user/gdn/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-arrow-alt-circle-right"></i> BAST
+                                                <i class="fas fa-file"></i> BAST
                                             </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">

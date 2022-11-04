@@ -111,12 +111,11 @@
                         @else
                         <div class="col-sm-10">
                             <table class="table table-bordered text-center">
-                                <thead>
+                                <thead class="bg-secondary">
                                     <tr>
                                         <td>No</td>
                                         <td>Jenis Barang</td>
-                                        <td>Merk Barang</td>
-                                        <td>Pengguna</td>
+                                        <td>Merk Barang</td>\
                                         <td>Unit Kerja</td>
                                         <td>Tahun Perolehan</td>
                                     </tr>
@@ -128,7 +127,6 @@
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
                                         <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
-                                        <td>{{ $dataBarangPerbaikan->nama_pegawai }}</td>
                                         <td>{{ $dataBarangPerbaikan->unit_kerja }}</td>
                                         <td>{{ $dataBarangPerbaikan->tahun_perolehan }}</td>
                                     </tr>

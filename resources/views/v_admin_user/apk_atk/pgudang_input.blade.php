@@ -124,6 +124,9 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">File Kwitansi (*)</label>
                         <div class="col-sm-4">
+                            <p>
+                                <img id="preview-image-before-upload" src="https://cdn-icons-png.flaticon.com/512/1611/1611318.png" class="img-responsive img-thumbnail mt-2" style="width: 20%;">
+                            </p>
                             <div class="btn btn-default btn-file">
                                 <i class="fas fa-paperclip"></i> Upload Kwitansi
                                 <input type="file" class="form-control image" name="file_kwitansi" accept="image/jpeg , image/jpg, image/png" required>
@@ -147,5 +150,17 @@
     </div>
 </section>
 
+@section('js')
+<script>
+    $('.image').change(function() {
+        let reader = new FileReader();
+
+        reader.onload = (e) => {
+            $('#preview-image-before-upload').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    });
+</script>
+@endsection
 
 @endsection

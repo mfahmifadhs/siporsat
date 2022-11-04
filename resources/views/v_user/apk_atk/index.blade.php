@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-8">
-                <h4 class="m-0">Alat Tulis Kantor</h4>
+                <h4 class="m-0 ml-2">PEMELIHARAAN ALAT TULIS KANTOR</h4>
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
 <section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3 col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Usulan Pengadaan/Distribusi ATK</h3>
@@ -48,12 +48,12 @@
 
                     <div class="card-footer text-center font-weight-bold">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-6">
                                 <a href="{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}" class="btn btn-primary btn-xs py-1">
                                     <i class="fas fa-plus-circle"></i> Usulan Pengadaan
                                 </a>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-6">
                                 <a href="{{ url('unit-kerja/atk/usulan/distribusi/baru') }}" class="btn btn-primary btn-xs py-1">
                                     <i class="fas fa-plus-circle"></i> Usulan Distribusi
                                 </a>
@@ -63,7 +63,7 @@
                 </div>
 
             </div>
-            <div class="col-9">
+            <div class="col-md-9 col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan</h3>
@@ -184,7 +184,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-3">
-                                <label>Nama Barang</label> <br>
+                                <label>Merk/Tipe</label> <br>
                                 <select name="merk" id="merktipe`+ i +`" class="form-control text-capitalize select2-4">
                                     <option value="">-- MERK/TIPE BARANG --</option>
                                 </select>
@@ -204,14 +204,14 @@
             <div class="col-12">
                 <div id="notif-konten-chart"></div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4 col-12">
                 <div class="card">
                     <div id="konten-chart-google-chart">
                         <div id="piechart" style="height: 400px;"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-md-8 col-12">
                 <div class="card">
                     <div class="card-body">
                         <table id="table-atk" class="table table-bordered">

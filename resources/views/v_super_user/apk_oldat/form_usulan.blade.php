@@ -368,6 +368,7 @@
         $(document).on('change', '.spekBarang', function() {
             let idBarang = $(this).val();
             let target = $(this).data('idtarget');
+            console.log(idBarang);
             if (idBarang) {
                 $.ajax({
                     type: "GET",
@@ -394,7 +395,7 @@
                                 '<input type="text" class="form-control" value="' + row.satuan_barang + '" readonly>'
                             );
                             $("#tahun_perolehan" + target).append(
-                                '<input type="number" class="form-control" value="' + row.tahun_perolehan + '" readonly>'
+                                `<input type="text" class="form-control" value="{{ \Carbon\Carbon::parse(` + row.tahun_perolehan + `)->isoFormat('Y') }}" readonly>`
                             );
                         });
                     }

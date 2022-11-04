@@ -98,7 +98,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Kode Barang </label>
                         <div class="col-sm-4">
-                            <input type="number" class="form-control" name="kode_barang[]" placeholder="Kode Barang / Kode BMN">
+                            <input type="number" class="form-control" name="kode_barang[]" value="{{ $dataBarang->kategori_barang_id }}" readonly>
                         </div>
                         <label class="col-sm-2 col-form-label">NUP Barang </label>
                         <div class="col-sm-4">
@@ -131,9 +131,9 @@
                         <div class="col-sm-4">
                             <input type="number" class="form-control" name="nilai_perolehan[]" required>
                         </div>
-                        <label class="col-sm-2 col-form-label">Tahun Perolehan (*) </label>
+                        <label class="col-sm-2 col-form-label">Tanggal Perolehan (*) </label>
                         <div class="col-sm-4">
-                            <input type="number" class="form-control" name="tahun_perolehan[]" required>
+                            <input type="date" class="form-control" name="tahun_perolehan[]" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -188,7 +188,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Merk Barang </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_barang }}" readonly>
+                            <input type="text" class="form-control text-capitalize" name="merk_tipe_barang[]" value="{{ $dataBarang->merk_tipe_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">

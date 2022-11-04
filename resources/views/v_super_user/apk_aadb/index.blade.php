@@ -29,76 +29,78 @@
             </div>
             <div class="col-md-6 form-group">
                 <div class="row">
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-3 form-group">
                         <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn-block btn btn-primary">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2962/2962303.png" width="50" height="50">
+                            <i class="fas fa-car fa-2x"></i>
                             <h5 class="font-weight-bold mt-1"><small>Usulan <br> Pengadaan</small></h5>
                         </a>
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-3 form-group">
                         <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn-block btn btn-primary">
-                            <img src="https://cdn-icons-png.flaticon.com/512/4659/4659844.png" width="50" height="50">
+                            <i class="fas fa-tools fa-2x"></i>
                             <h5 class="font-weight-bold mt-1"><small>Usulan <br> Servis</small></h5>
                         </a>
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-3 form-group">
                         <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn-block btn btn-primary">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3389/3389596.png" width="50" height="50">
+                            <i class="fas fa-id-card-alt fa-2x"></i>
                             <h5 class="font-weight-bold mt-1"><small>Usulan <br> Perpanjangan STNK</small></h5>
                         </a>
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-3 form-group">
                         <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn-block btn btn-primary">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2915/2915450.png" width="50" height="50">
+                            <i class="fas fa-gas-pump fa-2x"></i>
                             <h5 class="font-weight-bold mt-1"><small>Usulan <br> Voucher BBM</small></h5>
                         </a>
                     </div>
+                    <div class="col-md-12 form-group">
+                        <div class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h4 class="card-title font-weight-bold small">Masa Jatuh Tempo STNK</h4>
+                            </div>
+                            <div class="card-body">
+                                <table id="table-jatuh-tempo" class="table table-striped m-0">
+                                    <thead>
+                                        <tr>
+                                            <td>No</td>
+                                            <td>Kendaraan</td>
+                                            <td>Pengguna</td>
+                                            <td>Masa Jatuh Tempo STNK</td>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach ($stnk as $jatuhTempo)
+                                        @if(\Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)) < 365) <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>
+                                                {{ $jatuhTempo->no_plat_kendaraan }} <br>
+                                                <b>{{ $jatuhTempo->merk_tipe_kendaraan }}</b>
+                                            </td>
+                                            <td>
+                                                {{ $jatuhTempo->pengguna }} <br>
+                                                {{ $jatuhTempo->jabatan }}
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-sm badge-pill badge-danger">
+                                                    {{ \Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)->isoFormat('DD MMMM Y') }}
+                                                </span>
+                                            </td>
+                                            </tr>
+                                            @endif
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6 form-group">
-                <div class="card card-outline card-primary">
-                    <div class="card-header">
-                        <h4 class="card-title font-weight-bold small">Masa Jatuh Tempo STNK</h4>
-                    </div>
-                    <div class="card-body">
-                        <table id="table-jatuh-tempo" class="table table-striped m-0">
-                            <thead>
-                                <tr>
-                                    <td>No</td>
-                                    <td>Kendaraan</td>
-                                    <td>Pengguna</td>
-                                    <td>Masa Jatuh Tempo STNK</td>
-                                </tr>
-                            </thead>
-                            <?php $no = 1; ?>
-                            <tbody>
-                                @foreach ($stnk as $jatuhTempo)
-                                @if(\Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)) < 365) <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>
-                                        {{ $jatuhTempo->no_plat_kendaraan }} <br>
-                                        <b>{{ $jatuhTempo->merk_tipe_kendaraan }}</b>
-                                    </td>
-                                    <td>
-                                        {{ $jatuhTempo->pengguna }} <br>
-                                        {{ $jatuhTempo->jabatan }}
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-sm badge-pill badge-danger">
-                                            {{ \Carbon\Carbon::parse($jatuhTempo->mb_stnk_plat_kendaraan)->isoFormat('DD MMMM Y') }}
-                                        </span>
-                                    </td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="col-12">
+                <div id="notif-konten-chart"></div>
             </div>
-
             <div class="col-md-12 form-group">
-                <div class="card card-outline card-primary text-center" style="height: 100%;">
+                <div class="card card-outline card-primary" style="height: 100%;">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-4 form-group">
@@ -162,7 +164,7 @@
                         </div>
                     </div>
                     <div class="card-body" id="konten-statistik">
-                        <div id="konten-chart">
+                        <div id="konten-chart-google-chart">
                             <div id="piechart" style="height: 500px;"></div>
                         </div>
                         <div class="table">
@@ -204,9 +206,8 @@
 </section>
 
 @section('js')
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
         $("#table-jatuh-tempo").DataTable({
             "responsive": true,
@@ -215,8 +216,11 @@
             "info": false,
             "paging": true,
             "searching": false,
-            pageLength : 4,
-            lengthMenu: [[4, 10, 20, -1], [4, 10, 20, 'Semua']]
+            pageLength: 4,
+            lengthMenu: [
+                [4, 10, 20, -1],
+                [4, 10, 20, 'Semua']
+            ]
         })
 
         $("#table-kendaraan").DataTable({
@@ -227,35 +231,28 @@
             "paging": true
         })
 
-        let resOTP = ''
-        $(document).on('click', '#btnKirimOTP', function() {
-            let tujuan = "Usulan AADB"
-            jQuery.ajax({
-                url: '/super-user/sendOTP?tujuan=' + tujuan,
-                type: "GET",
-                success: function(res) {
-                    // console.log(res)
-                    alert('Berhasi mengirim kode OTP')
-                    resOTP = res
+        for (let i = 1; i <= 3; i++) {
+            $(".select2-" + i).select2({
+                ajax: {
+                    url: `{{ url('super-user/aadb/select2-dashboard/` + i + `/kendaraan') }}`,
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            search: params.term // search term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
                 }
-            });
-        });
-
-        $(document).on('click', '#btnCheckOTP', function() {
-            let idUsulan = $(this).data('idtarget')
-            let inputOTP = $('#inputOTP' + idUsulan).val()
-            console.log(idUsulan)
-            if (inputOTP == '') {
-                alert('Mohon isi kode OTP yang diterima')
-            } else if (inputOTP == resOTP) {
-                $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
-                alert('Kode OTP Benar')
-                $('#btnSubmit' + idUsulan).prop('disabled', false)
-            } else {
-                alert('Kode OTP Salah')
-                $('#btnSubmit' + idUsulan).prop('disabled', true)
-            }
-        })
+            })
+        }
     })
 
     let chart

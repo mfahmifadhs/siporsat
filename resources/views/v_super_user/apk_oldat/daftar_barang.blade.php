@@ -43,10 +43,11 @@
                     <table id="table-barang" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Id Barang</th>
+                                <th>id Barang</th>
                                 <th class="text-center">No</th>
                                 <th>Kode Barang</th>
-                                <th>NUP</th>
+                                <th>Nama Barang</th>
+                                <th>Merk/Tipe</th>
                                 <th>Jumlah</th>
                                 <th>Nilai Perolehan</th>
                                 <th>Tahun Perolehan</th>
@@ -56,32 +57,7 @@
                             </tr>
                         </thead>
                         <?php $no = 1; ?>
-                        <tbody>
-                            {{-- @foreach ($barang as $row)
-                        <tr>
-                            <td class="text-center">{{ $no++ }}</td>
-                            <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->nup_barang }}</td>
-                            <td>{{ $row->kategori_barang }}</td>
-                            <td>{{ $row->spesifikasi_barang }}</td>
-                            <td>{{ $row->jumlah_barang.' '.$row->satuan_barang }}</td>
-                            <td>Rp {{ number_format($row->nilai_perolehan, 0, ',', '.') }}</td>
-                            <td>{{ $row->tahun_perolehan }}</td>
-                            <td>{{ $row->kondisi_barang }}</td>
-                            <td>{{ $row->nama_pegawai }}</td>
-                            <td>
-                                <a type="button" class="btn btn-primary" data-toggle="dropdown">
-                                    <i class="fas fa-bars"></i>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item btn" href="{{ url('super-user/oldat/barang/detail/'. $row->id_barang) }}">
-                                        <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach --}}
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -148,49 +124,7 @@
             });
             // $('.table-container').hide()
             setTimeout(showTable, 1000);
-        });
-
-
-        // function showTable() {
-        //     let dataTable = $('#table-barang').DataTable()
-        //     console.log('start')
-        //     let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
-        //     // console.log($('#table-barang').find('tbody'))
-
-        //     dataTable.clear()
-        //     // dataTable.draw()
-        //     // console.log('tes')
-        //     // console.log(parseInt(dataBarang.length / 4))
-        //     // let progress = $('.progress-bar')
-        //     let no = 1
-        //     dataBarang.forEach(element => {
-        //         dataTable.row.add([
-        //             element.id_barang,
-        //             no,
-        //             element.kode_barang,
-        //             element.nup_barang,
-        //             element.jumlah_barang + ' ' + element.satuan_barang,
-        //             element.nilai_perolehan,
-        //             element.tahun_perolehan,
-        //             element.kondisi_barang,
-        //             element.nama_pegawai
-        //         ])
-        //         // if (no == parseInt(dataBarang.length / 4 * 100)) {
-        //         //     console.log(no)
-        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 4 * 100))
-        //         // } else if (no == parseInt(dataBarang.length / 2)) {
-        //         //     console.log(no)
-        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length / 2 * 100))
-        //         // } else if (no == parseInt(dataBarang.length * 3 / 4)) {
-        //         //     console.log(no)
-        //         //     $('.progress-bar').css('width' , parseInt(dataBarang.length * 3 / 4 * 100))
-        //         // }
-        //         no++
-        //         // console.log('data ke - ' + no)
-        //     });
-        //     dataTable.draw()
-        //     // }).buttons().container().appendTo('#table-barang_wrapper .col-md-6:eq(0)');
-        // }
+        })
 
             function showTable() {
                 let dataTable = $('#table-barang').DataTable()
@@ -205,13 +139,14 @@
                     dataTable.row.add([
                         element.id_barang,
                         no,
-                        element.kode_barang,
-                        element.nup_barang,
+                        element.kode_barang + `<br> / ` + element.nup_barang,
+                        element.kategori_barang,
+                        element.barang,
                         element.jumlah_barang + ' ' + element.satuan_barang,
-                        element.nilai_perolehan,
+                        `Rp ` + element.nilai_perolehan,
                         element.tahun_perolehan,
                         element.kondisi_barang,
-                        element.nama_pegawai
+                        element.unit_kerja
                     ])
                     no++
                     // console.log('data ke - ' + no)

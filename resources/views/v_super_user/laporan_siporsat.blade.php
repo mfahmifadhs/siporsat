@@ -93,15 +93,6 @@
             "info"         : false,
             "paging"       : false,
             "autoWidth"    : false,
-            buttons: [
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-success mr-2 rounded',
-                    title: 'Oktober',
-                    messageTop: 'Total Usulan Penyediaan Barang / Jasa '
-                }
-            ]
         }).buttons().container().appendTo('#table_wrapper .col-md-6:eq(0)');
     });
 </script>

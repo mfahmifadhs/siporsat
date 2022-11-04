@@ -41,7 +41,7 @@
 <!-- Content Header -->
 <section class="content-header">
     <div class="container">
-        <div class="row mb-2 text-capitalize">
+        <div class="row text-capitalize">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>

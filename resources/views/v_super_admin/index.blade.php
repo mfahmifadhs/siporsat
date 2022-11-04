@@ -21,42 +21,42 @@
     <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
-            <div class="col-lg-6 form-group">
+            <div class="col-md-3 form-group">
                 <a href="{{ url('super-admin/oldat/dashboard') }}">
-                    <div class="card card-main bg-primary">
-                        <div class="card-body text-black text-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3659/3659899.png" width="100" height="100">
-                            <h3 class="font-weight-bold mt-4">PENGELOLAAN BMN <br> OLAH DATA <br> (OLDAT)</h3>
+                    <div class="card bg-primary">
+                        <div class="card-body text-center">
+                            <i class="fas fa-laptop fa-3x"></i>
+                            <h6 class="font-weight-bold mt-4">PEMELIHARAAN <br> OLAH DATA & MEUBELAIR</h6>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-lg-6 form-group">
+            <div class="col-md-3 form-group">
                 <a href="#">
-                    <div class="card card-main bg-primary ">
+                    <div class="card bg-primary ">
                         <div class="card-body text-black text-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3418/3418139.png" width="100" height="100">
-                            <h3 class="font-weight-bold mt-4">PENGELOLAAN BMN <br> ALAT ANGKUTAN DARAT BERMOTOR <br> (AADT)</h3>
+                            <i class="fas fa-car fa-3x"></i>
+                            <h6 class="font-weight-bold mt-4">PEMELIHARAAN <br> ALAT ANGKUTAN DARAT BERMOTOR </h3>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-lg-6 form-group">
+            <div class="col-lg-3 form-group">
                 <a href="#">
-                    <div class="card card-main bg-primary ">
+                    <div class="card bg-primary ">
                         <div class="card-body text-black text-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/4100/4100658.png" width="100" height="100">
-                            <h3 class="font-weight-bold mt-4">PENGELOLAAN <br> ALAT TULIS KANTOR <br> (ATK)</h3>
+                            <i class="fas fa-pencil-ruler fa-3x"></i>
+                            <h6 class="font-weight-bold mt-4">PENGELOLAAN <br> ALAT TULIS KANTOR</h6>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-lg-6 form-group">
+            <div class="col-lg-3 form-group">
                 <a href="#">
-                    <div class="card card-main bg-primary ">
+                    <div class="card bg-primary ">
                         <div class="card-body text-black text-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/602/602182.png" width="100" height="100">
-                            <h3 class="font-weight-bold" style="margin-top: 40px;">PENGELOLAAN PEMELIHARAAN</h3>
+                            <i class="fas fa-building fa-3x"></i>
+                            <h6 class="font-weight-bold mt-4">PEMELIHARAAN <br> GEDUNG DAN BANGUNAN</h6>
                         </div>
                     </div>
                 </a>
