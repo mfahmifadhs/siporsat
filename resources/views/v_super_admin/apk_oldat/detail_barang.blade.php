@@ -53,7 +53,7 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link active" href="#informasi-barang" data-toggle="tab">Informasi Barang</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#riwayat-barang" data-toggle="tab">Riwayat Penggunaan</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#riwayat-barang" data-toggle="tab">Riwayat</a></li>
                         </ul>
                     </div>
                     <div class="card-body">
@@ -62,9 +62,27 @@
                                 <form action="{{ url('super-admin/oldat/barang/proses-ubah/'. $barang->id_barang) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Upload Foto Barang</label>
+                                            <p>
+                                                @if($barang->foto_barang == null)
+                                                <img id="preview-image-before-upload" src="{{ asset('dist_admin/img/1224838.png') }}" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
+                                                @else
+                                                <img id="preview-image-before-upload" src="{{ asset('gambar/barang_bmn/'. $barang->foto_barang) }}" class="img-responsive img-thumbnail mt-2" style="width: 10%;">
+                                                @endif
+                                            </p>
+                                            <p>
+                                            <div class="btn btn-default btn-file">
+                                                <i class="fas fa-paperclip"></i> Upload Foto
+                                                <input type="hidden" class="form-control image" name="foto_lama" value="{{ $barang->foto_barang }}">
+                                                <input type="file" class="form-control image" name="foto_barang" accept="image/jpeg , image/jpg, image/png" value="{{ $barang->foto_barang }}">
+                                            </div><br>
+                                            <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
+                                            </p>
+                                        </div>
                                         <div class="col-md-6 form-group">
                                             <label>Pengguna Barang :</label>
-                                            <select name="id_pegawai" class="form-control" disabled>
+                                            <select name="id_pegawai" class="form-control">
                                                 <option value="">-- Pilih Pegawai --</option>
                                                 @foreach($pegawai as $dataPegawai)
                                                 <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($barang->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
@@ -75,7 +93,7 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kategori Barang :</label>
-                                            <select name="id_kategori_barang" class="form-control" disabled>
+                                            <select name="id_kategori_barang" class="form-control">
                                                 <option value="">-- Pilih Level --</option>
                                                 @foreach($kategoriBarang as $dataKategoriBarang)
                                                 <option value="{{ $dataKategoriBarang->id_kategori_barang }}" <?php if ($barang->kategori_barang_id == $dataKategoriBarang->id_kategori_barang) echo "selected"; ?>>
@@ -86,27 +104,27 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kode Barang : </label>
-                                            <input type="text" name="kode_barang" class="form-control" value="{{ $barang->kode_barang }}" disabled>
+                                            <input type="text" name="kode_barang" class="form-control" value="{{ $barang->kode_barang }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>NUP : </label>
-                                            <input type="text" name="nup_barang" class="form-control" value="{{ $barang->nup_barang }}" disabled>
+                                            <input type="text" name="nup_barang" class="form-control" value="{{ $barang->nup_barang }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Jumlah : </label>
-                                            <input type="text" name="jumlah_barang" class="form-control" value="{{ $barang->jumlah_barang }}" disabled>
+                                            <input type="text" name="jumlah_barang" class="form-control" value="{{ $barang->jumlah_barang }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Satuan : </label>
-                                            <input type="text" name="satuan_barang" class="form-control" value="{{ $barang->satuan_barang }}" disabled>
+                                            <input type="text" name="satuan_barang" class="form-control" value="{{ $barang->satuan_barang }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Tahun Perolehan : </label>
-                                            <input type="text" name="tahun_perolehan" class="form-control" value="{{ $barang->tahun_perolehan }}" disabled>
+                                            <input type="text" name="tahun_perolehan" class="form-control" value="{{ $barang->tahun_perolehan }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label for="level">Kondisi Barang :</label>
-                                            <select name="id_kondisi_barang" class="form-control" disabled>
+                                            <select name="id_kondisi_barang" class="form-control">
                                                 <option value="">-- Pilih Kondisi Barang --</option>
                                                 @foreach($kondisiBarang as $dataKondisiBarang)
                                                 <option value="{{ $dataKondisiBarang->id_kondisi_barang }}" <?php if ($barang->kondisi_barang_id == $dataKondisiBarang->id_kondisi_barang) echo "selected"; ?>>
@@ -115,41 +133,118 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Nilai Perolehan : </label>
+                                            <input type="number" name="nilai_perolehan" class="form-control" value="{{ $barang->nilai_perolehan }}">
+                                        </div>
                                         <div class="col-md-12 form-group">
                                             <label>Spesifikasi : </label>
-                                            <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5" disabled>{{ $barang->spesifikasi_barang}}</textarea>
+                                            <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5">{{ $barang->spesifikasi_barang}}</textarea>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label>Proses : </label> <br>
+                                            <input type="radio" name="proses" value="update" required>
+                                            <span>Update Data    </span>
+                                            <input type="radio" name="proses" value="pengguna-baru" required>
+                                            <span>Pengguna Baru </span>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <button type="button" class="btn btn-default">Close</button>
+                                            <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah Informasi Barang ?')">Submit</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="tab-pane" id="riwayat-barang">
+                                @foreach($barang->riwayat as $i => $riwayatPengguna)
                                 <div class="timeline timeline-inverse">
                                     <div class="time-label">
                                         <span class="bg-danger">
-                                            10 Feb. 2014
+                                            {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}
                                         </span>
                                     </div>
                                     <div>
-                                        <i class="fas fa-envelope bg-primary"></i>
+                                        <i class="fas fa-user bg-primary"></i>
 
                                         <div class="timeline-item">
-                                            <span class="time"><i class="far fa-clock"></i> 12:05</span>
+                                            <span class="time"><i class="far fa-date"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
-                                            <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                                            <h3 class="timeline-header text-capitalize">
+                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                            </h3>
 
                                             <div class="timeline-body">
-                                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                                weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                                jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                                quora plaxo ideeli hulu weebly balihoo...
-                                            </div>
-                                            <div class="timeline-footer">
-                                                <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label>Lokasi Pemakaian : </label>
+                                                        <p>{{ $riwayatPengguna->keperluan_penggunaan }}</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label>Kondisi Barang : </label>
+                                                        <p>{{ $riwayatPengguna->kondisi_barang }}</p>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                        <a class="btn btn-danger btn-xs" href="{{ url('super-admin/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}"
+                                                        onclick="return confirm('Hapus Riwayat Ini ?')">
+                                                            <i class="fas fa-trash"></i> Hapus
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="modal fade" id="modal-default">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title text-capitalize">
+                                                            {{ $riwayatPengguna->kategori_barang.' '.$riwayatPengguna->spesifikasi_barang }}
+                                                        </h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ url('super-admin/oldat/barang/ubah-riwayat/'. $riwayatPengguna->barang_id) }}">
+                                                            @csrf
+                                                            <input type="hidden" name="id_riwayat_barang" value="{{ $riwayatPengguna->id_riwayat_barang }}">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Pengguna</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->nama_pegawai }}" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Tanggal Pemakaian</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="date" class="form-control" name="tanggal_pengguna" value="{{ $riwayatPengguna->tanggal_pengguna }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Lokasi Pemakaian</label>
+                                                                <div class="col-sm-8">
+                                                                    <textarea type="text" class="form-control" name="keperluan_penggunaan">{{ $riwayatPengguna->keperluan_penggunaan }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">&nbsp;</label>
+                                                                <div class="col-sm-8">
+                                                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah informasi riwayat pemakaian ?')">Ubah</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

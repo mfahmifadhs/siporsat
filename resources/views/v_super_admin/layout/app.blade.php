@@ -113,112 +113,35 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Pengelolaan OLAT -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
+                            <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-laptop"></i>
                                 <p>Pengelolaan OLDAT </p>
                                 <i class="right fas fa-angle-left"></i>
                             </a>
                             <ul class="nav nav-treeview">
-
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/oldat/dashboard') }}" class="nav-link {{ Request::is('super-admin/oldat/dashboard') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <a href="{{ url('super-admin/oldat/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
-                                <li class="nav-header ">Barang</li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/oldat/kategori-barang/data/semua') }}" class="nav-link {{ Request::is('super-admin/oldat/kategori-barang/data/semua') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-list-alt"></i>
-                                        <p>
-                                            Kategori
-                                        </p>
+                                    <a href="{{ url('super-admin/oldat/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Usulan Pengajuan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/oldat/barang/data/semua') }}" class="nav-link {{ Request::is('super-admin/oldat/barang/data/semua') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-boxes"></i>
-                                        <p>
-                                            Master Barang
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-header">Status</li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-list-alt"></i>
-                                        <p>
-                                            Status
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../../index.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Status Barang</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Status Pengadaan</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-header">Pengadaan</li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-list-alt"></i>
-                                        <p>
-                                            Form Pengadaan
-                                        </p>
+                                    <a href="{{ url('super-admin/oldat/barang/daftar/seluruh-barang') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Master Barang</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-admin/oldat/pengajuan/data/seluruh-pengajuan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-file"></i>
-                                        <p>
-                                            Master Pengajuan
-                                        </p>
+                                    <a href="{{ url('super-admin/oldat/lamp/daftar/seluruh-barang') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Arsip</p>
                                     </a>
-                                </li>
-                                <li class="nav-header">Rekapitulasi</li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-users"></i>
-                                        <p>
-                                            Master Rekapitulasi
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../../index.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Pengguna</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Tim Kerja</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Unit Kerja</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Unit Utama</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                             </ul>
                         </li>

@@ -54,16 +54,11 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [SuperAdminController::class, 'Oldat']);
         Route::get('/grafik', [SuperAdminController::class, 'SearchChartDataOldat']);
+        Route::get('usulan/{aksi}/{id}', [SuperAdminController::class, 'SubmissionOldat']);
+        Route::get('barang/{aksi}/{id}', [SuperAdminController::class, 'Items']);
 
+        Route::post('barang/{aksi}/{id}', [SuperAdminController::class, 'Items']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2OldatDashboard']);
-
-        Route::get('barang/{aksi}/{id}', [SuperAdminController::class, 'showItem']);
-        Route::get('kategori-barang/{aksi}/{id}', [SuperAdminController::class, 'showCategoryItem']);
-        Route::get('pengajuan/{aksi}/{id}', [SuperAdminController::class, 'submission']);
-        Route::post('pengajuan/{aksi}/{id}', [SuperAdminController::class, 'submission']);
-        Route::post('barang/{aksi}/{id}', [SuperAdminController::class, 'showItem']);
-        Route::post('kategori-barang/{aksi}/{id}', [SuperAdminController::class, 'showCategoryItem']);
-
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {

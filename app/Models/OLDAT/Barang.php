@@ -33,6 +33,8 @@ class Barang extends Model
     ];
 
     public function riwayat() {
-        return $this->hasMany(RiwayatBarang::class, 'barang_id','id_barang')->join('tbl_pegawai','id_pegawai','pegawai_id');
+        return $this->hasMany(RiwayatBarang::class, 'barang_id','id_barang')
+            ->join('oldat_tbl_kondisi_barang','id_kondisi_barang','kondisi_barang_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id');
     }
 }

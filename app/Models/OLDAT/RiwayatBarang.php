@@ -20,5 +20,9 @@ class RiwayatBarang extends Model
         'keperluan_penggunaan'
     ];
 
+    public function barang() {
+        return $this->belongsTo(Barang::class, 'barang_id');
+    }
+
 
 }

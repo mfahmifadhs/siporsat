@@ -56,7 +56,7 @@
                                     <button id="searchChartData" class="btn btn-primary">
                                         <i class="fas fa-search"></i> Cari
                                     </button>
-                                    <a href="{{ url('super-user/oldat/dashboard') }}" class="btn btn-danger">
+                                    <a href="{{ url('super-admin/oldat/dashboard') }}" class="btn btn-danger">
                                         <i class="fas fa-undo"></i>
                                     </a>
                                 </div>
