@@ -32,7 +32,7 @@
                         </div>
                     </a>
                     <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-body">
+                        <div class="card-header">
                             <div class="form-group row">
                                 <div class="col-sm-4">
                                     <label>Nama Barang</label> <br>
@@ -63,45 +63,38 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content text-capitalize">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div id="notif-konten-chart"></div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card">
-                    <div id="konten-chart-google-chart">
-                        <div id="piechart" style="height: 400px;"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8 col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="alert alert-secondary loading" role="alert">
-                            Sedang menyiapkan data ...
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="notif-konten-chart"></div>
                         </div>
-                        <table id="table-barang" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Barang</th>
-                                    <th>Merk/Tipe</th>
-                                    <th>Pengguna</th>
-                                    <th>Kondisi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="small">
+                        <div class="col-md-4 col-12">
+                            <div class="card-body border border-default">
+                                <div id="konten-chart-google-chart">
+                                    <div id="piechart" style="height: 400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-12">
+                            <div class="card-body border border-default">
+                                <div class="alert alert-secondary loading" role="alert">
+                                    Sedang menyiapkan data ...
+                                </div>
+                                <table id="table-barang" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe</th>
+                                            <th>Pengguna</th>
+                                            <th>Kondisi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small">
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -215,8 +208,9 @@
         var options = {
             title: 'Total Barang',
             legend: {
-                'position': 'left',
-                'alignment': 'center'
+                'position': 'top',
+                'alignment': 'center',
+                'maxLines': 10
             },
         }
 
@@ -230,7 +224,12 @@
         let unit_kerja = $('select[name="unitkerja"').val()
         let kondisi = $('select[name="kondisi"').val()
         let url = ''
-        console.log(barang)
+
+        $('.loading').show()
+        let dataTable = $('#table-barang').DataTable()
+        dataTable.clear()
+        dataTable.draw()
+
         if (barang || unit_kerja || kondisi) {
             url =
                 '<?= url("/super-admin/oldat/grafik?barang='+barang+'&unit_kerja='+unit_kerja+'&kondisi='+kondisi+'") ?>'
@@ -261,8 +260,10 @@
                             element.barang,
                             element.unit_kerja,
                             element.kondisi_barang
-                        ]).draw(false)
+                        ])
                     });
+                    dataTable.draw()
+                    $('.loading').hide()
 
                 } else {
                     dataTable.clear()

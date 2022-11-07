@@ -62,10 +62,13 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
-        Route::get('dashboard', [SuperAdminController::class, 'aadb']);
-        Route::get('kendaraan/{aksi}/{id}', [SuperAdminController::class, 'vehicle']);
-        Route::get('pengguna/{aksi}/{id}', [SuperAdminController::class, 'userVehicle']);
-        Route::get('pengemudi/{aksi}/{id}', [SuperAdminController::class, 'driver']);
+        Route::get('dashboard', [SuperAdminController::class, 'Aadb']);
+        Route::get('/grafik', [SuperAdminController::class, 'SearchChartDataAadb']);
+        Route::get('usulan/{aksi}/{id}', [SuperAdminController::class, 'SubmissionAadb']);
+        Route::get('kendaraan/{aksi}/{id}', [SuperAdminController::class, 'Vehicle']);
+
+        Route::post('kendaraan/{aksi}/{id}', [SuperAdminController::class, 'Vehicle']);
+        Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AadbDashboard']);
     });
 
 
@@ -105,6 +108,7 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterAtk']);
         Route::get('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
 
+        Route::post('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
         Route::post('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
     });
@@ -246,6 +250,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
         Route::get('/grafik', [UserController::class, 'SearchChartDataOldat']);
         Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2OldatDashboard']);
 
+        Route::post('barang/{aksi}/{id}', [UserController::class, 'Items']);
         Route::post('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2OldatDashboard']);
 
     });

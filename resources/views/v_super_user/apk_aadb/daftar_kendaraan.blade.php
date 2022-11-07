@@ -53,7 +53,7 @@
                             <td>
                                 <label>{{ $row->merk_tipe_kendaraan.' Tahun '.$row->tahun_kendaraan }}</label> <br>
                                 No. Polisi : {{ $row->no_plat_kendaraan }} <br>
-                                {{ $row->kode_barang.' / NUP. '.$row->nup_barang }} <br>
+                                {{ $row->kode_barang.'.'.$row->nup_barang }} <br>
                                 {{ $row->jenis_kendaraan }} <br>
                             </td>
                             <td>

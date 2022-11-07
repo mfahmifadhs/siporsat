@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<section class="content text-capitalize">
+<!-- <section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 col-12">
@@ -177,7 +177,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <section class="content text-capitalize">
     <div class="container-fluid">
@@ -408,6 +408,12 @@
         let barang = $('select[name="barang"').val()
         let kondisi = $('select[name="kondisi"').val()
         let url = ''
+
+        $('.loading').show()
+        let dataTable = $('#table-barang').DataTable()
+        dataTable.clear()
+        dataTable.draw()
+
         console.log(barang)
         if (barang || kondisi) {
             url =
@@ -440,8 +446,10 @@
                             element.barang,
                             element.unit_kerja,
                             element.kondisi_barang
-                        ]).draw(false)
+                        ])
                     });
+                    dataTable.draw()
+                    $('.loading').hide()
 
                 } else {
                     dataTable.clear()

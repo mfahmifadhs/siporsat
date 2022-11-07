@@ -42,8 +42,8 @@
                             <th>Usulan Pengajuan</th>
                             <th>Total Pengajuan</th>
                             <th>Rencana Pengguna</th>
-                            <th>Status Pengajuan</th>
-                            <th>Status Usulan</th>
+                            <th>Lampiran</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -58,13 +58,15 @@
                             <td>{{ $dataUsulan->total_pengajuan }} barang</td>
                             <td>{{ $dataUsulan->rencana_pengguna }}</td>
                             <td class="text-center">
-                                @if($dataUsulan->status_pengajuan_id == 1)
-                                <span class="badge badge-sm badge-pill badge-success">disetujui</span>
-                                @elseif($dataUsulan->status_pengajuan_id == 2)
-                                <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
+                                @if ($dataUsulan->lampiran != null)
+                                <span>Bukti Kwitansi : </span> <br>
+                                <a href="{{ asset('gambar/kwitansi/oldat_perbaikan/'. $dataUsulan->lampiran) }}" class="btn btn-primary btn-xs" download>
+                                    <i class="fas fa-download"></i> Unduh
+                                </a>
                                 @endif
                             </td>
                             <td class="text-center">
+                                <span>Status Pengajuan : </span> <br>
                                 @if($dataUsulan->status_proses_id == 1)
                                 <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
                                 @elseif ($dataUsulan->status_proses_id == 2)
@@ -75,9 +77,15 @@
                                 <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi kabag rt</span>
                                 @elseif ($dataUsulan->status_proses_id == 5)
                                 <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                @endif <br>
+                                <span>Status Proses</span> <br>
+                                @if($dataUsulan->status_pengajuan_id == 1)
+                                <span class="badge badge-sm badge-pill badge-success">disetujui</span>
+                                @elseif($dataUsulan->status_pengajuan_id == 2)
+                                <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>

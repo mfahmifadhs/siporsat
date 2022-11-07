@@ -314,9 +314,6 @@
             // $( ".jumlah" ).hide();
             $("#btn-total").prop("disabled", true);
         })
-
-
-
     })
 </script>
 @endsection

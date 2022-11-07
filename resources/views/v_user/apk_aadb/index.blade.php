@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<section class="content text-capitalize">
+<!-- <section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-5 col-12">
@@ -305,7 +305,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <section class="content text-capitalize">
     <div class="container-fluid">
@@ -334,7 +334,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label>Jenis AADB</label> <br>
                                 <select id="" class="form-control" name="jenis_aadb">
                                     <option value="">-- JENIS AADB --</option>
@@ -342,13 +342,13 @@
                                     <option value="sewa">SEWA</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <!-- <div class="col-sm-4">
                                 <label>Unit Kerja</label> <br>
                                 <select name="unit_kerja" id="unitkerja`+ i +`" class="form-control text-capitalize select2-1">
                                     <option value="">-- UNIT KERJA --</option>
                                 </select>
-                            </div>
-                            <div class="col-sm-4">
+                            </div> -->
+                            <div class="col-sm-6">
                                 <label>Nama Kendaraan</label> <br>
                                 <select name="jenis_kendaraan" id="kendaraan`+ i +`" class="form-control text-capitalize select2-2">
                                     <option value="">-- NAMA KENDARAAN --</option>
@@ -530,13 +530,12 @@
 
     $('body').on('click', '#searchChartData', function() {
         let jenis_aadb      = $('select[name="jenis_aadb"').val()
-        let unit_kerja      = $('select[name="unit_kerja"').val()
         let jenis_kendaraan = $('select[name="jenis_kendaraan"').val()
         let table = $('#table-kendaraan').DataTable();
         let url = ''
 
-        if (jenis_aadb || unit_kerja || jenis_kendaraan) {
-            url = '<?= url("/unit-kerja/aadb/grafik?jenis_aadb='+jenis_aadb+'&unit_kerja='+unit_kerja+'&jenis_kendaraan='+jenis_kendaraan+'") ?>'
+        if (jenis_aadb || jenis_kendaraan) {
+            url = '<?= url("/unit-kerja/aadb/grafik?jenis_aadb='+jenis_aadb+'&jenis_kendaraan='+jenis_kendaraan+'") ?>'
         } else {
             url = '<?= url("/unit-kerja/aadb/grafik") ?>'
         }

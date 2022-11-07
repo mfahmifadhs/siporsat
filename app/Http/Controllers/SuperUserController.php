@@ -2695,9 +2695,9 @@ class SuperUserController extends Controller
                     $kendaraan->save();
 
                     if ($request->jenis_aadb == 'sewa') {
-                        $idKendaraanSewa = KendaraanSewa::count();
+                        $idKendaraanSewa = KendaraanSewa::where('id_kendaraan_sewa','like','%'.$request->id_kendaraan.'%')->count();
                         $kendaraanSewa = new KendaraanSewa();
-                        $kendaraanSewa->id_kendaraan_sewa   = $idKendaraanSewa + 1;
+                        $kendaraanSewa->id_kendaraan_sewa   = $request->id_kendaraan.$idKendaraanSewa + 1;
                         $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
                         $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
                         $kendaraanSewa->penyedia            = $request->penyedia;

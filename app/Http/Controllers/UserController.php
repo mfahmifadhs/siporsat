@@ -32,6 +32,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Google2FA;
 use DB;
+use Validator;
 
 class UserController extends Controller
 {
@@ -46,7 +47,14 @@ class UserController extends Controller
 
     public function Profile(Request $request, $aksi, $id)
     {
-        $user = User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)
+            ->join('tbl_level','id_level','level_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+            ->leftjoin('tbl_tim_kerja','id_tim_kerja','tim_kerja_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','tbl_pegawai.unit_kerja_id')
+            ->first();
+
         if ($aksi == 'user') {
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
@@ -56,7 +64,12 @@ class UserController extends Controller
                 $registration_data = $secretkey
             );
 
-            return view('v_user.profil', compact('QR_Image', 'secretkey'));
+            return view('v_user.profil', compact('user','QR_Image', 'secretkey'));
+        } elseif ($aksi == 'reset-autentikasi') {
+
+            User::where('id', $id)->update(['status_google2fa' => null]);
+            return redirect ('unit-kerja/profil/user/'. Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
+
         } else {
             User::where('id', $id)->first();
             User::where('id', $id)->update([
@@ -338,7 +351,6 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-
         } elseif ($modul == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -354,7 +366,7 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
 
-            return view('v_user/print_surat_bast', compact('pimpinan', 'bast', 'id','modul'));
+            return view('v_user/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul'));
         } elseif ($modul == 'bast-aadb') {
             $modul = 'aadb';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -368,7 +380,7 @@ class UserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->first();
 
-            return view('v_user/print_surat_bast', compact('pimpinan', 'bast', 'id','modul'));
+            return view('v_user/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul'));
         }
     }
 
@@ -380,7 +392,7 @@ class UserController extends Controller
     {
         $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            // ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('gdn_tbl_form_usulan.pegawai_id', Auth::user()->pegawai->unit_kerja_id)
             ->get();
         $googleChartData = $this->ChartDataAtk();
 
@@ -440,7 +452,7 @@ class UserController extends Controller
     //                   OLDAT
     // ===============================================
 
-    public function Oldat (Request $request)
+    public function Oldat(Request $request)
     {
         $googleChartData = $this->ChartDataOldat();
         $usulan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -455,38 +467,146 @@ class UserController extends Controller
 
     public function Items(Request $request, $aksi, $id)
     {
-        if ($aksi == 'detail') {
-            $barang = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+        if ($aksi == 'daftar') {
+            $char = '"';
+            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan',
+                'tahun_perolehan','kondisi_barang','nama_pegawai',DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
+                ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+                ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->where('id_barang', 'like', '%'.$id.'%')
-                ->first();
-            $riwayat = RiwayatBarang::join('oldat_tbl_barang', 'id_barang', 'barang_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+                ->orderBy('tahun_perolehan', 'DESC')
+                ->get();
+
+            $result = json_decode($barang);
+            return view('v_user.apk_oldat.daftar_barang', compact('barang'));
+        } elseif ($aksi == 'detail') {
+            $kategoriBarang = KategoriBarang::get();
+            $kondisiBarang  = KondisiBarang::get();
+            $pegawai        = Pegawai::orderBy('nama_pegawai', 'ASC')->get();
+            $barang         = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+                ->where('id_barang', 'like', '%' . $id . '%')->first();
+
+            $riwayat        = RiwayatBarang::join('oldat_tbl_barang', 'id_barang', 'barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_riwayat_barang.kondisi_barang_id')
+                ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                 ->join('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_riwayat_barang.pegawai_id')
                 ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-                ->where('barang_id', 'like', '%'.$id.'%')
-                ->get();
+                ->where('barang_id', 'like', '%' . $id . '%')->get();
 
-            return view('v_user.apk_oldat.detail_barang', compact('barang', 'riwayat'));
+            return view('v_user.apk_oldat.detail_barang', compact('kategoriBarang', 'kondisiBarang', 'pegawai', 'barang', 'riwayat'));
+        } elseif ($aksi == 'upload') {
+            Excel::import(new BarangImport(), $request->upload);
+            return redirect('unit-kerja/oldat/barang/data/semua')->with('success', 'Berhasil Mengupload Data Barang');
+        } elseif ($aksi == 'proses-tambah') {
+            $cekData        = KategoriBarang::get()->count();
+            $kategoriBarang = new KategoriBarang();
+            $kategoriBarang->id_kategori_barang   = $cekData + 1;
+            $kategoriBarang->kategori_barang      = strtolower($request->input('kategori_barang'));
+            $kategoriBarang->save();
+            return redirect('unit-kerja/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menambahkan Kategori Barang');
+        } elseif ($aksi == 'proses-ubah') {
+            $cekFoto  = Validator::make($request->all(), [
+                'foto_barang'    => 'mimes: jpg,png,jpeg|max:4096',
+            ]);
+
+            if ($cekFoto->fails()) {
+                return redirect('unit-kerja/oldat/barang/detail/' . $id)->with('failed', 'Format foto tidak sesuai, mohon cek kembali');
+            } else {
+                if ($request->foto_barang == null) {
+                    $fotoBarang = $request->foto_lama;
+                } else {
+                    $dataBarang = Barang::where('id_barang', 'like', '%' . $id . '%')->first();
+
+                    if ($request->hasfile('foto_barang')) {
+                        if ($dataBarang->foto_barang != ''  && $dataBarang->foto_barang != null) {
+                            $file_old = public_path() . '\gambar\barang_bmn\\' . $dataBarang->foto_barang;
+                            unlink($file_old);
+                        }
+                        $file       = $request->file('foto_barang');
+                        $filename   = $file->getClientOriginalName();
+                        $file->move('gambar/barang_bmn/', $filename);
+                        $dataBarang->foto_barang = $filename;
+                    } else {
+                        $dataBarang->foto_barang = '';
+                    }
+                    $fotoBarang = $dataBarang->foto_barang;
+                }
+                $barang = Barang::where('id_barang', 'like', '%' . $id . '%')->update([
+                    'pegawai_id'            => $request->id_pegawai,
+                    'kategori_barang_id'    => $request->id_kategori_barang,
+                    'kode_barang'           => $request->kode_barang,
+                    'nup_barang'            => $request->nup_barang,
+                    'spesifikasi_barang'    => $request->spesifikasi_barang,
+                    'jumlah_barang'         => $request->jumlah_barang,
+                    'satuan_barang'         => $request->satuan_barang,
+                    'kondisi_barang_id'     => $request->id_kondisi_barang,
+                    'nilai_perolehan'       => $request->nilai_perolehan,
+                    'tahun_perolehan'       => $request->tahun_perolehan,
+                    'nilai_perolehan'       => $request->nilai_perolehan,
+                    'foto_barang'           => $fotoBarang
+
+                ]);
+            }
+            if ($request->proses == 'pengguna-baru') {
+                $cekBarang = RiwayatBarang::count();
+                $riwayat   = new RiwayatBarang();
+                $riwayat->id_riwayat_barang = $cekBarang + 1;
+                $riwayat->barang_id         = $id;
+                $riwayat->pegawai_id        = $request->input('id_pegawai');
+                $riwayat->tanggal_pengguna  = Carbon::now();
+                $riwayat->kondisi_barang_id = $request->input('id_kondisi_barang');
+                $riwayat->save();
+            }
+
+            return redirect('unit-kerja/oldat/barang/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Barang');
+        } elseif ($aksi == 'ubah-riwayat') {
+            RiwayatBarang::where('id_riwayat_barang', $request->id_riwayat_barang)->update([
+                'tanggal_pengguna'     => $request->tanggal_pengguna,
+                'keperluan_penggunaan' => $request->keperluan_penggunaan
+            ]);
+
+            return redirect('unit-kerja/oldat/barang/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Barang');
+        } elseif ($aksi == 'hapus-riwayat') {
+            RiwayatBarang::where('id_riwayat_barang', $id)->delete();
+            return redirect('unit-kerja/oldat/barang/detail/' . $id)->with('success', 'Berhasil Menghapus Riwayat Barang');
+        } elseif ($aksi == 'download') {
+            return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
         } else {
-
+            $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);
+            $kategoriBarang->delete();
+            return redirect('unit-kerja/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menghapus Kategori Barang');
         }
     }
 
     public function ChartDataOldat()
     {
         $char = '"';
-        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
-                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
-                ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
-                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
-                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
-                ->orderBy('tahun_perolehan', 'DESC')
-                ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
-                ->get();
+        $dataBarang = Barang::select(
+            'id_barang',
+            'kode_barang',
+            'kategori_barang',
+            'nup_barang',
+            'jumlah_barang',
+            'satuan_barang',
+            'nilai_perolehan',
+            'tahun_perolehan',
+            'kondisi_barang',
+            'nama_pegawai',
+            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            'unit_kerja'
+        )
+            ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+            ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
+            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+            ->orderBy('tahun_perolehan', 'DESC')
+            ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+            ->get();
 
 
         $dataKategoriBarang = KategoriBarang::get();
@@ -505,14 +625,27 @@ class UserController extends Controller
     public function SearchChartDataOldat(Request $request)
     {
         $char = '"';
-        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
-                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
-                ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
-                ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
-                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
-                ->orderBy('tahun_perolehan', 'DESC');
+        $dataBarang = Barang::select(
+            'id_barang',
+            'kode_barang',
+            'kategori_barang',
+            'nup_barang',
+            'jumlah_barang',
+            'satuan_barang',
+            'nilai_perolehan',
+            'tahun_perolehan',
+            'kondisi_barang',
+            'nama_pegawai',
+            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            'unit_kerja'
+        )
+            ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+            ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
+            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+            ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+            ->orderBy('tahun_perolehan', 'DESC');
 
 
         $dataKategoriBarang = KategoriBarang::get();
@@ -625,14 +758,14 @@ class UserController extends Controller
             ->get();
 
         return view('v_user.apk_aadb.index', compact(
-            'unitKerja', 'jenisKendaraan', 'merk','tahun','pengguna','googleChartData','kendaraan','usulan','stnk'
-        ));
+            'unitKerja','jenisKendaraan','merk','tahun','pengguna','googleChartData','kendaraan','usulan','stnk'));
     }
 
     public function ChartDataAadb()
     {
         $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan')
+            ->where('aadb_tbl_kendaraan.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->get();
 
         $dataJenisKendaraan = JenisKendaraan::get();
@@ -651,7 +784,8 @@ class UserController extends Controller
     public function SearchChartDataAadb(Request $request)
     {
         $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan');
+            ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan')
+            ->where('aadb_tbl_kendaraan.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id);
 
         $dataJenisKendaraan = JenisKendaraan::get();
 
@@ -800,7 +934,7 @@ class UserController extends Controller
     {
         $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            // ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
             ->get();
         $googleChartData = $this->ChartDataAtk();
 
@@ -825,6 +959,7 @@ class UserController extends Controller
                 ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('status_proses_id', $id)
+                ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
                 ->get();
 
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
@@ -837,6 +972,7 @@ class UserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
                 ->get();
 
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
@@ -1045,22 +1181,24 @@ class UserController extends Controller
 
     public function ChartDataAtk()
     {
-        $dataAtk = SubKelompokAtk::join('atk_tbl_kelompok_sub_jenis', 'id_subkelompok_atk', 'subkelompok_atk_id')
-            ->join('atk_tbl_kelompok_sub_kategori', 'id_jenis_atk', 'jenis_atk_id')
-            ->join('atk_tbl', 'id_kategori_atk', 'kategori_atk_id');
+        $dataAtk = Atk::select('kategori_atk','kategori_atk_id', DB::raw('sum(total_atk) as stok'))
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
+            ->groupBy('kategori_atk','kategori_atk_id')
+            ->get();
 
-        $dataChart['atk'] = $dataAtk->get();
-        $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
-        $dataJenisAtk = KategoriAtk::get();
-        foreach ($dataJenisAtk as $data) {
+        // $dataChart['atk'] = $dataAtk->get();
+        // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'));
+
+        // $dataJenisAtk = KategoriAtk::get();
+        foreach ($dataAtk as $data) {
             $dataArray[] = $data->kategori_atk;
-            $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
-            $dataArray[] = $totalStok[0]->stok;
+            $dataArray[] = $data->stok;
             $dataChart['all'][] = $dataArray;
             unset($dataArray);
         }
 
-
+        // dd($dataChart);
         $chart = json_encode($dataChart);
         // dd($chart);
         return $chart;

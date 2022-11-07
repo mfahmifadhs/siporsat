@@ -10,7 +10,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Daftar AADB</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-admin/aadb/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Master kendaraan</li>
                 </ol>
             </div>
         </div>
@@ -43,42 +44,50 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Jenis AADB</th>
-                            <th>Jenis Kendaraan</th>
-                            <th>Merk</th>
-                            <th>Tipe</th>
+                            <th>Kendaraan</th>
                             <th>No. Plat</th>
-                            <th>Masa Berlaku STNK</th>
+                            <th>Detail</th>
                             <th>Pengguna</th>
-                            <th>Jabatan</th>
-                            <th>Pengemudi</th>
-                            <th class="text-center">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
-                        @foreach($kendaraan as $row)
+                        @foreach($kendaraan as $dataKendaraan)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $row->kode_barang }}</td>
-                            <td>{{ $row->jenis_kendaraan }}</td>
-                            <td>{{ $row->merk_kendaraan }}</td>
-                            <td>{{ $row->tipe_kendaraan }}</td>
-                            <td>{{ $row->no_plat_kendaraan }}</td>
-                            <td>{{ $row->mb_stnk_plat_kendaraan }}</td>
-                            <td>{{ $row->pengguna }}</td>
-                            <td>{{ $row->jabatan }}</td>
-                            <td>{{ $row->pengemudi }}</td>
+                            <td>
+                                <label>{{ $dataKendaraan->merk_tipe_kendaraan.' Tahun '.$dataKendaraan->tahun_kendaraan }}</label> <br>
+                                No. Polisi : {{ $dataKendaraan->no_plat_kendaraan }} <br>
+                                {{ $dataKendaraan->kode_barang.'.'.$dataKendaraan->nup_barang }} <br>
+                                {{ $dataKendaraan->jenis_kendaraan }} <br>
+                            </td>
+                            <td>
+                                <label>No. Plat</label> <br>
+                                No. Polisi : {{ $dataKendaraan->no_plat_kendaraan }} <br>
+                                Masa Berlaku : {{ $dataKendaraan->mb_stnk_plat_kendaraan }} <br>
+                                <label>No. Plat RHS</label> <br>
+                                No. Polisi : {{ $dataKendaraan->no_plat_rhs }} <br>
+                                Masa Berlaku : {{ $dataKendaraan->mb_stnk_plat_rhs }}
+                            </td>
+                            <td>
+                                No. BPKB: {{ $dataKendaraan->no_bpkb }} <br>
+                                No. Rangka: {{ $dataKendaraan->no_rangka }} <br>
+                                No. Mesin: {{ $dataKendaraan->no_mesin }} <br>
+                                Nilai Perolehan: Rp {{ number_format($dataKendaraan->nilai_perolehan, 0, ',', '.') }} <br>
+                            </td>
+                            <td>
+                                Unit Kerja : {{ $dataKendaraan->unit_kerja }} <br>
+                                Pengguna : {{ $dataKendaraan->pengguna }} <br>
+                                Jabatan : {{ $dataKendaraan->jabatan }} <br>
+                            </td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url('super-admin/oldat/barang/detail/'. $row->id_barang) }}">
+                                    <a class="dropdown-item" href="{{ url('super-admin/aadb/kendaraan/detail/'. $dataKendaraan->id_kendaraan) }}">
                                         <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                    <a class="dropdown-item" href="{{ url('super-admin/oldat/kategori-barang/proses-hapus/'. $row->id_barang) }}" onclick="return confirm('Hapus data kategori barang ?')">
-                                        <i class="fas fa-trash"></i> Hapus
                                     </a>
                                 </div>
                             </td>
@@ -98,7 +107,10 @@
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "lengthMenu": [[10, 25, 50, "Semua", -1], [10, 25, 50, "Semua"]]
+            "lengthMenu": [
+                [10, 25, 50, "Semua", -1],
+                [10, 25, 50, "Semua"]
+            ]
         });
     });
 </script>

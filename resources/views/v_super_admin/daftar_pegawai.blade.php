@@ -53,8 +53,7 @@
                             <th style="width: 10%;">NIP</th>
                             <th style="width: 20%;">Nama</th>
                             <th style="width: 15%;">No. Hp</th>
-                            <th style="width: 15%;">Jabatan</th>
-                            <th style="width: 20%;">Tim Kerja</th>
+                            <th style="width: 25%;">Jabatan</th>
                             <th style="width: 15%;">Unit Kerja</th>
                             <th>Aksi</th>
                         </tr>
@@ -67,8 +66,7 @@
                             <td>{{ $row->nip_pegawai }}</td>
                             <td>{{ $row->nama_pegawai }}</td>
                             <td>{{ $row->nohp_pegawai }}</td>
-                            <td>{{ $row->jabatan }}</td>
-                            <td>{{ $row->tim_kerja }}</td>
+                            <td>{{ $row->keterangan_pegawai }}</td>
                             <td>{{ $row->unit_kerja }}</td>
                             <td>
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
@@ -136,7 +134,7 @@
                                                 <select name="id_unit_kerja" class="form-control">
                                                     <option value="">-- Pilih Unit Kerja --</option>
                                                     @foreach($unitKerja as $dataUnitKerja)
-                                                    <option value="{{ $dataUnitKerja->id_unit_kerja }}" <?php if ($row->unit_kerja_id == $dataUnitKerja->id_unit_kerja) echo "selected"; ?>>
+                                                    <option value="{{ $dataUnitKerja->id_unit_kerja }}" <?php if ($row->id_unit_kerja == $dataUnitKerja->id_unit_kerja) echo "selected"; ?>>
                                                         {{ $dataUnitKerja->unit_kerja }}
                                                     </option>
                                                     @endforeach

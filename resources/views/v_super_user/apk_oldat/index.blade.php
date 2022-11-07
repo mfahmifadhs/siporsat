@@ -619,13 +619,11 @@
             let kondisi = $('select[name="kondisi"').val()
             let url = ''
 
-
             $('.loading').show()
             let dataTable = $('#table-barang').DataTable()
             dataTable.clear()
             dataTable.draw()
-            
-            console.log(barang)
+
             if (barang || unit_kerja || kondisi) {
                 url =
                     '<?= url("/super-user/oldat/grafik?barang='+barang+'&unit_kerja='+unit_kerja+'&kondisi='+kondisi+'") ?>'

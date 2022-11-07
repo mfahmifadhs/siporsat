@@ -139,7 +139,7 @@
                     dataTable.row.add([
                         element.id_barang,
                         no,
-                        element.kode_barang + `<br> / ` + element.nup_barang,
+                        element.kode_barang + `<br> . ` + element.nup_barang,
                         element.kategori_barang,
                         element.barang,
                         element.jumlah_barang + ' ' + element.satuan_barang,

@@ -48,12 +48,12 @@
 
                     <div class="card-footer text-center font-weight-bold">
                         <div class="row">
-                            <div class="col-md-6 col-6">
+                            <!-- <div class="col-md-6 col-6">
                                 <a href="{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}" class="btn btn-primary btn-xs py-1">
                                     <i class="fas fa-plus-circle"></i> Usulan Pengadaan
                                 </a>
-                            </div>
-                            <div class="col-md-6 col-6">
+                            </div> -->
+                            <div class="col-md-12 col-6">
                                 <a href="{{ url('unit-kerja/atk/usulan/distribusi/baru') }}" class="btn btn-primary btn-xs py-1">
                                     <i class="fas fa-plus-circle"></i> Usulan Distribusi
                                 </a>

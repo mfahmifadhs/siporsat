@@ -16,43 +16,75 @@
     <div class="container">
         <div class="card">
             <div class="card-body">
-                @if ($kategori == 'atk')
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Kelompok Baarng</label>
-                    <div class="col-sm-10">
-                        <select name="" class="form-control sub-barang">
-                            <option value="">-- PILIH JENIS BARANG --</option>
-                        </select>
+                @if ($id == 3)
+                <form action="{{ url('admin-user/atk/barang/proses-tambah-barang/baru') }}" method="POST">
+                    @csrf
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kelompok Baarng</label>
+                        <div class="col-sm-10">
+                            <select name="" class="form-control sub-barang">
+                                <option value="">-- PILIH JENIS BARANG --</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Kategori Barang</label>
-                    <div class="col-sm-10">
-                        <select id="kategori" name="" class="form-control kategori">
-                            <option value="">-- PILIH KATEGORI BARANG --</option>
-                        </select>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kategori Barang</label>
+                        <div class="col-sm-10">
+                            <select id="kategori" name="jenis_atk" class="form-control kategori">
+                                <option value="">-- PILIH KATEGORI BARANG --</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Nama Barang</label>
-                    <div class="col-sm-10">
-                        <select id="jenis" name="" class="form-control jenis">
-                            <option value="">-- PILIH BARANG --</option>
-                        </select>
+                    <div class="form-group row jumlah">
+                        <label class="col-sm-2 col-form-label">Jumlah Pengajuan</label>
+                        <div class="col-sm-1">
+                            <input type="number" name="total_pengajuan" id="jumlahAtk" class="form-control" value="1" placeholder="Jumlah Barang">
+                        </div>
+                        <div class="col-sm-1">
+                            <button id="btn-total" class="btn btn-primary btn-block">Pilih</button>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Kode Barang</label>
-                    <div class="col-sm-10">
-                        <span id="kodebarang"><input class="form-control" placeholder="KODE BARANG" readonly></span>
+                    <div id="section-atk"></div>
+                </form>
+                @endif
+                @if ($id == 4)
+                <form action="{{ url('admin-user/atk/barang/proses-tambah-detail/baru') }}" method="POST">
+                    @csrf
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kelompok Baarng</label>
+                        <div class="col-sm-10">
+                            <select name="" class="form-control sub-barang">
+                                <option value="">-- PILIH JENIS BARANG --</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Merk/Tipe Barang</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Masukan Merk/Tipe Barang Secara Spesifik">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kategori Barang</label>
+                        <div class="col-sm-10">
+                            <select id="kategori" name="jenis_atk" class="form-control kategori">
+                                <option value="">-- PILIH KATEGORI BARANG --</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Barang *</label>
+                        <div class="col-sm-10">
+                            <select id="jenis" name="kategori_atk" class="form-control jenis" required>
+                                <option value="">-- PILIH BARANG --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row jumlah">
+                        <label class="col-sm-2 col-form-label">Jumlah Pengajuan</label>
+                        <div class="col-sm-1">
+                            <input type="number" name="total_pengajuan" id="jumlahAtk" class="form-control" value="1" placeholder="Jumlah Barang">
+                        </div>
+                        <div class="col-sm-1">
+                            <button id="btn-total" class="btn btn-primary btn-block">Pilih</button>
+                        </div>
+                    </div>
+                    <div id="section-atk"></div>
+                </form>
                 @endif
             </div>
         </div>
@@ -154,7 +186,7 @@
                             $("#kodeBarang").select2();
                             $.each(res, function(index, row) {
                                 $("#kodeBarang").append(
-                                    '<input type="text" name="id_atk" class="form-control" value="'+index+'" readonly>'
+                                    '<input type="text" name="id_atk" class="form-control" value="' + index + '" readonly>'
                                 )
                             });
                         } else {
@@ -166,6 +198,46 @@
                 $("#kodeBarang").empty();
             }
         })
+        $('#btn-total').click(function() {
+            total = ($('#jumlahAtk').val())
+            j = 1
+            $("#section-atk").empty()
+            for (let i = 1; i <= total; i++) {
+                $("#section-atk").append(
+                    `<div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Barang ` + i + `</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-uppercase" name="barang[]" placeholder="Nama Barang`+i+`">
+                        </div>
+                    </div>
+                    @if ($id == 4)
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Satuan ` + i + ` *</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-uppercase" name="satuan[]" placeholder="Satuan `+i+`" required>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Keterangan ` + i + `</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-uppercase" name="keterangan[]" placeholder="Keterangan `+i+`">
+                            </div>
+                        </div>
+                    @endif
+                    `
+                )
+            }
+            $('#section-atk').append(
+                `<div class="form-group row">
+                    <label class="col-sm-2">&nbsp;</label>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">SUBMIT</button>
+                    </div>
+                </div>`
+            )
+
+            // $( ".jumlah" ).hide();
+            $("#btn-total").prop("disabled", true);
+        })
+
     })
 </script>
 @endsection

@@ -47,7 +47,14 @@ class AdminUserController extends Controller
 
     public function Profile(Request $request,$aksi, $id)
     {
-        $user = User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)
+            ->join('tbl_level','id_level','level_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
+            ->leftjoin('tbl_tim_kerja','id_tim_kerja','tim_kerja_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','tbl_pegawai.unit_kerja_id')
+            ->first();
+
         if ($aksi == 'user') {
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
@@ -57,7 +64,12 @@ class AdminUserController extends Controller
                 $registration_data = $secretkey
             );
 
-            return view('v_admin_user.profil', compact('QR_Image','secretkey'));
+            return view('v_admin_user.profil', compact('user', 'QR_Image','secretkey'));
+        } elseif ($aksi == 'reset-autentikasi') {
+
+            User::where('id', $id)->update(['status_google2fa' => null]);
+            return redirect ('admin-user/profil/user/'. Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
+
         } else {
             User::where('id',$id)->first();
             User::where('id',$id)->update([
@@ -215,7 +227,36 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.daftar_atk', compact('kategoriAtk','jenisAtk','subkelompokAtk','kelompokAtk','atk'));
         } elseif ($aksi == 'tambah-atk') {
             $kategori = 'atk';
-            return view('v_admin_user.apk_atk.tambah_atk', compact('kategori'));
+            return view('v_admin_user.apk_atk.tambah_atk', compact('kategori', 'id'));
+        } elseif ($aksi == 'proses-tambah-barang') {
+            $kategori   = $request->barang;
+            foreach ($kategori as $i => $kategoriAtk)
+            {
+                $total      = KategoriATK::where('jenis_atk_id', $request->jenis_atk)->count();
+                $idKategori = $request->jenis_atk.str_pad($total + 1, 4, 0, STR_PAD_LEFT);
+                $kategori   = new KategoriATK();
+                $kategori->id_kategori_atk = $idKategori;
+                $kategori->jenis_atk_id    = $request->jenis_atk;
+                $kategori->kategori_atk    = strtoupper($request->barang[$i]);
+                $kategori->save();
+            }
+            return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success','Berhasil menambah barang');
+
+        } elseif ($aksi == 'proses-tambah-detail') {
+            $kategori   = $request->barang;
+            foreach ($kategori as $i => $kategoriAtk)
+            {
+                $total  = ATK::where('kategori_atk_id', $request->kategori_atk)->count();
+                $idAtk  = $request->kategori_atk.str_pad($total + 1, 5, 0, STR_PAD_LEFT);
+                $atk   = new ATK();
+                $atk->id_atk           = $idAtk;
+                $atk->kategori_atk_id  = $request->kategori_atk;
+                $atk->merk_atk         = strtoupper($request->barang[$i]);
+                $atk->total_atk        = 0;
+                $atk->satuan           = strtoupper($request->satuan[$i]);
+                $atk->save();
+            }
+            return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success','Berhasil menambah barang');
         }
     }
 

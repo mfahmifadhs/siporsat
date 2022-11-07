@@ -28,16 +28,19 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <div class="card card-primary">
+                <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">4)  Barang</h3>
                         <div class="card-tools">
-                            <a href="{{ url('admin-user/atk/barang/tambah-atk/4') }}" type="button" class="btn btn-tool">
-                                <i class="fas fa-plus-square"></i>
+                            <a href="{{ url('admin-user/atk/barang/tambah-atk/3') }}" type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus-square"></i> BARANG
                             </a>
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <a href="{{ url('admin-user/atk/barang/tambah-atk/4') }}" type="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus-square"></i> MERK/TIPE
+                            </a>
+                            <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                     <div class="card-body">

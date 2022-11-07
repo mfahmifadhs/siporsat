@@ -14,9 +14,15 @@ use App\Exports\BarangExport;
 use App\Imports\TimKerjaImport;
 use App\Imports\UnitKerjaImport;
 use App\Imports\PegawaiImport;
-
-
+use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
+use App\Models\AADB\KendaraanSewa;
+use App\Models\AADB\KondisiKendaraan;
+use App\Models\AADB\UsulanAadb;
+use App\Models\AADB\UsulanKendaraan;
+use App\Models\AADB\UsulanPerpanjanganSTNK;
+use App\Models\AADB\UsulanServis;
+use App\Models\AADB\UsulanVoucherBBM;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
@@ -32,7 +38,7 @@ use App\Models\UnitKerja;
 use App\Models\TimKerja;
 use App\Models\UserAkses;
 
-use Auth;
+use DB;
 use Hash;
 use Validator;
 use Carbon\Carbon;
@@ -48,22 +54,231 @@ class SuperAdminController extends Controller
     //                       AADB
     // ====================================================
 
-    public function aadb()
+    public function Aadb(Request $request)
     {
-        return view('v_super_admin.apk_aadb.index');
+        $unitKerja       = UnitKerja::get();
+        $jenisKendaraan  = JenisKendaraan::get();
+        $merk            = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
+        $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
+        $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
+        $kendaraan       = Kendaraan::orderBy('jenis_aadb', 'ASC')
+            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+        $stnk      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->where(DB::raw("(DATE_FORMAT(mb_stnk_plat_kendaraan, '%Y-%m'))"), '>', Carbon::now()->format('Y-m'))
+            ->orderBy('mb_stnk_plat_kendaraan', 'ASC')
+            ->get();
+        $googleChartData = $this->ChartDataAadb();
+
+        $usulan  = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->get();
+
+        return view('v_super_admin.apk_aadb.index', compact(
+            'unitKerja','jenisKendaraan','merk','tahun','pengguna','googleChartData','kendaraan','usulan','stnk'));
     }
 
-    public function vehicle(Request $request, $aksi, $id)
+    public function SubmissionAadb(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
+            $pengajuan  = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->get();
 
-            if ($id == 'kendaraan') {
-                $kendaraan = Kendaraan::get();
-                return view('v_super_admin.apk_aadb.daftar_kendaraan', compact('kendaraan'));
-            } else {
+            return view('v_super_admin.apk_aadb.daftar_pengajuan', compact('pengajuan'));
+        } elseif ($aksi == 'hapus') {
+            // Hapus Detail Usulan
+            $usulan = UsulanAadb::where('id_form_usulan', $id)->first();
+            if ($usulan->jenis_form == 1) {
+
+                $pengadaan = Kendaraan::where('form_usulan_id', $id)
+                    ->join('aadb_tbl_form_usulan','id_form_usulan','form_usulan_id')
+                    ->get();
+
+                foreach ($pengadaan as $dataPengadaan)
+                {
+                    if ($dataPengadaan->jenis_aadb == 'sewa')
+                    {
+                        KendaraanSewa::where('kendaraan_id', $dataPengadaan->id_kendaraan)->delete();
+                    }
+                }
+
+                if ($usulan->lampiran != null) {
+                    $file = public_path() . '\gambar\kwitansi\pengadaan\\' . $usulan->lampiran;
+                    unlink($file);
+                }
+                Kendaraan::where('form_usulan_id', $id)->delete();
+                UsulanKendaraan::where('form_usulan_id', $id)->delete();
+
+            } elseif($usulan->jenis_form == 2) {
+                if ($usulan->lampiran != null) {
+                    $file = public_path() . '\gambar\kwitansi\servis\\' . $usulan->lampiran;
+                    unlink($file);
+                }
+                UsulanServis::where('form_usulan_id', $id)->delete();
+
+            } elseif($usulan->jenis_form == 3) {
+                if ($usulan->lampiran != null) {
+                    $file = public_path() . '\gambar\kendaraan\stnk\\' . $usulan->lampiran;
+                    unlink($file);
+                }
+                UsulanPerpanjanganSTNK::where('form_usulan_id', $id)->delete();
+
+            } elseif($usulan->jenis_form == 4) {
+                UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
             }
-        } else {
+
+            // Hapus Form Usulan
+            UsulanAadb::where('id_form_usulan', $id)->delete();
+            return redirect('super-admin/aadb/usulan/daftar/seluruh-usulan')->with('success','Berhasil Menghapus Usulan');
+        } elseif ($aksi == 'proses-ubah') {
+            dd($request->all());
         }
+    }
+
+    public function Vehicle(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->join('aadb_tbl_kondisi_kendaraan','id_kondisi_kendaraan','kondisi_kendaraan_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->orderBy('jenis_aadb','ASC')
+                ->get();
+
+            return view('v_super_admin.apk_aadb.daftar_kendaraan', compact('kendaraan'));
+
+        } elseif ($aksi == 'detail') {
+            $unitKerja = UnitKerja::get();
+            $jenis     = JenisKendaraan::get();
+            $kondisi   = KondisiKendaraan::get();
+            $kendaraan = Kendaraan::where('id_kendaraan', $id)
+                ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
+                ->first();
+
+            return view('v_super_admin.apk_aadb.detail_kendaraan', compact('unitKerja','jenis','kondisi','kendaraan'));
+
+        } elseif ($aksi == 'upload') {
+            Excel::import(new KendaraanImport(), $request->upload);
+            return redirect('super-admin/aadb/kendaraan/')->with('success', 'Berhasil Mengupload Data Kendaraan');
+        }
+    }
+
+    public function ChartDataAadb()
+    {
+        $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan')
+            ->get();
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[] = $data->jenis_kendaraan;
+            $dataArray[] = $dataKendaraan->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart['all'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['kendaraan'] = $dataKendaraan;
+        $chart = json_encode($dataChart);
+        return $chart;
+    }
+
+    public function SearchChartDataAadb(Request $request)
+    {
+        $dataKendaraan = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_kendaraan', 'jenis_kendaraan_id', 'id_jenis_kendaraan');
+
+        $dataJenisKendaraan = JenisKendaraan::get();
+
+        if ($request->hasAny(['jenis_aadb', 'unit_kerja', 'jenis_kendaraan'])) {
+            if ($request->jenis_aadb) {
+                $dataSearch = $dataKendaraan->where('jenis_aadb', $request->jenis_aadb);
+            }
+            if ($request->unit_kerja) {
+                $dataSearch = $dataKendaraan->where('unit_kerja_id', $request->unit_kerja);
+            }
+            if ($request->jenis_kendaraan) {
+                $dataSearch = $dataKendaraan->where('jenis_kendaraan_id', $request->jenis_kendaraan);
+            }
+
+            $dataSearch = $dataSearch->get();
+        } else {
+            $dataSearch = $dataKendaraan->get();
+        }
+
+        // dd($dataSearch);
+        foreach ($dataJenisKendaraan as $data) {
+            $dataArray[]          = $data->jenis_kendaraan;
+            $dataArray[]          = $dataSearch->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
+            $dataChart['chart'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['table'] = $dataSearch;
+        $chart = json_encode($dataChart);
+
+        if (count($dataSearch) > 0) {
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'success',
+                'data'      => $chart
+            ], 200);
+        } else {
+            return response([
+                'status'    => true,
+                'total'     => count($dataSearch),
+                'message'   => 'not found'
+            ], 200);
+        }
+    }
+
+    public function Select2AadbDashboard(Request $request, $aksi, $id)
+    {
+        $search = $request->search;
+        if ($aksi == 1) {
+            if ($search == '') {
+                $aadb  = UnitKerja::select('id_unit_kerja as id', 'unit_kerja as nama')
+                    ->orderby('unit_kerja', 'asc')
+                    ->get();
+            } else {
+                $aadb  = UnitKerja::select('id_unit_kerja as id', 'unit_kerja as nama')
+                    ->orderby('unit_kerja', 'asc')
+                    ->where('id_unit_kerja', 'like', '%' . $search . '%')
+                    ->orWhere('unit_kerja', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        } elseif ($aksi == 2) {
+            if ($search == '') {
+                $aadb  = JenisKendaraan::select('id_jenis_kendaraan as id', 'jenis_kendaraan as nama')
+                    ->orderby('id_jenis_kendaraan', 'asc')
+                    ->get();
+            } else {
+                $aadb  = JenisKendaraan::select('id_jenis_kendaraan as id', 'jenis_kendaraan as nama')
+                    ->orderby('id_jenis_kendaraan', 'asc')
+                    ->where('id_jenis_kendaraan', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_kendaraan', 'like', '%' . $search . '%')
+                    ->get();
+            }
+        }
+
+        $response = array();
+        foreach ($aadb as $data) {
+            $response[] = array(
+                "id"     =>  $data->id,
+                "text"   =>  $data->id . ' - ' . $data->nama
+            );
+        }
+
+        return response()->json($response);
     }
 
     // ====================================================
@@ -325,20 +540,8 @@ class SuperAdminController extends Controller
     public function SearchChartDataOldat(Request $request)
     {
         $char = '"';
-        $dataBarang = Barang::select(
-            'id_barang',
-            'kode_barang',
-            'kategori_barang',
-            'nup_barang',
-            'jumlah_barang',
-            'satuan_barang',
-            'nilai_perolehan',
-            'tahun_perolehan',
-            'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
-        )
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan','tahun_perolehan','kondisi_barang','nama_pegawai',
+            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),'unit_kerja')
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -428,6 +631,7 @@ class SuperAdminController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                 ->leftjoin('tbl_unit_utama', 'tbl_unit_utama.id_unit_utama', 'tbl_unit_kerja.unit_utama_id')
                 ->join('tbl_level', 'tbl_level.id_level', 'users.level_id')
+                ->orderBy('level_id','DESC')
                 ->get();
             return view('v_super_admin.daftar_pengguna', compact('level', 'unitKerja', 'pegawai', 'pengguna'));
         } elseif ($aksi == 'proses-tambah') {
@@ -437,9 +641,10 @@ class SuperAdminController extends Controller
             if ($cekUsername->fails()) {
                 return redirect('super-admin/pengguna/data/semua')->with('failed', 'Username telah terdaftar');
             } else {
-                $cekData  = User::get()->count();
+                $user = User::count();
+                $id   = Carbon::now()->isoFormat('DMYY').rand(100,999).$user;
                 $pengguna = new User();
-                $pengguna->id               = $cekData + 1;
+                $pengguna->id               = $id;
                 $pengguna->level_id         = $request->input('id_level');
                 $pengguna->pegawai_id       = $request->input('id_pegawai');
                 $pengguna->username         = $request->input('username');
@@ -451,7 +656,7 @@ class SuperAdminController extends Controller
                 $idPengguna  = User::select('id')->orderBy('id', 'DESC')->first();
                 $hakAkses = new UserAkses();
                 $hakAkses->id_user_akses    = $cekHakAkses + 1;
-                $hakAkses->user_id          = $idPengguna->id;
+                $hakAkses->user_id          = $id;
                 $hakAkses->is_oldat         = $request->input('is_oldat');
                 $hakAkses->is_aadb          = $request->input('is_aadb');
                 $hakAkses->is_atk           = $request->input('is_atk');
@@ -510,7 +715,7 @@ class SuperAdminController extends Controller
             $pegawai   = Pegawai::leftjoin('tbl_pegawai_jabatan', 'tbl_pegawai_jabatan.id_jabatan', 'tbl_pegawai.jabatan_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-                ->orderBy('nama_pegawai')
+                ->orderBy('id_pegawai','DESC')
                 ->get();
 
             return view('v_super_admin.daftar_pegawai', compact('jabatan', 'timKerja', 'unitKerja', 'pegawai'));
@@ -525,7 +730,7 @@ class SuperAdminController extends Controller
             $pegawai->jabatan_id         = $request->input('id_jabatan');
             $pegawai->tim_kerja_id       = $request->input('id_tim_kerja');
             $pegawai->unit_kerja_id      = $request->input('id_unit_kerja');
-            $pegawai->keterangan_pegawai = $request->input('keterangan_pegawai');
+            $pegawai->keterangan_pegawai = strtoupper($request->input('keterangan_pegawai'));
             $pegawai->save();
 
             return redirect('super-admin/pegawai/data/semua')->with('success', 'Berhasil menambah data pegawai');
@@ -537,7 +742,7 @@ class SuperAdminController extends Controller
                 'jabatan_id'            => $request->id_jabatan,
                 'tim_kerja_id'          => $request->id_tim_kerja,
                 'unit_kerja_id'         => $request->id_unit_kerja,
-                'keterangan_pegawai'    => ucwords($request->keterangan_pegawai)
+                'keterangan_pegawai'    => strtoupper($request->input('keterangan_pegawai'))
             ]);
             return redirect('super-admin/pegawai/data/semua')->with('success', 'Berhasil mengubah data pegawai');
         } elseif ($aksi == 'upload') {
