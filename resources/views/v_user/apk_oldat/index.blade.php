@@ -12,14 +12,15 @@
     </div>
 </div>
 
-<!-- <section class="content text-capitalize">
+<section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 col-12">
                 <div class="form-group">
-                    <a href="" class="btn btn-primary btn-sm btn-block">
+                    <a href="{{ url('unit-kerja/oldat/usulan/perbaikan/baru') }}" class="btn btn-primary btn-sm btn-block">
                         <i class="fas fa-tools fa-2x"></i> <br>
-                        Usulan <br> Perbaikan </a>
+                        Usulan <br> Perbaikan
+                    </a>
                 </div>
                 <div class="form-group">
                     <div class="card">
@@ -92,44 +93,12 @@
                                         Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
                                     <td class="small text-capitalize">
-                                        @if ($dataUsulan->jenis_form == 1)
-                                        @foreach($dataUsulan->usulanKendaraan as $dataPengadaan)
-                                        Kendaraan {{ $dataPengadaan->jenis_aadb }}<br>
-                                        {{ ucfirst(strtolower($dataPengadaan->jenis_kendaraan)) }} <br>
-                                        {{ $dataPengadaan->merk_tipe_kendaraan.' '.$dataPengadaan->tahun_kendaraan }} <br>
-                                        @endforeach
-                                        @endif
-
-                                        @if ($dataUsulan->jenis_form == 2)
-                                        @foreach($dataUsulan->usulanServis as $dataServis)
-                                        {{ $dataServis->merk_tipe_kendaraan.' '.$dataServis->tahun_kendaraan }} <br>
-                                        Jatuh Tempo Servis : <br>{{ $dataServis->jatuh_tempo_servis }} KM<br>
-                                        Jatuh Tempo Ganti Oli : <br>{{ $dataServis->jatuh_tempo_ganti_oli }} KM<br>
-                                        Tanggal Terakhir Servis : <br>{{ $dataServis->tgl_servis_terakhir }} <br>
-                                        Tanggal Terakhir Ganti Oli : <br>{{ $dataServis->tgl_ganti_oli_terakhir }} <br>
-                                        @endforeach
-                                        @endif
-
-                                        @if ($dataUsulan->jenis_form == 3)
-                                        @foreach($dataUsulan->usulanSTNK as $dataStnk)
-                                        {{ $dataStnk->merk_tipe_kendaraan.' '.$dataStnk->tahun_kendaraan }} <br>
-                                        Masa Berlaku STNK lama : <br>{{ $dataStnk->mb_stnk_lama }} <br>
-                                        Masa Berlaku STNK Baru : <br>{{ $dataStnk->mb_stnk_baru }} <br>
-                                        Biaya Perpanjangan : <br>Rp {{ number_format($dataStnk->biaya_perpanjangan, 0, ',', '.') }} <br>
-                                        @if($dataStnk->bukti_pembayaran != null)
-                                        Bukti Pembayaran : <br><a href="{{ asset('gambar/kendaraan/stnk/'. $dataStnk->bukti_pembayaran) }}" class="font-weight-bold" download>Download</a>
-                                        @endif
-                                        @endforeach
-                                        @endif
-
-                                        @if ($dataUsulan->jenis_form == 4)
-                                        @foreach($dataUsulan->usulanVoucher as $dataVoucher)
-                                        {{ $dataVoucher->merk_tipe_kendaraan.' '.$dataVoucher->tahun_kendaraan }} <br>
-                                        Bulan Pengadaan : {{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMM Y') }} <br>
-                                        Voucher 25 : <br>{{ $dataVoucher->voucher_25 }} <br>
-                                        Voucher 50 : <br>{{ $dataVoucher->voucher_50 }} <br>
-                                        Voucher 100 : <br>{{ $dataVoucher->voucher_100 }} <br>
-                                        Total Biaya : <br>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }} <br>
+                                        @if ($dataUsulan->jenis_form == 'perbaikan')
+                                        @foreach($dataUsulan->detailPerbaikan as $dataPerbaikan)
+                                        Kode Barang : {{ $dataPerbaikan->kode_barang.'.'.$dataPerbaikan->nup_barang }}<br>
+                                        Nama Barang : {{ $dataPerbaikan->kategori_barang}}<br>
+                                        Merk / Tipe : {{ $dataPerbaikan->merk_tipe_barang }}<br>
+                                        Keterangan Perbaikan : <br> {{ $dataPerbaikan->keterangan_perbaikan }}<br>
                                         @endforeach
                                         @endif
                                     </td>
@@ -158,11 +127,11 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-oldat/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
                                             @if ($dataUsulan->status_proses_id == 5)
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-aadb/'. $dataUsulan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-oldat/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Bast
                                             </a>
                                             @endif
@@ -177,7 +146,7 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 <section class="content text-capitalize">
     <div class="container-fluid">

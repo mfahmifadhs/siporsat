@@ -586,7 +586,7 @@ class SuperUserController extends Controller
             $detail = $request->lokasi_bangunan;
             foreach ($detail as $i => $detailUsulan) {
                 $detail = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = ($request->id_usulan + 1) + $i;
+                // $detail->id_form_usulan_detail  = ($request->id_usulan + 1) + $i;
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -2156,13 +2156,8 @@ class SuperUserController extends Controller
 
             return redirect('super-user/oldat/surat/surat-bast/' . $request->kode_otp)->with('success', 'Berhasil membuat BAST');
         } elseif ($aksi == 'print-surat-bast') {
-            $pegawai    = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-            if ($pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = null;
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $bast = FormUsulan::where('id_form_usulan', $id)
                 ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2174,13 +2169,8 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_oldat.print_surat_bast', compact('pimpinan', 'bast'));
         } elseif ($aksi == 'surat-bast') {
-            $pegawai    = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-            if ($pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = null;
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $bast = FormUsulan::where('id_form_usulan', $id)
                 ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2192,12 +2182,8 @@ class SuperUserController extends Controller
             return view('v_super_user.apk_oldat.surat_bast', compact('bast', 'pimpinan'));
         } elseif ($aksi == 'surat-usulan') {
             $pegawai        = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-            if ($pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = null;
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan  = FormUsulan::where('id_form_usulan', $id)
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2206,14 +2192,8 @@ class SuperUserController extends Controller
                 ->first();
             return view('v_super_user.apk_oldat.surat_usulan', compact('usulan', 'pimpinan'));
         } elseif ($aksi == 'print-surat-usulan') {
-            $pegawai        = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')->where('id_form_usulan', $id)->first();
-
-            if ($pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = null;
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan  = FormUsulan::where('id_form_usulan', $id)
                 ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')

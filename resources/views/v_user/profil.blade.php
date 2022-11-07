@@ -54,9 +54,9 @@
                             <div class="col-sm-2 text-center">
                                 <i class="fas fa-user-circle fa-5x bg-pri"></i>
                             </div>
-                            <div class="col-sm-8 mt-3">
+                            <div class="col-sm-8 mt-3 text-capitalize">
                                 <span class="font-weight-bold">{{ $user->nama_pegawai }}</span> <br>
-                                <small>{{ $user->unit_kerja }}</small>
+                                <small>{{ {{ ucfirst(strtolower($user->unit_kerja))  }}</small>
                             </div>
                             <div class="col-sm-2 text-right">
                                 <!-- <a href="{{ url('super-user/profil/ubah/'. $user->id) }}" class="btn btn-warning btn-sm mt-4">

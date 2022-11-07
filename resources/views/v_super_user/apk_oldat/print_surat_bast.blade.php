@@ -88,13 +88,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Merk/Tipe Barang</th>
                             @if($bast->jenis_form == 'pengadaan')
                             <th>Spesifikasi</th>
                             <th>Tahun Perolehan </th>
                             @else
-                            <th>Unit Kerja</th>
                             <th>Tahun Perolehan</th>
                             @endif
                         </tr>
@@ -105,6 +105,7 @@
                         @foreach($bast->barang as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
                             <td>{{ $dataBarang->spesifikasi_barang }}</td>
@@ -115,9 +116,9 @@
                         @foreach($bast->detailPerbaikan as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->unit_kerja }}</td>
                             <td>{{ $dataBarang->tahun_perolehan }}</td>
                         </tr>
                         @endforeach

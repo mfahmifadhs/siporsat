@@ -111,29 +111,53 @@
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} ruangan</div>
+                                    <div class="col-md-10">: {{ $usulan->total_pengajuan }} ruangan</div>
                                 </div>
                                 @if($usulan->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
+                                    <div class="col-md-10">: {{ $usulan->rencana_pengguna }}</div>
                                 </div>
                                 @endif
                             </div>
                             <div class="col-12 mt-4 mb-5">
-                                @if ($modul == 'atk')
+                                @if ($modul == 'oldat')
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe Barang</th>
+                                            <th>Tahun Perolehan</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach($usulan->detailPerbaikan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                            <td>{{ $dataBarang->tahun_perolehan }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                @elseif ($modul == 'atk')
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>

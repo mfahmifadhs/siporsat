@@ -76,11 +76,11 @@
                         <span class="dropdown-item dropdown-header">
                             <p class="text-capitalize">
                                 @if( Auth::user()->pegawai->jabatan_id == '1' || Auth::user()->pegawai->jabatan_id == '2')
-                                {{ Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->unitKerja->unit_kerja }} <br>
-                                {{ Auth::user()->pegawai->keterangan_pegawai }}
+                                {{ Auth::user()->pegawai->nama_pegawai }} <br> {{ ucfirst(strtolower(Auth::user()->pegawai->unitKerja->unit_kerja)) }} <br>
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->keterangan_pegawai)) }}
                                 @else
-                                {{ Auth::user()->pegawai->nama_pegawai }} <br> {{ Auth::user()->pegawai->unitKerja->unit_kerja }} <br>
-                                {{ Auth::user()->pegawai->keterangan_pegawai }}
+                                {{ Auth::user()->pegawai->nama_pegawai }} <br> {{ ucfirst(strtolower(Auth::user()->pegawai->unitKerja->unit_kerja)) }} <br>
+                                {{ ucfirst(strtolower(Auth::user()->pegawai->keterangan_pegawai)) }}
                                 @endif
                             </p>
                         </span>

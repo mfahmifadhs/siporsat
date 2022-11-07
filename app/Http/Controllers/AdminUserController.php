@@ -257,6 +257,8 @@ class AdminUserController extends Controller
                 $atk->save();
             }
             return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success','Berhasil menambah barang');
+        } elseif ($aksi == 'detail-kategori') {
+            return view('v_admin_user.atk.kategori_atk', compact('id'));
         }
     }
 

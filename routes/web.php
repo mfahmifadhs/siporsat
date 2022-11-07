@@ -249,7 +249,10 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
         Route::get('barang/{aksi}/{id}', [UserController::class, 'Items']);
         Route::get('/grafik', [UserController::class, 'SearchChartDataOldat']);
         Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2OldatDashboard']);
+        Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionOldat']);
+        Route::get('/select2/{aksi}', [UserController::class, 'Select2Oldat']);
 
+        Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionOldat']);
         Route::post('barang/{aksi}/{id}', [UserController::class, 'Items']);
         Route::post('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2OldatDashboard']);
 

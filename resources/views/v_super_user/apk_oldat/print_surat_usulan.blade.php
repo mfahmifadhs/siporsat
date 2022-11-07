@@ -77,9 +77,9 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Merk/Tipe Barang</th>
-                            <th>Unit Kerja</th>
                             @if($usulan->jenis_form == 'pengadaan')
                             <th>Estimasi Biaya</th>
                             @else
@@ -93,9 +93,9 @@
                         @foreach($usulan->detailPengadaan as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk__tipebarang }}</td>
-                            <td>{{ $dataBarang->unit_kerja }}</td>
                             <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                         </tr>
                         @endforeach
@@ -103,9 +103,9 @@
                         @foreach($usulan->detailPerbaikan as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->unit_kerja }}</td>
                             <td>{{ $dataBarang->tahun_perolehan }}</td>
                         </tr>
                         @endforeach
