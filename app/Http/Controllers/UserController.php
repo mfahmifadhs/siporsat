@@ -18,6 +18,7 @@ use App\Models\gdn\UsulanGdn;
 use App\Models\gdn\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\FormUsulan;
+use App\Models\OLDAT\FormUsulanPerbaikan;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
 use App\Models\OLDAT\RiwayatBarang;
@@ -120,7 +121,6 @@ class UserController extends Controller
                     return redirect('unit-kerja/surat/surat-bast/' . Auth::user()->sess_form_id);
                 }
             } elseif (Auth::user()->sess_modul == 'oldat') {
-
                 $usulan = FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->first();
                 if ($usulan->status_proses_id == null) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
@@ -128,7 +128,7 @@ class UserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/oldat/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('unit-kerja/surat/usulan-oldat/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -136,7 +136,7 @@ class UserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/oldat/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('unit-kerja/surat/usulan-oldat/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
@@ -218,6 +218,12 @@ class UserController extends Controller
                     'sess_form_id' => $id
                 ]);
                 return view('google2fa.index');
+            } elseif ($aksi == 'usulan-oldat') {
+                User::where('id', Auth::user()->id)->update([
+                    'sess_modul'   => 'oldat',
+                    'sess_form_id' => $id
+                ]);
+                return view('google2fa.index');
             }
         }
     }
@@ -271,6 +277,17 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($aksi == 'usulan-oldat') {
+            $modul = 'oldat';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan  = FormUsulan::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_user/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
         } elseif ($aksi == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -307,7 +324,6 @@ class UserController extends Controller
     public function PrintLetter(Request $request, $modul, $id)
     {
         if ($modul == 'usulan-gdn') {
-            $form = UsulanGdn::where('id_form_usulan', $id)->first();
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
                 ->where('unit_kerja_id', 465930)
@@ -322,7 +338,6 @@ class UserController extends Controller
 
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
         } elseif ($modul == 'usulan-atk') {
-            $form = UsulanAtk::where('id_form_usulan', $id)->first();
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
                 ->where('unit_kerja_id', 465930)
@@ -334,10 +349,8 @@ class UserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
-
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
         } elseif ($modul == 'usulan-aadb') {
-            $modul = 'aadb';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
@@ -351,6 +364,19 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+
+
+        } elseif ($modul == 'usulan-oldat') {
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan  = FormUsulan::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+
         } elseif ($modul == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -458,9 +484,8 @@ class UserController extends Controller
         $usulan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('pegawai_id', Auth::user()->id)
+            ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
-
 
         return view('v_user.apk_oldat.index', compact('googleChartData', 'usulan'));
     }
@@ -582,6 +607,46 @@ class UserController extends Controller
         }
     }
 
+    public function SubmissionOldat(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'proses-usulan') {
+            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $formUsulan = new FormUsulan();
+            $formUsulan->id_form_usulan      = $idFormUsulan;
+            $formUsulan->pegawai_id          = $request->input('pegawai_id');
+            $formUsulan->kode_form           = 'OLDAT_001';
+            $formUsulan->jenis_form          = 'perbaikan';
+            $formUsulan->total_pengajuan     = $request->input('total_pengajuan');
+            $formUsulan->tanggal_usulan      = $request->input('tanggal_usulan');
+            $formUsulan->rencana_pengguna    = $request->input('rencana_pengguna');
+            $formUsulan->no_surat_usulan     = $request->no_surat_usulan;
+            $formUsulan->save();
+
+            $barang = $request->kode_barang;
+            foreach ($barang as $i => $kodeBarang) {
+                $cekDataDetail  = FormUsulanPerbaikan::count();
+                $detailUsulan   = new FormUsulanPerbaikan();
+                $detailUsulan->id_form_usulan_perbaikan  = $idFormUsulan . $cekDataDetail . $i;
+                $detailUsulan->form_usulan_id            = $idFormUsulan;
+                $detailUsulan->barang_id                 = $kodeBarang;
+                $detailUsulan->keterangan_perbaikan      = $request->keterangan_perbaikan[$i];
+                $detailUsulan->save();
+            }
+
+            return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
+        } else {
+            $totalUsulan    = FormUsulan::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $kategoriBarang = KategoriBarang::get();
+            $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('id_pegawai', Auth::user()->pegawai_id)
+                ->first();
+
+            return view('v_user.apk_oldat.usulan', compact('aksi', 'idUsulan', 'kategoriBarang', 'pegawai'));
+        }
+    }
+
     public function ChartDataOldat()
     {
         $char = '"';
@@ -687,6 +752,31 @@ class UserController extends Controller
                 'message' => 'not found'
             ], 200);
         }
+    }
+
+    public function Select2Oldat(Request $request, $id)
+    {
+        if ($id == 'daftar') {
+            $search = $request->search;
+
+            if ($search == '') {
+                $result  = Barang::select('id_barang', DB::raw('CONCAT(unit_kerja," - ",kode_barang,".",nup_barang," - ",merk_tipe_barang) AS merk_tipe_barang'))
+                    ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+                    ->where('kategori_barang_id', $request->kategori)
+                    ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                    ->pluck('id_barang', 'merk_tipe_barang');
+            }
+
+        } elseif ($id == 'detail') {
+            $result   = Barang::join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
+                ->where('id_barang', 'like', '%'.$request->idBarang.'%')
+                ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                ->get();
+        }
+
+        // dd($result);
+        return response()->json($result);
     }
 
     public function Select2OldatDashboard(Request $request, $aksi, $id)
@@ -1209,11 +1299,13 @@ class UserController extends Controller
     public function SearchChartDataAtk(Request $request)
     {
         $dataAtk = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
-            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id');
+            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
+            ->join('atk_tbl_kelompok_sub', 'id_subkelompok_atk', 'subkelompok_atk_id');
 
         $totalAtk = Atk::select('id_kategori_atk', 'kategori_atk', DB::raw('sum(total_atk) as stok'))
             ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
-            ->groupBy('id_kategori_atk', 'kategori_atk');
+            ->groupBy('id_kategori_atk', 'kategori_atk')
+            ->get();
 
         if ($request->hasAny(['kategori', 'jenis', 'nama', 'merk'])) {
             if ($request->kategori) {
@@ -1233,23 +1325,35 @@ class UserController extends Controller
                 $dataTotalAtk  = $totalAtk->where('id_atk', $request->merk);
             }
 
-            $resultSearchAtk = $dataSearchAtk->get();
-            $resultTotalAtk = $dataTotalAtk->get();
+            $resultSearchAtk = $dataSearchAtk;
+            $resultTotalAtk = $dataTotalAtk;
+            // dd($resultSearchAtk);
         } else {
-            $resultSearchAtk = $dataAtk->get();
-            $resultTotalAtk = $totalAtk->get();
+            $resultSearchAtk = $dataAtk;
+            $resultTotalAtk = $totalAtk;
         }
+        $kategoriAtk = $resultSearchAtk->select('kategori_atk_id','kategori_atk')->groupBy('kategori_atk_id','kategori_atk')->get();
 
         foreach ($resultTotalAtk as $data) {
             $dataArray[] = $data->kategori_atk;
             $dataArray[] = (int) $data->stok;
             $dataChart['all'][] = $dataArray;
             unset($dataArray);
+            // $dataArray[] = (int) $atk->stok;
+            // dd($totalAtk);
+            // $field = $data->select('kategori_atk');
+            // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('kategori_atk_id');
+            // $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->first();
+            // $dataArray[] = $data->kategori_atk;
+            // $dataArray[] = (int) $totalStok[0]->stok;
+            // $dataArray[]  = $data->kategori_atk;
+            // $dataArray[]  = $totalStok->stok;
+            // $dataChart['chart'][] = $dataArray;
         }
-
-        $dataChart['table'] = $resultSearchAtk;
+        // dd($dataChart);
+        $dataChart['table'] = $resultSearchAtk->get();
         $chart = json_encode($dataChart);
-        // dd($chart);
+
         if (count($resultSearchAtk) > 0) {
             return response([
                 'status' => true,
