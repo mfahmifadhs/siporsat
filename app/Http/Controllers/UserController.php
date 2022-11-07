@@ -1181,24 +1181,26 @@ class UserController extends Controller
 
     public function ChartDataAtk()
     {
-        $dataAtk = Atk::select('kategori_atk','kategori_atk_id', DB::raw('sum(total_atk) as stok'))
-            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+        $dataAtk = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
             ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
-            ->groupBy('kategori_atk','kategori_atk_id')
             ->get();
 
-        // $dataChart['atk'] = $dataAtk->get();
-        // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'));
+        // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
+        $totalAtk = Atk::select('id_kategori_atk', 'kategori_atk', DB::raw('sum(total_atk) as stok'))
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->groupBy('id_kategori_atk', 'kategori_atk')
+            ->get();
 
-        // $dataJenisAtk = KategoriAtk::get();
-        foreach ($dataAtk as $data) {
+        foreach ($totalAtk as $data) {
             $dataArray[] = $data->kategori_atk;
-            $dataArray[] = $data->stok;
+            $dataArray[] = (int) $data->stok;
+            // $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
+            // $dataArray[] = $totalStok[$i]->stok;
             $dataChart['all'][] = $dataArray;
             unset($dataArray);
         }
 
-        // dd($dataChart);
+        $dataChart['atk'] = $dataAtk;
         $chart = json_encode($dataChart);
         // dd($chart);
         return $chart;
@@ -1206,36 +1208,42 @@ class UserController extends Controller
 
     public function SearchChartDataAtk(Request $request)
     {
-        $dataAtk = SubKelompokAtk::join('atk_tbl_kelompok_sub_jenis', 'id_subkelompok_atk', 'subkelompok_atk_id')
-            ->join('atk_tbl_kelompok_sub_kategori', 'id_jenis_atk', 'jenis_atk_id')
-            ->join('atk_tbl', 'id_kategori_atk', 'kategori_atk_id');
+        $dataAtk = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id');
+
+        $totalAtk = Atk::select('id_kategori_atk', 'kategori_atk', DB::raw('sum(total_atk) as stok'))
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->groupBy('id_kategori_atk', 'kategori_atk');
 
         if ($request->hasAny(['kategori', 'jenis', 'nama', 'merk'])) {
             if ($request->kategori) {
                 $dataSearchAtk = $dataAtk->where('id_subkelompok_atk', $request->kategori);
+                $dataTotalAtk  = $totalAtk->where('id_subkelompok_atk', $request->kategori);
             }
             if ($request->jenis) {
                 $dataSearchAtk = $dataAtk->where('id_jenis_atk', $request->jenis);
+                $dataTotalAtk  = $totalAtk->where('id_jenis_atk', $request->jenis);
             }
             if ($request->nama) {
                 $dataSearchAtk = $dataAtk->where('id_kategori_atk', $request->nama);
+                $dataTotalAtk  = $totalAtk->where('id_kategori_atk', $request->nama);
             }
             if ($request->merk) {
                 $dataSearchAtk = $dataAtk->where('id_atk', $request->merk);
+                $dataTotalAtk  = $totalAtk->where('id_atk', $request->merk);
             }
 
             $resultSearchAtk = $dataSearchAtk->get();
-            // dd($resultSearchAtk);
+            $resultTotalAtk = $dataTotalAtk->get();
         } else {
             $resultSearchAtk = $dataAtk->get();
+            $resultTotalAtk = $totalAtk->get();
         }
 
-        foreach ($resultSearchAtk as $data) {
-            $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
-            $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
+        foreach ($resultTotalAtk as $data) {
             $dataArray[] = $data->kategori_atk;
-            $dataArray[] = $totalStok[0]->stok;
-            $dataChart['chart'][] = $dataArray;
+            $dataArray[] = (int) $data->stok;
+            $dataChart['all'][] = $dataArray;
             unset($dataArray);
         }
 

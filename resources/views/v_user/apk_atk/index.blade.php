@@ -308,9 +308,9 @@
     })
 
     function drawChart(dataChart) {
-
+        console.log(dataChart)
         chartData = [
-            ['Jenis ATK', 'Stok']
+            ['Kategori ATK', 'Stok']
         ]
         console.log(dataChart)
         dataChart.forEach(data => {
@@ -337,10 +337,10 @@
 
     $('body').on('click', '#searchChartData', function() {
         let kategori = $('select[name="kategori"').val()
-        let jenis = $('select[name="jenis"').val()
-        let nama = $('select[name="nama"').val()
-        let merk = $('select[name="merk"').val()
-        let url = ''
+        let jenis    = $('select[name="jenis"').val()
+        let nama     = $('select[name="nama"').val()
+        let merk     = $('select[name="merk"').val()
+        let url      = ''
 
         if (kategori || jenis || nama || merk) {
             url = '<?= url("/unit-kerja/atk/grafik?kategori='+kategori+'&jenis='+jenis+'&nama='+nama+'&merk='+merk+'") ?>'

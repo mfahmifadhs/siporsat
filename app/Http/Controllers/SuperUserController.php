@@ -1016,22 +1016,29 @@ class SuperUserController extends Controller
 
     public function ChartDataAtk()
     {
-        $dataAtk = SubKelompokAtk::join('atk_tbl_kelompok_sub_jenis', 'id_subkelompok_atk', 'subkelompok_atk_id')
-            ->join('atk_tbl_kelompok_sub_kategori', 'id_jenis_atk', 'jenis_atk_id')
-            ->join('atk_tbl', 'id_kategori_atk', 'kategori_atk_id');
+        $dataAtk  = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
+            ->get();
 
-        $dataChart['atk'] = $dataAtk->get();
-        $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
-        $dataJenisAtk = KategoriAtk::get();
-        foreach ($dataJenisAtk as $data) {
+        $totalAtk = Atk::select('kategori_atk', DB::raw('sum(total_atk) as stok'))
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
+            ->groupBy('id_kategori_atk','kategori_atk','kategori_atk_id')
+            ->get();
+
+        // $dataChart['atk'] = $dataAtk->get();
+        // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'));
+
+        // $dataJenisAtk = KategoriAtk::get();
+        foreach ($totalAtk as $data) {
             $dataArray[] = $data->kategori_atk;
-            $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
-            $dataArray[] = $totalStok[0]->stok;
+            $dataArray[] = $data->stok;
             $dataChart['all'][] = $dataArray;
             unset($dataArray);
         }
 
-
+        // dd($dataChart);
+        $dataChart['atk'] = $dataAtk;
         $chart = json_encode($dataChart);
         // dd($chart);
         return $chart;

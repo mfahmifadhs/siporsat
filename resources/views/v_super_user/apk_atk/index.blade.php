@@ -4,7 +4,7 @@
 
 <section class="content">
     <div class="container-fluid">
-            <div class="row">
+        <div class="row">
 
             <!-- Chart -->
             <div class="col-md-12 form-group">
@@ -82,8 +82,14 @@
                                     @foreach ($googleChartData1->atk as $dataAtk)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataAtk->subkelompok_atk }}</td>
-                                        <td>{{ $dataAtk->merk_atk}}</td>
+                                        <td>
+                                            <b class="text-primary">{{ $dataAtk->id_kategori_atk }}</b> <br>
+                                            {{ $dataAtk->kategori_atk }}
+                                        </td>
+                                        <td>
+                                            <b class="text-primary">{{ $dataAtk->id_atk }}</b> <br>
+                                            {{ $dataAtk->merk_atk}}
+                                        </td>
                                         <td>{{ $dataAtk->total_atk }}</td>
                                     </tr>
                                     @endforeach
