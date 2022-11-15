@@ -24,14 +24,15 @@
                         <div class="col-md-6 form-group">
                             <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}"
                                 class="btn btn-primary btn-sm btn-block">
-                                <i class="fas fa-car fa-2x"></i> <br>
+                                <i class="fas fa-laptop fa-2x"></i> <br>
                                 Usulan <br> Pengadaan </a>
                         </div>
                         <div class="col-md-6 form-group">
                             <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}"
                                 class="btn btn-primary btn-sm btn-block">
                                 <i class="fas fa-tools fa-2x"></i> <br>
-                                Usulan <br> Perbaikan </a>
+                                Usulan <br> Perbaikan
+                            </a>
                         </div>
                     </div>
                     <div class="form-group row">

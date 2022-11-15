@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-center">
-                    @if (Auth::user()->google2fa_secret == null)
+                    @if (Auth::user()->status_google2fa == null)
                     <div class="card-header">
                         <p>Silahkan scan barcode di bawah ini dengan aplikasi <b>Google Authenticator</b>. <br>
                             Mohon klik submit setelah anda selesai scan barcode.</p>

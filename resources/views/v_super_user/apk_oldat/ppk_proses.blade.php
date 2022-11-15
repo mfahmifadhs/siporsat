@@ -89,7 +89,7 @@
 
                     @if ($form == 'pengadaan')
                     @foreach($dataPengajuan->detailPengadaan as $i => $dataBarang)
-                    <input type="hidden" name="id_barang[]" value="{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
+                    <input type="hidden" name="id_barang[]" value="1{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
                     <input type="hidden" name="detail_usulan_id[]" value="{{ $dataBarang->id_form_usulan_pengadaan }}">
                     <div class="form-group row mt-4">
                         <div class="col-md-12"><label class="text-muted">Informasi Barang</label></div>
@@ -178,7 +178,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">NUP Barang </label>
                         <div class="col-sm-4">
-                            <input type="number" class="form-control" name="kode_barang[]" value="{{ $dataBarang->nup_barang }}" readonly>
+                            <input type="number" class="form-control" name="nup_barang[]" value="{{ $dataBarang->nup_barang }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">

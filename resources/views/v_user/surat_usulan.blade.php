@@ -42,8 +42,14 @@
 <section class="content-header">
     <div class="container">
         <div class="row text-capitalize">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <h4>Surat Usulan Pengajuan</h4>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Surat Usulan</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -65,9 +71,9 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
+                <!-- <a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
-                </a>
+                </a> -->
                 @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                 <a href="{{ url('unit-kerja/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
@@ -142,6 +148,7 @@
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe Barang</th>
                                             <th>Tahun Perolehan</th>
+                                            <th>Keterangan Kerusakan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -153,6 +160,7 @@
                                             <td>{{ $dataBarang->kategori_barang }}</td>
                                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
                                             <td>{{ $dataBarang->tahun_perolehan }}</td>
+                                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -313,7 +321,9 @@
                             </div>
                             <div class="col-md-12 text-capitalize">
                                 <div class="row text-center">
+                                    @if ($usulan->otp_usulan_pengusul != null)
                                     <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
+                                    @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                                     <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
@@ -321,7 +331,9 @@
                             </div>
                             <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
+                                    @if ($usulan->otp_usulan_pengusul != null)
                                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
+                                    @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
                                     @endif
@@ -329,7 +341,9 @@
                             </div>
                             <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
+                                    @if ($usulan->otp_usulan_pengusul != null)
                                     <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
+                                    @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )
                                     <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif

@@ -61,9 +61,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
+                <!-- <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
-                </a>
+                </a> -->
                 @if (Auth::user()->pegawai->jabatan_id == 2 && $bast->status_proses_id == 4)
                 <a href="{{ url('super-user/verif/usulan-aadb/'. $bast->id_form_usulan) }}" class="btn btn-success" title="Konfirmasi BAST" onclick="return confirm('Konfirmasi BAST')">
                     <i class="fas fa-file-signature"></i>

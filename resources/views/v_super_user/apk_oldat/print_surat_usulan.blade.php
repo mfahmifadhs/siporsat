@@ -84,6 +84,7 @@
                             <th>Estimasi Biaya</th>
                             @else
                             <th>Tahun Perolehan</th>
+                            <th>Keterangan Kerusakan</th>
                             @endif
                         </tr>
                     </thead>
@@ -107,6 +108,7 @@
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
                             <td>{{ $dataBarang->tahun_perolehan }}</td>
+                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                         </tr>
                         @endforeach
                         @endif

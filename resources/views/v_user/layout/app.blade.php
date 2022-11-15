@@ -165,14 +165,14 @@
                             </a>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas Negara</li> -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="{{ url('unit-kerja/rdn/rumah/daftar/seluruh-rumah') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-house-user"></i>
                                 <p>
                                     Rumah Dinas Negara
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
             </div>

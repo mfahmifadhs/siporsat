@@ -7,7 +7,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\BarangExport;
 use App\Imports\AADB\KendaraanImport;
+use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
+use App\Models\AADB\KondisiKendaraan;
 use App\Models\AADB\RiwayatKendaraan;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
@@ -26,6 +28,7 @@ use App\Models\atk\UsulanAtk;
 use App\Models\atk\UsulanAtkDetail;
 use App\Models\atk\UsulanAtkLampiran;
 use App\Models\RDN\RumahDinas;
+use App\Models\UnitKerja;
 use App\Models\User;
 use Carbon\Carbon;
 use Validator;
@@ -258,7 +261,25 @@ class AdminUserController extends Controller
             }
             return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success','Berhasil menambah barang');
         } elseif ($aksi == 'detail-kategori') {
-            return view('v_admin_user.atk.kategori_atk', compact('id'));
+            $kategoriAtk    = KategoriATK::get();
+            $jenisAtk       = JenisATK::get();
+            $subkelompokAtk = SubKelompokATK::get();
+            $kelompokAtk    = KelompokATK::get();
+            return view('v_admin_user.apk_atk.kategori_atk', compact('id','kelompokAtk','subkelompokAtk','jenisAtk','kategoriAtk'));
+        } elseif ($aksi == 'edit-atk') {
+            if ($request->atk == 'merk_atk') {
+                ATK::where('id_atk', $request->id_atk)->update([ 'merk_atk' => strtoupper($request->merk_atk) ]);
+                return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success', 'Berhasil mengubah informasi barang');
+            } elseif ($request->atk == 'kategori_atk') {
+                KategoriATK::where('id_kategori_atk', $request->id_kategori_atk)->update([ 'kategori_atk' => strtoupper($request->kategori_atk) ]);
+                return redirect('admin-user/atk/barang/detail-kategori/kategori')->with('success', 'Berhasil mengubah informasi kategori barang');
+            } elseif ($request->atk == 'jenis_atk') {
+                JenisATK::where('id_jenis_atk', $request->id_jenis_atk)->update([ 'jenis_atk' => strtoupper($request->jenis_atk) ]);
+                return redirect('admin-user/atk/barang/detail-kategori/jenis')->with('success', 'Berhasil mengubah informasi jenis barang');
+            } elseif ($request->atk == 'subkelompok_atk') {
+                SubKelompokATK::where('id_subkelompok_atk', $request->id_subkelompok_atk)->update([ 'subkelompok_atk' => strtoupper($request->subkelompok_atk) ]);
+                return redirect('admin-user/atk/barang/detail-kategori/kelompok')->with('success', 'Berhasil mengubah informasi kelompok barang');
+            }
         }
     }
 
@@ -566,13 +587,14 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_aadb.daftar_kendaraan', compact('kendaraan'));
 
         } elseif ($aksi == 'detail') {
+            $unitKerja = UnitKerja::get();
+            $jenis     = JenisKendaraan::get();
+            $kondisi   = KondisiKendaraan::get();
             $kendaraan = Kendaraan::where('id_kendaraan', $id)
                 ->join('aadb_tbl_jenis_kendaraan','id_jenis_kendaraan','jenis_kendaraan_id')
                 ->first();
 
-            $pengguna = RiwayatKendaraan::where('kendaraan_id', $id)->get();
-
-            return view('v_admin_user.apk_aadb.detail_kendaraan', compact('kendaraan','pengguna'));
+            return view('v_admin_user.apk_aadb.detail_kendaraan', compact('unitKerja','jenis','kondisi','kendaraan'));
 
         } elseif ($aksi == 'upload') {
             Excel::import(new KendaraanImport(), $request->upload);
@@ -588,12 +610,13 @@ class AdminUserController extends Controller
     {
         if ($aksi == 'data') {
             $char = '"';
-            $barang = Barang::select('id_barang','kode_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
-                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
+            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang', 'satuan_barang', 'nilai_perolehan', 'tahun_perolehan',
+                'kondisi_barang', 'nama_pegawai', \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
                 ->join('oldat_tbl_kategori_barang','oldat_tbl_kategori_barang.id_kategori_barang','oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
                 ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','oldat_tbl_barang.unit_kerja_id')
                 ->orderBy('tahun_perolehan', 'DESC')
                 ->get();
 
@@ -606,7 +629,8 @@ class AdminUserController extends Controller
             $pegawai        = Pegawai::orderBy('nama_pegawai','ASC')->get();
             $barang         = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->where('id_barang', $id)->first();
+                ->where('id_barang','like', $id)
+                ->first();
 
             $riwayat        = RiwayatBarang::join('oldat_tbl_barang','id_barang','barang_id')
                 ->join('oldat_tbl_kondisi_barang','oldat_tbl_kondisi_barang.id_kondisi_barang','oldat_tbl_riwayat_barang.kondisi_barang_id')
@@ -614,7 +638,8 @@ class AdminUserController extends Controller
                 ->join('tbl_pegawai','tbl_pegawai.id_pegawai','oldat_tbl_riwayat_barang.pegawai_id')
                 ->leftjoin('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
                 ->leftjoin('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','tbl_pegawai.unit_kerja_id')
-                ->where('barang_id', $id)->get();
+                ->where('barang_id', $id)
+                ->get();
 
             return view('v_admin_user.apk_oldat.detail_barang', compact('kategoriBarang','kondisiBarang','pegawai','barang','riwayat'));
 
@@ -636,7 +661,7 @@ class AdminUserController extends Controller
             if ($cekFoto->fails()) {
                 return redirect('admin-user/oldat/barang/detail/'. $id)->with('failed', 'Format foto tidak sesuai, mohon cek kembali');
             }else{
-                if($request->foto_barang = null) {
+                if($request->foto_barang == null) {
                     $fotoBarang = $request->foto_lama;
                 } else {
                     $dataBarang = Barang::where('id_barang', $id)->first();
@@ -672,15 +697,16 @@ class AdminUserController extends Controller
 
                 ]);
             }
-
-            $cekBarang = RiwayatBarang::count();
-            $riwayat   = new RiwayatBarang();
-            $riwayat->id_riwayat_barang = $cekBarang + 1;
-            $riwayat->barang_id         = $id;
-            $riwayat->pegawai_id        = $request->input('id_pegawai');
-            $riwayat->tanggal_pengguna  = Carbon::now();
-            $riwayat->kondisi_barang_id = $request->input('id_kondisi_barang');
-            $riwayat->save();
+            if ($request->proses == 'pengguna-baru') {
+                $cekBarang = RiwayatBarang::count();
+                $riwayat   = new RiwayatBarang();
+                $riwayat->id_riwayat_barang = $cekBarang + 1;
+                $riwayat->barang_id         = $id;
+                $riwayat->pegawai_id        = $request->input('id_pegawai');
+                $riwayat->tanggal_pengguna  = Carbon::now();
+                $riwayat->kondisi_barang_id = $request->input('id_kondisi_barang');
+                $riwayat->save();
+            }
 
             return redirect('admin-user/oldat/barang/detail/'. $id)->with('success', 'Berhasil Mengubah Informasi Barang');
 

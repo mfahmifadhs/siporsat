@@ -62,9 +62,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
+                <!-- <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
-                </a>
+                </a> -->
                 @if ($dataUsulan->status_proses_id != 1)
                 <a href="{{ url('super-user/aadb/surat/print-surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>

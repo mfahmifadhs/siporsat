@@ -27,19 +27,18 @@
                 </div>
                 @endif
             </div>
+            <div class="col-md-12 text-right form-group">
+                <a href="{{ url('admin-user/atk/barang/detail-kategori/kelompok') }}" class="btn btn-primary btn-sm">Kategori Barang</a>
+                <a href="{{ url('admin-user/atk/barang/detail-kategori/jenis') }}" class="btn btn-primary btn-sm">Jenis Barang</a>
+                <a href="{{ url('admin-user/atk/barang/detail-kategori/kategori') }}" class="btn btn-primary btn-sm">Barang</a>
+            </div>
             <div class="col-md-12 form-group">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Barang</h3>
                         <div class="card-tools">
-                            <a href="{{ url('admin-user/atk/barang/detail-kategori/kelompok') }}" class="btn btn-primary btn-sm">Kelompok ATK</a>
-                            <a href="{{ url('admin-user/atk/barang/detail-kategori/jenis') }}" class="btn btn-primary btn-sm">Jenis ATK</a>
-                            <a href="{{ url('admin-user/atk/barang/detail-kategori/kategori') }}" class="btn btn-primary btn-sm">Kategori ATK</a>
-                            <a href="{{ url('admin-user/atk/barang/tambah-atk/3') }}" type="button" class="btn btn-primary btn-sm">
-                                <i class="fas fa-plus-square"></i> BARANG
-                            </a>
                             <a href="{{ url('admin-user/atk/barang/tambah-atk/4') }}" type="button" class="btn btn-primary btn-sm">
-                                <i class="fas fa-plus-square"></i> MERK/TIPE
+                                <i class="fas fa-plus-square"></i> TAMBAH
                             </a>
                             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -84,8 +83,45 @@
                                         <b class="text-info">{{ $dataAtk->id_atk }}</b><br>
                                         {{ $dataAtk->merk_atk }}
                                     </td>
-                                    <td><a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a></td>
+                                    <td>
+                                        <a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ $dataAtk->id_atk }}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
                                 </tr>
+                                <!-- Modal -->
+                                <div class="modal fade" id="edit{{ $dataAtk->id_atk }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Ubah Merk Barang</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ url('admin-user/atk/barang/edit-atk/'. $dataAtk->id_atk) }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="atk" value="merk_atk">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">ID Barang</label>
+                                                        <input type="text" class="form-control" name="id_atk" value="{{ $dataAtk->id_atk }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Barang</label>
+                                                        <input type="text" class="form-control text-uppercase" name="merk_atk" value="{{ $dataAtk->merk_atk }}">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah data barang ini ?')">
+                                                        <i class="fas fa-edit"></i> Ubah
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -97,8 +133,6 @@
 </section>
 
 @section('js')
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script>
     $(function() {
         $("#table-kategori-atk").DataTable({

@@ -205,7 +205,7 @@
                     </div>
                     <div class="form-group">
                         <label for="unitkerja">Unit Kerja :</label>
-                        <select name="id_unit_kerja" class="form-control" required>
+                        <select name="id_unit_kerja" class="form-control select2-1" style="width: 100%;" required>
                             <option value="">-- Pilih Unit Kerja --</option>
                             @foreach($unitKerja as $dataUnitKerja)
                             <option value="{{ $dataUnitKerja->id_unit_kerja }}">{{ $dataUnitKerja->unit_kerja }}</option>
@@ -214,7 +214,7 @@
                     </div>
                     <div class="form-group">
                         <label for="unitkerja">Pegawai :</label>
-                        <select name="id_pegawai" class="form-control text-capitalize" required>
+                        <select name="id_pegawai" class="form-control text-capitalize select2-2" style="width: 100%;" required>
                             <option value="">-- Pilih Pegawai --</option>
                             @foreach($pegawai as $dataPegawai)
                             <option value="{{ $dataPegawai->id_pegawai }}">{{ $dataPegawai->nama_pegawai }}</option>
@@ -270,30 +270,54 @@
 
 @section('js')
 <script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
         $("#table-pengguna").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
             "buttons": ["excel", "pdf", "print"]
-        }).buttons().container().appendTo('#table-workunit_wrapper .col-md-6:eq(0)');
-    });
+        }).buttons().container().appendTo('#table-workunit_wrapper .col-md-6:eq(0)')
+
+        for (let i = 1; i <= 2; i++) {
+            $(".select2-" + i).select2({
+                ajax: {
+                    url: `{{ url('super-admin/select2/pengguna/` + i + `') }}`,
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            search: params.term // search term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            })
+        }
+    })
 
     function passwordEdit() {
         var x = document.getElementById("edit-password");
         if (x.type === "password") {
-            x.type = "text";
+            x.type = "text"
         } else {
-            x.type = "password";
+            x.type = "password"
         }
     }
 
     function passwordAdd() {
         var x = document.getElementById("add-password");
         if (x.type === "password") {
-            x.type = "text";
+            x.type = "text"
         } else {
-            x.type = "password";
+            x.type = "password"
         }
     }
 </script>

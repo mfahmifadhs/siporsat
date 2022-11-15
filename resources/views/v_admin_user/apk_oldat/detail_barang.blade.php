@@ -142,6 +142,13 @@
                                             <textarea type="text" name="spesifikasi_barang" class="form-control" rows="5">{{ $barang->spesifikasi_barang}}</textarea>
                                         </div>
                                         <div class="col-md-12 form-group">
+                                            <label>Proses : </label> <br>
+                                            <input type="radio" name="proses" value="update" required>
+                                            <span>Update Data </span>
+                                            <input type="radio" name="proses" value="pengguna-baru" required>
+                                            <span>Pengguna Baru </span>
+                                        </div>
+                                        <div class="col-md-12 form-group">
                                             <button type="button" class="btn btn-default">Close</button>
                                             <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah Informasi Barang ?')">Submit</button>
                                         </div>

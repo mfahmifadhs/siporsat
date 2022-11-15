@@ -43,7 +43,9 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $dataPengajuan->nama_pegawai }}</td>
+                                    <td>
+                                        {{ $dataPengajuan->nama_pegawai }} <br> {{ $dataPengajuan->unit_kerja }}
+                                    </td>
                                     <td>{{ $dataPengajuan->jenis_form_usulan }}</td>
                                     <td>{{ $dataPengajuan->rencana_pengguna }}</td>
                                     <td class="text-center">

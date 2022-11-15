@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\MailController;
@@ -22,7 +23,8 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () { return view('index'); });
 Route::get('/login', function () { return view('login'); });
-Route::get('/send-email',[MailController::class, 'index']);
+Route::get('/surat/{modul}/{id}', [Controller::class, 'Links']);
+Route::get('/usulan/{modul}/{id}', [Controller::class, 'Letters']);
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
@@ -50,6 +52,7 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     Route::post('tim-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkteam']);
     Route::post('pengguna/{aksi}/{id}', [SuperAdminController::class, 'showUsers']);
     Route::post('level/{aksi}/{id}', [SuperAdminController::class, 'showLevel']);
+    Route::post('select2/{aksi}/{id}', [SuperAdminController::class, 'Select2User']);
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [SuperAdminController::class, 'Oldat']);
@@ -69,6 +72,32 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 
         Route::post('kendaraan/{aksi}/{id}', [SuperAdminController::class, 'Vehicle']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AadbDashboard']);
+    });
+
+    Route::group(['prefix' => 'atk', 'as' => 'atk.'], function () {
+        Route::get('dashboard', [SuperAdminController::class, 'Atk']);
+        Route::get('/grafik', [SuperAdminController::class, 'SearchChartDataAtk']);
+        Route::get('usulan/{aksi}/{id}', [SuperAdminController::class, 'SubmissionAtk']);
+        Route::get('barang/{aksi}/{id}', [SuperAdminController::class, 'OfficeStationery']);
+
+        Route::post('barang/{aksi}/{id}', [SuperAdminController::class, 'OfficeStationery']);
+        Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AtkDashboard']);
+    });
+
+    Route::group(['prefix' => 'gdn', 'as' => 'gdn.'], function () {
+        Route::get('dashboard/{aksi}/{id}', [SuperAdminController::class, 'Gdn']);
+
+        Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AtkDashboard']);
+    });
+
+    Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
+        Route::get('dashboard', [SuperAdminController::class, 'Rdn']);
+        Route::get('/grafik', [SuperAdminController::class, 'SearchChartDataRdn']);
+        Route::get('usulan/{aksi}/{id}', [SuperAdminController::class, 'SubmissionRdn']);
+        Route::get('rumah-dinas/{aksi}/{id}', [SuperAdminController::class, 'OfficialResidence']);
+
+        Route::post('rumah-dinas/{aksi}/{id}', [SuperAdminController::class, 'OfficialResidence']);
+        Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2RdnDashboard']);
     });
 
 
@@ -262,7 +291,14 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb'], function () {
         Route::get('dashboard', [UserController::class, 'Aadb']);
         Route::get('/grafik', [UserController::class, 'SearchChartDataAadb']);
+        Route::get('kendaraan/{aksi}/{id}', [UserController::class, 'Vehicle']);
+        Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAadb']);
+        Route::get('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
         Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AadbDashboard']);
+
+        Route::post('kendaraan/{aksi}/{id}', [UserController::class, 'Vehicle']);
+        Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAadb']);
+        Route::post('/select2/{aksi}', [UserController::class, 'Select2Aadb']);
         Route::post('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AadbDashboard']);
 
     });

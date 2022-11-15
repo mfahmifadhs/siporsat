@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <h3 class="card-title"><small class="font-weight-bold">Daftar Usulan</small></h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-default btn-xs" data-card-widget="collapse">
+                            <button type="button" class="btn btn-default btn-sm" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
@@ -216,7 +216,7 @@
                         <div class="alert alert-secondary loading" role="alert">
                             Sedang menyiapkan data ...
                         </div>
-                        <table id="table-barang" class="table table-bordered">
+                        <table id="table-barang" class="table table-bordered text-center">
                             <thead>
                                 <tr>
                                     <th>Id Barang</th>

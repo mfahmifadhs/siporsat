@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="form-group row jumlah">
-                        <label class="col-sm-2 col-form-label">Jumlah Pengajuan</label>
+                        <label class="col-sm-2 col-form-label">Jumlah Barang</label>
                         <div class="col-sm-1">
                             <input type="number" name="total_pengajuan" id="jumlahAtk" class="form-control" value="1" placeholder="Jumlah Barang">
                         </div>

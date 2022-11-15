@@ -42,7 +42,7 @@
 <!-- Content Header -->
 <section class="content-header">
     <div class="container">
-        <div class="row mb-2 text-capitalize">
+        <div class="row text-capitalize">
             <div class="col-sm-6">
                 <h4>Surat Pengajuan Usulan {{ $dataUsulan->jenis_form }}</h4>
             </div>
@@ -73,9 +73,6 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/atk/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
-                    <i class="fas fa-home"></i>
-                </a>
                 @if ($dataUsulan->otp_usulan_pimpinan != null)
                 <a href="{{ url('super-user/atk/surat/print-surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>

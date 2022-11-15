@@ -167,6 +167,65 @@
                                 </li>
                             </ul>
                         </li>
+                        <!-- Pengelolaan ATK -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-pencil-ruler"></i>
+                                <p>Pengelolaan ATK</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/atk/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Usulan Pengajuan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/atk/barang/daftar/seluruh-barang') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Master ATK</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Pengelolaan Gedung Bangunan -->
+                        <li class="nav-item">
+                            <a href="{{ url('super-admin/gdn/dashboard/daftar/seluruh-usulan') }}" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Gedung & Bangunan</p>
+                            </a>
+                        </li>
+
+                        <!-- Pengelolaan Rumah Dinas -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Rumah Dinas</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/rdn/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-list-alts"></i>
+                                        <p>Master Rumah Dinas</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="nav-header font-weight-bold mt-4">Pengguna & Pegawai</li>
                         <li class="nav-item">
                             <a href="{{ url('super-admin/level/data/semua') }}" class="nav-link {{ Request::is('super-admin/level/data/semua') ? 'active' : '' }}">
@@ -263,8 +322,6 @@
 
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist_admin/js/demo.js') }}"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('dist_admin/js/pages/dashboard2.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('dist_admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- DataTables  & Plugins -->

@@ -31,4 +31,9 @@ class UsulanAtk extends Model
             ->join('atk_tbl','id_atk','atk_id')
             ->join('atk_tbl_kelompok_sub_kategori','id_kategori_atk','kategori_atk_id');
     }
+
+    public function lampiranAtk() {
+        return $this->hasMany(UsulanAtkLampiran::class, 'form_usulan_id')
+            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id');
+    }
 }

@@ -73,7 +73,51 @@
                 @endif
             </div>
             <div class="col-12 table-responsiv" style="margin-bottom: 10vh;">
-                @if ($modul == 'atk')
+                @if ($modul == 'oldat')
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Merk/Tipe Barang</th>
+                            @if($bast->jenis_form == 'pengadaan')
+                            <th>Spesifikasi</th>
+                            <th>Tahun Perolehan </th>
+                            @else
+                            <th>Tahun Perolehan</th>
+                            <th>Keterangan Kerusakan</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <?php $no = 1; ?>
+                    <tbody>
+                        @if($bast->jenis_form == 'pengadaan')
+                        @foreach($bast->barang as $dataBarang)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                            <td>{{ $dataBarang->kategori_barang }}</td>
+                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
+                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                        </tr>
+                        @endforeach
+                        @else
+                        @foreach($bast->detailPerbaikan as $dataBarang)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                            <td>{{ $dataBarang->kategori_barang }}</td>
+                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                            <td>{{ $dataBarang->tahun_perolehan }}</td>
+                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                @elseif ($modul == 'atk')
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -125,7 +169,7 @@
                     </thead>
                     <?php $no = 1; ?>
                     <tbody class="text-capitalize">
-                        @foreach($kendaraan as $dataKendaraan)
+                        @foreach($bast->kendaraan as $dataKendaraan)
                         <tr>
                             <td>{{ $no++ }}</td>
                             @if($dataKendaraan->jenis_aadb == 'bmn')
@@ -134,7 +178,9 @@
                             <td>{{ $dataKendaraan->jenis_aadb }}</td>
                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
                             <td>
+                                @if($jenisAadb->jenis_aadb == 'bmn')
                                 <span class="text-uppercase">{{ $dataKendaraan->no_plat_kendaraan }}</span> <br>
+                                @endif
                                 {{ $dataKendaraan->merk_tipe_kendaraan.' '.$dataKendaraan->tahun_kendaraan }}
                             </td>
                             @if($dataKendaraan->jenis_aadb == 'sewa')

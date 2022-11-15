@@ -114,17 +114,12 @@
                         </div>
                         <div class="table-daftar mt-4">
                             <label>Daftar Usulan Pengajuan Olah Data BMN & Meubelair</label>
-                            <table id="table-pengajuan" class="table table-bordered">
+                            <table id="table-pengajuan" class="table table-bordered small">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>ID Usulan</th>
-                                        <th>Tanggal</th>
-                                        <th>Pengusul</th>
-                                        <th>Unit Kerja</th>
-                                        <th>Total Pengajuan</th>
-                                        <th>Status Pengajuan</th>
-                                        <th>Status Proses</th>
+                                        <th>Usulan</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,13 +127,19 @@
                                     @foreach ($dataChart->pengajuan as $dataUsulan)
                                     <tr>
                                         <td>{{$no++}}</td>
-                                        <td>{{$dataUsulan->id_form_usulan}}</td>
-                                        <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                        <td>{{$dataUsulan->nama_pegawai}}</td>
-                                        <td>{{$dataUsulan->unit_kerja}}</td>
-                                        <td>{{$dataUsulan->total_pengajuan}} barang</td>
-                                        <td>{{$dataUsulan->status_pengajuan}}</td>
-                                        <td>{{$dataUsulan->status_proses}}</td>
+                                        <td>
+                                            {{ strtoupper($dataUsulan->no_surat_usulan) }} <br>
+                                            {{ $dataUsulan->tanggal_usulan }} <br>
+                                            Diusulkan Oleh {{ ucfirst(strtolower($dataUsulan->nama_pegawai))}} <br>
+                                            {{$dataUsulan->unit_kerja}} <br>
+                                            Total Pengajuan {{$dataUsulan->total_pengajuan}} barang
+                                        </td>
+                                        <td>
+                                            <span>Status Pengajuan : </span><br>
+                                            <span class="badge badge-sm badge-pill badge-primary">{{ ucfirst(strtolower($dataUsulan->status_pengajuan))  }}</span> <br><br>
+                                            <span>Status Proses : </span> <br>
+                                            <span class="badge badge-sm badge-pill badge-primary">{{ ucfirst(strtolower($dataUsulan->status_proses))  }}</span>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -168,51 +169,51 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
             ],
-            buttons: [{
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0, 2, 3, 4, 5, 6]
-                    }
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Data Master Barang',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6]
-                    }
-                }
-            ]
+            // buttons: [{
+            //         extend: 'pdf',
+            //         text: ' PDF',
+            //         className: 'fas fa-file btn btn-primary mr-2 rounded',
+            //         title: 'Data Master Barang',
+            //         exportOptions: {
+            //             columns: [0, 2, 3, 4, 5, 6]
+            //         }
+            //     },
+            //     {
+            //         extend: 'excel',
+            //         text: ' Excel',
+            //         className: 'fas fa-file btn btn-primary mr-2 rounded',
+            //         title: 'Data Master Barang',
+            //         exportOptions: {
+            //             columns: [0, 1, 2, 3, 4, 5, 6]
+            //         }
+            //     }
+            // ]
         }).buttons().container().appendTo('#table-pengajuan_wrapper .col-md-6:eq(0)');
 
         $("#table-laporan").DataTable({
-            "responsive"   : true,
-            "lengthChange" : false,
-            "searching"    : false,
-            "info"         : false,
-            "paging"       : false,
-            "autoWidth"    : false,
+            "responsive": true,
+            "lengthChange": false,
+            "searching": false,
+            "info": false,
+            "paging": false,
+            "autoWidth": false,
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
             ],
-            buttons: [{
-                    extend: 'pdf',
-                    text: ' PDF',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Laporan Usulan Pengajuan OLDAT'
-                },
-                {
-                    extend: 'excel',
-                    text: ' Excel',
-                    className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Laporan Usulan Pengajuan OLDAT'
-                }
-            ]
+            // buttons: [{
+            //         extend: 'pdf',
+            //         text: ' PDF',
+            //         className: 'fas fa-file btn btn-primary mr-2 rounded',
+            //         title: 'Laporan Usulan Pengajuan OLDAT'
+            //     },
+            //     {
+            //         extend: 'excel',
+            //         text: ' Excel',
+            //         className: 'fas fa-file btn btn-primary mr-2 rounded',
+            //         title: 'Laporan Usulan Pengajuan OLDAT'
+            //     }
+            // ]
         }).buttons().container().appendTo('#table-laporan_wrapper .col-md-6:eq(0)');
     });
 
@@ -269,7 +270,7 @@
             url: url,
             type: "GET",
             success: function(res) {
-                let dataTableDaftar  = $('#table-pengajuan').DataTable()
+                let dataTableDaftar = $('#table-pengajuan').DataTable()
                 let dataTableLaporan = $('#table-laporan').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove()
@@ -287,13 +288,19 @@
                     data.table.forEach(element => {
                         dataTableDaftar.row.add([
                             no++,
-                            element.id_form_usulan,
-                            element.tanggal_usulan,
-                            element.nama_pegawai,
-                            element.unit_kerja,
-                            element.total_pengajuan,
-                            element.status_pengajuan,
-                            element.status_proses
+                            element.no_surat_usulan.toUpperCase() + `<br>` +
+                            element.tanggal_usulan + `<br>
+                            Diusulkan Oleh {{ ucfirst(strtolower(`+ element.nama_pegawai +`)) }} <br>
+                            `+ element.unit_kerja +` <br>
+                            Total Pengajuan `+ element.total_pengajuan +` barang`,
+                            `<span>Status Pengajuan : </span><br>
+                            <span class="badge badge-sm badge-pill badge-primary">
+                                `+ element.status_pengajuan[0].toUpperCase() + element.status_pengajuan.slice(1).toLowerCase() +`
+                            </span> <br><br>
+                            <span>Status Proses : </span> <br>
+                            <span class="badge badge-sm badge-pill badge-primary">
+                                `+ element.status_proses[0].toUpperCase() + element.status_proses.slice(1).toLowerCase() +`
+                            </span>`
                         ]).draw(false)
                     });
 

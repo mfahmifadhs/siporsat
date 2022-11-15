@@ -62,7 +62,10 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row->unit_utama }}</td>
-                            <td>{{ $row->unit_kerja }}</td>
+                            <td>
+                                <b class="text-primary">{{ $row->id_unit_kerja }}</b> <br>
+                                {{ $row->unit_kerja }}
+                            </td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>

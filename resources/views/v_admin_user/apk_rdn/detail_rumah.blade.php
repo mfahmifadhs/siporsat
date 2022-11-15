@@ -1,4 +1,4 @@
-@extends('v_user.layout.app')
+@extends('v_admin_user.layout.app')
 
 @section('content')
 

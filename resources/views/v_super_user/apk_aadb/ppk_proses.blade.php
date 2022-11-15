@@ -32,7 +32,7 @@
                     @csrf
                     <input type="hidden" name="id_form_usulan" value="{{ $pengajuan->id_form_usulan }}">
                     <input type="hidden" name="unit_kerja_id" value="{{ $pengajuan->id_unit_kerja }}">
-                    <input type="hidden" name="id_kendaraan" value="{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
+                    <input type="hidden" name="id_kendaraan" value="1{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor BAST</label>
                         <div class="col-sm-10">

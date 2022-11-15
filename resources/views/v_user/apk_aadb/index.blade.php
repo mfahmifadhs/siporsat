@@ -12,69 +12,28 @@
     </div>
 </div>
 
-<!-- <section class="content text-capitalize">
+<section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-5 col-12">
                 <div class="row">
-                    <div class="col-md-3 form-group">
-                        <a href="" class="btn btn-primary btn-sm btn-block">
-                            <i class="fas fa-car fa-2x"></i> <br>
-                            Usulan <br> Pengadaan </a>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <a href="" class="btn btn-primary btn-sm btn-block">
+                    <div class="col-md-4 form-group">
+                        <a href="{{ url('unit-kerja/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary btn-sm btn-block">
                             <i class="fas fa-tools fa-2x"></i> <br>
                             Usulan <br> Servis </a>
                     </div>
-                    <div class="col-md-3 form-group">
-                        <a href="" class="btn btn-primary btn-sm btn-block">
+                    <div class="col-md-4 form-group">
+                        <a href="{{ url('unit-kerja/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn btn-primary btn-sm btn-block">
                             <i class="fas fa-id-card-alt fa-2x"></i> <br>
                             Usulan <br> Perpanjang STNK </a>
                     </div>
-                    <div class="col-md-3 form-group">
-                        <a href="" class="btn btn-primary btn-sm btn-block">
+                    <div class="col-md-4 form-group">
+                        <a href="{{ url('unit-kerja/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn btn-primary btn-sm btn-block">
                             <i class="fas fa-gas-pump fa-2x"></i> <br>
                             Usulan <br> Voucher BBM </a>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><small class="font-weight-bold">Usulan Pengadaan</small></h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-default btn-xs" data-card-widget="collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-8 form-group small">Menunggu Persetujuan</div>
-                                    <div class="col-md-4 form-group small text-right">{{ $usulan->where('jenis_form',1)->where('status_proses_id', 1)->count() }}</div>
-                                    <div class="col-md-12">
-                                        <hr style="border: 1px solid grey;margin-top:-1vh;">
-                                    </div>
-                                    <div class="col-md-8 form-group small">Sedang Diproses</div>
-                                    <div class="col-md-4 form-group small text-right">{{ $usulan->where('jenis_form',1)->where('status_proses_id', 2)->count() }}</div>
-                                    <div class="col-md-12">
-                                        <hr style="border: 1px solid grey;margin-top:-1vh;">
-                                    </div>
-                                    <div class="col-md-8 form-group small">Menunggu Konfirmasi</div>
-                                    <div class="col-md-4 form-group small text-right">{{ $usulan->where('jenis_form',1)->where('status_proses_id', 4)->count() }}</div>
-                                    <div class="col-md-12">
-                                        <hr style="border: 1px solid grey;margin-top:-1vh;">
-                                    </div>
-                                    <div class="col-md-8 form-group small">Selesai</div>
-                                    <div class="col-md-4 form-group small text-right">{{ $usulan->where('jenis_form',1)->where('status_proses_id', 5)->count() }}</div>
-                                    <div class="col-md-12">
-                                        <hr style="border: 1px solid grey;margin-top:-1vh;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
@@ -191,7 +150,7 @@
                     <div class="card-header">
                         <h3 class="card-title"><small class="font-weight-bold">Daftar Usulan</small></h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-default btn-xs" data-card-widget="collapse">
+                            <button type="button" class="btn btn-default btn-sm" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
@@ -305,7 +264,7 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 <section class="content text-capitalize">
     <div class="container-fluid">
@@ -327,7 +286,7 @@
                     <div class="card-header">
                         <h4 class="card-title mt-1 font-weight-bold small">Filter AADB</h4>
                         <div class="card-tools">
-                            <button type="button" class="btn bg-primary btn-sm" data-card-widget="collapse">
+                            <button type="button" class="btn btn-default btn-sm" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>

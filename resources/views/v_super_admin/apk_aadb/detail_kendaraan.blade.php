@@ -37,7 +37,7 @@
                             @if($kendaraan->foto_kendaraan == null)
                             <img src="https://cdn-icons-png.flaticon.com/512/3202/3202926.png" class="img-thumbnail mt-2" style="width: 100%;">
                             @else
-                            <img src="{{ asset('gambar/barang_bmn/'. $kendaraan->foto_kendaraan) }}" class="img-thumbnail mt-2" style="width: 100%;">
+                            <img src="{{ asset('gambar/kendaraan/'. $kendaraan->foto_kendaraan) }}" class="img-thumbnail mt-2" style="width: 100%;">
                             @endif
                         </div>
                         <h3 class="profile-username text-center">{{ $kendaraan->kategori_barang }}</h3>
@@ -56,9 +56,10 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="informasi-barang">
-                                <form action="{{ url('super-admin/aadb/barang/proses-ubah/'. $kendaraan->id_barang) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ url('super-admin/aadb/kendaraan/proses-ubah/'. $kendaraan->id_kendaraan) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="form_usulan_id" value="{{ $kendaraan->form_usulan_id }}">
+                                    <input type="hidden" name="jenis_aadb" value="{{ $kendaraan->jenis_aadb }}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label>Upload Foto Kendaraan</label>
@@ -80,7 +81,7 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Pengguna :</label>
-                                            <input type="text" class="form-control" name="pengguna" value="pengguna" placeholder="Masukkan Nama Pengguna">
+                                            <input type="text" class="form-control" name="pengguna" value="{{ $kendaraan->pengguna }}" placeholder="Masukkan Nama Pengguna">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Unit Kerja :</label>
@@ -104,7 +105,7 @@
                                         <div class="col-md-6 form-group">
                                             <label for="level">Nama Kendaraan :</label>
                                             <select name="id_jenis_kendaraan" class="form-control">
-                                                <option value="">-- Pilih Kondisi Barang --</option>
+                                                <option value="">-- Pilih Jenis Kendaraan --</option>
                                                 @foreach($jenis as $dataJenis)
                                                 <option value="{{ $dataJenis->id_jenis_kendaraan }}" <?php if ($kendaraan->jenis_kendaraan_id == $dataJenis->id_jenis_kendaraan) echo "selected"; ?>>
                                                     {{ $dataJenis->jenis_kendaraan }}
@@ -126,7 +127,7 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>No. Plat RHS: </label>
-                                            <input type="text" name="no_plat_kendaraan" class="form-control" value="{{ $kendaraan->no_plat_rhs }}">
+                                            <input type="text" name="no_plat_rhs" class="form-control" value="{{ $kendaraan->no_plat_rhs }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Masa Berlaku STNK RHS: </label>
@@ -196,18 +197,14 @@
                                             <span class="time"><i class="far fa-date"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
                                             <h3 class="timeline-header text-capitalize">
-                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                                <a href="#">{{ $riwayatPengguna->unit_kerja }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
                                             </h3>
 
                                             <div class="timeline-body">
                                                 <div class="form-group row">
                                                     <div class="col-sm-6">
-                                                        <label>Lokasi Pemakaian : </label>
-                                                        <p>{{ $riwayatPengguna->keperluan_penggunaan }}</p>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label>Kondisi Barang : </label>
-                                                        <p>{{ $riwayatPengguna->kondisi_barang }}</p>
+                                                        <label>Pengguna : </label>
+                                                        <p>{{ $riwayatPengguna->pengguna }}</p>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
@@ -232,25 +229,19 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ url('super-admin/aadb/barang/ubah-riwayat/'. $riwayatPengguna->barang_id) }}">
+                                                        <form action="{{ url('super-admin/aadb/kendaraan/ubah-riwayat/'. $riwayatPengguna->kendaraan_id) }}">
                                                             @csrf
-                                                            <input type="hidden" name="id_riwayat_barang" value="{{ $riwayatPengguna->id_riwayat_barang }}">
+                                                            <input type="hidden" name="id_riwayat_kendaraan" value="{{ $riwayatPengguna->id_riwayat_kendaraan }}">
                                                             <div class="form-group row">
                                                                 <label class="col-sm-4 col-form-label">Pengguna</label>
                                                                 <div class="col-sm-8">
-                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->nama_pegawai }}" readonly>
+                                                                    <input type="text" class="form-control" name="pengguna" value="{{ $riwayatPengguna->pengguna }}">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label class="col-sm-4 col-form-label">Tanggal Pemakaian</label>
                                                                 <div class="col-sm-8">
                                                                     <input type="date" class="form-control" name="tanggal_pengguna" value="{{ $riwayatPengguna->tanggal_pengguna }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label class="col-sm-4 col-form-label">Lokasi Pemakaian</label>
-                                                                <div class="col-sm-8">
-                                                                    <textarea type="text" class="form-control" name="keperluan_penggunaan">{{ $riwayatPengguna->keperluan_penggunaan }}</textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">

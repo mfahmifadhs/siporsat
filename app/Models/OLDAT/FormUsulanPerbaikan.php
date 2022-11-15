@@ -15,7 +15,8 @@ class FormUsulanPerbaikan extends Model
     protected $fillable = [
         'id_form_usulan_perbaikan',
         'form_usulan_id',
-        'barang_id'
+        'barang_id',
+        'keterangan_perbaikan'
     ];
 
 }
