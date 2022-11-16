@@ -160,8 +160,8 @@
                                         </tbody>
                                     </table>
                                     @elseif ($modul == 'atk')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Barang</th>
@@ -171,7 +171,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->detailUsulanAtk as $dataAtk)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -184,8 +184,8 @@
                                         </tbody>
                                     </table>
                                     @elseif ($modul == 'gdn')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Lokasi Perbaikan</th>
@@ -195,7 +195,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->detailUsulanGdn as $dataGdn)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -209,8 +209,8 @@
                                     </table>
                                     @elseif ($modul == 'aadb')
                                     @if($usulan->jenis_form == '1')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Jenis AADB</th>
@@ -220,7 +220,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->usulanKendaraan as $dataKendaraan)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -233,8 +233,8 @@
                                         </tbody>
                                     </table>
                                     @elseif($usulan->jenis_form == '2')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Kendaraan</th>
@@ -246,7 +246,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->usulanServis as $dataServis)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -261,8 +261,8 @@
                                         </tbody>
                                     </table>
                                     @elseif($usulan->jenis_form == '3')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Kendaraan</th>
@@ -271,7 +271,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->usulanSTNK as $dataSTNK)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
@@ -283,8 +283,8 @@
                                         </tbody>
                                     </table>
                                     @elseif($usulan->jenis_form == '4')
-                                    <table class="table table-bordered m-0">
-                                        <thead>
+                                    <table class="table table-bordered m-0 table-responsive">
+                                        <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Kendaraan</th>
@@ -296,7 +296,7 @@
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody>
+                                        <tbody style="font-size: 8px;">
                                             @foreach($usulan->usulanVoucher as $dataVoucher)
                                             <tr>
                                                 <td>{{ $no++ }}</td>

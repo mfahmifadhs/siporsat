@@ -114,9 +114,9 @@
             </div>
             <div class="col-md-12">
                 <div class="row text-center">
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
                 </div>
             </div>
             <div class="col-md-12">

@@ -174,9 +174,9 @@
                             </div>
                             <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-atk/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
                                     @if ($dataUsulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$dataUsulan->otp_usulan_pimpinan) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-atk/'.$dataUsulan->otp_usulan_pimpinan) !!}</label>
                                     @endif
                                 </div>
                             </div>
