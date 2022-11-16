@@ -154,21 +154,21 @@
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holdings-usd"></i>
-                                        <p>Usulan Pengajuan</p>
+                                        <p>Daftar Usulan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/barang/daftar/seluruh-barang') }}" class="nav-link">
                                         <i class="nav-icon fas fa-boxess"></i>
-                                        <p>Master Barang</p>
+                                        <p>Daftar Barang</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="{{ url('super-user/oldat/rekap/daftar/seluruh-rekapitulasi') }}" class="nav-link">
                                         <i class="nav-icon fas fa-copys"></i>
                                         <p>Rekapitulasi</p>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-chart-bars"></i>
@@ -213,13 +213,13 @@
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Usulan Pengajuan</p>
+                                        <p>Daftar Usulan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-cars"></i>
-                                        <p>Master AADB</p>
+                                        <p>Daftar AADB</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -251,13 +251,13 @@
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/aadb/laporan/perpanjangan/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Perpanjangan STNK</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ url('super-user/aadb/laporan/voucher/daftar') }}" class="nav-link">
-                                                <i class="nav-icon fas fa-file-alt"></i>
+                                                <i class="nav-icon fas fa-file-alts"></i>
                                                 <p>Laporan Voucher BBM</p>
                                             </a>
                                         </li>
@@ -284,13 +284,13 @@
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/atk/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Usulan Pengajuan</p>
+                                        <p>Daftar Usulan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/atk/barang/daftar/semua') }}" class="nav-link">
                                         <i class="nav-icon fas fa-pencil-rulers"></i>
-                                        <p>Master ATK</p>
+                                        <p>Daftar ATK</p>
                                     </a>
                                 </li>
                             </ul>
@@ -325,14 +325,14 @@
                             <ul class="nav nav-treeview ">
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/rdn/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
+                                        <i class="nav-icon fas fa-chart-pies"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('super-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-house-user"></i>
-                                        <p>Master Rumah Dinas</p>
+                                        <i class="nav-icon fas fa-house-users"></i>
+                                        <p>Daftar Rumah Dinas</p>
                                     </a>
                                 </li>
                             </ul>

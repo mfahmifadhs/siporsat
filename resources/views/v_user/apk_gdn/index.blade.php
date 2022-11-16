@@ -38,16 +38,24 @@
                             <div class="row">
                                 <div class="col-md-8 form-group small">Menunggu Persetujuan</div>
                                 <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 1)->count() }}</div>
-                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-12">
+                                    <hr style="border: 1px solid grey;margin-top:-1vh;">
+                                </div>
                                 <div class="col-md-8 form-group small">Sedang Diproses</div>
                                 <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 2)->count() }}</div>
-                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-12">
+                                    <hr style="border: 1px solid grey;margin-top:-1vh;">
+                                </div>
                                 <div class="col-md-8 form-group small">Menunggu Konfirmasi</div>
                                 <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 4)->count() }}</div>
-                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-12">
+                                    <hr style="border: 1px solid grey;margin-top:-1vh;">
+                                </div>
                                 <div class="col-md-8 form-group small">Selesai</div>
                                 <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 5)->count() }}</div>
-                                <div class="col-md-12"><hr style="border: 1px solid grey;margin-top:-1vh;"></div>
+                                <div class="col-md-12">
+                                    <hr style="border: 1px solid grey;margin-top:-1vh;">
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer text-center">
@@ -62,48 +70,48 @@
                         <h4 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h4>
                     </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered m-0">
+                        <table id="table-usulan" class="table table-bordered m-0 small">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Lokasi Perbaikan</th>
-                                    <th>Status Pengajuan</th>
-                                    <th>Status Proses</th>
+                                    <th>Usulan</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <?php $no = 1;$no2 = 1; ?>
+                            <?php $no = 1;
+                            $no2 = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="pt-4">{{ $no++ }}</td>
-                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y') }}</td>
-                                    <td class="text-uppercase">
-                                        <p class="font-weight-bold">No. Surat : {{ $dataUsulan->no_surat_usulan }}</p>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
+                                        No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }}</p>
+                                        <label>Lokasi Kerusakan :</label>
                                         @foreach($dataUsulan->detailUsulanGdn as $dataGdn)
-                                            <p>
-                                                <label for=""> {{ $no2++.'. '.$dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label><br>
-                                                <span class="pl-3">○ {{ $dataGdn->bid_kerusakan.' : '.$dataGdn->keterangan  }}</span>
-                                            </p>
+                                        <p class="text-capitalize">
+                                            <label for=""> {{ $no2++.'. '.$dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label><br>
+                                            <span class="pl-3">○ {{ ucfirst(strtolower($dataGdn->bid_kerusakan)).' : '.$dataGdn->keterangan  }}</span>
+                                        </p>
                                         @endforeach
                                     </td>
-                                    <td class="text-center pt-4">
+                                    <td class="pt-2">
+                                        Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                         @elseif($dataUsulan->status_pengajuan_id == 2)
                                         <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center text-capitalize pt-4">
+                                        @endif <br>
+                                        Status Proses : <br>
                                         @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan</span>
                                         @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses ppk</span>
                                         @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi pengusul</span>
                                         @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses petugas gudang</span>
                                         @elseif ($dataUsulan->status_proses_id == 5)
                                         <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                         @endif
@@ -113,9 +121,18 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
+                                            @else
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/gdn/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

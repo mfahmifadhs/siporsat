@@ -41,6 +41,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Hash;
+use Validator;
 use Google2FA;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Psr7\Request as Psr7Request;
@@ -114,9 +116,58 @@ class SuperUserController extends Controller
             );
             return view('v_super_user.profil', compact('user', 'QR_Image', 'secretkey'));
         } elseif ($aksi == 'reset-autentikasi') {
-
-
             return redirect('super-user/profil/user/' . Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
+        } elseif ($aksi == 'edit-profil') {
+            $username = User::where('id', $id)->where('username', $request->username)->count();
+            Pegawai::where('id_pegawai', $request->id_pegawai)
+                ->update([
+                    'nip_pegawai'   => $request->nip,
+                    'nama_pegawai'  => $request->nama_pegawai,
+                    'nohp_pegawai'  => $request->nohp_pegawai,
+                    'keterangan_pegawai' => strtoupper($request->keterangan_pegawai)
+                ]);
+
+
+            if ($username != 1) {
+                $cekUser    = Validator::make($request->all(), [
+                    'username'   => 'unique:users'
+                ]);
+
+                if ($cekUser->fails()) {
+                    return redirect('super-user/profil/user/'. $id)->with('failed', 'Username sudah terdaftar');
+                } else {
+                    User::where('id', $id)
+                    ->update([
+                           'username' => $request->username
+                    ]);
+                }
+                return redirect('keluar')->with('success', 'Berhasil mengubah username');
+            }
+
+            return redirect('super-user/profil/user/'. $id)->with('success', 'Berhasil mengubah informasi profil');
+        } elseif ($aksi == 'edit-password') {
+            $pass = User::where('password_teks', $request->old_password)->where('id', Auth::user()->id)->count();
+            if ($pass != 1) {
+                return redirect('super-user/profil/user/'. $id)->with('failed', 'Password lama anda salah');
+            }
+
+            $cekPass    = Validator::make($request->all(), [
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required|min:6'
+            ]);
+
+            if ($cekPass->fails()) {
+                return redirect('super-user/profil/user/'. $id)->with('failed', 'Konfirmasi password salah');
+            } else {
+                User::where('id', $id)
+                ->update([
+                    'password'      => Hash::make($request->password),
+                    'password_teks' => $request->password
+                ]);
+            }
+
+            return redirect('keluar')->with('success', 'Berhasil mengubah password');
+
         } else {
             User::where('id', $id)->first();
             User::where('id', $id)->update([
@@ -167,7 +218,6 @@ class SuperUserController extends Controller
                     return redirect('super-user/atk/surat/surat-bast/' . Auth::user()->sess_form_id);
                 }
             } elseif (Auth::user()->sess_modul == 'oldat') {
-
                 $usulan = FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->first();
                 if ($usulan->status_proses_id == null) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
@@ -265,6 +315,8 @@ class SuperUserController extends Controller
                     Google2FA::logout();
                     return redirect('super-user/gdn/surat/surat-bast/' . Auth::user()->sess_form_id);
                 }
+            } elseif (Auth::user()->status_google2fa == null) {
+                return redirect('super-user/dashboard')->with('failed', 'Mohon untuk mendaftarkan akun pada google autentikasi');
             }
         } else {
             if ($aksi == 'usulan-oldat') {
@@ -457,7 +509,9 @@ class SuperUserController extends Controller
     {
         $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            // ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
             ->get();
         $googleChartData = $this->ChartDataAtk();
 
@@ -606,6 +660,10 @@ class SuperUserController extends Controller
                 ->first();
 
             return view('v_super_user/apk_gdn/proses_persetujuan', compact('usulan'));
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanGdnDetail::where('form_usulan_id', $id)->delete();
+            UsulanGdn::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             $totalUsulan    = UsulanGdn::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -620,7 +678,6 @@ class SuperUserController extends Controller
 
     public function Atk(Request $request)
     {
-
         $googleChartData = $this->ChartDataAtk();
         $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
             ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -724,6 +781,10 @@ class SuperUserController extends Controller
                 ->first();
 
             return view('v_super_user/apk_atk/proses_persetujuan', compact('usulan'));
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+            UsulanAtk::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1298,6 +1359,15 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->first();
             return view('v_super_user/apk_aadb/proses_persetujuan', compact('usulan'));
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanKendaraan::where('form_usulan_id', $id)->delete();
+            UsulanServis::where('form_usulan_id', $id)->delete();
+            UsulanPerpanjanganSTNK::where('form_usulan_id', $id)->delete();
+            UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
+            UsulanAadb::where('id_form_usulan', $id)->delete();
+
+            return redirect('super-user/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1812,13 +1882,17 @@ class SuperUserController extends Controller
     public function Oldat()
     {
         $googleChartData = $this->ChartDataOldat();
+        $rekapUsulan = FormUsulan::select(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m') as bulan"),
+            DB::raw('count(id_form_usulan) as total_usulan'))
+            ->groupBy('bulan')
+            ->get();
         $usulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan'));
+        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan','rekapUsulan'));
     }
 
     public function Items(Request $request, $aksi, $id)
@@ -1941,6 +2015,17 @@ class SuperUserController extends Controller
                 ->get();
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
+        } elseif ($aksi == 'periode') {
+            $formUsulan  = FormUsulan::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m')"), $id)
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
+            return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
         } elseif ($aksi == 'form-usulan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -2019,6 +2104,12 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->first();
             return view('v_super_user/apk_oldat/proses_persetujuan', compact('usulan'));
+        } elseif ($aksi == 'proses-pembatalan') {
+            FormUsulanPerbaikan::where('form_usulan_id', $id)->delete();
+            FormUsulanPengadaan::where('form_usulan_id', $id)->delete();
+            FormUsulan::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+
         } else {
             if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5) {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')

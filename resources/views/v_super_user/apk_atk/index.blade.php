@@ -22,16 +22,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-primary card-outline" id="accordion">
-                    <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                        <div class="card-header">
-                            <h4 class="card-title font-weight-bold mt-1">Stok Barang</h4>
-                            <div class="card-tools">
+                    <div class="card-header">
+                        <b class="font-weight-bold mt-1 text-primary">
+                            <i class="fas fa-table"></i> TABEL BARANG ATK
+                        </b>
+                        <div class="card-tools">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
                                 <span class="btn btn-primary btn-sm">
                                     <i class="fas fa-filter"></i> Filter
                                 </span>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                     <div id="collapseTwo" class="collapse" data-parent="#accordion">
                         <div class="card-header">
                             <div class="form-group row">
@@ -120,6 +122,7 @@
         </div>
     </div>
 </section>
+
 
 @section('js')
 <script>
@@ -249,8 +252,8 @@
                     data.table.forEach(element => {
                         dataTable.row.add([
                             no++,
-                            `<b class="text-primary">`+element.id_kategori_atk+`</b> <br>`+ element.kategori_atk,
-                            `<b class="text-primary">`+element.id_atk+`</b> <br>`+ element.merk_atk,
+                            `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
+                            `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
                             element.total_atk,
                             element.satuan
                         ]).draw(false)

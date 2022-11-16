@@ -44,8 +44,8 @@
         <div class="row text-capitalize">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
-                    <li class="breadcrumb-item active">Surat Pengajuan Usulan Gedung/Bangunan</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Surat Usulan</li>
                 </ol>
             </div>
         </div>
@@ -68,9 +68,6 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/gdn') }}" class="btn btn-primary print mr-2">
-                    <i class="fas fa-home"></i>
-                </a>
                 @if($usulan->otp_usulan_kabag != null)
                 <a href="{{ url('super-user/gdn/surat/print-surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>

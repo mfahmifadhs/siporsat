@@ -165,9 +165,9 @@
                     <div id="section-kendaraan">
                         <div class="form-group row">
                             <label class="col-sm-12 mb-3 text-muted">Informasi Kendaraan</label>
-                            <label class="col-sm-3 col-form-label">Pilih Kendaraan</label>
+                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
                             <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-uppercase select2-kendaraan" data-idtarget="1">
+                                <select name="kendaraan_id[]" class="form-control text-uppercase select2-kendaraan" data-idtarget="1" required>
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
@@ -178,29 +178,29 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label>
+                            <label class="col-sm-3 col-form-label">Kilometer Kendaraan*</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
+                                <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis</label>
+                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" required>
                             </div>
-                            <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)</label>
+                            <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)*</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000">
+                                <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli</label>
+                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" required>
                             </div>
-                            <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
+                            <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)*</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000">
+                                <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000" required>
                             </div>
                         </div>
                     </div>
@@ -264,9 +264,9 @@
                     <div id="section-kendaraan">
                         <div class="form-group row">
                             <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
-                            <label class="col-sm-3 col-form-label">Pilih Kendaraan</label>
+                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
                             <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize aadb select2-kendaraan" data-idtarget="1">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize aadb select2-kendaraan" data-idtarget="1" required>
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">
@@ -277,7 +277,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Masa Berlaku STNK</label>
+                            <label class="col-sm-3 col-form-label">Masa Berlaku STNK*</label>
                             <span id="mb-stnk1" class="col-sm-9"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                         </div>
                     </div>
@@ -352,9 +352,9 @@
                     </div>
                     <div id="section-kendaraan">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Pilih Kendaraan</label>
+                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
                             <div class="col-sm-10">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan" data-idtarget="1">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan" data-idtarget="1" required>
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraan as $dataKendaraan)
                                     <option value="{{ $dataKendaraan->id_kendaraan }}">

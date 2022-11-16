@@ -89,6 +89,14 @@
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+                                            @if ($dataPengajuan->otp_usulan_pengusul == null)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-aadb/'. $dataPengajuan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/proses-pembatalan/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -233,9 +241,11 @@
                                                         @endif
                                                     </span>
                                                     <span style="float: right;">
+                                                        @if ($dataPengajuan->otp_usulan_pengusul != null)
                                                         <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataPengajuan->id_form_usulan) }}" class="btn btn-primary">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
+                                                        @endif
                                                     </span>
                                                 </div>
                                             </div>

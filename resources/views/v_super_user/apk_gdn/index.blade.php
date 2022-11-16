@@ -8,6 +8,11 @@
             <div class="col-sm-6">
                 <h4 class="m-0 ml-2">GEDUNG DAN BANGUNAN</h4>
             </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Dashboard GDN</li>
+                </ol>
+            </div>
         </div>
     </div>
 </div>
@@ -29,9 +34,11 @@
             </div>
             <div class="col-3">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold">Usulan Perbaikan Gedung/Bangunan</h3>
+                            <h3 class="card-title font-weight-bold text-primary" style="font-size: medium;">
+                                <i class="fas fa-table"></i> TOTAL USULAN
+                            </h3>
                             <div class="card-tools"></div>
                         </div>
                         <div class="card-body">
@@ -57,9 +64,11 @@
                 </div>
             </div>
             <div class="col-9">
-                <div class="card">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h4 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h4>
+                        <h4 class="card-title font-weight-bold text-primary font-weight-bold" style="font-size: medium;">
+                           <i class="fas fa-table"></i> TABEL USULAN
+                        </h4>
                     </div>
                     <div class="card-body text-capitalize">
                         <table id="table-usulan" class="table table-bordered m-0">
@@ -130,9 +139,19 @@
                                                 <i class="fas fa-file"></i> BAST
                                             </a>
                                             @endif
+                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" href="{{ url('super-user/gdn/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
+                                            @endif
+                                            @if ($dataUsulan->otp_usulan_pengusul == null)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

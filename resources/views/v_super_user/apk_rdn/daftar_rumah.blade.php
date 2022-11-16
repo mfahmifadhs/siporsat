@@ -5,8 +5,14 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <h1 class="m-0">Daftar Rumah Dinas Negara</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/rdn/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active">Daftar Rumah Dinas</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -28,9 +34,10 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <div class="card">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Daftar Rumah Dinas Negara</h3>
+                        <h3 class="card-title text-primary font-weight-bold">
+                            <i class="fas fa-table"></i> TABEL RUMAH DINAS NEGARA</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>

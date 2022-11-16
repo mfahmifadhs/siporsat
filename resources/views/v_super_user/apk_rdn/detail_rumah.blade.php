@@ -10,9 +10,9 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}">Daftar Rumah</a></li>
-                    <li class="breadcrumb-item active">Barang</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/rdn/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}">Daftar Rumah Dinas</a></li>
+                    <li class="breadcrumb-item active">Detail Rumah Dinas</li>
                 </ol>
             </div>
         </div>

@@ -15,6 +15,18 @@
 <section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-md-12 col-12 form-group">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                </div>
+                @endif
+                @if ($message = Session::get('failed'))
+                <div class="alert alert-danger">
+                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                </div>
+                @endif
+            </div>
             <div class="col-md-3 col-12">
                 <div class="card">
                     <div class="card-header">
@@ -74,8 +86,7 @@
                                     <th>No</th>
                                     <th>Pengusul</th>
                                     <th>Usulan</th>
-                                    <th>Status Pengajuan</th>
-                                    <th>Status Proses</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -98,14 +109,14 @@
                                         Jumlah : {{ ucfirst(strtolower($dataAtk->jumlah_pengajuan.' '.$dataAtk->satuan)) }} <br>
                                         @endforeach
                                     </td>
-                                    <td class="text-center pt-4">
+                                    <td class="pt-2 small">
+                                        Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                         @elseif($dataUsulan->status_pengajuan_id == 2)
                                         <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center text-capitalize pt-4">
+                                        @endif <br>
+                                        Status Proses : <br>
                                         @if($dataUsulan->status_proses_id == 1)
                                         <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
                                         @elseif ($dataUsulan->status_proses_id == 2)
@@ -123,9 +134,18 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-atk/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
+                                            @else
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/atk/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->status_proses_id == 5)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-atk/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Bast
@@ -366,8 +386,8 @@
                     data.table.forEach(element => {
                         dataTable.row.add([
                             no++,
-                            `<b class="text-primary">`+element.id_kategori_atk+`</b> <br>`+ element.kategori_atk,
-                            `<b class="text-primary">`+element.id_atk+`</b> <br>`+ element.merk_atk,
+                            `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
+                            `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
                             element.total_atk
                         ]).draw(false)
                     })

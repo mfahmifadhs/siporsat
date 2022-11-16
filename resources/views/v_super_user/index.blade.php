@@ -90,7 +90,7 @@
                             </a>
                             <a href="{{ url('super-user/aadb/usulan/status/5') }}">
                                 <div class="card-header">
-                                    <label class="small">Menunggu Persetujuan</label>
+                                    <label class="small">Selesai</label>
                                     <div class="card-tools">
                                         {{ $usulanAadb->where('status_proses_id', 5)->count() }}
                                         <small>usulan</small>
@@ -133,7 +133,7 @@
                             </a>
                             <a href="{{ url('super-user/atk/usulan/status/5') }}">
                                 <div class="card-header">
-                                    <label class="small">Menunggu Persetujuan</label>
+                                    <label class="small">Selesai</label>
                                     <div class="card-tools">
                                         {{ $usulanAtk->where('status_proses_id', 5)->count() }}
                                         <small>usulan</small>
@@ -176,7 +176,7 @@
                             </a>
                             <a href="{{ url('super-user/gdn/usulan/status/5') }}">
                                 <div class="card-header">
-                                    <label class="small">Menunggu Persetujuan</label>
+                                    <label class="small">Selesai</label>
                                     <div class="card-tools">
                                         {{ $usulanGdn->where('status_proses_id', 5)->count() }}
                                         <small>usulan</small>

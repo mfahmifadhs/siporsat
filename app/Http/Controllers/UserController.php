@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Auth;
 use Google2FA;
 use DB;
 use Validator;
+use Hash;
 
 class UserController extends Controller
 {
@@ -74,6 +75,57 @@ class UserController extends Controller
 
             User::where('id', $id)->update(['status_google2fa' => null]);
             return redirect ('unit-kerja/profil/user/'. Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
+
+        } elseif ($aksi == 'edit-profil') {
+            $username = User::where('id', $id)->where('username', $request->username)->count();
+            Pegawai::where('id_pegawai', $request->id_pegawai)
+                ->update([
+                    'nip_pegawai'   => $request->nip,
+                    'nama_pegawai'  => $request->nama_pegawai,
+                    'nohp_pegawai'  => $request->nohp_pegawai,
+                    'keterangan_pegawai' => strtoupper($request->keterangan_pegawai)
+                ]);
+
+
+            if ($username != 1) {
+                $cekUser    = Validator::make($request->all(), [
+                    'username'   => 'unique:users'
+                ]);
+
+                if ($cekUser->fails()) {
+                    return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Username sudah terdaftar');
+                } else {
+                    User::where('id', $id)
+                    ->update([
+                           'username' => $request->username
+                    ]);
+                }
+                return redirect('keluar')->with('success', 'Berhasil mengubah username');
+            }
+
+            return redirect('unit-kerja/profil/user/'. $id)->with('success', 'Berhasil mengubah informasi profil');
+        } elseif ($aksi == 'edit-password') {
+            $pass = User::where('password_teks', $request->old_password)->where('id', Auth::user()->id)->count();
+            if ($pass != 1) {
+                return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Password lama anda salah');
+            }
+
+            $cekPass    = Validator::make($request->all(), [
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required|min:6'
+            ]);
+
+            if ($cekPass->fails()) {
+                return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Konfirmasi password salah');
+            } else {
+                User::where('id', $id)
+                ->update([
+                    'password'      => Hash::make($request->password),
+                    'password_teks' => $request->password
+                ]);
+            }
+
+            return redirect('keluar')->with('success', 'Berhasil mengubah password');
 
         } else {
             User::where('id', $id)->first();
@@ -460,7 +512,10 @@ class UserController extends Controller
     {
         $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->where('gdn_tbl_form_usulan.pegawai_id', Auth::user()->pegawai->unit_kerja_id)
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->where('gdn_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
             ->get();
         $googleChartData = $this->ChartDataAtk();
 
@@ -482,8 +537,10 @@ class UserController extends Controller
 
             $detail = $request->lokasi_bangunan;
             foreach ($detail as $i => $detailUsulan) {
-                $detail = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = ($request->id_usulan + 1) + $i;
+                $totalUsulan = UsulanGdnDetail::count();
+                $idUsulan    = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $detail      = new UsulanGdnDetail();
+                $detail->id_form_usulan_detail  = $idFormUsulan.($idUsulan + $i);
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -494,6 +551,10 @@ class UserController extends Controller
 
             UsulanGdn::where('id_form_usulan', $idFormUsulan)->update(['total_pengajuan' => count($request->lokasi_bangunan)]);
             return redirect('unit-kerja/verif/usulan-gdn/' . $idFormUsulan);
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanGdnDetail::where('form_usulan_id', $id)->delete();
+            UsulanGdn::where('id_form_usulan', $id)->delete();
+            return redirect('unit-kerja/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             $totalUsulan    = UsulanGdn::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -676,6 +737,10 @@ class UserController extends Controller
             }
 
             return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
+        } elseif ($aksi == 'proses-pembatalan') {
+            FormUsulanPerbaikan::where('form_usulan_id', $id)->delete();
+            FormUsulan::where('id_form_usulan', $id)->delete();
+            return redirect('unit-kerja/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1022,6 +1087,13 @@ class UserController extends Controller
             return redirect('unit-kerja/verif/usulan-aadb/' . $idFormUsulan);
             // return redirect('unit-kerja/aadb/surat/surat-usulan/'. $idFormUsulan);
 
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanAadb::where('id_form_usulan', $id)->delete();
+            UsulanServis::where('form_usulan_id', $id)->delete();
+            UsulanPerpanjanganSTNK::where('form_usulan_id', $id)->delete();
+            UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
+            return redirect('unit-kerja/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1207,6 +1279,9 @@ class UserController extends Controller
         $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
             ->get();
         $googleChartData = $this->ChartDataAtk();
 
@@ -1296,6 +1371,11 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/apk_atk/proses_persetujuan', compact('usulan'));
+        } elseif ($aksi == 'proses-pembatalan') {
+            UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+            UsulanAtk::where('id_form_usulan', $id)->delete();
+            return redirect('unit-kerja/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+
         } else {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);

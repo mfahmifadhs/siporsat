@@ -5,8 +5,14 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <h1 class="m-0">Daftar ATK</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active">Daftar ATK</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -28,15 +34,20 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <div class="card">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <b class="font-weight-bold mt-1 text-primary">
+                            <i class="fas fa-table"></i> TABEL BARANG ATK
+                        </b>
+                    </div>
                     <div class="card-body">
                         <table id="table-atk" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <td>No</td>
-                                    <td>Jenis Barang</td>
-                                    <td>Nama Barang</td>
-                                    <td>Merk/Tipe</td>
+                                    <th>No</th>
+                                    <th>Jenis Barang</th>
+                                    <th>Nama Barang</th>
+                                    <th>Merk/Tipe</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp

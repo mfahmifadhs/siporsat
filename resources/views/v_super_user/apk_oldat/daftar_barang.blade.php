@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Barang</li>
+                    <li class="breadcrumb-item active">Daftar Barang</li>
                 </ol>
             </div>
         </div>

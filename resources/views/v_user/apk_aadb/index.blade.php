@@ -17,6 +17,18 @@
         <div class="row">
             <div class="col-md-5 col-12">
                 <div class="row">
+                    <div class="col-md-12 col-12 form-group">
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                        </div>
+                        @endif
+                        @if ($message = Session::get('failed'))
+                        <div class="alert alert-danger">
+                            <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+                        </div>
+                        @endif
+                    </div>
                     <div class="col-md-4 form-group">
                         <a href="{{ url('unit-kerja/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary btn-sm btn-block">
                             <i class="fas fa-tools fa-2x"></i> <br>
@@ -245,9 +257,19 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
+                                            @else
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/aadb/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}"
+                                                onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->status_proses_id == 5)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-aadb/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Bast
@@ -269,18 +291,6 @@
 <section class="content text-capitalize">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 col-12 form-group">
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
-                </div>
-                @endif
-                @if ($message = Session::get('failed'))
-                <div class="alert alert-danger">
-                    <p class="fw-light" style="margin: auto;">{{ $message }}</p>
-                </div>
-                @endif
-            </div>
             <div class="col-md-12 col-12 form-group">
                 <div class="card">
                     <div class="card-header">

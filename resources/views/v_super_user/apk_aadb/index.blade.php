@@ -5,8 +5,13 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-8">
-                <h1 class="m-0">Dashboard Pengelolaan Alat Angkutan Darat Bermotor (AADB)</h1>
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard AADB</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -199,6 +204,14 @@
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+                                            @if ($dataUsulan->otp_usulan_pengusul == null)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -343,9 +356,11 @@
                                                         @endif
                                                     </span>
                                                     <span style="float: right;">
+                                                        @if ($dataUsulan->otp_usulan_pengusul != null)
                                                         <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" class="btn btn-primary">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
+                                                        @endif
                                                     </span>
                                                 </div>
                                             </div>

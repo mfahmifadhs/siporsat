@@ -10,6 +10,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}"> Dashboard</a></li>
                     <li class="breadcrumb-item active">Daftar Usulan</li>
                 </ol>
             </div>
@@ -39,8 +40,11 @@
 
             </div>
             <div class="col-md-12 form-group">
-                <div class="card">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
+                        <b class="font-weight-bold text-primary card-title mt-3" style="font-size:medium;">
+                            <i class="fas fa-table"></i> TABEL USULAN ATK
+                        </b>
                         <div class="card-tools">
                             <a class="btn btn-primary btn-xs" href="{{ url('super-user/atk/usulan/pengadaan/barang') }}">
                                 <i class="fa fa-shopping-cart fa-2x py-1"></i> <br>
@@ -122,6 +126,14 @@
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+                                            @if ($dataUsulan->otp_usulan_pengusul == null)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/atk/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -220,9 +232,11 @@
                                                         @endif
                                                     </span>
                                                     <span style="float: right;">
+                                                        @if ($dataUsulan->otp_usulan_pengusul != null)
                                                         <a href="{{ url('super-user/atk/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" class="btn btn-primary">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
+                                                        @endif
                                                     </span>
                                                 </div>
                                             </div>

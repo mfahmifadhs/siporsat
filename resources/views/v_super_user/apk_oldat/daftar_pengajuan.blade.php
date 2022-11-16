@@ -36,6 +36,18 @@ $jabatan = $user->jabatan; ?>
             @endif
         </div>
         <div class="card">
+            <div class="card-header">
+                <div class="card-tools">
+                    <a class="btn btn-primary btn-xs" href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}">
+                        <i class="fa fa-laptop fa-2x py-1"></i> <br>
+                        Usulan Pengadaan
+                    </a>
+                    <a class="btn btn-primary btn-xs" href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}">
+                        <i class="fa fa-tools fa-2x py-1"></i> <br>
+                        Usulan Perbaikan
+                    </a>
+                </div>
+            </div>
             <div class="card-body">
                 <table id="table-pengajuan" class="table table-bordered text-capitalize text-center">
                     <thead>
@@ -128,8 +140,8 @@ $jabatan = $user->jabatan; ?>
                                             <b class="text-warning p-3">menunggu konfirmasi kabag rt</b>
                                         </span>
                                         @elseif($row->status_proses_id == 5)
-                                        <span class="border border-warning">
-                                            <b class="text-warning p-3">selesai</b>
+                                        <span class="border border-success">
+                                            <b class="text-success p-3">selesai</b>
                                         </span>
                                         @endif
                                         @endif
