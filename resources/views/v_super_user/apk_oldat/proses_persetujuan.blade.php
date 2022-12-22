@@ -142,12 +142,36 @@
                             <button class="btn btn-success" id="btnSubmit" onclick="return confirm('Pengajuan Diterima ?')">
                                 <i class="fas fa-check-circle"></i> Terima
                             </button>
-                            <a href="{{ url('super-user/aadb/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" class="btn btn-danger" onclick="return confirm('Pengajuan Ditolak ?')">
+                            <a class="btn btn-danger" data-toggle="modal" data-target="#tolakUsulan">
                                 <i class="fas fa-times-circle"></i> Tolak
                             </a>
                         </div>
                     </div>
                 </form>
+                <!-- Modal -->
+                <div class="modal fade" id="tolakUsulan" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{ url('super-user/oldat/pengajuan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                    <label class="col-form-label">Keterangan Penolakan</label>
+                                    <textarea name="keterangan" class="form-control" id="" cols="30" rows="10"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Pengajuan Ditolak ?')">
+                                        <i class="fas fa-times-circle"></i> Tolak
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

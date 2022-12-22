@@ -34,39 +34,46 @@
             </div>
             @endif
         </div>
-        <div class="card card-outline card-primary">
+        <div class="card" style="border-radius: 20px;">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>SIPORSAT</b> </a>
+                <a href="{{ url('/') }}">
+                    <p><img src="{{ url('gambar/main/logo-siporsat.png') }}" class="img-fluid" width="150"></p>
+                </a>
+                <span class="text-uppercase text-center small" style="font-family: Arial;">
+                    Sistem Informasi Pengelolaan <br> Operasional Perkantoran Terpusat
+                </span>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sistem Informasi Pengelolaan Operasional Perkantoran Terpusat</p>
-
                 <form action="{{ route('masuk.post') }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control" placeholder="Username">
                         <div class="input-group-append">
-                            <div class="input-group-text">
+                            <div class="input-group-text rounded-left">
                                 <span class="fas fa-users"></span>
                             </div>
                         </div>
+                        <input type="text" name="username" class="form-control" placeholder="Username">
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                    <div class="input-group mb-3" id="password">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <a type="button" onclick="lihatPassword()"><span class="fas fa-eye"></span></a>
+                            <div class="input-group-text rounded-left">
+                                <a type="button" onclick="lihatPassword()"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                             </div>
                         </div>
+                        <input type="password" name="password" class="form-control" placeholder="Password">
                     </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
+                    <div class="input-group">
+                        <div class="mt-1 mb-2">
+                            <div class="captcha">
+                                <span>{!! captcha_img() !!}</span>
+                                <button type="button" class="btn btn-danger" class="reload" id="reload">
+                                    &#x21bb;
+                                </button>
                             </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha" required>
                         </div>
                     </div>
                     <div class="social-auth-links text-center mt-2 mb-3">
@@ -83,7 +90,10 @@
                     <a href="#" class="text-center">Bantuan</a>
                 </p>
             </div>
-            <!-- /.card-body -->
+            <div class="card-footer text-center">
+                <img src="{{ url('gambar/main/logo-kemenkes.png') }}" class="img-fluid" width="50">
+                <img src="{{ url('gambar/main/logo-germas.png') }}" class="img-fluid" width="50">
+            </div>
         </div>
         <!-- /.card -->
     </div>
@@ -99,12 +109,26 @@
     <script type="text/javascript">
         function lihatPassword() {
             var x = document.getElementById("password");
-            if (x.type === "password") {
-                x.type = "text";
+            if ($('#password input').attr("type") == "password") {
+                $('#password input').attr('type', 'text');
+                $('#password i').addClass("fa-eye-slash");
+                $('#password i').removeClass("fa-eye");
             } else {
-                x.type = "password";
+                $('#password input').attr('type', 'password');
+                $('#password i').removeClass("fa-eye-slash");
+                $('#password i').addClass("fa-eye");
             }
         }
+
+        $('#reload').click(function() {
+            $.ajax({
+                type: 'GET',
+                url: 'captcha-reload',
+                success: function(data) {
+                    $(".captcha span").html(data.captcha);
+                }
+            });
+        });
     </script>
 </body>
 

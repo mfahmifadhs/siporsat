@@ -34,6 +34,7 @@ use Carbon\Carbon;
 use Validator;
 use Auth;
 use Google2FA;
+use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
@@ -62,7 +63,7 @@ class AdminUserController extends Controller
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image = $google2fa->getQRCodeInline(
-                config('app.name'),
+                $registration_data = 'Siporsat',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
@@ -268,7 +269,10 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.kategori_atk', compact('id','kelompokAtk','subkelompokAtk','jenisAtk','kategoriAtk'));
         } elseif ($aksi == 'edit-atk') {
             if ($request->atk == 'merk_atk') {
-                ATK::where('id_atk', $request->id_atk)->update([ 'merk_atk' => strtoupper($request->merk_atk) ]);
+                ATK::where('id_atk', $request->id_atk)->update([
+                    'merk_atk' => strtoupper($request->merk_atk),
+                    'satuan'   => $request->satuan
+                ]);
                 return redirect('admin-user/atk/barang/daftar/seluruh-barang')->with('success', 'Berhasil mengubah informasi barang');
             } elseif ($request->atk == 'kategori_atk') {
                 KategoriATK::where('id_kategori_atk', $request->id_kategori_atk)->update([ 'kategori_atk' => strtoupper($request->kategori_atk) ]);
@@ -412,8 +416,9 @@ class AdminUserController extends Controller
     public function SubmissionAtk(Request $request, $aksi, $id)
     {
         if($aksi == 'input') {
-            $totalUsulan  = UsulanAtk::where('no_surat_bast','!=', null)->count();
-            $idBast       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+
+            $jenisForm  = UsulanAtk::where('id_form_usulan',$id)->pluck('jenis_form');
+            $total      = UsulanAtk::select('jenis_form', DB::raw('count(jenis_form) as total_form'))->groupBy('jenis_form')->where('jenis_form', $jenisForm)->first();
             $usulan = UsulanAtk::where('id_form_usulan', $id)
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')
                 ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
@@ -422,7 +427,7 @@ class AdminUserController extends Controller
                 ->join('tbl_status_proses','id_status_proses','status_proses_id')
                 ->first();
 
-            return view('v_admin_user.apk_atk.pgudang_input', compact('id','idBast', 'usulan'));
+            return view('v_admin_user.apk_atk.pgudang_input', compact('total', 'id', 'usulan'));
         } elseif ($aksi == 'proses-input' && $id == 'pengadaan') {
             // Update form usulan
             UsulanAtk::where('id_form_usulan', $request->form_id)->update([

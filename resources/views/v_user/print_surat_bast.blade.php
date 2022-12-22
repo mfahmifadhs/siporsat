@@ -41,9 +41,11 @@
         </div>
         <div class="row text-capitalize">
             <div class="col-md-12 form-group">
-                <div class="form-group row mb-0">
-                    <div class="col-md-2">Nomor Surat</div>
-                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
+                <div class="form-group row mb-3 text-center">
+                    <div class="col-md-12 text-uppercase">
+                        berita acara serah terima <br>
+                        nomor surat : {{ $bast->no_surat_bast }}
+                    </div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
@@ -60,10 +62,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Tanggal Usulan</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-2">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $bast->total_pengajuan }} kendaraan</div>
                 </div>
                 @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">

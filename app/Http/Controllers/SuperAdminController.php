@@ -10,7 +10,8 @@ use App\Exports\PegawaiExport;
 use App\Exports\TimKerjaExport;
 use App\Exports\UnitKerjaExport;
 use App\Exports\BarangExport;
-
+use App\Imports\AADB\KendaraanImport;
+use App\Imports\BarangImport;
 use App\Imports\TimKerjaImport;
 use App\Imports\UnitKerjaImport;
 use App\Imports\PegawaiImport;
@@ -29,6 +30,8 @@ use App\Models\atk\JenisAtk;
 use App\Models\atk\KategoriAtk;
 use App\Models\atk\SubKelompokAtk;
 use App\Models\atk\UsulanAtk;
+use App\Models\atk\UsulanAtkDetail;
+use App\Models\atk\UsulanAtkLampiran;
 use App\Models\gdn\UsulanGdn;
 use App\Models\gdn\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
@@ -269,43 +272,41 @@ class SuperAdminController extends Controller
         } elseif ($aksi == 'hapus') {
             // Hapus Detail Usulan
             $usulan = UsulanAtk::where('id_form_usulan', $id)->first();
-            if ($usulan->jenis_form == 1) {
+            $detail = UsulanAtkDetail::select('atk_id', DB::raw('sum(jumlah_pengajuan) as total'))
+                ->groupBy('atk_id')
+                ->where('form_usulan_id', $id)
+                ->get();
 
-                $pengadaan = Kendaraan::where('form_usulan_id', $id)
-                    ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                    ->get();
-
-                foreach ($pengadaan as $dataPengadaan) {
-                    if ($dataPengadaan->jenis_aadb == 'sewa') {
-                        KendaraanSewa::where('kendaraan_id', $dataPengadaan->id_kendaraan)->delete();
-                    }
+            if ($usulan->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5)
+            {
+                $lampiran = UsulanAtkLampiran::where('form_usulan_id', $id)->get();
+                foreach ($lampiran as $atkLampiran)
+                {
+                    $file_old = public_path() . '\gambar\kwitansi\atk_pengadaan\\' . $atkLampiran->file_kwitansi;
+                    unlink($file_old);
+                    UsulanAtkLampiran::where('form_usulan_id', $id)->delete();
                 }
 
-                if ($usulan->lampiran != null) {
-                    $file = public_path() . '\gambar\kwitansi\pengadaan\\' . $usulan->lampiran;
-                    unlink($file);
+                foreach ($detail as $atk)
+                {
+                    $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
+                    $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk - $atk->total)]);
+                    UsulanAtk::where('id_form_usulan', $id)->delete();
+                    UsulanAtkDetail::where('form_usulan_id', $id)->delete();
                 }
-                Kendaraan::where('form_usulan_id', $id)->delete();
-                UsulanKendaraan::where('form_usulan_id', $id)->delete();
-            } elseif ($usulan->jenis_form == 2) {
-                if ($usulan->lampiran != null) {
-                    $file = public_path() . '\gambar\kwitansi\servis\\' . $usulan->lampiran;
-                    unlink($file);
+            } elseif ($usulan->jenis_form == 'distribusi' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5) {
+                foreach ($detail as $atk)
+                {
+                    $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
+                    $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk + $atk->total)]);
+                    UsulanAtk::where('id_form_usulan', $id)->delete();
+                    UsulanAtkDetail::where('form_usulan_id', $id)->delete();
                 }
-                UsulanServis::where('form_usulan_id', $id)->delete();
-            } elseif ($usulan->jenis_form == 3) {
-                if ($usulan->lampiran != null) {
-                    $file = public_path() . '\gambar\kendaraan\stnk\\' . $usulan->lampiran;
-                    unlink($file);
-                }
-                UsulanPerpanjanganSTNK::where('form_usulan_id', $id)->delete();
-            } elseif ($usulan->jenis_form == 4) {
-                UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
+            } else {
+                UsulanAtk::where('id_form_usulan', $id)->delete();
             }
 
-            // Hapus Form Usulan
-            UsulanAadb::where('id_form_usulan', $id)->delete();
-            return redirect('super-admin/aadb/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Menghapus Usulan');
+            return redirect('super-admin/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Menghapus Usulan');
         }
     }
 
@@ -584,9 +585,6 @@ class SuperAdminController extends Controller
                 ->first();
 
             return view('v_super_admin.apk_aadb.detail_kendaraan', compact('unitKerja', 'jenis', 'kondisi', 'kendaraan'));
-        } elseif ($aksi == 'upload') {
-            Excel::import(new KendaraanImport(), $request->upload);
-            return redirect('super-admin/aadb/kendaraan/')->with('success', 'Berhasil Mengupload Data Kendaraan');
         } elseif ($aksi == 'proses-ubah') {
             $cekFoto  = Validator::make($request->all(), [
                 'foto_kendaraan'    => 'mimes: jpg,png,jpeg|max:4096',
@@ -662,6 +660,14 @@ class SuperAdminController extends Controller
             ]);
 
             return redirect('super-admin/aadb/kendaraan/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Kendaraan');
+        } elseif ($aksi == 'hapus-riwayat') {
+            $riwayat   = RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->first();
+            $kendaraan = Kendaraan::where('id_kendaraan', $riwayat->kendaraan_id)->update(['pengguna' => null]);
+            RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->delete();
+            return redirect('super-admin/aadb/kendaraan/detail/' . $riwayat->kendaraan_id)->with('success', 'Berhasil Menghapus Riwayat Pengguna Kendaraan');
+        } elseif ($aksi == 'file-kendaraan') {
+            Excel::import(new KendaraanImport(), $request->file);
+            return redirect('super-admin/aadb/kendaraan/daftar/seluruh-kendaraan')->with('success', 'Berhasil Mengupload Data Kendaraan');
         }
     }
 
@@ -794,24 +800,11 @@ class SuperAdminController extends Controller
     {
         if ($aksi == 'daftar') {
             $char = '"';
-            $barang = Barang::select(
-                'id_barang',
-                'kode_barang',
-                'kategori_barang',
-                'nup_barang',
-                'jumlah_barang',
-                'satuan_barang',
-                'nilai_perolehan',
-                'tahun_perolehan',
-                'kondisi_barang',
-                'nama_pegawai',
-                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-                'unit_kerja'
-            )
+            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
+                'nilai_perolehan','kondisi_barang','pengguna_barang','unit_kerja','tahun_perolehan',
+                DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
                 ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
                 ->orderBy('tahun_perolehan', 'DESC')
                 ->get();
@@ -822,16 +815,13 @@ class SuperAdminController extends Controller
             $kategoriBarang = KategoriBarang::get();
             $kondisiBarang  = KondisiBarang::get();
             $pegawai        = Pegawai::orderBy('nama_pegawai', 'ASC')->get();
-            $barang         = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
-                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
+            $barang         = Barang::join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                 ->where('id_barang', 'like', '%' . $id . '%')->first();
 
             $riwayat        = RiwayatBarang::join('oldat_tbl_barang', 'id_barang', 'barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_riwayat_barang.kondisi_barang_id')
                 ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
-                ->join('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_riwayat_barang.pegawai_id')
-                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->where('barang_id', 'like', '%' . $id . '%')->get();
 
             return view('v_super_admin.apk_oldat.detail_barang', compact('kategoriBarang', 'kondisiBarang', 'pegawai', 'barang', 'riwayat'));
@@ -873,10 +863,11 @@ class SuperAdminController extends Controller
                     $fotoBarang = $dataBarang->foto_barang;
                 }
                 $barang = Barang::where('id_barang', 'like', '%' . $id . '%')->update([
-                    'pegawai_id'            => $request->id_pegawai,
+                    'pengguna_barang'       => $request->pengguna_barang,
                     'kategori_barang_id'    => $request->id_kategori_barang,
                     'kode_barang'           => $request->kode_barang,
                     'nup_barang'            => $request->nup_barang,
+                    'merk_tipe_barang'      => $request->merk_tipe_barang,
                     'spesifikasi_barang'    => $request->spesifikasi_barang,
                     'jumlah_barang'         => $request->jumlah_barang,
                     'satuan_barang'         => $request->satuan_barang,
@@ -884,16 +875,17 @@ class SuperAdminController extends Controller
                     'nilai_perolehan'       => $request->nilai_perolehan,
                     'tahun_perolehan'       => $request->tahun_perolehan,
                     'nilai_perolehan'       => $request->nilai_perolehan,
+                    'status_barang'         => $request->status_barang,
                     'foto_barang'           => $fotoBarang
 
                 ]);
             }
             if ($request->proses == 'pengguna-baru') {
-                $cekBarang = RiwayatBarang::count();
+                $cekBarang = RiwayatBarang::orderBy('id_riwayat_barang','DESC')->first();
                 $riwayat   = new RiwayatBarang();
-                $riwayat->id_riwayat_barang = $cekBarang + 1;
+                $riwayat->id_riwayat_barang = $cekBarang->id_riwayat_barang + 1;
                 $riwayat->barang_id         = $id;
-                $riwayat->pegawai_id        = $request->input('id_pegawai');
+                $riwayat->pengguna_barang   = $request->input('pengguna_barang');
                 $riwayat->tanggal_pengguna  = Carbon::now();
                 $riwayat->kondisi_barang_id = $request->input('id_kondisi_barang');
                 $riwayat->save();
@@ -909,9 +901,12 @@ class SuperAdminController extends Controller
             return redirect('super-admin/oldat/barang/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Barang');
         } elseif ($aksi == 'hapus-riwayat') {
             RiwayatBarang::where('id_riwayat_barang', $id)->delete();
-            return redirect('super-admin/oldat/barang/detail/' . $id)->with('success', 'Berhasil Menghapus Riwayat Barang');
+            return redirect('super-admin/oldat/barang/detail/' . $request->barang_id)->with('success', 'Berhasil Menghapus Riwayat Barang');
         } elseif ($aksi == 'download') {
             return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
+        } elseif ($aksi == 'file-barang') {
+            Excel::import(new BarangImport(), $request->file);
+            return redirect('super-admin/oldat/barang/daftar/seluruh-barang')->with('success', 'Berhasil Mengupload Data Kendaraan');
         } else {
             $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);
             $kategoriBarang->delete();
@@ -1002,20 +997,9 @@ class SuperAdminController extends Controller
     public function ChartDataOldat()
     {
         $char = '"';
-        $dataBarang = Barang::select(
-            'id_barang',
-            'kode_barang',
-            'kategori_barang',
-            'nup_barang',
-            'jumlah_barang',
-            'satuan_barang',
-            'nilai_perolehan',
-            'tahun_perolehan',
-            'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
-        )
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
+            'nilai_perolehan','unit_kerja','tahun_perolehan','kondisi_barang','nama_pegawai',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -1040,20 +1024,9 @@ class SuperAdminController extends Controller
     public function SearchChartDataOldat(Request $request)
     {
         $char = '"';
-        $dataBarang = Barang::select(
-            'id_barang',
-            'kode_barang',
-            'kategori_barang',
-            'nup_barang',
-            'jumlah_barang',
-            'satuan_barang',
-            'nilai_perolehan',
-            'tahun_perolehan',
-            'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
-        )
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
+            'nilai_perolehan','tahun_perolehan','kondisi_barang','nama_pegawai', 'unit_kerja',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -1162,6 +1135,7 @@ class SuperAdminController extends Controller
                 $pengguna->username         = $request->input('username');
                 $pengguna->password         = Hash::make($request->input('password'));
                 $pengguna->password_teks    = $request->input('password');
+                $pengguna->status_google2fa = 0;
                 $pengguna->save();
 
                 $cekHakAkses = UserAkses::count();
@@ -1224,6 +1198,7 @@ class SuperAdminController extends Controller
             $jabatan   = PegawaiJabatan::get();
             $timKerja  = TimKerja::get();
             $unitKerja = UnitKerja::get();
+            dd($unitKerja);
             $pegawai   = Pegawai::leftjoin('tbl_pegawai_jabatan', 'tbl_pegawai_jabatan.id_jabatan', 'tbl_pegawai.jabatan_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')

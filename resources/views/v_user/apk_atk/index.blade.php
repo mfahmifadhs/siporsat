@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-8">
-                <h4 class="m-0 ml-2">PEMELIHARAAN ALAT TULIS KANTOR</h4>
+                <h4 class="m-0 ml-2">ALAT TULIS KANTOR</h4>
             </div>
         </div>
     </div>
@@ -27,60 +27,82 @@
                 </div>
                 @endif
             </div>
-            <div class="col-md-3 col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title font-weight-bold">Usulan Distribusi ATK</h3>
-                        <div class="card-tools"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8 form-group small">Menunggu Persetujuan</div>
-                            <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 1)->count() }}</div>
-                            <div class="col-md-12">
-                                <hr style="border: 1px solid grey;margin-top:-1vh;">
-                            </div>
-                            <div class="col-md-8 form-group small">Sedang Diproses</div>
-                            <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 2)->count() }}</div>
-                            <div class="col-md-12">
-                                <hr style="border: 1px solid grey;margin-top:-1vh;">
-                            </div>
-                            <div class="col-md-8 form-group small">Menunggu Konfirmasi</div>
-                            <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 4)->count() }}</div>
-                            <div class="col-md-12">
-                                <hr style="border: 1px solid grey;margin-top:-1vh;">
-                            </div>
-                            <div class="col-md-8 form-group small">Selesai</div>
-                            <div class="col-md-4 form-group small text-right">{{ $usulan->where('status_proses_id', 5)->count() }}</div>
-                            <div class="col-md-12">
-                                <hr style="border: 1px solid grey;margin-top:-1vh;">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-footer text-center font-weight-bold">
-                        <div class="row">
-                            <!-- <div class="col-md-6 col-6">
-                                <a href="{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}" class="btn btn-primary btn-xs py-1">
-                                    <i class="fas fa-plus-circle"></i> Usulan Pengadaan
-                                </a>
-                            </div> -->
-                            <div class="col-md-12 col-6">
-                                <a href="{{ url('unit-kerja/atk/usulan/distribusi/baru') }}" class="btn btn-primary btn-xs py-1">
-                                    <i class="fas fa-plus-circle"></i> Usulan Distribusi
-                                </a>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Sedang Diproses</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Selesai Diproses</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Selesai BAST</h6>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-3 col-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold">Daftar Penggunaan ATK</h3>
+                    </div>
+                    <div class="card-body table-responsive p-1">
+                        <table id="table-penggunaan" class="table table-valign-middle small">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Barang</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+                            @php $no = 1; @endphp
+                            <tbody>
+                                @foreach($atk as $row)
+                                @if($row->jenis_form == 'distribusi')
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ \Carbon\carbon::parse($row->tanggal_usulan)->isoFormat('DD MMM Y') }} <br>
+                                        {{ $row->merk_atk }}
+                                    </td>
+                                    <td>{{ $row->total_atk.' '.$row->satuan }}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-9 col-12">
-                <div class="card">
+                <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan</h3>
                     </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered m-0">
+                        <table id="table-usulan" class="table table-bordered m-0" style="font-size: 80%;">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -96,20 +118,20 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="text-center pt-3">{{ $no++ }}</td>
-                                    <td class="small">
+                                    <td>
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
                                         No. Surat : {{ $dataUsulan->no_surat_usulan }} <br>
                                         Pengusul : {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
                                         Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
-                                    <td class="small">
+                                    <td>
                                         @foreach($dataUsulan->detailUsulanAtk as $dataAtk)
                                         <b>Kode Barang. {{ $dataAtk->atk_id }}</b> <br>
                                         {{ ucfirst(strtolower($dataAtk->kategori_atk.' - '.$dataAtk->merk_atk)) }} <br>
                                         Jumlah : {{ ucfirst(strtolower($dataAtk->jumlah_pengajuan.' '.$dataAtk->satuan)) }} <br>
                                         @endforeach
                                     </td>
-                                    <td class="pt-2 small">
+                                    <td class="pt-2">
                                         Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
@@ -169,15 +191,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-primary card-outline" id="accordion">
-                    <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                        <div class="card-header">
-                            <div class="card-tools">
+                    <div class="card-header">
+                        <h3 class="card-title mt-1 font-weight-bold">Daftar dan Stok ATK pada Gudang</h3>
+                        <div class="card-tools">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
                                 <span class="btn btn-primary btn-sm">
                                     <i class="fas fa-filter"></i> Filter
                                 </span>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                     <div id="collapseTwo" class="collapse" data-parent="#accordion">
                         <div class="card-header">
                             <div class="form-group row">
@@ -235,7 +258,8 @@
                                             <th>No</th>
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe Barang</th>
-                                            <th>Stok Barang</th>
+                                            <th>Stok</th>
+                                            <th>Satuan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -252,6 +276,7 @@
                                                 {{ $dataAtk->merk_atk}}
                                             </td>
                                             <td>{{ $dataAtk->total_atk }}</td>
+                                            <td>{{ $dataAtk->satuan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -276,8 +301,25 @@
             "lengthChange": false,
             "autoWidth": false,
             "info": false,
-            "paging": true
-        })
+            "paging": true,
+            buttons: [
+                {
+                    text: '(+) Usulan Pengadaan',
+                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                    action: function(e, dt, node, config) {
+                        window.location.href = "{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}";
+                    }
+                },
+                {
+                    text: '(+) Usulan Distribusi',
+                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                    action: function(e, dt, node, config) {
+                        window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
+                    }
+                }
+            ]
+
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
 
         $("#table-atk").DataTable({
             "responsive": true,
@@ -285,6 +327,19 @@
             "autoWidth": false,
             "info": false,
             "paging": true
+        })
+
+        $("#table-penggunaan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": false,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ]
         })
 
         let total = 1
@@ -388,7 +443,8 @@
                             no++,
                             `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
                             `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
-                            element.total_atk
+                            element.total_atk,
+                            element.satuan,
                         ]).draw(false)
                     })
 

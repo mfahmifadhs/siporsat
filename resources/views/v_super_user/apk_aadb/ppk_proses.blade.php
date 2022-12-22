@@ -36,7 +36,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor BAST</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/pengadaan/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/pengadaan/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">

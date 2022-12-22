@@ -34,6 +34,7 @@ Route::get('daftar', [AuthController::class, 'daftar'])->name('daftar-user');
 Route::get('keluar', [AuthController::class, 'keluar'])->name('keluar');
 Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.post');
 Route::post('post-masuk', [AuthController::class, 'postMasuk'])->name('masuk.post');
+Route::get('captcha-reload', [AuthController::class, 'reloadCaptcha']);
 
 // ====================================================
 //                    SUPER ADMIN

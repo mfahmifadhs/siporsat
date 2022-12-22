@@ -23,14 +23,23 @@ class AuthController extends Controller
             'username'  => 'required',
             'password'  => 'required',
         ]);
-        $credentials = $request->only('username', 'password');
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
+
+        if ( $request->captcha == null) {
+            return back()->with('failed','mohon isi kode captcha');
+        } elseif(captcha_check($request->captcha) == false ) {
+            return back()->with('failed','captcha salah');
+        } else {
+            $credentials = $request->only('username', 'password');
+            if (Auth::attempt($credentials)) {
+                return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
+            }
+            return redirect("masuk")->with('failed', 'Username atau Password Salah !');
         }
-        return redirect("masuk")->with('failed', 'Username atau Password Salah !');
     }
 
-
+    public function reloadCaptcha() {
+        return response()->json(['captcha' => captcha_img()]);
+    }
 
     public function registration()
     {

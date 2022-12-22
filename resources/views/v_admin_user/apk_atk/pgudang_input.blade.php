@@ -5,8 +5,8 @@
 <div class="content-header">
     <div class="container">
         <div class="row mb-2">
-            <div class="col-sm-8">
-                <h4 class="m-0">Proses Input Barang</h4>
+            <div class="col-sm-8 text-capitalize">
+                <h4 class="m-0">proses {{ $usulan->jenis_form }} ATK</h4>
             </div>
         </div>
     </div>
@@ -27,12 +27,20 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title text-capitalize">proses {{ $usulan->jenis_form }} barang </h3>
+                <h3 class="card-title text-capitalize">proses {{ $usulan->jenis_form }} ATK </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('admin-user/atk/usulan/proses-input/'. $usulan->jenis_form) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/atk/'.$usulan->jenis_form.'/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                    @php
+                    $totalUsulan = $total->total_form + 1;
+                    $tahun = \Carbon\Carbon::now()->isoFormat('Y');
+                    @endphp
+                    @if ($total->jenis_form == 'pengadaan')
+                    <input type="hidden" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.01.03/2/'.$totalUsulan.'/'.$tahun }}" readonly>
+                    @else
+                    <input type="hidden" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$totalUsulan.'/'.$tahun }}" readonly>
+                    @endif
                     <input type="hidden" name="form_id" value="{{ $id }}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor Surat Usulan</label>

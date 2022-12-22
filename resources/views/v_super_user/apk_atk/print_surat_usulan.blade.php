@@ -42,9 +42,11 @@
         </div>
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Nomor Surat</div>
-                    <div class="col-md-9 text-uppercase">: {{ $dataUsulan->no_surat_usulan }}</div>
+                <div class="form-group row mb-3 text-center">
+                    <div class="col-md-12 text-uppercase">
+                        usulan pengajuan <br>
+                        nomor surat : {{ $dataUsulan->no_surat_usulan }}
+                    </div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
@@ -61,10 +63,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Tanggal Usulan</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} kendaraan</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Rencana Pengguna</div>
@@ -85,6 +83,18 @@
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
+                        @if ($form->jenis_form == 'pengadaan')
+                        @foreach($dataUsulan->pengadaanAtk as $dataAtk)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->spesifikasi }}</td>
+                            <td>{{ $dataAtk->jumlah }}</td>
+                            <td>{{ $dataAtk->satuan }}</td>
+                            <td>{{ $dataAtk->status.' '.$dataAtk->keterangan }}</td>
+                        </tr>
+                        @endforeach
+                        @else
                         @foreach($dataUsulan->detailUsulanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
@@ -95,6 +105,7 @@
                             <td>{{ $dataAtk->keterangan }}</td>
                         </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

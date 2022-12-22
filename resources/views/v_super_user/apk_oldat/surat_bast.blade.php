@@ -87,7 +87,7 @@
                             <div class="col-md-8 text-center">
                                 <h2 class="page-header">
                                     <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
+                                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>sekretariat jenderal</b></h5>
                                     <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                                 </h2>
                             </div>
@@ -102,9 +102,11 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ ucfirst(strtolower($bast->no_surat_bast)) }}</div>
+                                <div class="form-group row mb-5 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        berita acara serah terima <br>
+                                        nomor surat : {{ ucfirst(strtolower($bast->no_surat_bast)) }}
+                                    </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -121,10 +123,6 @@
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
                                     <div class="col-md-10">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-10">: {{ $bast->total_pengajuan }} barang</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Biaya</div>

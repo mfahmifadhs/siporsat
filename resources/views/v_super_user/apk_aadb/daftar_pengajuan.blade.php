@@ -6,11 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Daftar Pengajuan</h1>
+                <h1 class="m-0">Daftar Usulan AADB</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/aadb/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Daftar Usulan AADB</li>
                 </ol>
             </div>
         </div>
@@ -23,16 +24,39 @@
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <h4 class="card-title">Daftar Pengajuan Pengadaan Kendaraan Baru/Sewa</h4>
+                        <b class="font-weight-bold text-primary card-title mt-3" style="font-size:medium;">
+                            <i class="fas fa-table"></i> TABEL USULAN AADB
+                        </b>
+                        <div class="card-tools">
+                            <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                                <i class="fas fa-car fa-2x py-2"></i> <br>
+                                Usulan Pengadaan
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                                <i class="fas fa-tools fa-2x py-2"></i> <br>
+                                Usulan Servis
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                                <i class="fas fa-id-card-alt fa-2x py-2"></i> <br>
+                                Usulan Perpanjang STNK
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn btn-primary btn-xs">
+                                <i class="fas fa-gas-pump fa-2x py-2"></i> <br>
+                                Usulan Voucher BBM
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <table id="table-pengajuan" class="table table-bordered table-striped">
                             <thead>
                                 <th>No</th>
                                 <th>Tanggal</th>
+                                <th>No. Surat</th>
+                                <th>No. Surat</th>
                                 <th>Pengusul</th>
-                                <th>Jenis Pengajuan</th>
-                                <th>Rencana Pengguna</th>
+                                <th>Unit Kerja</th>
+                                <th>Jenis Usulan</th>
+                                <th>Status</th>
                                 <th>Status Pengajuan</th>
                                 <th>Status Usulan</th>
                                 <th>Aksi</th>
@@ -43,19 +67,23 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td class="text-uppercase">{{ $dataPengajuan->no_surat_usulan }}</td>
                                     <td>
-                                        {{ $dataPengajuan->nama_pegawai }} <br> {{ $dataPengajuan->unit_kerja }}
+                                        {{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
+                                        <span class="text-uppercase">{{ $dataPengajuan->no_surat_usulan }}</span>
                                     </td>
+                                    <td>{{ ucfirst(strtolower($dataPengajuan->nama_pegawai)) }}</td>
+                                    <td>{{ $dataPengajuan->unit_kerja }}</td>
                                     <td>{{ $dataPengajuan->jenis_form_usulan }}</td>
-                                    <td>{{ $dataPengajuan->rencana_pengguna }}</td>
-                                    <td class="text-center">
+                                    <td>
+                                        <span>Status Pengajuan : </span> <br>
                                         @if($dataPengajuan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                         @elseif($dataPengajuan->status_pengajuan_id == 2)
                                         <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
                                         @endif
-                                    </td>
-                                    <td class="text-center text-capitalize  ">
+                                        <br>
+                                        <span>Status Proses : </span> <br>
                                         @if($dataPengajuan->status_proses_id == 1)
                                         <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
                                         @elseif ($dataPengajuan->status_proses_id == 2)
@@ -68,29 +96,33 @@
                                         <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                         @endif
                                     </td>
+                                    <td class="text-uppercase">{{ $dataPengajuan->status_pengajuan }}</td>
+                                    <td class="text-uppercase">{{ $dataPengajuan->status_proses }} </td>
                                     <td>
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
+
                                         <div class="dropdown-menu">
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/persetujuan/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
                                             @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataPengajuan->status_proses_id == 2)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/aadb/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/aadb/usulan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses Penyerahan
                                             </a>
                                             @elseif ($dataPengajuan->status_proses_id == 4)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> BAST
                                             </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataPengajuan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
-                                            @if ($dataPengajuan->otp_usulan_pengusul == null)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-aadb/'. $dataPengajuan->id_form_usulan) }}">
+
+                                            @if ($dataPengajuan->otp_usulan_pengusul == null && $dataPengajuan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
                                             <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/proses-pembatalan/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
@@ -138,15 +170,15 @@
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataPengajuan->nama_pegawai }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataPengajuan->nama_pegawai)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataPengajuan->keterangan_pegawai }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataPengajuan->keterangan_pegawai)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Unit Kerja</label></div>
-                                                    <div class="col-md-8">: {{ $dataPengajuan->unit_kerja }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataPengajuan->unit_kerja)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Tanggal Usulan </label></div>
@@ -266,13 +298,48 @@
 @section('js')
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/" +
+            (currentdate.getMonth() + 1) + "/" +
+            currentdate.getFullYear() + " \n Pukul: " +
+            currentdate.getHours() + ":" +
+            currentdate.getMinutes() + ":" +
+            currentdate.getSeconds()
         $("#table-pengajuan").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
-            "buttons": ["pdf", "excel"]
-        }).buttons().container().appendTo('#table-rekap_wrapper .col-md-6:eq(0)');
-    });
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            columnDefs: [{
+                "bVisible": false,
+                "aTargets": [1, 2, 8, 9]
+            }, ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan AADB',
+                    exportOptions: {
+                        columns: [0, 3, 4, 5, 6, 8, 9]
+                    },
+                    messageTop: datetime
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan AADB',
+                    exportOptions: {
+                        columns: [0, 1, 2, 4, 5, 6, 8, 9]
+                    },
+                    messageTop: datetime
+                }
+            ]
+        }).buttons().container().appendTo('#table-pengajuan_wrapper .col-md-6:eq(0)');
+    })
 </script>
 @endsection
 

@@ -80,33 +80,45 @@
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th>Nama Barang</th>
-                                        <th>Merk/Tipe</th>
-                                        <th style="width: 20%;">Jumlah</th>
+                                        <th style="width: 20%;">Nama Barang</th>
+                                        <th style="width: 25%;">Merk/Tipe</th>
+                                        <th style="width: 14%;">Jumlah</th>
                                         <th>Satuan</th>
+                                        @if ($usulan->jenis_form == 'pengadaan')
+                                        <th>Status</th>
+                                        <th style="width: 20%;">Keterangan</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
-                                <tbody>
+                                <tbody style="font-size: 13px;">
                                     @if ($usulan->jenis_form == 'pengadaan')
-                                    @foreach($usulan->detailUsulanAtk as $dataPengadaan)
+                                    @foreach($usulan->pengadaanAtk as $i => $dataPengadaan)
                                     <tr>
                                         <td>
-                                            <input type="hidden" name="detail_form_id[]" value="{{ $dataPengadaan->id_form_usulan_detail }}">
-                                            {{ $dataPengadaan->kategori_atk }}
+                                            <input type="hidden" name="modul" value="pengadaan">
+                                            <input type="hidden" name="id_pengadaan[]" value="{{ $dataPengadaan->id_form_usulan_pengadaan }}">
+                                            {{ $dataPengadaan->nama_barang }}
                                         </td>
-                                        <td>{{ $dataPengadaan->merk_atk }}</td>
+                                        <td>{{ $dataPengadaan->spesifikasi }}</td>
                                         <td>
-                                            <input type="hidden" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPengadaan->jumlah_pengajuan }}">
-                                            {{ $dataPengadaan->jumlah_pengajuan }}
+                                            <input type="number" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPengadaan->jumlah }}">
                                         </td>
                                         <td>{{ $dataPengadaan->satuan }}</td>
+                                        <td class="text-left">
+                                            <input type="radio" name="konfirmasi_atk[{{$i}}]" value="diterima" required> Terima <br>
+                                            <input type="radio" name="konfirmasi_atk[{{$i}}]" value="ditolak" required> Tolak
+                                        </td>
+                                        <td>
+                                            <input name="keterangan[]" class="form-control" style="font-size: 13px;">
+                                        </td>
                                     </tr>
                                     @endforeach
                                     @else
                                     @foreach($usulan->detailUsulanAtk as $dataDistribusi)
                                     <tr>
                                         <td>
+                                            <input type="hidden" name="modul" value="distribusi">
                                             <input type="hidden" name="detail_form_id[]" value="{{ $dataDistribusi->id_form_usulan_detail }}">
                                             {{ $dataDistribusi->kategori_atk }}
                                         </td>
@@ -128,9 +140,11 @@
                             <button class="btn btn-success" id="btnSubmit" onclick="return confirm('Pengajuan Diterima ?')">
                                 <i class="fas fa-check-circle"></i> Terima
                             </button>
+                            @if (Auth::user()->id == 5)
                             <a href="{{ url('super-user/aadb/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" class="btn btn-danger" onclick="return confirm('Pengajuan Ditolak ?')">
                                 <i class="fas fa-times-circle"></i> Tolak
                             </a>
+                            @endif
                         </div>
                     </div>
                 </form>

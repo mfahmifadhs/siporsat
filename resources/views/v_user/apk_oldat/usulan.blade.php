@@ -337,7 +337,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Keterangan Kerusakan</label>
                                 <div class="col-sm-10">
-                                    <textarea name="keterangan_kerusakan[`+j+`]" class="form-control" rows="2"></textarea>
+                                    <textarea name="keterangan_kerusakan[`+i+`]" class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>`

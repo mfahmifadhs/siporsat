@@ -2,6 +2,7 @@
 
 namespace App\Models\atk;
 
+use App\Models\Atk\UsulanAtkPengadaan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +14,7 @@ class UsulanAtk extends Model
     public $timestamps      = false;
 
     protected $fillable = [
+        'id_form_usulan',
         'pegawai_id',
         'jenis_form',
         'total_pengajuan',
@@ -28,8 +30,12 @@ class UsulanAtk extends Model
 
     public function detailUsulanAtk() {
         return $this->hasMany(UsulanAtkDetail::class, 'form_usulan_id')
-            ->join('atk_tbl','id_atk','atk_id')
-            ->join('atk_tbl_kelompok_sub_kategori','id_kategori_atk','kategori_atk_id');
+            ->leftjoin('atk_tbl','id_atk','atk_id')
+            ->leftjoin('atk_tbl_kelompok_sub_kategori','id_kategori_atk','kategori_atk_id');
+    }
+
+    public function pengadaanAtk() {
+        return $this->hasMany(UsulanAtkPengadaan::class, 'form_usulan_id');
     }
 
     public function lampiranAtk() {

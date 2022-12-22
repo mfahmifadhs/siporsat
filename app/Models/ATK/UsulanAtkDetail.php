@@ -16,8 +16,9 @@ class UsulanAtkDetail extends Model
         'id_form_usulan_detail',
         'form_usulan_id ',
         'atk_id ',
+        'barang_lain ',
         'jumlah_pengajuan',
-        'satuan',
+        'satuan_detail',
         'harga',
         'keterangan'
     ];

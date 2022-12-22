@@ -59,7 +59,7 @@
                         <div class="col-sm-10">
                             <select name="jenis_aadb" class="form-control" required>
                                 <option value="sewa">Sewa</option>
-                                <option value="bmn">BMN</option>
+                                <!-- <option value="bmn">BMN</option> -->
                             </select>
                         </div>
                     </div>
@@ -71,6 +71,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
+                        <div class="col-sm-12"><hr></div>
                         <label class="col-sm-2 col-form-label">Jenis (*)</label>
                         <div class="col-sm-10">
                             <select name="jenis_kendaraan" class="form-control" required>

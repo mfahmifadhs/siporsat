@@ -26,6 +26,7 @@ class FormUsulan extends Model
         'tanggal_bast',
         'total_biaya',
         'rencana_pengguna',
+        'keterangan',
         'status_pengajuan_id',
         'status_proses_id',
         'otp_usulan_pengusul',
@@ -51,7 +52,6 @@ class FormUsulan extends Model
         return $this->hasMany(FormUsulanPerbaikan::class, 'form_usulan_id', 'id_form_usulan')
             ->join('oldat_tbl_barang','id_barang','barang_id')
             ->join('oldat_tbl_kategori_barang','id_kategori_barang','kategori_barang_id')
-            ->leftjoin('tbl_pegawai','id_pegawai','pegawai_id')
             ->join('tbl_unit_kerja','tbl_unit_kerja.id_unit_kerja','oldat_tbl_barang.unit_kerja_id');
     }
 }

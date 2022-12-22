@@ -40,14 +40,22 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="table-aadb" class="table table-bordered">
+                <table id="table-aadb" class="table table-bordered small">
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Id</th>
                             <th>Kendaraan</th>
+                            <th>Merk/Tipe</th>
+                            <th>Tahun Perolehan</th>
+                            <th>NUP</th>
                             <th>No. Plat</th>
-                            <th>Detail</th>
+                            <th>Masa Berlaku <br> STNK</th>
+                            <th>Nomor BPKB</th>
+                            <th>Nomor Rangka</th>
+                            <th>Nomor Mesin</th>
                             <th>Pengguna</th>
+                            <th>Unit Kerja</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -56,31 +64,20 @@
                         @foreach($kendaraan as $dataKendaraan)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataKendaraan->id_kendaraan }}</td>
                             <td>
-                                <label>{{ $dataKendaraan->merk_tipe_kendaraan.' Tahun '.$dataKendaraan->tahun_kendaraan }}</label> <br>
-                                No. Polisi : {{ $dataKendaraan->no_plat_kendaraan }} <br>
-                                {{ $dataKendaraan->kode_barang.'.'.$dataKendaraan->nup_barang }} <br>
-                                {{ $dataKendaraan->jenis_kendaraan }} <br>
+                                {{ $dataKendaraan->kode_barang }} <br> {{ $dataKendaraan->jenis_kendaraan }} <br> {{ $dataKendaraan->jenis_aadb }}
                             </td>
-                            <td>
-                                <label>No. Plat</label> <br>
-                                No. Polisi : {{ $dataKendaraan->no_plat_kendaraan }} <br>
-                                Masa Berlaku : {{ $dataKendaraan->mb_stnk_plat_kendaraan }} <br>
-                                <label>No. Plat RHS</label> <br>
-                                No. Polisi : {{ $dataKendaraan->no_plat_rhs }} <br>
-                                Masa Berlaku : {{ $dataKendaraan->mb_stnk_plat_rhs }}
-                            </td>
-                            <td>
-                                No. BPKB: {{ $dataKendaraan->no_bpkb }} <br>
-                                No. Rangka: {{ $dataKendaraan->no_rangka }} <br>
-                                No. Mesin: {{ $dataKendaraan->no_mesin }} <br>
-                                Nilai Perolehan: Rp {{ number_format($dataKendaraan->nilai_perolehan, 0, ',', '.') }} <br>
-                            </td>
-                            <td>
-                                Unit Kerja : {{ $dataKendaraan->unit_kerja }} <br>
-                                Pengguna : {{ $dataKendaraan->pengguna }} <br>
-                                Jabatan : {{ $dataKendaraan->jabatan }} <br>
-                            </td>
+                            <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
+                            <td>{{ $dataKendaraan->nup_barang }}</td>
+                            <td>{{ $dataKendaraan->no_plat_kendaraan }}</td>
+                            <td>{{ $dataKendaraan->mb_stnk_plat_kendaraan }}</td>
+                            <td>{{ $dataKendaraan->no_bpkb }}</td>
+                            <td>{{ $dataKendaraan->no_rangka }}</td>
+                            <td>{{ $dataKendaraan->no_mesin }}</td>
+                            <td>{{ $dataKendaraan->pengguna }}</td>
+                            <td>{{ $dataKendaraan->unit_kerja }}</td>
                             <td class="text-center">
                                 <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                     <i class="fas fa-bars"></i>
@@ -100,6 +97,31 @@
     </div>
 </section>
 
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url('super-admin/aadb/kendaraan/file-kendaraan/upload') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    <label class="col-form-label">Upload Data Kendaraan</label>
+                    <input type="file" class="form-control" name="file" required>
+                    <small>Format file (.xlsx)</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
 @section('js')
 <script>
     $(function() {
@@ -110,8 +132,43 @@
             "lengthMenu": [
                 [10, 25, 50, "Semua", -1],
                 [10, 25, 50, "Semua"]
-            ]
-        });
+            ],
+            columnDefs: [{
+                    "bVisible": false,
+                    "aTargets": [1]
+                },
+            ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Barang',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 6, 8, 11, 12]
+                        // columns: [0, 3, 4, 5, 6, 7, 8, 9]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Data Master Barang',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                    }
+                },
+                {
+                    text: ' Upload',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    action: function(e, dt, node, config) {
+                        var rowData = dt.row({
+                            selected: true
+                        }).data();
+                        $('#upload').modal('show');
+                    }
+                }
+            ],
+        }).buttons().container().appendTo('#table-aadb_wrapper .col-md-6:eq(0)');
     });
 </script>
 @endsection

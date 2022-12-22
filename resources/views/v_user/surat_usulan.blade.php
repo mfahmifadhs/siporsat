@@ -59,7 +59,7 @@
 <section class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 form-group">
+            <div class="col-md-12">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p style="color:white;margin: auto;">{{ $message }}</p>
@@ -71,15 +71,23 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <!-- <a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
+                <a href="{{ url('unit-kerja/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
-                </a> -->
+                </a>
                 @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                 <a href="{{ url('unit-kerja/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
                 @endif
             </div>
+
+            @if ($usulan->status_pengajuan_id == 2)
+            <div class="col-md-12 mb-2">
+                <div class="border border-danger">
+                    <b class="text-danger p-2">USULAN DITOLAK : {{ $usulan->keterangan }}</b>
+                </div>
+            </div>
+            @endif
             <div class="col-md-12 form-group ">
                 <div class="card">
                     <div class="card-body">
@@ -107,9 +115,11 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group text-capitalize">
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                <div class="form-group row mb-3 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        usulan pengajuan <br>
+                                        nomor surat : {{ $usulan->no_surat_usulan }}
+                                    </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -127,10 +137,6 @@
                                     <div class="col-md-2">Tanggal Usulan</div>
                                     <div class="col-md-10">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-10">: {{ $usulan->total_pengajuan }} ruangan</div>
-                                </div>
                                 @if($usulan->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>
@@ -147,12 +153,27 @@
                                             <th>Kode Barang</th>
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe Barang</th>
+                                            @if($usulan->jenis_form == 'pengadaan')
+                                            <th>Estimasi Biaya</th>
+                                            @else
                                             <th>Tahun Perolehan</th>
                                             <th>Keterangan Kerusakan</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
+                                        @if($usulan->jenis_form == 'pengadaan')
+                                        @foreach($usulan->detailPengadaan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kategori_barang_id }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @else
                                         @foreach($usulan->detailPerbaikan as $dataBarang)
                                         <tr>
                                             <td>{{ $no++ }}</td>
@@ -163,6 +184,7 @@
                                             <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                                         </tr>
                                         @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                                 @elseif ($modul == 'atk')
@@ -174,19 +196,43 @@
                                             <th>Merk/Tipe</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
+                                            @if ($form->jenis_form == 'pengadaan')
+                                            <th>Keterangan</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
+                                        @if ($form->jenis_form == 'pengadaan')
+                                        @foreach($usulan->pengadaanAtk as $dataAtk)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td>{{ $dataAtk->jumlah }}</td>
+                                            <td>{{ $dataAtk->satuan }}</td>
+                                            <td>{{ $dataAtk->status.' '.$dataAtk->keterangan }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @else
                                         @foreach($usulan->detailUsulanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataAtk->kategori_atk }}</td>
+                                            @if ($dataAtk->atk_lain != null)
+                                            <td>{{ $dataAtk->atk_lain }}</td>
+                                            @else
                                             <td>{{ $dataAtk->merk_atk }}</td>
+                                            @endif
                                             <td>{{ $dataAtk->jumlah_pengajuan }}</td>
+                                            @if ($dataAtk->atk_lain != null)
+                                            <td>{{ $dataAtk->satuan_detail }}</td>
+                                            @else
                                             <td>{{ $dataAtk->satuan }}</td>
+                                            @endif
                                         </tr>
                                         @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                                 @elseif ($modul == 'gdn')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AADB\JadwalServis;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\JenisUsulan;
 use App\Models\AADB\UsulanAadb;
@@ -12,17 +13,18 @@ use App\Models\AADB\RiwayatKendaraan;
 use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
-use App\Models\atk\Atk;
-use App\Models\atk\JenisAtk;
-use App\Models\atk\KategoriAtk;
-use App\Models\atk\KelompokAtk;
-use App\Models\atk\StokAtk;
-use App\Models\atk\SubKelompokAtk;
-use App\Models\atk\UsulanAtk;
-use App\Models\atk\UsulanAtkDetail;
-use App\Models\gdn\BidangKerusakan;
-use App\Models\gdn\UsulanGdn;
-use App\Models\gdn\UsulanGdnDetail;
+use App\Models\ATK\Atk;
+use App\Models\ATK\JenisAtk;
+use App\Models\ATK\KategoriAtk;
+use App\Models\ATK\KelompokAtk;
+use App\Models\ATK\StokAtk;
+use App\Models\ATK\SubKelompokAtk;
+use App\Models\ATK\UsulanAtk;
+use App\Models\ATK\UsulanAtkDetail;
+use App\Models\Atk\UsulanAtkPengadaan;
+use App\Models\GDN\BidangKerusakan;
+use App\Models\GDN\UsulanGdn;
+use App\Models\GDN\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\FormUsulan;
@@ -62,35 +64,50 @@ class SuperUserController extends Controller
         // Report Oldat
         $oldatUsulan    = FormUsulan::get();
         $oldatJenisForm = ['pengadaan', 'perbaikan'];
-        foreach ($oldatJenisForm as $data) {
-            $dataArray['usulan']  = $data;
-            $dataArray['ditolak'] = $oldatUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data)->count();
-            $dataArray['proses']  = $oldatUsulan->where('status_proses_id', 2)->where('jenis_form', $data)->count();
-            $dataArray['selesai'] = $oldatUsulan->where('status_proses_id', 5)->where('jenis_form', $data)->count();
-            $reportOldat[]        = $dataArray;
-            unset($dataArray);
+        if ($oldatJenisForm == []) {
+            foreach ($oldatJenisForm as $data) {
+                $dataArray['usulan']  = $data;
+                $dataArray['ditolak'] = $oldatUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data)->count();
+                $dataArray['proses']  = $oldatUsulan->where('status_proses_id', 2)->where('jenis_form', $data)->count();
+                $dataArray['selesai'] = $oldatUsulan->where('status_proses_id', 5)->where('jenis_form', $data)->count();
+                $reportOldat[]        = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportOldat[] = null;
         }
+
         // Report AADB
         $aadbUsulan     = UsulanAadb::get();
         $aadbJenisForm  = JenisUsulan::get();
-        foreach ($aadbJenisForm as $data) {
-            $dataArray['usulan']  = $data->jenis_form_usulan;
-            $dataArray['ditolak'] = $aadbUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
-            $dataArray['proses']  = $aadbUsulan->where('status_proses_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
-            $dataArray['selesai'] = $aadbUsulan->where('status_proses_id', 5)->where('jenis_form', $data->id_jenis_form_usulan)->count();
-            $reportAadb[]         = $dataArray;
-            unset($dataArray);
+
+        if ($aadbJenisForm == []) {
+            foreach ($aadbJenisForm as $data) {
+                $dataArray['usulan']  = $data->jenis_form_usulan;
+                $dataArray['ditolak'] = $aadbUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $dataArray['proses']  = $aadbUsulan->where('status_proses_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $dataArray['selesai'] = $aadbUsulan->where('status_proses_id', 5)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $reportAadb[]         = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportAadb[] = null;
         }
+
         // Report ATK
         $atkUsulan    = UsulanAtk::get();
         $atkJenisForm = UsulanAtk::select('jenis_form')->groupBy('jenis_form')->get();
-        foreach ($atkJenisForm as $data) {
-            $dataArray['usulan']  = $data->jenis_form;
-            $dataArray['ditolak'] = $atkUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->jenis_form)->count();
-            $dataArray['proses']  = $atkUsulan->where('status_proses_id', 2)->where('jenis_form', $data->jenis_form)->count();
-            $dataArray['selesai'] = $atkUsulan->where('status_proses_id', 5)->where('jenis_form', $data->jenis_form)->count();
-            $reportAtk[]          = $dataArray;
-            unset($dataArray);
+        if ($atkJenisForm == []) {
+            foreach ($atkJenisForm as $data) {
+                $dataArray['usulan']  = $data->jenis_form;
+                $dataArray['ditolak'] = $atkUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->jenis_form)->count();
+                $dataArray['proses']  = $atkUsulan->where('status_proses_id', 2)->where('jenis_form', $data->jenis_form)->count();
+                $dataArray['selesai'] = $atkUsulan->where('status_proses_id', 5)->where('jenis_form', $data->jenis_form)->count();
+                $reportAtk[]          = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportAtk[] = null;
         }
 
         return view('v_super_user.index', compact('usulanOldat', 'usulanAadb', 'usulanAtk', 'usulanGdn', 'reportOldat', 'reportAadb', 'reportAtk'));
@@ -110,12 +127,13 @@ class SuperUserController extends Controller
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image   = $google2fa->getQRCodeInline(
-                config('app.name'),
+                $registration_data = 'Localhost',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
             return view('v_super_user.profil', compact('user', 'QR_Image', 'secretkey'));
         } elseif ($aksi == 'reset-autentikasi') {
+            User::where('id', $id)->update(['status_google2fa' => null]);
             return redirect('super-user/profil/user/' . Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
         } elseif ($aksi == 'edit-profil') {
             $username = User::where('id', $id)->where('username', $request->username)->count();
@@ -134,21 +152,21 @@ class SuperUserController extends Controller
                 ]);
 
                 if ($cekUser->fails()) {
-                    return redirect('super-user/profil/user/'. $id)->with('failed', 'Username sudah terdaftar');
+                    return redirect('super-user/profil/user/' . $id)->with('failed', 'Username sudah terdaftar');
                 } else {
                     User::where('id', $id)
-                    ->update([
-                           'username' => $request->username
-                    ]);
+                        ->update([
+                            'username' => $request->username
+                        ]);
                 }
                 return redirect('keluar')->with('success', 'Berhasil mengubah username');
             }
 
-            return redirect('super-user/profil/user/'. $id)->with('success', 'Berhasil mengubah informasi profil');
+            return redirect('super-user/profil/user/' . $id)->with('success', 'Berhasil mengubah informasi profil');
         } elseif ($aksi == 'edit-password') {
             $pass = User::where('password_teks', $request->old_password)->where('id', Auth::user()->id)->count();
             if ($pass != 1) {
-                return redirect('super-user/profil/user/'. $id)->with('failed', 'Password lama anda salah');
+                return redirect('super-user/profil/user/' . $id)->with('failed', 'Password lama anda salah');
             }
 
             $cekPass    = Validator::make($request->all(), [
@@ -157,17 +175,16 @@ class SuperUserController extends Controller
             ]);
 
             if ($cekPass->fails()) {
-                return redirect('super-user/profil/user/'. $id)->with('failed', 'Konfirmasi password salah');
+                return redirect('super-user/profil/user/' . $id)->with('failed', 'Konfirmasi password salah');
             } else {
                 User::where('id', $id)
-                ->update([
-                    'password'      => Hash::make($request->password),
-                    'password_teks' => $request->password
-                ]);
+                    ->update([
+                        'password'      => Hash::make($request->password),
+                        'password_teks' => $request->password
+                    ]);
             }
 
             return redirect('keluar')->with('success', 'Berhasil mengubah password');
-
         } else {
             User::where('id', $id)->first();
             User::where('id', $id)->update([
@@ -529,11 +546,12 @@ class SuperUserController extends Controller
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
-            $usulan = UsulanGdn::where('id_form_usulan', $id)
+            $usulan = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_gdn/surat_usulan', compact('pimpinan', 'usulan'));
@@ -547,11 +565,12 @@ class SuperUserController extends Controller
                     ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
-            $usulan = UsulanGdn::where('id_form_usulan', $id)
+            $usulan = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_gdn/print_surat_usulan', compact('pimpinan', 'usulan'));
@@ -559,11 +578,12 @@ class SuperUserController extends Controller
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
-            $bast = UsulanGdn::where('id_form_usulan', $id)
+            $bast = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_gdn/surat_bast', compact('pimpinan', 'bast'));
@@ -571,11 +591,12 @@ class SuperUserController extends Controller
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
-            $bast = UsulanGdn::where('id_form_usulan', $id)
+            $bast = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_gdn/print_surat_bast', compact('pimpinan', 'bast'));
@@ -603,7 +624,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('status_proses_id', $id)
                 ->get();
@@ -614,7 +635,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
@@ -654,9 +675,10 @@ class SuperUserController extends Controller
             UsulanGdn::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
             return redirect('super-user/gdn/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
-            $usulan = UsulanGdn::where('id_form_usulan', $id)
+            $usulan = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_gdn/proses_persetujuan', compact('usulan'));
@@ -684,7 +706,7 @@ class SuperUserController extends Controller
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
@@ -693,7 +715,7 @@ class SuperUserController extends Controller
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
@@ -703,7 +725,15 @@ class SuperUserController extends Controller
     public function OfficeStationery(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $atk = ATK::with('KategoriATK')->get();
+            $atks = ATK::with('KategoriATK')->get();
+            $atk  = UsulanAtkDetail::select('atk_id','merk_atk','tanggal_usulan','atk_tbl.satuan','jenis_form', DB::raw('sum(jumlah_pengajuan) as total_atk'))
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('atk_tbl', 'id_atk', 'atk_id')
+                ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+                ->groupBy('atk_id','merk_atk','tanggal_usulan','atk_tbl.satuan','jenis_form')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
             return view('v_super_user.apk_atk.daftar_atk', compact('atk'));
         }
     }
@@ -715,7 +745,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('status_proses_id', $id)
                 ->get();
@@ -726,7 +756,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
@@ -759,28 +789,41 @@ class SuperUserController extends Controller
             }
             return redirect('super-user/verif/usulan-atk/' . $idFormUsulan);
         } elseif ($aksi == 'proses-diterima') {
-
-            $detailId = $request->detail_form_id;
-            foreach ($detailId as $i => $id_form_usulan_detail) {
-                UsulanAtkDetail::where('id_form_usulan_detail', $id_form_usulan_detail)
-                    ->update([
-                        'jumlah_pengajuan' => $request->jumlah_pengajuan[$i]
+            if ($request->modul == 'pengadaan') {
+                $pengadaan = $request->id_pengadaan;
+                foreach ($pengadaan as $i => $id_pengadaan) {
+                    UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)->update([
+                        'jumlah'     => (int) $request->jumlah_pengajuan[$i],
+                        'status'     => $request->konfirmasi_atk[$i],
+                        'keterangan' => $request->keterangan[$i]
                     ]);
+                }
+            } else {
+                $detailId = $request->detail_form_id;
+                foreach ($detailId as $i => $id_form_usulan_detail) {
+                    UsulanAtkDetail::where('id_form_usulan_detail', $id_form_usulan_detail)
+                        ->update([
+                            'jumlah_pengajuan' => $request->jumlah_pengajuan[$i]
+                        ]);
+                }
             }
 
-
             return redirect('super-user/verif/usulan-atk/' . $id)->with('success', 'Pembelian barang telah selesai dilakukan');
+
         } elseif ($aksi == 'proses-ditolak') {
 
             UsulanAtk::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
             return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
+
         } elseif ($aksi == 'persetujuan') {
-            $usulan = UsulanAtk::where('id_form_usulan', $id)
+            $usulan = UsulanAtk::with(['detailUsulanAtk'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_atk/proses_persetujuan', compact('usulan'));
+
         } elseif ($aksi == 'proses-pembatalan') {
             UsulanAtkDetail::where('form_usulan_id', $id)->delete();
             UsulanAtk::where('id_form_usulan', $id)->delete();
@@ -805,15 +848,16 @@ class SuperUserController extends Controller
                     ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
-            $usulan = UsulanAtk::where('id_form_usulan', $id)
+            $usulan = UsulanAtk::with(['detailUsulanAtk'])
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->get();
 
-            return view('v_super_user/apk_atk/surat_usulan', compact('pimpinan', 'usulan'));
+            return view('v_super_user/apk_atk/surat_usulan', compact('form', 'pimpinan', 'usulan'));
         } elseif ($aksi == 'surat-bast') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
             if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
@@ -824,12 +868,13 @@ class SuperUserController extends Controller
                     ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             }
 
-            $bast = UsulanAtk::where('id_form_usulan', $id)
+            $bast = UsulanAtk::with(['detailUsulanAtk'])
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
                 ->first();
 
             return view('v_super_user/apk_atk/surat_bast', compact('pimpinan', 'bast', 'id'));
@@ -851,7 +896,7 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->get();
 
-            return view('v_super_user/apk_atk/print_surat_usulan', compact('pimpinan', 'usulan'));
+            return view('v_super_user/apk_atk/print_surat_usulan', compact('form','pimpinan', 'usulan'));
 
 
             $cekForm = UsulanAadb::where('id_form_usulan', $id)->first();
@@ -1185,6 +1230,11 @@ class SuperUserController extends Controller
             ->orderBy('status_proses_id', 'ASC')
             ->get();
 
+        $jadwalServis = JadwalServis::join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+
         return view('v_super_user.apk_aadb.index', compact(
             'unitKerja',
             'jenisKendaraan',
@@ -1194,7 +1244,8 @@ class SuperUserController extends Controller
             'googleChartData',
             'kendaraan',
             'usulan',
-            'stnk'
+            'stnk',
+            'jadwalServis'
         ));
     }
 
@@ -1351,14 +1402,36 @@ class SuperUserController extends Controller
 
             return redirect('super-user/verif/usulan-aadb/' . $id);
         } elseif ($aksi == 'proses-ditolak') {
-            UsulanAadb::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => null]);
-            return redirect('super-user/aadb/dashboard')->with('failed', 'Usulan Pengajuan Ditolak');
+            UsulanAadb::where('id_form_usulan', $id)->update([
+                'keterangan'          => $request->keterangan,
+                'status_pengajuan_id' => 2,
+                'status_proses_id'    => null
+            ]);
+            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
-            $usulan = UsulanAadb::where('id_form_usulan', $id)
-                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            $usulan = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('id_form_usulan', $id)
                 ->first();
-            return view('v_super_user/apk_aadb/proses_persetujuan', compact('usulan'));
+
+            $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+            $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            return view('v_super_user/apk_aadb/proses_persetujuan', compact('usulan', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
         } elseif ($aksi == 'proses-pembatalan') {
             UsulanKendaraan::where('form_usulan_id', $id)->delete();
             UsulanServis::where('form_usulan_id', $id)->delete();
@@ -1367,7 +1440,6 @@ class SuperUserController extends Controller
             UsulanAadb::where('id_form_usulan', $id)->delete();
 
             return redirect('super-user/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
-
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1389,8 +1461,7 @@ class SuperUserController extends Controller
                 $pimpinan = null;
             }
 
-            $usulan = UsulanAadb::with('usulanKendaraan')
-                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            $usulan = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -1398,7 +1469,24 @@ class SuperUserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->get();
 
-            return view('v_super_user/apk_aadb/surat_usulan', compact('pimpinan', 'usulan'));
+            $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+            $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            return view('v_super_user/apk_aadb/surat_usulan', compact('pimpinan', 'usulan', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
         } elseif ($aksi == 'surat-bast') {
             if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -1406,8 +1494,8 @@ class SuperUserController extends Controller
             } else {
                 $pimpinan = null;
             }
-            $form      = UsulanAadb::where('id_form_usulan', $id)->pluck('id_form_usulan');
-            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $form)->first();
+            $form      = UsulanAadb::where('id_form_usulan', $id)->first();
+            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $id)->first();
 
             $bast = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1417,12 +1505,29 @@ class SuperUserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->first();
 
+            $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+            $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
             $kendaraan = Kendaraan::with('kendaraanSewa')
                 ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-                ->where('form_usulan_id', $form)
+                ->where('form_usulan_id', $id)
                 ->get();
 
-            return view('v_super_user/apk_aadb/surat_bast', compact('pimpinan', 'jenisAadb', 'bast', 'kendaraan', 'id'));
+            return view('v_super_user/apk_aadb/surat_bast', compact('pimpinan', 'jenisAadb', 'bast', 'kendaraan', 'id', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
         } elseif ($aksi == 'print-surat-usulan') {
             if (Auth::user()->pegawai->unit_kerja_id == 465930) {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -1439,7 +1544,24 @@ class SuperUserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->get();
 
-            return view('v_super_user/apk_aadb/print_surat_usulan', compact('pimpinan', 'usulan'));
+            $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+            $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            return view('v_super_user/apk_aadb/print_surat_usulan', compact('pimpinan', 'usulan', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
 
 
             $cekForm = UsulanAadb::where('id_form_usulan', $id)->first();
@@ -1503,12 +1625,29 @@ class SuperUserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->first();
 
+            $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+            $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+            $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
             $kendaraan = Kendaraan::with('kendaraanSewa')
                 ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('form_usulan_id', $id)
                 ->where('jenis_aadb', 'sewa')->get();
 
-            return view('v_super_user/apk_aadb/print_surat_bast', compact('jenisAadb', 'pimpinan', 'bast', 'kendaraan', 'id'));
+            return view('v_super_user/apk_aadb/print_surat_bast', compact('jenisAadb', 'pimpinan', 'bast', 'kendaraan', 'id', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
         }
     }
 
@@ -1603,8 +1742,8 @@ class SuperUserController extends Controller
             ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
             ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
-            ->join('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->format('Y-m'))
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
@@ -1651,8 +1790,8 @@ class SuperUserController extends Controller
         $dataPengajuan = UsulanAadb::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-            ->join('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->where('jenis_form', $jenisForm->id_jenis_form_usulan);
 
@@ -1882,17 +2021,20 @@ class SuperUserController extends Controller
     public function Oldat()
     {
         $googleChartData = $this->ChartDataOldat();
-        $rekapUsulan = FormUsulan::select(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m') as bulan"),
-            DB::raw('count(id_form_usulan) as total_usulan'))
+        $rekapUsulan = FormUsulan::select(
+            DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m') as bulan"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
             ->groupBy('bulan')
             ->get();
+
         $usulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan','rekapUsulan'));
+        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan', 'rekapUsulan'));
     }
 
     public function Items(Request $request, $aksi, $id)
@@ -1907,16 +2049,14 @@ class SuperUserController extends Controller
                 'jumlah_barang',
                 'satuan_barang',
                 'nilai_perolehan',
-                'tahun_perolehan',
                 'kondisi_barang',
-                'nama_pegawai',
-                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-                'unit_kerja'
+                'unit_kerja',
+                'pengguna_barang',
+                DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+                DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
             )
                 ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-                ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
                 ->orderBy('tahun_perolehan', 'DESC')
                 ->get();
@@ -1924,17 +2064,15 @@ class SuperUserController extends Controller
             $result = json_decode($barang);
             return view('v_super_user.apk_oldat.daftar_barang', compact('barang'));
         } elseif ($aksi == 'detail') {
-            $barang = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
+            $barang  = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
                 ->where('id_barang', 'like', '%' . $id . '%')
                 ->first();
             $riwayat = RiwayatBarang::join('oldat_tbl_barang', 'id_barang', 'barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_riwayat_barang.kondisi_barang_id')
-                ->join('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_riwayat_barang.pegawai_id')
-                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-                ->where('barang_id', 'like', '%' . $id . '%')
-                ->get();
+                ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->where('barang_id', 'like', '%' . $id . '%')->get();
 
             return view('v_super_user.apk_oldat.detail_barang', compact('barang', 'riwayat'));
         } else {
@@ -2010,6 +2148,8 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('status_proses_id', $id)
                 ->get();
@@ -2022,6 +2162,8 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
@@ -2096,8 +2238,12 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-diterima') {
             return redirect('super-user/verif/usulan-oldat/' . $id);
         } elseif ($aksi == 'proses-ditolak') {
-            FormUsulan::where('kode_otp_usulan', $id)->update(['status_pengajuan' => 'tolak', 'status_proses' => 'selesai']);
-            return redirect('super-user/oldat/dashboard')->with('failed', 'Usulan Pengajuan Ditolak');
+            FormUsulan::where('id_form_usulan', $id)->update([
+                'keterangan'          => $request->keterangan,
+                'status_pengajuan_id' => 2,
+                'status_proses_id'    => null
+            ]);
+            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
             $usulan = FormUsulan::where('id_form_usulan', $id)
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2108,13 +2254,14 @@ class SuperUserController extends Controller
             FormUsulanPerbaikan::where('form_usulan_id', $id)->delete();
             FormUsulanPengadaan::where('form_usulan_id', $id)->delete();
             FormUsulan::where('id_form_usulan', $id)->delete();
-            return redirect('super-user/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
-
+            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5) {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->orderBy('status_pengajuan_id', 'ASC')
                     ->orderBy('status_proses_id', 'ASC')
@@ -2123,6 +2270,8 @@ class SuperUserController extends Controller
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                     ->where('id_pegawai', Auth::user()->pegawai_id)
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->orderBy('status_pengajuan_id', 'ASC')
@@ -2371,8 +2520,8 @@ class SuperUserController extends Controller
             $dataPengajuan = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
                 ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-                ->join('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->where('jenis_form', $pengajuan)
                 ->where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->format('Y-m'))
                 ->orderBy('tanggal_usulan', 'DESC')
@@ -2389,8 +2538,8 @@ class SuperUserController extends Controller
         } else {
             $dataPengajuan = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
-                ->join('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-                ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                 ->where('jenis_form', $pengajuan)
                 ->where(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m'))"), Carbon::now()->format('Y-m'))
@@ -2438,8 +2587,8 @@ class SuperUserController extends Controller
         $dataPengajuan = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
-            ->join('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->orderBy('tanggal_usulan', 'DESC')
             ->where('jenis_form', $request->form);
 
@@ -2518,13 +2667,22 @@ class SuperUserController extends Controller
     public function ChartDataOldat()
     {
         $char = '"';
-        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
-            'nilai_perolehan','tahun_perolehan','kondisi_barang','nama_pegawai',
-            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),'unit_kerja')
+        $dataBarang = Barang::select(
+            'id_barang',
+            'kode_barang',
+            'kategori_barang',
+            'nup_barang',
+            'jumlah_barang',
+            'satuan_barang',
+            'nilai_perolehan',
+            'kondisi_barang',
+            'unit_kerja',
+            'pengguna_barang',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
+        )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
             ->orderBy('tahun_perolehan', 'DESC')
             ->get();
@@ -2553,16 +2711,14 @@ class SuperUserController extends Controller
             'jumlah_barang',
             'satuan_barang',
             'nilai_perolehan',
-            'tahun_perolehan',
             'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
+            'unit_kerja',
+            'pengguna_barang',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
         )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
             ->orderBy('tahun_perolehan', 'DESC');
 
@@ -2706,13 +2862,15 @@ class SuperUserController extends Controller
             } else {
                 $form       = $aksi;
                 $tujuan     = 'BAST';
+                $jenisForm  = FormUsulan::where('id_form_usulan',$id)->pluck('jenis_form');
+                $total      = FormUsulan::select('jenis_form', DB::raw('count(jenis_form) as total_form'))->groupBy('jenis_form')->where('jenis_form', $jenisForm)->first();
                 $pengajuan  = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                     ->where('id_form_usulan', $id)
                     ->get();
-                return view('v_super_user.apk_oldat.ppk_proses', compact('idBast', 'tujuan', 'pengajuan', 'id', 'form'));
+                return view('v_super_user.apk_oldat.ppk_proses', compact('idBast', 'tujuan', 'total', 'pengajuan', 'id', 'form'));
             }
         }
 
@@ -2731,7 +2889,24 @@ class SuperUserController extends Controller
                     ->where('id_form_usulan', $id)
                     ->first();
 
-                return view('v_super_user.apk_aadb.ppk_proses', compact('idBast', 'tujuan', 'pengajuan', 'aksi', 'id', 'form'));
+                $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
+                    ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                    ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+
+                $usulanServis = UsulanServis::where('id_form_usulan', $id)
+                    ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                    ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+                $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
+                    ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                    ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+                $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
+                    ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                    ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                    ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+
+                return view('v_super_user.apk_aadb.ppk_proses', compact('idBast', 'tujuan', 'pengajuan', 'aksi', 'id', 'form', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
             }
 
             if ($tujuan == 'proses-usulan') {
@@ -2828,10 +3003,6 @@ class SuperUserController extends Controller
                         $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
 
                         if ($request->hasfile('foto_stnk')) {
-                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
-                                $file_old = public_path() . '\gambar\kendaraan\stnk\\' . $dataUsulan->lampiran;
-                                unlink($file_old);
-                            }
                             $file       = $request->file('foto_stnk');
                             $filename   = $file->getClientOriginalName();
                             $file->move('gambar/kendaraan/stnk/', $filename);
@@ -2874,12 +3045,14 @@ class SuperUserController extends Controller
                 $totalUsulan = UsulanGdn::count();
                 $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $form        = $aksi;
-                $pengajuan  = UsulanGdn::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                $pengajuan  = UsulanGdn::with(['detailUsulanGdn'])
+                    ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                     ->where('id_form_usulan', $id)
                     ->get();
+
                 return view('v_super_user.apk_gdn.ppk_proses', compact('pengajuan', 'id', 'idBast', 'form'));
             } else {
                 UsulanGdn::where('id_form_usulan', $id)->update([

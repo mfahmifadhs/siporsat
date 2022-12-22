@@ -18,6 +18,8 @@ class RiwayatKendaraan extends Model
         'tanggal_pengguna',
         'pengguna',
         'jabatan',
-        'pengemudi'
+        'pengemudi',
+        'status_pengguna',
+        'status_pengemudi'
     ];
 }

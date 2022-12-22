@@ -72,19 +72,29 @@
                             <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->unit_kerja }}" readonly>
                         </div>
                     </div>
-                    @foreach($dataPengajuan->detailUsulanGdn as $i => $dataPerbaikan)
-                    <input type="hidden" name="id_barang[]" value="{{ $dataPerbaikan->id_barang }}">
                     <div class="form-group row mt-4">
                         <div class="col-md-12"><label class="text-muted">Informasi Perbaikan</label></div>
                     </div>
+                    @foreach($dataPengajuan->detailUsulanGdn as $i => $dataPerbaikan)
+                    <input type="hidden" name="id_barang[]" value="{{ $dataPerbaikan->id_barang }}">
                     <hr>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Lokasi Perbaikan </label>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4">
                             <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_bangunan }}" readonly>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
                             <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_spesifik }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Bidang Kerusakan </label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->bid_kerusakan }}" readonly>
+                        </div>
+                        <label class="col-sm-2 col-form-label">Keterangan </label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->keterangan }}" readonly>
                         </div>
                     </div>
                     @endforeach

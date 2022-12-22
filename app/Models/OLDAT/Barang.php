@@ -17,7 +17,7 @@ class Barang extends Model
         'id_barang',
         'form_usulan_id',
         'unit_kerja_id',
-        'pegawai_id',
+        'pengguna_barang',
         'kategori_barang_id',
         'kode_barang',
         'nup_barang',
@@ -34,7 +34,6 @@ class Barang extends Model
 
     public function riwayat() {
         return $this->hasMany(RiwayatBarang::class, 'barang_id','id_barang')
-            ->join('oldat_tbl_kondisi_barang','id_kondisi_barang','kondisi_barang_id')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id');
+            ->join('oldat_tbl_kondisi_barang','id_kondisi_barang','kondisi_barang_id');
     }
 }

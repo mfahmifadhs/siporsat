@@ -40,9 +40,11 @@
         </div>
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group text-capitalize">
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Nomor Surat</div>
-                    <div class="col-md-9 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                <div class="form-group row mb-3 text-center">
+                    <div class="col-md-12 text-uppercase">
+                        usulan pengajuan <br>
+                        nomor surat : {{ $usulan->no_surat_usulan }}
+                    </div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
@@ -59,10 +61,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Tanggal Usulan</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} kendaraan</div>
                 </div>
                 @if($usulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -105,19 +103,43 @@
                             <th>Merk/Tipe</th>
                             <th>Jumlah</th>
                             <th>Satuan</th>
+                            @if ($form->jenis_form == 'pengadaan')
+                            <th>Keterangan</th>
+                            @endif
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
+                        @if ($form->jenis_form == 'pengadaan')
+                        @foreach($usulan->pengadaanAtk as $dataAtk)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->spesifikasi }}</td>
+                            <td>{{ $dataAtk->jumlah }}</td>
+                            <td>{{ $dataAtk->satuan }}</td>
+                            <td>{{ $dataAtk->status.' '.$dataAtk->keterangan }}</td>
+                        </tr>
+                        @endforeach
+                        @else
                         @foreach($usulan->detailUsulanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataAtk->kategori_atk }}</td>
+                            @if ($dataAtk->atk_lain != null)
+                            <td>{{ $dataAtk->atk_lain }}</td>
+                            @else
                             <td>{{ $dataAtk->merk_atk }}</td>
+                            @endif
                             <td>{{ $dataAtk->jumlah_pengajuan }}</td>
+                            @if ($dataAtk->atk_lain != null)
+                            <td>{{ $dataAtk->satuan_detail }}</td>
+                            @else
                             <td>{{ $dataAtk->satuan }}</td>
+                            @endif
                         </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table>
                 @elseif ($modul == 'usulan-gdn')

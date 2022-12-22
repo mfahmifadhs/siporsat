@@ -33,35 +33,70 @@
                 </div>
                 @endif
             </div>
-            <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <b class="font-weight-bold mt-1 text-primary">
-                            <i class="fas fa-table"></i> TABEL BARANG ATK
-                        </b>
+            <div class="col-md-6 col-12 form-group">
+                <div class="card card-primary card-outline" style="height: 100%;">
+                    <div class="card-header border-0">
+                        <h3 class="card-title">Daftar Pengadaan ATK</h3>
                     </div>
-                    <div class="card-body">
-                        <table id="table-atk" class="table table-bordered">
+                    <div class="card-body table-responsive p-4">
+                        <table id="table-atk-1" class="table table-striped table-valign-middle">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Jenis Barang</th>
+                                    <th>Tanggal</th>
                                     <th>Nama Barang</th>
-                                    <th>Merk/Tipe</th>
+                                    <th>Jumlah</th>
+                                    <th>Satuan</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
                             <tbody>
-                                @foreach($atk as $dataAtk)
+                                @foreach($atk as $row)
+                                @if($row->jenis_form == 'pengadaan')
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $dataAtk->KategoriATK->JenisATK->jenis_atk }}</td>
-                                    <td>{{ $dataAtk->KategoriATK->kategori_atk }}</td>
-                                    <td>{{ $dataAtk->merk_atk }}</td>
+                                    <td>{{ $row->tanggal_usulan }}</td>
+                                    <td>{{ $row->merk_atk }}</td>
+                                    <td>{{ $row->total_atk }}</td>
+                                    <td>{{ $row->satuan }}</td>
                                 </tr>
+                                @endif
                                 @endforeach
                             </tbody>
-
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 form-group">
+                <div class="card card-primary card-outline" style="height: 100%;">
+                    <div class="card-header border-0">
+                        <h3 class="card-title">Daftar Distribusi ATK</h3>
+                    </div>
+                    <div class="card-body table-responsive p-4">
+                        <table id="table-atk-2" class="table table-striped table-valign-middle">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Nama Barang</th>
+                                    <th>Jumlah</th>
+                                    <th>Satuan</th>
+                                </tr>
+                            </thead>
+                            @php $no = 1; @endphp
+                            <tbody>
+                                @foreach($atk as $row)
+                                @if($row->jenis_form == 'distribusi')
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $row->tanggal_usulan }}</td>
+                                    <td>{{ $row->merk_atk }}</td>
+                                    <td>{{ $row->total_atk }}</td>
+                                    <td>{{ $row->satuan }}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -75,13 +110,19 @@
 
 <script>
     $(function() {
-        $("#table-atk").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
-        })
+        for (let i = 1; i <= 2; i++) {
+            $("#table-atk-" + i).DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "info": false,
+                "paging": true,
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "Semua"]
+                ]
+            })
+        }
     })
 </script>
 

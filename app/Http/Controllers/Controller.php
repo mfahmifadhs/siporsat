@@ -68,14 +68,15 @@ class Controller extends BaseController
             $modul = 'atk';
 
 
-            $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            $usulan = UsulanAtk::with(['detailUsulanAtk'])
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('otp_usulan_pengusul', $id)
                 ->orWhere('otp_usulan_pimpinan', $id)
                 ->first();
-
+            dd($usulan);
             if($usulan->jenis_form == 'pengadaan')
             {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -129,7 +130,8 @@ class Controller extends BaseController
             }
         } elseif ($modul == 'bast-atk') {
             $modul = 'atk';
-            $bast = UsulanAtk::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            $bast = UsulanAtk::with(['detailUsulanAtk'])
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')

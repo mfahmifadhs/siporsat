@@ -42,9 +42,17 @@
                     @csrf
                     <div class="form-group row">
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                        <label class="col-sm-2 col-form-label">Nomor Surat </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/oldat/'.$form.'/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            @php
+                            $totalUsulan = $total->total_form + 1;
+                            $tahun = \Carbon\Carbon::now()->isoFormat('Y');
+                            @endphp
+                            @if ($total->jenis_form == 'pengadaan')
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.01/2/'.$totalUsulan.'/'.$tahun }}" readonly>
+                            @else
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$totalUsulan.'/'.$tahun }}" readonly>
+                            @endif
                         </div>
                     </div>
                     <div class="form-group row">

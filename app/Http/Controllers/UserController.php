@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\Atk\ImportAlkom;
+use App\Imports\Atk\ImportAtk;
+use App\Models\AADB\JadwalServis;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
+use App\Models\AADB\KondisiKendaraan;
+use App\Models\AADB\RiwayatKendaraan;
 use App\Models\AADB\UsulanAadb;
 use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
@@ -17,11 +22,13 @@ use App\Models\atk\StokAtk;
 use App\Models\atk\SubKelompokAtk;
 use App\Models\atk\UsulanAtk;
 use App\Models\atk\UsulanAtkDetail;
+use App\Models\Atk\UsulanAtkPengadaan;
 use App\Models\gdn\BidangKerusakan;
 use App\Models\gdn\UsulanGdn;
 use App\Models\gdn\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\FormUsulan;
+use App\Models\OLDAT\FormUsulanPengadaan;
 use App\Models\OLDAT\FormUsulanPerbaikan;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
@@ -39,6 +46,7 @@ use Google2FA;
 use DB;
 use Validator;
 use Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -54,28 +62,27 @@ class UserController extends Controller
     public function Profile(Request $request, $aksi, $id)
     {
         $user = User::where('id', Auth::user()->id)
-            ->join('tbl_level','id_level','level_id')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id')
-            ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-            ->leftjoin('tbl_tim_kerja','id_tim_kerja','tim_kerja_id')
-            ->join('tbl_unit_kerja','id_unit_kerja','tbl_pegawai.unit_kerja_id')
+            ->join('tbl_level', 'id_level', 'level_id')
+            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
             ->first();
 
         if ($aksi == 'user') {
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image   = $google2fa->getQRCodeInline(
-                config('app.name'),
+                $registration_data = 'Localhost',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
 
-            return view('v_user.profil', compact('user','QR_Image', 'secretkey'));
+            return view('v_user.profil', compact('user', 'QR_Image', 'secretkey'));
         } elseif ($aksi == 'reset-autentikasi') {
 
             User::where('id', $id)->update(['status_google2fa' => null]);
-            return redirect ('unit-kerja/profil/user/'. Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
-
+            return redirect('unit-kerja/profil/user/' . Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
         } elseif ($aksi == 'edit-profil') {
             $username = User::where('id', $id)->where('username', $request->username)->count();
             Pegawai::where('id_pegawai', $request->id_pegawai)
@@ -93,21 +100,21 @@ class UserController extends Controller
                 ]);
 
                 if ($cekUser->fails()) {
-                    return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Username sudah terdaftar');
+                    return redirect('unit-kerja/profil/user/' . $id)->with('failed', 'Username sudah terdaftar');
                 } else {
                     User::where('id', $id)
-                    ->update([
-                           'username' => $request->username
-                    ]);
+                        ->update([
+                            'username' => $request->username
+                        ]);
                 }
                 return redirect('keluar')->with('success', 'Berhasil mengubah username');
             }
 
-            return redirect('unit-kerja/profil/user/'. $id)->with('success', 'Berhasil mengubah informasi profil');
+            return redirect('unit-kerja/profil/user/' . $id)->with('success', 'Berhasil mengubah informasi profil');
         } elseif ($aksi == 'edit-password') {
             $pass = User::where('password_teks', $request->old_password)->where('id', Auth::user()->id)->count();
             if ($pass != 1) {
-                return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Password lama anda salah');
+                return redirect('unit-kerja/profil/user/' . $id)->with('failed', 'Password lama anda salah');
             }
 
             $cekPass    = Validator::make($request->all(), [
@@ -116,17 +123,16 @@ class UserController extends Controller
             ]);
 
             if ($cekPass->fails()) {
-                return redirect('unit-kerja/profil/user/'. $id)->with('failed', 'Konfirmasi password salah');
+                return redirect('unit-kerja/profil/user/' . $id)->with('failed', 'Konfirmasi password salah');
             } else {
                 User::where('id', $id)
-                ->update([
-                    'password'      => Hash::make($request->password),
-                    'password_teks' => $request->password
-                ]);
+                    ->update([
+                        'password'      => Hash::make($request->password),
+                        'password_teks' => $request->password
+                    ]);
             }
 
             return redirect('keluar')->with('success', 'Berhasil mengubah password');
-
         } else {
             User::where('id', $id)->first();
             User::where('id', $id)->update([
@@ -323,7 +329,7 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
 
-            return view('v_user/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+            return view('v_user/surat_usulan', compact('form','modul', 'usulan', 'pimpinan'));
         } elseif ($aksi == 'usulan-aadb') {
             $modul = 'aadb';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -382,7 +388,7 @@ class UserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->first();
 
-            return view('v_user/surat_bast', compact('pimpinan', 'bast', 'modul','jenisAadb'));
+            return view('v_user/surat_bast', compact('pimpinan', 'bast', 'modul', 'jenisAadb'));
         } elseif ($aksi == 'bast-oldat') {
             $modul = 'oldat';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -416,6 +422,7 @@ class UserController extends Controller
 
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
         } elseif ($modul == 'usulan-atk') {
+            $form  = UsulanAtk::where('id_form_usulan', $id)->first();
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
                 ->where('unit_kerja_id', 465930)
@@ -427,7 +434,8 @@ class UserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
-            return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+            return view('v_user/print_surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
+
         } elseif ($modul == 'usulan-aadb') {
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
@@ -442,8 +450,6 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-
-
         } elseif ($modul == 'usulan-oldat') {
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
@@ -454,7 +460,6 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-
         } elseif ($modul == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -540,7 +545,7 @@ class UserController extends Controller
                 $totalUsulan = UsulanGdnDetail::count();
                 $idUsulan    = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $detail      = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = $idFormUsulan.($idUsulan + $i);
+                $detail->id_form_usulan_detail  = $idFormUsulan . ($idUsulan + $i);
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -584,9 +589,7 @@ class UserController extends Controller
     public function Oldat(Request $request)
     {
         $googleChartData = $this->ChartDataOldat();
-        $usulan  = FormUsulan::with('detailPengadaan')->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('tanggal_usulan', 'DESC')
+        $usulan  = FormUsulan::orderBy('tanggal_usulan', 'DESC')
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
@@ -597,8 +600,20 @@ class UserController extends Controller
     {
         if ($aksi == 'daftar') {
             $char = '"';
-            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan',
-                'tahun_perolehan','kondisi_barang','nama_pegawai',DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), 'unit_kerja')
+            $barang = Barang::select(
+                'id_barang',
+                'kode_barang',
+                'kategori_barang',
+                'nup_barang',
+                'jumlah_barang',
+                'satuan_barang',
+                'nilai_perolehan',
+                'tahun_perolehan',
+                'kondisi_barang',
+                'nama_pegawai',
+                'unit_kerja',
+                DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang")
+            )
                 ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -680,9 +695,9 @@ class UserController extends Controller
                 ]);
             }
             if ($request->proses == 'pengguna-baru') {
-                $cekBarang = RiwayatBarang::count();
+                $cekBarang = RiwayatBarang::orderBy('id_riwayat_barang', 'DESC')->first();
                 $riwayat   = new RiwayatBarang();
-                $riwayat->id_riwayat_barang = $cekBarang + 1;
+                $riwayat->id_riwayat_barang = $cekBarang->id_riwayat_barang + 1;
                 $riwayat->barang_id         = $id;
                 $riwayat->pegawai_id        = $request->input('id_pegawai');
                 $riwayat->tanggal_pengguna  = Carbon::now();
@@ -712,7 +727,39 @@ class UserController extends Controller
 
     public function SubmissionOldat(Request $request, $aksi, $id)
     {
-        if ($aksi == 'proses-usulan') {
+        if ($aksi == 'proses-usulan' && $id == 'pengadaan') {
+            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $formUsulan = new FormUsulan();
+            $formUsulan->id_form_usulan       = $idFormUsulan;
+            $formUsulan->pegawai_id           = $request->input('pegawai_id');
+            $formUsulan->kode_form            = 'OLDAT_001';
+            $formUsulan->jenis_form           = 'pengadaan';
+            $formUsulan->total_pengajuan      = $request->input('total_pengajuan');
+            $formUsulan->tanggal_usulan       = $request->input('tanggal_usulan');
+            $formUsulan->rencana_pengguna     = $request->input('rencana_pengguna');
+            $formUsulan->no_surat_usulan      = $request->no_surat_usulan;
+            $formUsulan->save();
+
+            $barang = $request->kategori_barang_id;
+            foreach ($barang as $i => $kategoriBarang) {
+                $jumlah = $request->jumlah_barang[$i];
+                for ($x = 1; $x <= $jumlah; $x++) {
+                    $cekDataDetail  = FormUsulanPengadaan::count();
+                    $detailUsulan   = new FormUsulanPengadaan();
+                    $detailUsulan->id_form_usulan_pengadaan  = $idFormUsulan . $cekDataDetail . $i;
+                    $detailUsulan->form_usulan_id         = $idFormUsulan;
+                    $detailUsulan->kategori_barang_id     = $kategoriBarang;
+                    $detailUsulan->merk_barang            = $request->merk_barang[$i];
+                    $detailUsulan->spesifikasi_barang     = $request->spesifikasi_barang[$i];
+                    $detailUsulan->jumlah_barang          = 1;
+                    $detailUsulan->satuan_barang          = $request->satuan_barang[$i];
+                    $detailUsulan->estimasi_biaya         = $request->estimasi_biaya[$i];
+                    $detailUsulan->save();
+                }
+            }
+
+            return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
+        } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
             $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan      = $idFormUsulan;
@@ -733,6 +780,7 @@ class UserController extends Controller
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->keterangan_perbaikan      = $request->keterangan_kerusakan[$i];
+
                 $detailUsulan->save();
             }
 
@@ -744,7 +792,7 @@ class UserController extends Controller
         } else {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $kategoriBarang = KategoriBarang::orderBy('kategori_barang','ASC')->get();
+            $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
@@ -765,16 +813,15 @@ class UserController extends Controller
             'jumlah_barang',
             'satuan_barang',
             'nilai_perolehan',
-            'tahun_perolehan',
             'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
+            'pengguna_barang',
+            'unit_kerja',
+            'pengguna_barang',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
         )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
             ->orderBy('tahun_perolehan', 'DESC')
             ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
@@ -807,14 +854,12 @@ class UserController extends Controller
             'nilai_perolehan',
             'tahun_perolehan',
             'kondisi_barang',
-            'nama_pegawai',
-            \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            'unit_kerja'
+            'pengguna_barang',
+            'unit_kerja',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang")
         )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
-            ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
-            ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
             ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->orderBy('tahun_perolehan', 'DESC');
@@ -868,17 +913,15 @@ class UserController extends Controller
 
             if ($search == '') {
                 $result  = Barang::select('id_barang', DB::raw('CONCAT(unit_kerja," - ",kode_barang,".",nup_barang," - ",merk_tipe_barang) AS merk_tipe_barang'))
-                    ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
                     ->where('kategori_barang_id', $request->kategori)
                     ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
-                    ->where('status_barang','!=','2')
+                    ->where('status_barang', '!=', '2')
                     ->pluck('id_barang', 'merk_tipe_barang');
             }
-
         } elseif ($id == 'detail') {
             $result   = Barang::join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
-                ->where('id_barang', 'like', '%'.$request->idBarang.'%')
+                ->where('id_barang', 'like', '%' . $request->idBarang . '%')
                 ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->get();
         }
@@ -932,16 +975,16 @@ class UserController extends Controller
     // ===============================================
     public function Aadb(Request $request)
     {
-        $unitKerja       = UnitKerja::get();
-        $jenisKendaraan  = JenisKendaraan::get();
-        $merk            = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
-        $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
-        $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
-        $kendaraan       = Kendaraan::orderBy('jenis_aadb', 'ASC')
+        $unitKerja      = UnitKerja::get();
+        $jenisKendaraan = JenisKendaraan::get();
+        $merk           = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
+        $tahun          = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
+        $pengguna       = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
+        $kendaraan      = Kendaraan::orderBy('jenis_aadb', 'ASC')
             ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->get();
-        $stnk      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+        $stnk           = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->where(DB::raw("(DATE_FORMAT(mb_stnk_plat_kendaraan, '%Y-%m'))"), '>', Carbon::now()->format('Y-m'))
             ->orderBy('mb_stnk_plat_kendaraan', 'ASC')
@@ -956,20 +999,184 @@ class UserController extends Controller
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
+        $jadwalServis = JadwalServis::join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+            ->get();
+
         return view('v_user.apk_aadb.index', compact(
-            'unitKerja','jenisKendaraan','merk','tahun','pengguna','googleChartData','kendaraan','usulan','stnk'));
+            'unitKerja',
+            'jenisKendaraan',
+            'merk',
+            'tahun',
+            'pengguna',
+            'googleChartData',
+            'kendaraan',
+            'usulan',
+            'stnk',
+            'jadwalServis'
+        ));
     }
 
     public function Vehicle(Request $request, $aksi, $id)
     {
         if ($aksi == 'detail') {
+            $unitKerja = UnitKerja::get();
+            $jenis     = JenisKendaraan::get();
+            $kondisi   = KondisiKendaraan::get();
             $kendaraan = Kendaraan::where('id_kendaraan', $id)
                 ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->first();
-            $pengguna = RiwayatKendaraan::where('kendaraan_id', $id)->get();
 
-            return view('v_user.apk_aadb.detail_kendaraan', compact('kendaraan', 'pengguna'));
+            return view('v_user.apk_aadb.detail_kendaraan', compact('unitKerja', 'jenis', 'kondisi', 'kendaraan'));
+        } elseif ($aksi == 'proses-ubah') {
 
+            if ($request->update == 'foto') {
+                if ($request->hapus == 1) {
+                    $file_old = public_path() . '\gambar\kendaraan\\' . $request->foto_lama;
+                    unlink($file_old);
+                    Kendaraan::where('id_kendaraan', $id)->update([
+                        'foto_kendaraan' => null
+                    ]);
+                    return redirect('unit-kerja/aadb/kendaraan/detail/' . $id)->with('failed', 'Berhasil menghapus foto kendaraan');
+                } else {
+
+                    $cekFoto  = Validator::make($request->all(), [
+                        'foto_kendaraan'    => 'mimes: jpg,png,jpeg|max:4096',
+                    ]);
+
+                    if ($cekFoto->fails()) {
+                        return redirect('unit-kerja/aadb/kendaraan/detail/' . $id)->with('failed', 'Format foto tidak sesuai, mohon cek kembali');
+                    } else {
+                        if ($request->foto_kendaraan == null) {
+                            $fotoKendaraan = $request->foto_lama;
+                        } else {
+                            $dataKendaraan = Kendaraan::where('id_kendaraan', 'like', '%' . $id . '%')->first();
+
+                            if ($request->hasfile('foto_kendaraan')) {
+                                if ($dataKendaraan->foto_kendaraan != null) {
+                                    $file_old = public_path() . '\gambar\kendaraan\\' . $dataKendaraan->foto_kendaraan;
+                                    unlink($file_old);
+                                }
+                                $file       = $request->file('foto_kendaraan');
+                                $filename   = $file->getClientOriginalName();
+                                $file->move('gambar/kendaraan/', $filename);
+                                $dataKendaraan->foto_kendaraan = $filename;
+                            } else {
+                                $dataKendaraan->foto_kendaraan = '';
+                            }
+                            $fotoKendaraan = $dataKendaraan->foto_kendaraan;
+                            Kendaraan::where('id_kendaraan', $id)->update([
+                                'foto_kendaraan' => $fotoKendaraan,
+                            ]);
+                        }
+                    }
+                }
+            } else {
+
+                Kendaraan::where('id_kendaraan', $id)->update([
+                    'unit_kerja_id'           => $request->unit_kerja_id,
+                    'jenis_aadb'              => $request->jenis_aadb,
+                    'kode_barang'             => $request->kode_barang,
+                    'nup_barang'              => $request->nup_barang,
+                    'jenis_kendaraan_id'      => $request->id_jenis_kendaraan,
+                    'merk_tipe_kendaraan'     => $request->merk_tipe_kendaraan,
+                    'no_plat_kendaraan'       => $request->no_plat_kendaraan,
+                    'mb_stnk_plat_kendaraan'  => $request->mb_stnk_plat_kendaraan,
+                    'no_plat_rhs'             => $request->no_plat_rhs,
+                    'mb_stnk_plat_rhs'        => $request->mb_stnk_plat_rhs,
+                    'no_bpkb'                 => $request->no_bpkb,
+                    'no_rangka'               => $request->no_rangka,
+                    'no_mesin'                => $request->no_mesin,
+                    'tahun_kendaraan'         => $request->tahun_kendaraan,
+                    'tanggal_perolehan'       => $request->tanggal_perolehan,
+                    'kondisi_kendaraan_id'    => $request->id_kondisi_kendaraan,
+                    'nilai_perolehan'         => $request->nilai_perolehan,
+                    'keterangan_aadb'         => $request->keterangan_aadb,
+                    'pengguna'                => $request->pengguna,
+                    'jabatan'                 => $request->jabatan,
+                    'pengemudi'               => $request->pengemudi,
+                    'foto_kendaraan'          => $request->foto_kendaraan,
+                    'status_kendaraan_id'     => $request->status_kendaraan_id
+                ]);
+
+                if ($request->proses == 'pengguna-baru') {
+                    RiwayatKendaraan::where('kendaraan_id', $id)->update([
+                        'status_pengguna'  => 2,
+                        'status_pengemudi' => 2
+                    ]);
+
+                    $riwayat   = new RiwayatKendaraan();
+                    $riwayat->kendaraan_id      = $id;
+                    $riwayat->tanggal_pengguna  = Carbon::now();
+                    $riwayat->pengguna          = $request->pengguna;
+                    $riwayat->jabatan           = $request->jabatan;
+                    $riwayat->pengemudi         = $request->pengemudi;
+                    $riwayat->status_pengguna   = 1;
+
+                    if ($request->pengemudi != null) {
+                        $riwayat->status_pengemudi  = 1;
+                    } else {
+                        $riwayat->status_pengemudi  = 0;
+                    }
+
+                    $riwayat->save();
+                }
+
+                if ($request->proses == 'pengemudi-baru') {
+                    RiwayatKendaraan::where('kendaraan_id', $id)->update([
+                        'status_pengguna'  => 2,
+                        'status_pengemudi' => 2
+                    ]);
+
+                    $riwayat   = new RiwayatKendaraan();
+                    $riwayat->kendaraan_id      = $id;
+                    $riwayat->tanggal_pengguna  = Carbon::now();
+                    $riwayat->pengguna          = $request->pengguna;
+                    $riwayat->jabatan           = $request->jabatan;
+                    $riwayat->pengemudi         = $request->pengemudi;
+                    $riwayat->status_pengemudi  = 1;
+
+                    if ($request->pengemudi != null) {
+                        $riwayat->status_pengguna  = 1;
+                    } else {
+                        $riwayat->status_pengguna  = 0;
+                    }
+
+                    $riwayat->save();
+                }
+            }
+
+            return redirect('unit-kerja/aadb/kendaraan/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Kendaraan');
+        } elseif ($aksi == 'ubah-riwayat') {
+            RiwayatKendaraan::where('id_riwayat_kendaraan', $request->id_riwayat_kendaraan)->update([
+                'tanggal_pengguna'  => $request->tanggal_pengguna,
+                'pengguna'          => $request->pengguna,
+                'jabatan'           => $request->jabatan,
+                'pengemudi'         => $request->pengemudi
+            ]);
+
+            $riwayat = RiwayatKendaraan::where('id_riwayat_kendaraan', $request->id_riwayat_kendaraan)->first();
+            if ($riwayat->status_pengguna == 1) {
+                Kendaraan::where('id_kendaraan', $riwayat->kendaraan_id)->update([
+                    'pengguna'          => $request->pengguna,
+                    'jabatan'           => $request->jabatan,
+                    'pengemudi'         => $request->pengemudi
+                ]);
+            }
+
+            return redirect('unit-kerja/aadb/kendaraan/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Kendaraan');
+        } elseif ($aksi == 'hapus-riwayat') {
+            $riwayat   = RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->first();
+            RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->delete();
+
+            Kendaraan::where('pengguna', 'like', '%' . $riwayat->pengguna . '%')->update([
+                'pengguna'  => null,
+                'jabatan'   => null,
+                'pengemudi' => null
+            ]);
+
+            return redirect('unit-kerja/aadb/kendaraan/detail/' . $riwayat->kendaraan_id)->with('success', 'Berhasil Menghapus Riwayat Pengguna Kendaraan');
         } elseif ($aksi == 'detail-json') {
             $result = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('id_kendaraan', $request->kendaraanId)
@@ -977,6 +1184,15 @@ class UserController extends Controller
                 ->get();
 
             return response()->json($result);
+        } elseif ($aksi == 'servis-record') {
+
+            JadwalServis::where('id_jadwal_servis', $id)->update([
+                'km_terakhir' => $request->km_terakhir,
+                'km_servis' => $request->km_servis,
+                'km_ganti_oli' => $request->km_ganti_oli
+            ]);
+
+            return redirect('unit-kerja/aadb/dashboard')->with('success', 'Berhasil menyimpan servis record');
         }
     }
 
@@ -994,7 +1210,6 @@ class UserController extends Controller
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
-
         } elseif ($aksi == 'detail') {
 
             $pengajuan  = UsulanAadb::with('usulanKendaraan')
@@ -1007,7 +1222,6 @@ class UserController extends Controller
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
-
         } elseif ($aksi == 'daftar') {
             $pengajuan = UsulanAadb::with('usulanKendaraan')
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
@@ -1034,7 +1248,18 @@ class UserController extends Controller
             $usulan->no_surat_usulan     = $request->no_surat_usulan;
             $usulan->save();
 
-            if ($id == 'servis') {
+            if ($id == 'pengadaan') {
+                $totalUsulan    = UsulanKendaraan::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $usulanPengadaan = new UsulanKendaraan();
+                $usulanPengadaan->id_form_usulan_pengadaan  = $idUsulan;
+                $usulanPengadaan->form_usulan_id            = $idFormUsulan;
+                $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
+                $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
+                $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_kendaraan . ' ' . $request->tipe_kendaraan;
+                $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
+                $usulanPengadaan->save();
+            } elseif ($id == 'servis') {
                 $totalUsulan    = UsulanServis::count();
                 $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $kendaraan      = $request->kendaraan_id;
@@ -1077,7 +1302,7 @@ class UserController extends Controller
                     $usulanVoucherBBM->voucher_100                  = $request->voucher_100[$i];
                     $usulanVoucherBBM->total_biaya                  = $totalVoucher;
                     $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
-                    $total[$i] =+ $totalVoucher;
+                    $total[$i] = +$totalVoucher;
                     $usulanVoucherBBM->save();
                 }
 
@@ -1093,7 +1318,6 @@ class UserController extends Controller
             UsulanPerpanjanganSTNK::where('form_usulan_id', $id)->delete();
             UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
             return redirect('unit-kerja/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
-
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1276,6 +1500,7 @@ class UserController extends Controller
 
     public function Atk(Request $request)
     {
+        $googleChartData = $this->ChartDataAtk();
         $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
@@ -1283,9 +1508,17 @@ class UserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->get();
-        $googleChartData = $this->ChartDataAtk();
 
-        return view('v_user.apk_atk.index', compact('googleChartData', 'usulan'));
+        $atk  = UsulanAtkDetail::select('atk_id', 'merk_atk', 'tanggal_usulan', 'atk_tbl.satuan', 'jenis_form', DB::raw('sum(jumlah_pengajuan) as total_atk'))
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+            ->join('atk_tbl', 'id_atk', 'atk_id')
+            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->groupBy('atk_id', 'merk_atk', 'tanggal_usulan', 'atk_tbl.satuan', 'jenis_form')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_user.apk_atk.index', compact('googleChartData', 'usulan', 'atk'));
     }
 
     public function OfficeStationery(Request $request, $aksi, $id)
@@ -1324,30 +1557,136 @@ class UserController extends Controller
 
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses') {
+            // dd($request->all());
             $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $id;
-            $usulan->total_pengajuan    = $request->total_pengajuan;
+            $usulan->total_pengajuan    = count($request->atk_id);
             $usulan->no_surat_usulan    = $request->no_surat_usulan;
             $usulan->tanggal_usulan     = $request->tanggal_usulan;
             $usulan->rencana_pengguna   = $request->rencana_pengguna;
             $usulan->save();
 
-            $atk   = $request->atk_id;
-            foreach ($atk as $i => $atk_id) {
+            // Daftar barang
+            $daftar = $request->atk_id;
+            foreach ($daftar as $i => $dataAtk) {
                 $idDetail = UsulanAtkDetail::count();
-                $detail = new UsulanAtkDetail();
+                $detail   = new UsulanAtkDetail();
                 $detail->id_form_usulan_detail = $idDetail + 1;
                 $detail->form_usulan_id        = $idFormUsulan;
-                $detail->atk_id                = $atk_id;
+
+                if ($dataAtk == 'lain-lain') {
+                    // Input barang lain
+                    $total  = Atk::where('kategori_atk_id', $request->kategori_atk_id[$i])->count();
+                    $atk_id = $request->kategori_atk_id[$i].str_pad($total + 1, 5, 0, STR_PAD_LEFT);
+                    $detail->atk_id   = $atk_id;
+                    $detail->atk_lain = strtoupper($request->barang_lain[$i]);
+                    $cekAtk = Atk::where('merk_atk', 'like','%'.$request->barang_lain[$i].'%')->count();
+                    if ($cekAtk == 0) {
+                        $atkLain = new Atk();
+                        $atkLain->id_atk          = $atk_id;
+                        $atkLain->kategori_atk_id = $request->kategori_atk_id[$i];
+                        $atkLain->merk_atk        = strtoupper($request->barang_lain[$i]);
+                        $atkLain->total_atk       = 0;
+                        $atkLain->satuan          = strtoupper($request->satuan[$i]);
+                        $atkLain->save();
+                    }
+                } else {
+                    // Input barang yang sudah ada
+                    $detail->atk_id = $request->atk_id[$i];
+                }
+
                 $detail->jumlah_pengajuan      = $request->jumlah[$i];
-                $detail->satuan                = $request->satuan[$i];
+                $detail->satuan_detail         = strtoupper($request->satuan[$i]);
                 $detail->keterangan            = $request->keterangan[$i];
                 $detail->save();
             }
             return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
+
+        } elseif ($aksi == 'preview-pengadaan') {
+            $idUsulan = $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $noSurat  = $request->no_surat_usulan;
+            $tanggal  = $request->tanggal_usulan;
+            $rencana  = $request->rencana_pengguna;
+
+            if ($request->file_atk == null) {
+                $fileAtk = null;
+            } else {
+                $fileAtk = Excel::toArray(new ImportAtk(), $request->file_atk);
+            }
+
+            if ($request->file_alkom == null) {
+                $fileAlkom = null;
+            } else {
+                $fileAlkom = Excel::toArray(new ImportAlkom(), $request->file_alkom);
+            }
+
+            if ($request->file_atk == null && $request->file_alkom == null) {
+                return redirect('unit-kerja/atk/usulan/pengadaan/baru')->with('failed', 'Anda belum mengunggah file kebutuhan Alkom atau Oldat');
+            }
+
+            return view('v_user.apk_atk.preview', compact('fileAtk', 'fileAlkom','idUsulan','noSurat','tanggal','rencana'));
+
+        } elseif ($aksi == 'proses-pengadaan') {
+            // dd($request->all());
+            if ($request->atk_barang != null) {
+                $totalAtk = count($request->atk_barang);
+                $atk = $request->atk_barang;
+                foreach ($atk as $i => $dataAtk)
+                {
+                    $jumlahUsulan = UsulanAtkPengadaan::count();
+                    $pengadaanAtk = new UsulanAtkPengadaan();
+                    $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan.Carbon::now()->format('dmy').rand(000,999);
+                    $pengadaanAtk->form_usulan_id = $request->id_usulan;
+                    $pengadaanAtk->nama_barang = $request->atk_barang[$i];
+                    $pengadaanAtk->spesifikasi = $request->atk_spesifikasi[$i];
+                    $pengadaanAtk->jumlah = $request->atk_jumlah[$i];
+                    $pengadaanAtk->satuan = $request->atk_satuan[$i];
+                    $pengadaanAtk->tanggal = Carbon::now();
+                    $pengadaanAtk->status = 'proses';
+                    $pengadaanAtk->save();
+                }
+            } else {
+                $totalAtk = 0;
+            }
+
+            if ($request->alkom_barang != null) {
+                $totalAlkom = count($request->alkom_barang);
+                $alkom = $request->alkom_barang;
+                foreach ($atk as $i => $dataAtk)
+                {
+                    if ($request->alkom_jumlah != 0) {
+                        $jumlahUsulan = UsulanAtkPengadaan::count();
+                        $pengadaanAtk = new UsulanAtkPengadaan();
+                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan.Carbon::now()->format('dmy').rand(000,999);
+                        $pengadaanAtk->form_usulan_id = $request->id_usulan;
+                        $pengadaanAtk->nama_barang = $request->alkom_barang[$i];
+                        $pengadaanAtk->spesifikasi = $request->alkom_spesifikasi[$i];
+                        $pengadaanAtk->jumlah = $request->alkom_jumlah[$i];
+                        $pengadaanAtk->satuan = $request->alkom_satuan[$i];
+                        $pengadaanAtk->tanggal = Carbon::now();
+                        $pengadaanAtk->status = 'proses';
+                        $pengadaanAtk->save();
+                    }
+                }
+            } else {
+                $totalAtk = 0;
+            }
+
+            $usulan = new UsulanAtk();
+            $usulan->id_form_usulan     = $request->id_usulan;
+            $usulan->pegawai_id         = Auth::user()->pegawai_id;
+            $usulan->jenis_form         = 'pengadaan';
+            $usulan->total_pengajuan    = $totalAtk + $totalAlkom;
+            $usulan->no_surat_usulan    = $request->no_surat_usulan;
+            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->rencana_pengguna   = $request->rencana_pengguna;
+            $usulan->save();
+
+            return redirect('unit-kerja/verif/usulan-atk/' . $request->id_usulan);
+
         } elseif ($aksi == 'proses-diterima') {
 
             $detailId = $request->detail_form_id;
@@ -1375,7 +1714,6 @@ class UserController extends Controller
             UsulanAtkDetail::where('form_usulan_id', $id)->delete();
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
-
         } else {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);

@@ -236,9 +236,11 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Kode Barang</th>
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe</th>
                                             <th>Pengguna</th>
+                                            <th>Unit Kerja</th>
                                             <th>Kondisi</th>
                                         </tr>
                                     </thead>
@@ -339,8 +341,10 @@
         dataBarang.forEach(element => {
             dataTable.row.add([
                 no++,
+                element.kode_barang+'.'+element.nup_barang,
                 element.kategori_barang,
                 element.barang,
+                element.pengguna_barang,
                 element.unit_kerja,
                 element.kondisi_barang
             ])
@@ -423,8 +427,10 @@
                     data.table.forEach(element => {
                         dataTable.row.add([
                             no++,
+                            element.kode_barang+'.'+element.nup_barang,
                             element.kategori_barang,
                             element.barang,
+                            element.pengguna_barang,
                             element.unit_kerja,
                             element.kondisi_barang
                         ])

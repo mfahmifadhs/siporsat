@@ -39,7 +39,7 @@ class Kendaraan extends Model
     }
 
     public function riwayat() {
-        return $this->hasMany(RiwayatKendaraan::class, 'kendaraan_id','id_kendaraan');
+        return $this->hasMany(RiwayatKendaraan::class, 'kendaraan_id','id_kendaraan')->orderBy('tanggal_pengguna' ,'DESC');
     }
 
 }

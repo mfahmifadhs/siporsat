@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-admin/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-admin/oldat/barang/data/semua') }}">Daftar Barang</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-admin/oldat/barang/daftar/seluruh-barang') }}">Daftar Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -80,16 +80,20 @@
                                             <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
                                             </p>
                                         </div>
+                                        <div class="col-md-12 form-group">
+                                            <label>Status Barang : </label> <br>
+                                            <input type="radio" name="status_barang" value="1" {{ $barang->status_barang == 1 ? 'checked' : '' }}>
+                                            <span class="mr-3">Aktif    </span>
+                                            <input type="radio" name="status_barang" value="2" {{ $barang->status_barang == 2 ? 'checked' : '' }}>
+                                            <span class="mr-3">Perbaikan    </span>
+                                            <input type="radio" name="status_barang" value="3" {{ $barang->status_barang == 3 ? 'checked' : '' }}>
+                                            <span class="mr-3">Proses Penghapusan    </span>
+                                            <input type="radio" name="status_barang" value="4" {{ $barang->status_barang == 4 ? 'checked' : '' }}>
+                                            <span class="mr-3">Sudah Dihapuskan    </span>
+                                        </div>
                                         <div class="col-md-6 form-group">
-                                            <label>Pengguna Barang :</label>
-                                            <select name="id_pegawai" class="form-control">
-                                                <option value="">-- Pilih Pegawai --</option>
-                                                @foreach($pegawai as $dataPegawai)
-                                                <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($barang->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
-                                                    {{ $dataPegawai->nama_pegawai }}
-                                                </option>
-                                                @endforeach
-                                            </select>
+                                            <label>Merk/Tipe : </label>
+                                            <input type="text" name="merk_tipe_barang" class="form-control" value="{{ $barang->merk_tipe_barang }}">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kategori Barang :</label>
@@ -134,6 +138,10 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6 form-group">
+                                            <label>Pengguna Barang :</label>
+                                            <input type="text" name="pengguna_barang" class="form-control" value="{{ $barang->pengguna_barang }}">
+                                        </div>
+                                        <div class="col-md-6 form-group">
                                             <label>Nilai Perolehan : </label>
                                             <input type="number" name="nilai_perolehan" class="form-control" value="{{ $barang->nilai_perolehan }}">
                                         </div>
@@ -170,7 +178,7 @@
                                             <span class="time"><i class="far fa-date"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
                                             <h3 class="timeline-header text-capitalize">
-                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                                <a href="#">{{ $riwayatPengguna->pengguna_barang }}</a> <br> {{ $riwayatPengguna->unit_kerja }}
                                             </h3>
 
                                             <div class="timeline-body">
@@ -184,13 +192,17 @@
                                                         <p>{{ $riwayatPengguna->kondisi_barang }}</p>
                                                     </div>
                                                     <div class="col-sm-12">
-                                                        <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                        <a class="btn btn-danger btn-xs" href="{{ url('super-admin/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}"
-                                                        onclick="return confirm('Hapus Riwayat Ini ?')">
-                                                            <i class="fas fa-trash"></i> Hapus
-                                                        </a>
+                                                        <form action="{{ url('super-admin/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}" method="POST">
+                                                            @csrf
+
+                                                            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </a>
+                                                            <input type="hidden" name="barang_id" value="{{ $riwayatPengguna->barang_id }}">
+                                                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Hapus Riwayat Ini ?')">
+                                                                <i class="fas fa-trash"></i> Hapus
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -213,7 +225,7 @@
                                                             <div class="form-group row">
                                                                 <label class="col-sm-4 col-form-label">Pengguna</label>
                                                                 <div class="col-sm-8">
-                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->nama_pegawai }}" readonly>
+                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->pengguna_barang }}" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">

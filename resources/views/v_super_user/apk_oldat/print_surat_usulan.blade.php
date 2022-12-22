@@ -41,9 +41,11 @@
         </div>
         <div class="row" style="font-size: 22px;">
             <div class="col-md-12 form-group">
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Nomor Surat</div>
-                    <div class="col-md-9 text-uppercase">: {{ ucfirst(strtolower($usulan->no_surat_usulan)) }}</div>
+                <div class="form-group row mb-5 text-center">
+                    <div class="col-md-12 text-uppercase">
+                        usulan pengajuan <br>
+                        nomor surat : {{ ucfirst(strtolower($usulan->no_surat_usulan)) }}
+                    </div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
@@ -60,10 +62,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Tanggal Usulan</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} barang</div>
                 </div>
                 @if($usulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">

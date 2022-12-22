@@ -60,15 +60,15 @@
                         <table id="table-usulan" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <td>No</td>
-                                    <td>Tanggal</td>
-                                    <td>Jenis Usulan</td>
-                                    <td>Pengusul</td>
-                                    <td>Unit Kerja</td>
-                                    <td>Rencana Pengguna</td>
-                                    <td class="text-center">Status Pengajuan</td>
-                                    <td class="text-center">Status Proses</td>
-                                    <td class="text-center">Aksi</td>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis Usulan</th>
+                                    <th>Pengusul</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Rencana Pengguna</th>
+                                    <th class="text-center">Status Pengajuan</th>
+                                    <th class="text-center">Status Proses</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
@@ -106,11 +106,7 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            @if (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 1 && $dataUsulan->jenis_form == 'pengadaan')
-                                            <a class="dropdown-item btn" href="{{ url('super-user/atk/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses
-                                            </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1 && $dataUsulan->jenis_form == 'distribusi')
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/atk/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
@@ -175,15 +171,15 @@
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->nama_pegawai }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->keterangan_pegawai }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Unit Kerja</label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->unit_kerja }}</div>
+                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Tanggal Usulan </label></div>
