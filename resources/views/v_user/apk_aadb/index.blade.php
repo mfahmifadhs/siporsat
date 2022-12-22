@@ -67,9 +67,6 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Servis Record</h3>
-                        <div class="card-tools">
-                            <input type="text" id="myInputTextField">
-                        </div>
                     </div>
                     <div class="card-body">
                         <table id="table-servis" class="table table-striped table-valign-middle">
@@ -541,7 +538,7 @@
             "autoWidth": false,
             "info": false,
             "paging": true,
-            "searching": true,
+            "searching": false,
             "lengthMenu": [
                 [5, 10, 25, -1],
                 [5, 10, 25, "Semua"]

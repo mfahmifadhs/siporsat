@@ -329,7 +329,7 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
 
-            return view('v_user/surat_usulan', compact('form','modul', 'usulan', 'pimpinan'));
+            return view('v_user/surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
         } elseif ($aksi == 'usulan-aadb') {
             $modul = 'aadb';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -435,7 +435,6 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
             return view('v_user/print_surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
-
         } elseif ($modul == 'usulan-aadb') {
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
@@ -1580,10 +1579,10 @@ class UserController extends Controller
                 if ($dataAtk == 'lain-lain') {
                     // Input barang lain
                     $total  = Atk::where('kategori_atk_id', $request->kategori_atk_id[$i])->count();
-                    $atk_id = $request->kategori_atk_id[$i].str_pad($total + 1, 5, 0, STR_PAD_LEFT);
+                    $atk_id = $request->kategori_atk_id[$i] . str_pad($total + 1, 5, 0, STR_PAD_LEFT);
                     $detail->atk_id   = $atk_id;
                     $detail->atk_lain = strtoupper($request->barang_lain[$i]);
-                    $cekAtk = Atk::where('merk_atk', 'like','%'.$request->barang_lain[$i].'%')->count();
+                    $cekAtk = Atk::where('merk_atk', 'like', '%' . $request->barang_lain[$i] . '%')->count();
                     if ($cekAtk == 0) {
                         $atkLain = new Atk();
                         $atkLain->id_atk          = $atk_id;
@@ -1603,10 +1602,10 @@ class UserController extends Controller
                 $detail->keterangan            = $request->keterangan[$i];
                 $detail->save();
             }
-            return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
 
+            return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
         } elseif ($aksi == 'preview-pengadaan') {
-            $idUsulan = $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idUsulan = $request->id_usulan;
             $noSurat  = $request->no_surat_usulan;
             $tanggal  = $request->tanggal_usulan;
             $rencana  = $request->rencana_pengguna;
@@ -1627,23 +1626,22 @@ class UserController extends Controller
                 return redirect('unit-kerja/atk/usulan/pengadaan/baru')->with('failed', 'Anda belum mengunggah file kebutuhan Alkom atau Oldat');
             }
 
-            return view('v_user.apk_atk.preview', compact('fileAtk', 'fileAlkom','idUsulan','noSurat','tanggal','rencana'));
-
+            return view('v_user.apk_atk.preview', compact('fileAtk', 'fileAlkom', 'idUsulan', 'noSurat', 'tanggal', 'rencana'));
         } elseif ($aksi == 'proses-pengadaan') {
-            // dd($request->all());
+            $id_usulan = Carbon::now()->format('dmy'). $request->id_usulan;
             if ($request->atk_barang != null) {
                 $totalAtk = count($request->atk_barang);
                 $atk = $request->atk_barang;
-                foreach ($atk as $i => $dataAtk)
-                {
+                foreach ($atk as $i => $dataAtk) {
                     $jumlahUsulan = UsulanAtkPengadaan::count();
                     $pengadaanAtk = new UsulanAtkPengadaan();
-                    $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan.Carbon::now()->format('dmy').rand(000,999);
-                    $pengadaanAtk->form_usulan_id = $request->id_usulan;
-                    $pengadaanAtk->nama_barang = $request->atk_barang[$i];
-                    $pengadaanAtk->spesifikasi = $request->atk_spesifikasi[$i];
+                    $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                    $pengadaanAtk->form_usulan_id = $id_usulan;
+                    $pengadaanAtk->jenis_barang = 'ATK';
+                    $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
+                    $pengadaanAtk->spesifikasi = strtoupper($request->atk_spesifikasi[$i]);
                     $pengadaanAtk->jumlah = $request->atk_jumlah[$i];
-                    $pengadaanAtk->satuan = $request->atk_satuan[$i];
+                    $pengadaanAtk->satuan = strtoupper($request->atk_satuan[$i]);
                     $pengadaanAtk->tanggal = Carbon::now();
                     $pengadaanAtk->status = 'proses';
                     $pengadaanAtk->save();
@@ -1655,28 +1653,49 @@ class UserController extends Controller
             if ($request->alkom_barang != null) {
                 $totalAlkom = count($request->alkom_barang);
                 $alkom = $request->alkom_barang;
-                foreach ($atk as $i => $dataAtk)
-                {
+                foreach ($alkom as $i => $dataAtk) {
                     if ($request->alkom_jumlah != 0) {
                         $jumlahUsulan = UsulanAtkPengadaan::count();
                         $pengadaanAtk = new UsulanAtkPengadaan();
-                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan.Carbon::now()->format('dmy').rand(000,999);
-                        $pengadaanAtk->form_usulan_id = $request->id_usulan;
-                        $pengadaanAtk->nama_barang = $request->alkom_barang[$i];
-                        $pengadaanAtk->spesifikasi = $request->alkom_spesifikasi[$i];
+                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                        $pengadaanAtk->form_usulan_id = $id_usulan;
+                        $pengadaanAtk->jenis_barang = 'ALKOM';
+                        $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
+                        $pengadaanAtk->spesifikasi = strtoupper($request->alkom_spesifikasi[$i]);
                         $pengadaanAtk->jumlah = $request->alkom_jumlah[$i];
-                        $pengadaanAtk->satuan = $request->alkom_satuan[$i];
+                        $pengadaanAtk->satuan = strtoupper($request->alkom_satuan[$i]);
                         $pengadaanAtk->tanggal = Carbon::now();
                         $pengadaanAtk->status = 'proses';
                         $pengadaanAtk->save();
                     }
                 }
             } else {
-                $totalAtk = 0;
+                $totalAlkom = 0;
+            }
+
+            if ($request->atk_barang == null && $request->alkom_barang == null) {
+                $totalAtk = count($request->barang);
+                $barang = $request->barang;
+                foreach ($barang as $i => $dataAtk) {
+                    if ($request->jumlah != 0) {
+                        $jumlahUsulan = UsulanAtkPengadaan::count();
+                        $pengadaanAtk = new UsulanAtkPengadaan();
+                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                        $pengadaanAtk->form_usulan_id = $id_usulan;
+                        $pengadaanAtk->jenis_barang = strtoupper($request->jenis_barang[$i]);
+                        $pengadaanAtk->nama_barang = strtoupper($request->barang[$i]);
+                        $pengadaanAtk->spesifikasi = strtoupper($request->spesifikasi[$i]);
+                        $pengadaanAtk->jumlah = $request->jumlah[$i];
+                        $pengadaanAtk->satuan = strtoupper($request->satuan[$i]);
+                        $pengadaanAtk->tanggal = Carbon::now();
+                        $pengadaanAtk->status = 'proses';
+                        $pengadaanAtk->save();
+                    }
+                }
             }
 
             $usulan = new UsulanAtk();
-            $usulan->id_form_usulan     = $request->id_usulan;
+            $usulan->id_form_usulan     = $id_usulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = 'pengadaan';
             $usulan->total_pengajuan    = $totalAtk + $totalAlkom;
@@ -1685,8 +1704,7 @@ class UserController extends Controller
             $usulan->rencana_pengguna   = $request->rencana_pengguna;
             $usulan->save();
 
-            return redirect('unit-kerja/verif/usulan-atk/' . $request->id_usulan);
-
+            return redirect('unit-kerja/verif/usulan-atk/' . $id_usulan);
         } elseif ($aksi == 'proses-diterima') {
 
             $detailId = $request->detail_form_id;

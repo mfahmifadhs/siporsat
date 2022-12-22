@@ -74,6 +74,9 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            @if ($form->jenis_form == 'pengadaan')
+                            <th>Jenis Barang</th>
+                            @endif
                             <th>Nama Barang</th>
                             <th>Merk/Tipe</th>
                             <th>Jumlah</th>
@@ -87,6 +90,7 @@
                         @foreach($dataUsulan->pengadaanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataAtk->jenis_barang }}</td>
                             <td>{{ $dataAtk->nama_barang }}</td>
                             <td>{{ $dataAtk->spesifikasi }}</td>
                             <td>{{ $dataAtk->jumlah }}</td>

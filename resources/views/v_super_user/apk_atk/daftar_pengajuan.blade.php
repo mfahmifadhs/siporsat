@@ -114,7 +114,7 @@
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
-                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            @elseif ($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
                                             <a class="dropdown-item btn" href="{{ url('super-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> BAST
                                             </a>
@@ -196,32 +196,52 @@
                                                         Informasi ATK
                                                     </h6>
                                                 </div>
-                                                <div class="form-group row">
+                                                <div class="form-group row small">
                                                     <div class="col-md-12 text-center">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-3">Nama Barang</div>
-                                                            <div class="col-sm-3">Merk/Tipe</div>
-                                                            <div class="col-sm-3">Jumlah</div>
-                                                            <div class="col-sm-3">Satuan</div>
+                                                            @if ($dataUsulan->jenis_form == 'pengadaan')
+                                                            <div class="col-sm-2">Jenis Barang</div>
+                                                            @endif
+                                                            <div class="col-sm-2">Nama Barang</div>
+                                                            <div class="col-sm-2">Spesifikasi</div>
+                                                            <div class="col-sm-2">Jumlah</div>
+                                                            <div class="col-sm-2">Satuan</div>
+                                                            @if ($dataUsulan->jenis_form == 'pengadaan')
+                                                            <div class="col-sm-2">Keterangan</div>
+                                                            @endif
                                                         </div>
                                                         <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanAtk as $dataPengadaan)
+                                                        @if($dataUsulan->jenis_form == 'pengadaan')
+                                                        @foreach($dataUsulan->pengadaanAtk as $dataPengadaan)
                                                         <div class="form-group row">
-                                                            <div class="col-sm-3">{{ $dataPengadaan->kategori_atk }}</div>
-                                                            <div class="col-sm-3">{{ $dataPengadaan->merk_atk }}</div>
-                                                            <div class="col-sm-3">{{ $dataPengadaan->jumlah_pengajuan }}</div>
-                                                            <div class="col-sm-3">{{ $dataPengadaan->satuan }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->jenis_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->nama_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->spesifikasi }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->jumlah }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->satuan }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->keterangan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
+                                                        @else
+                                                        @foreach($dataUsulan->detailUsulanAtk as $dataPengadaan)
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-2">{{ $dataPengadaan->kategori_atk }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->merk_atk }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->jumlah_pengajuan }}</div>
+                                                            <div class="col-sm-2">{{ $dataPengadaan->satuan }}</div>
+                                                        </div>
+                                                        <hr>
+                                                        @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer justify-content-between">
                                                 <div class="col-md-12">
                                                     <span style="float: left;">
-                                                        @if($dataUsulan->status_proses_id == 5)
+                                                        @if($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
                                                         <a href="{{ url('super-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}" class="btn btn-primary">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>

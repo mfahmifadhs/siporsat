@@ -168,7 +168,7 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @endif
-                                            @if ($dataUsulan->status_proses_id == 5)
+                                            @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-atk/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file"></i> Surat Bast
                                             </a>

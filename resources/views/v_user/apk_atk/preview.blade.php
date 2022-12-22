@@ -85,33 +85,33 @@
                             <b>DAFTAR KEBUTUHAN BARANG-BARANG PERSEDIAAN (ALKOM) SATKER SETJEN TAHUN 2023</b>
                         </div>
                         <div class="card-body">
-                                <table id="table-alkom" class="table table-bordered">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>No</th>
-                                            <th style="width: 35%;">Nama Barang</th>
-                                            <th style="width: 40%;">Spesifikasi</th>
-                                            <th style="width: 15%;">Jumlah</th>
-                                            <th style="width: 10%;">Satuan</th>
-                                        </tr>
-                                    </thead>
-                                    @php $no = 1; @endphp
-                                    <tbody>
-                                        @foreach($fileAlkom as $key => $value)
-                                        @foreach ($value as $dataAtk)
-                                        @if($dataAtk[3] != 0)
-                                        <tr>
-                                            <td class="text-center">{{ $no++ }}</td>
-                                            <td><input type="text" name="alkom_barang[]" class="form-control" value="{{ $dataAtk[1] }}"></td>
-                                            <td><input type="text" name="alkom_spesifikasi[]" class="form-control" value="{{ $dataAtk[2] }}"></td>
-                                            <td><input type="text" name="alkom_jumlah[]" class="form-control text-center" value="{{ $dataAtk[3] }}"></td>
-                                            <td><input type="text" name="alkom_satuan[]" class="form-control text-center" value="BUAH" readonly></td>
-                                        </tr>
-                                        @endif
-                                        @endforeach
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <table id="table-alkom" class="table table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>No</th>
+                                        <th style="width: 35%;">Nama Barang</th>
+                                        <th style="width: 40%;">Spesifikasi</th>
+                                        <th style="width: 15%;">Jumlah</th>
+                                        <th style="width: 10%;">Satuan</th>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody>
+                                    @foreach($fileAlkom as $key => $value)
+                                    @foreach ($value as $dataAtk)
+                                    @if($dataAtk[3] != 0)
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td><input type="text" name="alkom_barang[]" class="form-control" value="{{ $dataAtk[1] }}"></td>
+                                        <td><input type="text" name="alkom_spesifikasi[]" class="form-control" value="{{ $dataAtk[2] }}"></td>
+                                        <td><input type="text" name="alkom_jumlah[]" class="form-control text-center" value="{{ $dataAtk[3] }}"></td>
+                                        <td><input type="text" name="alkom_satuan[]" class="form-control text-center" value="BUAH" readonly></td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                         @endif
                         <div class="card-footer text-right">

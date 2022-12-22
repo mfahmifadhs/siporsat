@@ -200,7 +200,6 @@ class SuperUserController extends Controller
     {
         if ($id == 'cek') {
             if (Auth::user()->sess_modul == 'atk') {
-
                 $usulan = UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->first();
                 if ($usulan->status_proses_id == null) {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
@@ -220,9 +219,15 @@ class SuperUserController extends Controller
 
                     return redirect('super-user/atk/surat/surat-usulan/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '2') {
-                    UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'status_proses_id'    => 4
-                    ]);
+                    if ($usulan->jenis_form == 'pengadaan') {
+                        UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                            'status_proses_id'    => 5
+                        ]);
+                    } else {
+                        UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                            'status_proses_id'    => 4
+                        ]);
+                    }
                     Google2FA::logout();
 
                     return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Memproses Usulan');

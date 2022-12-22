@@ -157,7 +157,7 @@
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('unit-kerja/atk/usulan/proses-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
@@ -177,6 +177,7 @@
                         <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
                         <div class="col-sm-4">
                             <input type="text" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
+                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
                     <hr style="border: 0.5px solid grey;">
@@ -191,15 +192,46 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Kebutuhan ATK (*)</label>
-                        <div class="col-sm-4">
-                            <input type="file" name="file_atk" class="form-control">
-                            <small>Format file (.xls)</small>
-                        </div>
-                        <label class="col-sm-2 col-form-label">Kebutuhan Alkom (*)</label>
-                        <div class="col-sm-4">
-                            <input type="file" name="file_alkom" class="form-control">
-                            <small>Format file (.xls)</small>
+                        <div class="col-md-12">
+                            <table id="table-kebutuhan" class="table table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>No</th>
+                                        <th style="width: 25%;">Jenis Barang</th>
+                                        <th style="width: 30%;">Nama Barang</th>
+                                        <th style="width: 35%;">Spesifikasi</th>
+                                        <th style="width: 20%;">Jumlah</th>
+                                        <th style="width: 10%;">Satuan</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody id="section-input">
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>
+                                            <select name="jenis_barang[]" class="form-control text-uppercase" style="font-size: 13px;" required>
+                                                <option value="">-- Pilih Jenis Barang --</option>
+                                                <option value="atk">Alat Tulis Kantor (ATK)</option>
+                                                <option value="alkom">Alat Komputer (Alkom)</option>
+                                                <option value="lainya">Lain-lain</option>
+                                            </select>
+                                        </td>
+                                        <td>
+
+                                            <input type="text" name="barang[] small" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Buku/Pensil/Printer/Tinta/Toner, Dll">
+                                        </td>
+                                        <td><input type="text" name="spesifikasi[]" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Toner Canon Seri 6A, Buku Tulis Dudu, Dll"></td>
+                                        <td><input type="number" name="jumlah[]" class="form-control text-center" style="font-size: 13px;" min="1" value="0"></td>
+                                        <td><input type="text" name="satuan[]" class="form-control text-center text-uppercase" style="font-size: 13px;"></td>
+                                        <td>
+                                            <a id="add-row-pengadaan" class="btn btn-dark text-uppercase font-weight-bold">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -214,6 +246,44 @@
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+                <input type="hidden" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                <input type="hidden" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
+                <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <input type="hidden" name="proses" value="upload">
+                        <label class="col-sm-5 col-form-label">Kebutuhan ATK (*)</label>
+                        <div class="col-sm-12">
+                            <input type="file" name="file_atk" class="form-control">
+                            <small>Format file (.xls)</small>
+                        </div>
+                        <label class="col-sm-5 col-form-label">Kebutuhan Alkom (*)</label>
+                        <div class="col-sm-12">
+                            <input type="file" name="file_alkom" class="form-control">
+                            <small>Format file (.xls)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah file sudah benar ?')">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endif
 
 @section('js')
@@ -224,6 +294,27 @@
         let total = 1
         let i = 0
         let button = document.getElementById("btnSubmit");
+
+        $("#table-kebutuhan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+            buttons: [{
+                text: '⬆️ Upload Kebutuhan',
+                className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                action: function(e, dt, node, config) {
+                    $('#upload').modal('show');
+                }
+            }]
+
+        }).buttons().container().appendTo('#table-kebutuhan_wrapper .col-md-6:eq(0)');
 
         // Daftar Kategori
         $(".kategori").select2({
@@ -688,10 +779,47 @@
 
         $(document).on('click', '.remove-list', function() {
             $(this).parents('.atk').remove();
-        });
+        })
 
+    })
+    // Pengadaan section
+    $(function() {
+        let i = 0
+        let no = 1
+        // More Item
+        $('#add-row-pengadaan').click(function() {
+            ++i
+            ++no
+            $("#section-input").append(
+                `<tr class="row-pengadaan">
+                    <td class="text-center">`+no+`</td>
+                    <td>
+                        <select name="jenis_barang[]" class="form-control text-uppercase" style="font-size: 13px;" required>
+                            <option value="">-- Pilih Jenis Barang --</option>
+                            <option value="atk">Alat Tulis Kantor (ATK)</option>
+                            <option value="alkom">Alat Komputer (Alkom)</option>
+                            <option value="lainya">Lain-lain</option>
+                        </select>
+                    </td>
+                    <td>
 
+                        <input type="text" name="barang[] small" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Buku/Pensil/Printer/Tinta/Toner, Dll">
+                    </td>
+                    <td><input type="text" name="spesifikasi[]" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Toner Canon Seri 6A, Buku Tulis Dudu, Dll"></td>
+                    <td><input type="number" name="jumlah[]"  class="form-control text-center" style="font-size: 13px;" min="1" value="0"></td>
+                    <td><input type="text" name="satuan[]"  class="form-control text-center text-uppercase" style="font-size: 13px;"></td>
+                    <td>
+                        <a id="remove-row-pengadaan" class="btn btn-dark text-uppercase font-weight-bold">
+                            <i class="fas fa-minus-circle"></i>
+                        </a>
+                    </td>
+                </tr>`
+            )
 
+            $(document).on('click', '#remove-row-pengadaan', function() {
+                $(this).parents('.row-pengadaan').remove();
+            });
+        })
     })
 </script>
 @endsection
