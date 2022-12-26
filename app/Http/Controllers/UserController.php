@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\Atk\ImportAlkom;
-use App\Imports\Atk\ImportAtk;
+use App\Imports\ATK\ImportAlkom;
+use App\Imports\ATK\ImportAtk;
 use App\Models\AADB\JadwalServis;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
