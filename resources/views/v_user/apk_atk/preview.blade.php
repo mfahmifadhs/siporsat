@@ -136,7 +136,7 @@
             "lengthChange": false,
             "autoWidth": true,
             "info": true,
-            "paging": true,
+            "paging": false,
             "search": false,
             "lengthMenu": [
                 [5, 10, 25, -1],
@@ -148,7 +148,7 @@
             "lengthChange": false,
             "autoWidth": true,
             "info": true,
-            "paging": true,
+            "paging": false,
             "search": false,
             "lengthMenu": [
                 [5, 10, 25, -1],

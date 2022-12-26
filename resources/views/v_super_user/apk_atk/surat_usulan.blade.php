@@ -73,11 +73,9 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                @if ($dataUsulan->otp_usulan_pimpinan != null)
                 <a href="{{ url('super-user/atk/surat/print-surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
-                @endif
             </div>
             <div class="col-md-12 form-group ">
                 <div class="card">
