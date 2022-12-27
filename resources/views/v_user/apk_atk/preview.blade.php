@@ -5,8 +5,14 @@
 <div class="content-header">
     <div class="container">
         <div class="row mb-2">
-            <div class="col-sm-8">
-                <h1 class="m-0">Daftar ATK</h1>
+            <div class="col-sm-6">
+                <h1 class="m-0">Usulan Pengadaan ATK</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/atk/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Usulan Pengadaan ATK</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -47,9 +53,10 @@
                         <input type="hidden" name="no_surat_usulan" value="{{ $noSurat }}">
                         <input type="hidden" name="tanggal_usulan" value="{{ $tanggal }}">
                         <input type="hidden" name="rencana_pengguna" value="{{ $rencana }}">
-                        @if($fileAtk != null)
+                        @if($resultAtk != null)
                         <div class="card-header">
-                            <b>DAFTAR KEBUTUHAN BARANG-BARANG PERSEDIAAN (ATK) SATKER SETJEN TAHUN 2023</b>
+                            <b>DAFTAR KEBUTUHAN BARANG-BARANG PERSEDIAAN (ATK) SATKER SETJEN TAHUN 2023</b> <br>
+                            <b><small class="text-danger font-weight-bold">Jumlah barang dapat diubah selama Usulan belum disetujui oleh Kepala Bagian Rumah Tangga</small></b>
                         </div>
                         <div class="card-body">
                             <table id="table-atk" class="table table-bordered">
@@ -64,23 +71,24 @@
                                 </thead>
                                 @php $no = 1; @endphp
                                 <tbody>
-                                    @foreach($fileAtk as $key => $value)
-                                    @foreach ($value as $dataAtk)
+                                    @foreach($resultAtk as $dataAtk)
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td><input type="text" name="atk_barang[]" class="form-control" value="{{ $dataAtk[1] }}"></td>
-                                        <td><input type="text" name="atk_spesifikasi[]" class="form-control" value="{{ $dataAtk[2] }}"></td>
-                                        <td><input type="text" name="atk_jumlah[]" class="form-control text-center" value="{{ $dataAtk[3] }}"></td>
-                                        <td><input type="text" name="atk_satuan[]" class="form-control text-center text-uppercase" value="{{ $dataAtk[4] }}"></td>
+                                        <td>
+                                            <input type="hidden" name="atk_id[]" class="form-control" value="{{ $dataAtk['id_form_usulan_pengadaan'] }}">
+                                            <input type="text" name="atk_barang[]" class="form-control" value="{{ $dataAtk['nama_barang'] }}">
+                                        </td>
+                                        <td><input type="text" name="atk_spesifikasi[]" class="form-control" value="{{ $dataAtk['spesifikasi'] }}"></td>
+                                        <td><input type="text" name="atk_jumlah[]" class="form-control text-center" value="{{ $dataAtk['jumlah'] }}"></td>
+                                        <td><input type="text" name="atk_satuan[]" class="form-control text-center text-uppercase" value="{{ $dataAtk['satuan'] }}"></td>
                                     </tr>
-                                    @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                         @endif
 
-                        @if ($fileAlkom != null)
+                        @if ($resultAlkom != null)
                         <div class="card-header">
                             <b>DAFTAR KEBUTUHAN BARANG-BARANG PERSEDIAAN (ALKOM) SATKER SETJEN TAHUN 2023</b>
                         </div>
@@ -97,18 +105,20 @@
                                 </thead>
                                 @php $no = 1; @endphp
                                 <tbody>
-                                    @foreach($fileAlkom as $key => $value)
-                                    @foreach ($value as $dataAtk)
-                                    @if($dataAtk[3] != 0)
+                                    @foreach($resultAlkom as $dataAlkom)
+                                    @if($dataAlkom['jumlah'] != 0)
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td><input type="text" name="alkom_barang[]" class="form-control" value="{{ $dataAtk[1] }}"></td>
-                                        <td><input type="text" name="alkom_spesifikasi[]" class="form-control" value="{{ $dataAtk[2] }}"></td>
-                                        <td><input type="text" name="alkom_jumlah[]" class="form-control text-center" value="{{ $dataAtk[3] }}"></td>
+                                        <td>
+
+                                            <input type="hidden" name="alkom_id[]" class="form-control" value="{{ $dataAlkom['id_form_usulan_pengadaan'] }}">
+                                            <input type="text" name="alkom_barang[]" class="form-control" value="{{ $dataAlkom['nama_barang'] }}">
+                                        </td>
+                                        <td><input type="text" name="alkom_spesifikasi[]" class="form-control" value="{{ $dataAlkom['spesifikasi'] }}"></td>
+                                        <td><input type="text" name="alkom_jumlah[]" class="form-control text-center" value="{{ $dataAlkom['jumlah'] }}"></td>
                                         <td><input type="text" name="alkom_satuan[]" class="form-control text-center" value="BUAH" readonly></td>
                                     </tr>
                                     @endif
-                                    @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
@@ -132,28 +142,22 @@
 <script>
     $(function() {
         $("#table-atk").DataTable({
-            "responsive": true,
+            "responsive": false,
             "lengthChange": false,
-            "autoWidth": true,
-            "info": true,
+            "autoWidth": false,
+            "info": false,
             "paging": false,
-            "search": false,
-            "lengthMenu": [
-                [5, 10, 25, -1],
-                [5, 10, 25, "Semua"]
-            ]
+            "searching": false,
+            "sort": false
         })
         $("#table-alkom").DataTable({
-            "responsive": true,
+            "responsive": false,
             "lengthChange": false,
-            "autoWidth": true,
-            "info": true,
+            "autoWidth": false,
+            "info": false,
             "paging": false,
-            "search": false,
-            "lengthMenu": [
-                [5, 10, 25, -1],
-                [5, 10, 25, "Semua"]
-            ]
+            "searching": false,
+            "sort": false
         })
     })
 </script>

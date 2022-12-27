@@ -10,7 +10,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/atk/dashboard') }}">Dashboard</a></li> -->
+                    <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/atk/dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Usulan Permintaan ATK</li>
                 </ol>
             </div>
@@ -177,7 +177,6 @@
                         <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
                         <div class="col-sm-4">
                             <input type="text" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
                     <hr style="border: 0.5px solid grey;">
@@ -186,8 +185,8 @@
                             <div class="alert alert-info alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                 <h6><i class="icon fas fa-info"></i> Mohon untuk mengupload file sesuai format!</h6>
-                                <small> Format Kebutuhan Alkom <a href=""> download</a> </small><br>
-                                <small> Format Kebutuhan ATK <a href=""> download</a> </small> </small>
+                                <small> Format Kebutuhan Alkom <a href="{{ asset('format/format_kebutuhan_alkom.xls') }}" download> download</a> </small><br>
+                                <small> Format Kebutuhan ATK <a href="{{ asset('format/format_kebutuhan_atk.xls') }}" download> download</a> </small> </small>
                             </div>
                         </div>
                     </div>
@@ -236,7 +235,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2">&nbsp;</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12 text-right">
                             <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
                         </div>
                     </div>

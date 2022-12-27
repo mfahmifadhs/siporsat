@@ -191,6 +191,26 @@
                                                     <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
                                                 </div>
                                                 @endif
+                                                @if ($dataUsulan->otp_usulan_pengusul != null)
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Surat Usulan </label></div>
+                                                    <div class="col-md-8">:
+                                                        <a href="{{ url('super-user/atk/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
+                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Surat BAST </label></div>
+                                                    <div class="col-md-8">:
+                                                        <a href="{{ url('super-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                            <i class="fas fa-file"></i> Surat BAST
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                @endif
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi ATK
@@ -236,24 +256,6 @@
                                                         @endforeach
                                                         @endif
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <div class="col-md-12">
-                                                    <span style="float: left;">
-                                                        @if($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
-                                                        <a href="{{ url('super-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}" class="btn btn-primary">
-                                                            <i class="fas fa-file"></i> Surat BAST
-                                                        </a>
-                                                        @endif
-                                                    </span>
-                                                    <span style="float: right;">
-                                                        @if ($dataUsulan->otp_usulan_pengusul != null)
-                                                        <a href="{{ url('super-user/atk/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" class="btn btn-primary">
-                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                        @endif
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

@@ -817,7 +817,11 @@ class SuperUserController extends Controller
 
         } elseif ($aksi == 'proses-ditolak') {
 
-            UsulanAtk::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
+            UsulanAtk::where('id_form_usulan', $id)->update([
+                'keterangan'          => $request->keterangan,
+                'status_pengajuan_id' => 2,
+                'status_proses_id'    => null
+            ]);
             return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
 
         } elseif ($aksi == 'persetujuan') {
@@ -845,13 +849,8 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'surat-usulan') {
             $form = UsulanAtk::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 465930 && $form->jenis_form == 'pengadaan') {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan = UsulanAtk::with(['detailUsulanAtk'])
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')

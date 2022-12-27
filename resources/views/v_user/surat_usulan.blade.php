@@ -79,6 +79,17 @@
                     <i class="fas fa-print"></i>
                 </a>
                 @endif
+
+                @if($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
+                @if($usulan->otp_usulan_kabag == null || $usulan->otp_usulan_pimpinan == null)
+                <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/preview') }}" class="btn btn-primary">
+                    <input type="hidden" name="id_form_usulan" value="{{ $form->id_form_usulan }}">
+                    <button class="btn btn-navbar btn-xs" type="submit">
+                        <i class="fas fa-edit fa-1x" style="color: white;"></i>
+                    </button>
+                </form>
+                @endif
+                @endif
             </div>
 
             @if ($usulan->status_pengajuan_id == 2)

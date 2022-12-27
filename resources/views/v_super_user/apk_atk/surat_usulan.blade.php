@@ -181,7 +181,7 @@
                                 <div class="row text-center">
                                     <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</label>
                                     @if ($dataUsulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->jabatan)) }}</label>
+                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>

@@ -23,6 +23,7 @@ class UsulanAtk extends Model
         'no_surat_bast',
         'tanggal_bast',
         'rencana_pengguna',
+        'keterangan',
         'status_pengajuan_id',
         'status_proses_id',
         'otp_usulan_pengusul'
