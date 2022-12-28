@@ -207,61 +207,6 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="col-md-7 mt-5">-->
-            <!--    <div class="card">-->
-            <!--        <div class="card-body">-->
-            <!--            <table id="table" class="table table-striped table-bordered">-->
-            <!--                <thead class="text-center">-->
-            <!--                    <tr>-->
-            <!--                        <td colspan="5" class="font-weight-bold">-->
-            <!--                            Total Usulan Penyediaan Barang / Jasa-->
-            <!--                        </td>-->
-            <!--                    </tr>-->
-            <!--                    <tr>-->
-            <!--                        <td rowspan="2" class="py-5">No</td>-->
-            <!--                        <td rowspan="2" class="py-5">Kategori Pengadaan / Penyediaan</td>-->
-            <!--                        <td colspan="3">Status </td>-->
-            <!--                    </tr>-->
-            <!--                    <tr>-->
-            <!--                        <td>Ditolak</td>-->
-            <!--                        <td>Sedang Proses Pengadaan</td>-->
-            <!--                        <td>Sudah BAST (Selesai)</td>-->
-            <!--                    </tr>-->
-            <!--                </thead>-->
-            <!--                @php $no = 1; @endphp-->
-            <!--                <tbody class="text-capitalize">-->
-            <!--                    @foreach($reportOldat as $report)-->
-            <!--                    <tr>-->
-            <!--                        <td>{{ $no++ }}</td>-->
-            <!--                        <td>{{ ucfirst(strtolower($report['usulan'])) }} Oldat</td>-->
-            <!--                        <td class="text-center">{{ $report['ditolak'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['proses'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['selesai'] }}</td>-->
-            <!--                    </tr>-->
-            <!--                    @endforeach-->
-            <!--                    @foreach($reportAadb as $report)-->
-            <!--                    <tr>-->
-            <!--                        <td>{{ $no++ }}</td>-->
-            <!--                        <td>{{ ucfirst(strtolower($report['usulan'])) }}</td>-->
-            <!--                        <td class="text-center">{{ $report['ditolak'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['proses'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['selesai'] }}</td>-->
-            <!--                    </tr>-->
-            <!--                    @endforeach-->
-            <!--                    @foreach($reportAtk as $report)-->
-            <!--                    <tr>-->
-            <!--                        <td>{{ $no++ }}</td>-->
-            <!--                        <td>{{ ucfirst(strtolower($report['usulan'])) }} Atk</td>-->
-            <!--                        <td class="text-center">{{ $report['ditolak'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['proses'] }}</td>-->
-            <!--                        <td class="text-center">{{ $report['selesai'] }}</td>-->
-            <!--                    </tr>-->
-            <!--                    @endforeach-->
-            <!--                </tbody>-->
-            <!--            </table>-->
-            <!--        </div>-->
-            <!--    </div>-->
-            <!--</div>-->
         </div>
     </div>
 </section>
