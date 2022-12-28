@@ -4,6 +4,7 @@ namespace App\Models\atk;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ATK\Atk;
 
 class StokAtk extends Model
 {
