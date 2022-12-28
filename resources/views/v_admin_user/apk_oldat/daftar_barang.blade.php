@@ -69,7 +69,6 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        console.log("ready!");
         $(function() {
             $("#table-barang").DataTable({
                 "responsive": true,
@@ -128,12 +127,9 @@
 
             function showTable() {
                 let dataTable = $('#table-barang').DataTable()
-                console.log('start')
                 let dataBarang = JSON.parse(`<?php echo $barang; ?>`)
-                // console.log($('#table-barang').find('tbody'))
 
                 dataTable.clear()
-                // dataTable.draw()
                 let no = 1
                 dataBarang.forEach(element => {
                     dataTable.row.add([
@@ -149,17 +145,14 @@
                         element.unit_kerja
                     ])
                     no++
-                    // console.log('data ke - ' + no)
                 });
                 dataTable.draw()
                 $('.loading').hide()
-                console.log('finish')
             }
 
             $('#table-barang tbody').on('click', '.btn-detail', function() {
                 let dataTable = $('#table-barang').DataTable()
                 let row = dataTable.row($(this).parents('tr')).data()
-                // console.log(row)
                 window.location.href = "/admin-user/oldat/barang/detail/" + row[0];
             })
     </script>

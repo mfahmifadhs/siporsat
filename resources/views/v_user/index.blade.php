@@ -23,6 +23,5 @@
         </div>
     </div>
 </section>
-<!-- /.content -->
 
 @endsection

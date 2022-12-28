@@ -260,7 +260,6 @@
     // Menampilkan informasi barang yang dipilih
     $(document).on('change', '.penghuni', function() {
         let penghuni = $(this).val()
-        console.log(penghuni)
         if (penghuni) {
             $.ajax({
                 type: "GET",
@@ -270,7 +269,6 @@
                     if (res) {
                         $("#jabatan").empty();
                         $.each(res, function(id_pegawai, keterangan_pegawai) {
-                            console.log(keterangan_pegawai)
                             $("#jabatan").append(
                                 '<input type="text" class="form-control" value="' + keterangan_pegawai + '" readonly>'
                             )

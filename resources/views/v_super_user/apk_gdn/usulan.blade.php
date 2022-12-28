@@ -175,7 +175,6 @@
         $(document).on('change', '.bidang-kerusakan', function() {
             let target = $(this).data('idtarget')
             let jenisKerusakan = $(this).val()
-            console.log(target)
             if (jenisKerusakan) {
                 $.ajax({
                     type: "GET",
@@ -183,7 +182,6 @@
                     dataType: 'JSON',
                     success: function(res) {
                         if (res) {
-                            console.log(res)
                             $("#bidangKerusakan" + target).empty();
                             $("#bidangKerusakan" + target).select2();
                             $("#bidangKerusakan" + target).append('<option value="">-- Pilih Jenis Kerusakan --</option>');

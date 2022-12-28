@@ -695,7 +695,6 @@
                 let merktipe = $(this).val()
                 let kategori = $('.barang' + target).val()
                 let usulan = '{{ $aksi }}'
-                console.log(kategori)
                 if (merktipe) {
                     $.ajax({
                         type: "GET",

@@ -215,8 +215,6 @@
 
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist_admin/js/demo.js') }}"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('dist_admin/js/pages/dashboard2.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('dist_admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- DataTables  & Plugins -->

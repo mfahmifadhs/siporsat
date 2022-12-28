@@ -276,7 +276,6 @@
                 },
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasi mengirim kode OTP')
                     resOTP = res
                 }
@@ -284,7 +283,6 @@
         });
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
-            console.log(inputOTP)
             $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
 

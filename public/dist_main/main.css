@@ -5,17 +5,6 @@
  ------------------------------------
  ====================================*/
 
-
-
-/*----------------------------------------*/
-/* Template default CSS
-/*----------------------------------------*/
-
-@font-face {
-	font-family: 'Futura';
-	src: url("../fonts/Futura.woff");
-}
-
 html,
 body {
 	height: 100%;
@@ -342,7 +331,6 @@ ol {
 	height: 900px;
 	padding-top: 260px;
 	display: block;
-	background-image: url("../img/hero-bg.png");
 	background-size: cover;
 	background-color: #f3f7f9;
 	background-position: right top;

@@ -224,7 +224,6 @@
                 let no = 2
                 let i
                 let jumlah = ($('#jumlahBarang').val()) - 1
-                console.log(jumlah)
                 for (i = 1; i <= jumlah; i++) {
                     ++j;
                     $("#input-barang-pengadaan").append(
@@ -368,7 +367,6 @@
         $(document).on('change', '.spekBarang', function() {
             let idBarang = $(this).val();
             let target = $(this).data('idtarget');
-            console.log(idBarang);
             if (idBarang) {
                 $.ajax({
                     type: "GET",
@@ -381,7 +379,6 @@
                         $("#satuan_barang" + target).empty();
                         $("#tahun_perolehan" + target).empty();
                         $.each(res, function(index, row) {
-                            console.log(res);
                             $("#kode_barang" + target).append(
                                 '<input type="number" class="form-control" value="' + row.kode_barang + '" readonly>'
                             );
@@ -412,7 +409,6 @@
                 url: '/super-user/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasi mengirim kode OTP')
                     resOTP = res
                 }
@@ -425,7 +421,6 @@
                 url: '/send-email',
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasi mengirim link verifikasi')
                     // resOTP = res
                 }
@@ -434,7 +429,6 @@
 
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
-            console.log(inputOTP)
             $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
     });

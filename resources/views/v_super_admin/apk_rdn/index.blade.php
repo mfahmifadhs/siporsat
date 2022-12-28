@@ -191,14 +191,12 @@
             url: url,
             type: "GET",
             success: function(res) {
-                // console.log(res.message);
                 let dataTable = $('#table-rumah').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();
                     $('#konten-chart-google-chart').show();
                     let data = JSON.parse(res.data)
                     drawChart(data.chart)
-                    console.log(data)
                     dataTable.clear()
                     dataTable.draw()
                     let no = 1
