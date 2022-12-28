@@ -4,6 +4,7 @@ namespace App\Models\atk;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ATK\JenisAtk;
 
 class KategoriAtk extends Model
 {
@@ -20,6 +21,6 @@ class KategoriAtk extends Model
     ];
 
     public function JenisATK() {
-        return $this->belongsTo(JenisATK::class, 'jenis_atk_id');
+        return $this->belongsTo(JenisAtk::class, 'jenis_atk_id');
     }
 }
