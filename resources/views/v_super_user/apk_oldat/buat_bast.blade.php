@@ -245,7 +245,6 @@
                 },
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasi mengirim kode OTP')
                     resOTP = res
                 }
@@ -253,7 +252,6 @@
         });
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
-            console.log(inputOTP)
             if (inputOTP == '') {
                 alert('Mohon isi kode OTP yang diterima')
             } else if (inputOTP == resOTP) {

@@ -344,10 +344,10 @@
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     <label>Jenis AADB</label> <br>
-                                    <select id="" class="form-control" name="jenis_aadb" style="width: 100%;">
+                                    <select id="jenis_aadb" class="form-control" name="jenis_aadb" style="width: 100%;">
                                         <option value="">-- JENIS AADB --</option>
-                                        <option value="bmn">BMN</option>
                                         <option value="sewa">SEWA</option>
+                                        <option value="bmn">BMN</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
@@ -497,7 +497,7 @@
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     // Jumlah Kendaraan
     $(function() {
-
+        $('#jenis_aadb').select2();
         $('.dataTables_filter input[type="search"]').css({
             'width': '50px',
             'display': 'inline-block'
@@ -599,7 +599,7 @@
         chartData = [
             ['Jenis Kendaraan', 'Jumlah']
         ]
-        console.log(dataChart)
+
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -638,7 +638,6 @@
             url: url,
             type: "GET",
             success: function(res) {
-                // console.log(res.message);
                 let dataTable = $('#table-aadb').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();

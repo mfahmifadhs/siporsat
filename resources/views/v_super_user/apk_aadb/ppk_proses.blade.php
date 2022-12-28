@@ -488,7 +488,6 @@
                 url: '/super-user/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasil mengirim kode OTP')
                     resOTP = res
                 }
@@ -496,7 +495,6 @@
         });
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
-            console.log(inputOTP)
             if (inputOTP == '') {
                 alert('Mohon isi kode OTP yang diterima')
             } else if (inputOTP == resOTP) {

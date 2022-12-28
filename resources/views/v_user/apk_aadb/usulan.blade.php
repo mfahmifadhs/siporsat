@@ -432,7 +432,7 @@
                 $(".section-kendaraan").empty()
                 for (i = 1; i <= total; i++) {
                     ++j
-                    console.log(j)
+
                     $("#section-kendaraan").append(
                         `<div class="section-kendaraan">
                         <div class="form-group row">
@@ -632,7 +632,6 @@
     $(document).on('change', '.select2-kendaraan', function() {
         let itemCategoryId = $(this).val();
         let target = $(this).data('idtarget');
-        console.log(target)
 
     })
 

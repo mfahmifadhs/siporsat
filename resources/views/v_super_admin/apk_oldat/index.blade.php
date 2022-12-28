@@ -163,9 +163,7 @@
 
     function showTable(data) {
         let dataTable = $('#table-barang').DataTable()
-        console.log('start')
         let dataBarang = data.barang
-        // console.log(dataBarang)
 
         dataTable.clear()
         let no = 1
@@ -180,7 +178,6 @@
         });
         dataTable.draw()
         $('.loading').hide()
-        console.log('finish')
     }
 
     let chart
@@ -198,7 +195,7 @@
         chartData = [
             ['Kategori Barang', 'Jumlah']
         ]
-        console.log(dataChart)
+
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -241,7 +238,6 @@
             url: url,
             type: "GET",
             success: function(res) {
-                // console.log(res.message);
                 let dataTable = $('#table-barang').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();
@@ -252,7 +248,6 @@
                     dataTable.clear()
                     dataTable.draw()
                     let no = 1
-                    console.log(res)
                     data.table.forEach(element => {
                         dataTable.row.add([
                             no++,

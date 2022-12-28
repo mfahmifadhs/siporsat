@@ -191,7 +191,7 @@
         chartData = [
             ['Jenis Kendaraan', 'Jumlah']
         ]
-        console.log(dataChart)
+
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -231,7 +231,6 @@
             url: url,
             type: "GET",
             success: function(res) {
-                // console.log(res.message);
                 let dataTable = $('#table-atk').DataTable()
                 if (res.message == 'success') {
                     $('.notif-tidak-ditemukan').remove();

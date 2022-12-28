@@ -88,10 +88,9 @@
 
     $('#btnPilihRekap').click(function() {
         $("#table-rekap").empty();
-        let no = 2;
-        let i;
-        let data = $('#dataRekap').val();
-        console.log(data);
+        let no = 2
+        let i
+        let data = $('#dataRekap').val()
         if (data == 1) {
             $("#table-rekap").append(
                 `<table id="table-1" class="table table-bordered">

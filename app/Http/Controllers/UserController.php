@@ -73,7 +73,7 @@ class UserController extends Controller
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image   = $google2fa->getQRCodeInline(
-                $registration_data = 'Localhost',
+                $registration_data = 'Siporsat Kemkes',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
@@ -805,20 +805,8 @@ class UserController extends Controller
     {
         $char = '"';
         $dataBarang = Barang::select(
-            'id_barang',
-            'kode_barang',
-            'kategori_barang',
-            'nup_barang',
-            'jumlah_barang',
-            'satuan_barang',
-            'nilai_perolehan',
-            'kondisi_barang',
-            'pengguna_barang',
-            'unit_kerja',
-            'pengguna_barang',
-            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
-        )
+            'id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan','kondisi_barang','pengguna_barang', 'unit_kerja',
+            'pengguna_barang', DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan"))
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
@@ -843,20 +831,8 @@ class UserController extends Controller
     public function SearchChartDataOldat(Request $request)
     {
         $char = '"';
-        $dataBarang = Barang::select(
-            'id_barang',
-            'kode_barang',
-            'kategori_barang',
-            'nup_barang',
-            'jumlah_barang',
-            'satuan_barang',
-            'nilai_perolehan',
-            'tahun_perolehan',
-            'kondisi_barang',
-            'pengguna_barang',
-            'unit_kerja',
-            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang")
-        )
+        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan','tahun_perolehan','kondisi_barang',
+            'pengguna_barang','unit_kerja', DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan"))
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')

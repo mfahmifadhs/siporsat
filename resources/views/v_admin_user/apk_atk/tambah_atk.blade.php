@@ -120,7 +120,6 @@
         // Daftar Jenis
         $(document).on('change', '.sub-barang', function() {
             let kategori = $(this).val()
-            console.log(kategori)
             if (kategori) {
                 $.ajax({
                     type: "GET",

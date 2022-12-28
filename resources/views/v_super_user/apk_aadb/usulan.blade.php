@@ -431,7 +431,6 @@
                 $(".section-kendaraan").empty()
                 for (i = 1; i <= total; i++) {
                     ++j
-                    console.log(j)
                     $("#section-kendaraan").append(
                         `<div class="section-kendaraan">
                         <div class="form-group row">
@@ -629,9 +628,8 @@
     })
 
     $(document).on('change', '.select2-kendaraan', function() {
-        let itemCategoryId = $(this).val();
-        let target = $(this).data('idtarget');
-        console.log(target)
+        let itemCategoryId = $(this).val()
+        let target = $(this).data('idtarget')
 
     })
 
@@ -647,7 +645,6 @@
                 url: '/super-user/sendOTP?tujuan=' + tujuan,
                 type: "GET",
                 success: function(res) {
-                    // console.log(res)
                     alert('Berhasil mengirim kode OTP')
                     resOTP = res
                 }
@@ -655,10 +652,9 @@
         });
         $(document).on('click', '#btnCheckOTP', function() {
             let inputOTP = $('#inputOTP').val()
-            console.log(inputOTP)
             $('#kode_otp').append('<input type="hidden" class="form-control" name="kode_otp" value="' + resOTP + '">')
         })
-    });
+    })
 </script>
 @endsection
 

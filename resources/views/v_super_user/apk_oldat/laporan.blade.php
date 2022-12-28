@@ -232,7 +232,7 @@
         chartData = [
             ['Pengusul', 'Jumlah']
         ]
-        // console.log(dataChart)
+
         dataChart.forEach(data => {
             chartData.push(data)
         })
@@ -259,7 +259,7 @@
         let status_pengajuan = $('select[name="status_pengajuan"').val()
         let status_proses = $('select[name="status_proses"').val()
         let url = ''
-        console.log(bulan)
+
         if (form || bulan || unit_kerja || status_pengajuan || status_proses) {
             url = '<?= url("/super-user/oldat/grafik-laporan?form='+form+'&bulan='+bulan+'&unit_kerja='+unit_kerja+'&status_pengajuan='+status_pengajuan+'&status_proses='+status_proses+'") ?>'
         } else {
@@ -276,7 +276,6 @@
                     $('.notif-tidak-ditemukan').remove()
                     $('#konten-chart-google-chart').show()
                     let data = JSON.parse(res.data)
-                    console.log(data.bulan)
                     drawChart(data.chart)
 
                     dataTableDaftar.clear()
@@ -284,7 +283,6 @@
                     dataTableDaftar.draw()
                     dataTableLaporan.draw()
                     let no = 1
-                    console.log(data.searchLaporan)
                     data.table.forEach(element => {
                         dataTableDaftar.row.add([
                             no++,
