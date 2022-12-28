@@ -47,6 +47,8 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
     Route::get('tim-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkteam']);
     Route::get('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
     Route::get('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
+    Route::get('surat/{aksi}/{id}', [SuperAdminController::class, 'Letter']);
+    Route::get('cetak-surat/{modul}/{id}', [SuperAdminController::class, 'PrintLetter']);
     Route::post('kewenangan/{aksi}/{id}', [SuperAdminController::class, 'showAuthority']);
     Route::post('pegawai/{aksi}/{id}', [SuperAdminController::class, 'showEmployees']);
     Route::post('unit-kerja/{aksi}/{id}', [SuperAdminController::class, 'showWorkunit']);
