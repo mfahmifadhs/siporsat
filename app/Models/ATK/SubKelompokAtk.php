@@ -4,7 +4,7 @@ namespace App\Models\atk;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ATK\KelompokATK;
+use App\Models\ATK\KelompokAtk;
 
 class SubKelompokAtk extends Model
 {

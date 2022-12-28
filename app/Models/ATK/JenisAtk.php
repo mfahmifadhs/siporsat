@@ -4,7 +4,7 @@ namespace App\Models\atk;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ATK\SubKelompokATK;
+use App\Models\ATK\SubKelompokAtk;
 
 class JenisAtk extends Model
 {
