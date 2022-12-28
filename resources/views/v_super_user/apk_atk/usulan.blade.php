@@ -1,42 +1,41 @@
-@extends('v_user.layout.app')
+@extends('v_super_user.layout.app')
 
 @section('content')
 
 <div class="content-header">
     <div class="container">
-        <div class="row mb-2 text-capitalize">
+        <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 ">usulan {{ $aksi }} ATK</h1>
+                <h1 class="m-0">Usulan Permintaan</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active">usulan {{ $aksi }} ATK</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Usulan Permintaan ATK</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
 
+@if ($aksi == 'distribusi')
 <section class="content">
     <div class="container">
-        <div class="col-md-12 form-group">
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p style="color:white;margin: auto;">{{ $message }}</p>
-            </div>
-            @elseif ($message = Session::get('failed'))
-            <div class="alert alert-danger">
-                <p style="color:white;margin: auto;">{{ $message }}</p>
-            </div>
-            @endif
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p style="color:white;margin: auto;">{{ $message }}</p>
         </div>
-        <div class="card">
+        @elseif ($message = Session::get('failed'))
+        <div class="alert alert-danger">
+            <p style="color:white;margin: auto;">{{ $message }}</p>
+        </div>
+        @endif
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title text-capitalize">usulan {{ $aksi }} ATK</h3>
+                <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('super-user/atk/usulan/proses/'. $aksi) }}" method="POST">
+                <form action="{{ url('super-userf/atk/usulan/proses/'. $aksi) }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
@@ -61,7 +60,7 @@
                     <div id="main-gdn">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
+                            <label class="col-sm-8 text-muted float-left mt-2">Merk/Tipe ATK</label>
                             <label class="col-sm-4 text-muted text-right">
                                 <a id="btn-total" class="btn btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah List Baru
@@ -107,6 +106,7 @@
                                 <span id="satuan1-atk"><input class="form-control" placeholder="SATUAN" readonly></span>
                             </div>
                         </div>
+                        <span id="list-baru"></span>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Jumlah (*)</label>
                             <div class="col-sm-4">
@@ -131,7 +131,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
                             <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
+                                <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
                             </div>
                         </div>
                     </div>
@@ -140,6 +140,150 @@
         </div>
     </div>
 </section>
+@else
+<section class="content">
+    <div class="container">
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p style="color:white;margin: auto;">{{ $message }}</p>
+        </div>
+        @elseif ($message = Session::get('failed'))
+        <div class="alert alert-danger">
+            <p style="color:white;margin: auto;">{{ $message }}</p>
+        </div>
+        @endif
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
+            </div>
+            <div class="card-body">
+                <form action="{{ url('super-user/atk/usulan/proses-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+                    <input type="hidden" name="jenis_form" value="1">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
+                        </div>
+                    </div>
+                    <hr style="border: 0.5px solid grey;">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <div class="alert alert-info alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h6><i class="icon fas fa-info"></i> Mohon untuk mengupload file sesuai format!</h6>
+                                <small> Format Kebutuhan Alkom <a href="{{ asset('format/format_kebutuhan_alkom.xls') }}" download> download</a> </small><br>
+                                <small> Format Kebutuhan ATK <a href="{{ asset('format/format_kebutuhan_atk.xls') }}" download> download</a> </small> </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <table id="table-kebutuhan" class="table table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>No</th>
+                                        <th style="width: 25%;">Jenis Barang</th>
+                                        <th style="width: 30%;">Nama Barang</th>
+                                        <th style="width: 35%;">Spesifikasi</th>
+                                        <th style="width: 20%;">Jumlah</th>
+                                        <th style="width: 10%;">Satuan</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody id="section-input">
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>
+                                            <select name="jenis_barang[]" class="form-control text-uppercase" style="font-size: 13px;" required>
+                                                <option value="">-- Pilih Jenis Barang --</option>
+                                                <option value="atk">Alat Tulis Kantor (ATK)</option>
+                                                <option value="alkom">Alat Komputer (Alkom)</option>
+                                                <option value="lainya">Lain-lain</option>
+                                            </select>
+                                        </td>
+                                        <td>
+
+                                            <input type="text" name="barang[] small" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Buku/Pensil/Printer/Tinta/Toner, Dll">
+                                        </td>
+                                        <td><input type="text" name="spesifikasi[]" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Toner Canon Seri 6A, Buku Tulis Dudu, Dll"></td>
+                                        <td><input type="number" name="jumlah[]" class="form-control text-center" style="font-size: 13px;" min="1" value="0"></td>
+                                        <td><input type="text" name="satuan[]" class="form-control text-center text-uppercase" style="font-size: 13px;"></td>
+                                        <td>
+                                            <a id="add-row-pengadaan" class="btn btn-dark text-uppercase font-weight-bold">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">&nbsp;</label>
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Modal -->
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url('super-user/atk/usulan/preview-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+                <input type="hidden" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                <input type="hidden" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
+                <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <input type="hidden" name="proses" value="upload">
+                        <label class="col-sm-5 col-form-label">Kebutuhan ATK (*)</label>
+                        <div class="col-sm-12">
+                            <input type="file" name="file_atk" class="form-control">
+                            <small>Format file (.xls)</small>
+                        </div>
+                        <label class="col-sm-5 col-form-label">Kebutuhan Alkom (*)</label>
+                        <div class="col-sm-12">
+                            <input type="file" name="file_alkom" class="form-control">
+                            <small>Format file (.xls)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah file sudah benar ?')">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 
 @section('js')
 <script>
@@ -148,6 +292,28 @@
     $(function() {
         let total = 1
         let i = 0
+        let button = document.getElementById("btnSubmit");
+
+        $("#table-kebutuhan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+            buttons: [{
+                text: '⬆️ Upload Kebutuhan',
+                className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                action: function(e, dt, node, config) {
+                    $('#upload').modal('show');
+                }
+            }]
+
+        }).buttons().container().appendTo('#table-kebutuhan_wrapper .col-md-6:eq(0)');
 
         // Daftar Kategori
         $(".kategori").select2({
@@ -243,7 +409,8 @@
                                 $("#merktipe").append(
                                     '<option value="' + row.id + '">' + row.text + '</option>'
                                 )
-                            });
+                            })
+                            $("#merktipe").append('<option value="lain-lain">LAIN-LAIN</option>')
                         } else {
                             $("#merktipe").empty();
                         }
@@ -256,34 +423,77 @@
 
         // Daftar Stok
         $(document).on('change', '.merktipe', function() {
+            let kategori = $('.barang').val()
             let merktipe = $(this).val()
+            let usulan = '{{ $aksi }}'
             if (merktipe) {
                 $.ajax({
                     type: "GET",
                     url: `{{ url('super-user/atk/select2/5/` + merktipe + `') }}`,
                     dataType: 'JSON',
                     success: function(res) {
-                        if (res) {
-                            $("#stok").empty();
-                            $("#satuan1-atk").empty();
-                            $("#satuan2-atk").empty();
-                            $("#jumlahDistribusi").empty();
-                            $.each(res, function(index, row) {
-                                $("#stok").append(
-                                    '<input type="number" class="form-control" value="' + row.stok + '" readonly>'
-                                )
-                                $("#satuan1-atk").append(
-                                    '<input type="text" class="form-control" value="' + row.satuan + '" readonly>'
-                                )
-                                $("#satuan2-atk").append(
-                                    '<input type="text" class="form-control" name="satuan[]" value="' + row.satuan + '" readonly>'
-                                )
-                                $("#jumlahDistribusi").append(
-                                    '<input type="number" class="form-control" name="jumlah[]" min="1" max="' + row.stok + '" required>'
-                                )
-                            });
+                        if (merktipe != 'lain-lain') {
+                            if (res) {
+                                $("#list-baru").empty()
+                                $("#stok").empty();
+                                $("#satuan1-atk").empty();
+                                $("#satuan2-atk").empty();
+                                $("#jumlahDistribusi").empty();
+                                $.each(res, function(index, row) {
+                                    $("#stok").append(
+                                        '<input type="number" class="form-control" value="' + row.stok + '" readonly>' +
+                                        '<input type="hidden" class="form-control text-uppercase" name="barang_lain[]">' +
+                                        '<input type="hidden" class="form-control text-uppercase" name="kategori_atk_id[]">'
+                                    )
+                                    $("#satuan1-atk").append(
+                                        '<input type="text" class="form-control text-uppercase" value="' + row.satuan + '" readonly>'
+                                    )
+                                    $("#satuan2-atk").append(
+                                        '<input type="text" class="form-control text-uppercase" name="satuan[]" value="' + row.satuan + '" readonly>'
+                                    )
+                                    $("#jumlahDistribusi").append(
+                                        row.stok == 0 ? '<input type="text" class="form-control" name="jumlah[]" value="STOK TIDAK TERSEDIA" required readonly>' : '<input type="number" class="form-control" name="jumlah[]" min="1" max="' + row.stok + '" required>'
+                                    )
+                                    if (usulan == 'pengadaan') {
+                                        button.disabled = false
+                                    } else {
+                                        row.stok == 0 ? button.disabled = true : button.disabled = false
+                                    }
+                                })
+                            } else {
+                                $("#stok").empty();
+                            }
                         } else {
-                            $("#stok").empty();
+
+                            $("#list-baru").empty()
+                            $("#stok").empty()
+                            $("#satuan1-atk").empty()
+                            $("#satuan2-atk").empty()
+
+                            $("#list-baru").append(
+                                `<div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Lain-lain</label>
+                                    <div class="col-md-10">
+                                        <input type="hidden" class="form-control text-uppercase" name="kategori_atk_id[]" value="` + kategori + `">
+                                        <input type="text" class="form-control text-uppercase" name="barang_lain[]" placeholder="MERK/TIPE LAINYA" required>
+                                    </div>
+                                </div>`
+                            )
+
+                            $("#stok").append(
+                                '<input type="text" class="form-control" value="-" readonly>'
+                            )
+
+                            $("#satuan1-atk").append(
+                                '<input type="text" class="form-control" value="-" readonly>'
+                            )
+
+                            $("#satuan2-atk").append(
+                                '<input type="text" class="form-control text-uppercase" name="satuan[]" placeholder="SATUAN" required>'
+                            )
+
+                            button.disabled = false
+
                         }
                     }
                 })
@@ -299,7 +509,7 @@
                 `<div class="atk">
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
+                        <label class="col-sm-8 text-muted float-left mt-2">Merk/Tipe ATK</label>
                         <label class="col-sm-4 text-muted text-right">
                             <a class="btn btn-danger remove-list">
                                 <i class="fas fa-trash"></i> Hapus List
@@ -308,63 +518,64 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Kategori</label>
-                            <div class="col-sm-4">
-                                <select class="form-control text-capitalize kategori` + i + `" data-idtarget=` + i + `>
-                                    <option value="">-- KATEGORI BARANG --</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Jenis</label>
-                            <div class="col-sm-4">
-                                <select id="jenis` + i + `" class="form-control text-capitalize select2-` + i + `-2 jenis` + i + `" data-idtarget=` + i + `>
-                                    <option value="">-- JENIS BARANG --</option>
-                                </select>
-                            </div>
+                        <label class="col-sm-2 col-form-label">Kategori</label>
+                        <div class="col-sm-4">
+                            <select class="form-control text-capitalize kategori` + i + `" data-idtarget=` + i + `>
+                                <option value="">-- KATEGORI BARANG --</option>
+                            </select>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Barang</label>
-                            <div class="col-sm-4">
-                                <select id="barang` + i + `" class="form-control text-capitalize select2-` + i + `-3 barang` + i + `" data-idtarget=` + i + `>
-                                    <option value="">-- NAMA BARANG --</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Merk/Tipe</label>
-                            <div class="col-sm-4">
-                                <select name="atk_id[]" id="merktipe` + i + `" class="form-control text-capitalize select2-` + i + `-4 merktipe` + i + `" data-idtarget=` + i + `>
-                                    <option value="">-- MERK/TIPE BARANG --</option>
-                                </select>
-                            </div>
+                        <label class="col-sm-2 col-form-label">Jenis</label>
+                        <div class="col-sm-4">
+                            <select id="jenis` + i + `" class="form-control text-capitalize select2-` + i + `-2 jenis` + i + `" data-idtarget=` + i + `>
+                                <option value="">-- JENIS BARANG --</option>
+                            </select>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Stok</label>
-                            <div class="col-sm-4">
-                                <span id="stok` + i + `"><input class="form-control" placeholder="STOK BARANG" readonly></span>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-4">
-                                <span id="satuan1` + i + `"><input class="form-control" placeholder="SATUAN" readonly></span>
-                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Nama Barang</label>
+                        <div class="col-sm-4">
+                            <select id="barang` + i + `" class="form-control text-capitalize select2-` + i + `-3 barang` + i + `" data-idtarget=` + i + `>
+                                <option value="">-- NAMA BARANG --</option>
+                            </select>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jumlah (*)</label>
-                            <div class="col-sm-4">
-                                @if ($aksi == 'pengadaan')
-                                <input type="number" class="form-control" name="jumlah[]" min="1" placeholder="MASUKAN JUMLAH BARANG" required>
-                                @else
-                                <span id="jumlahDistribusi` + i + `"><input class="form-control" placeholder="MASUKAN JUMLAH BARANG" readonly></span>
-                                @endif
-                            </div>
-                            <label class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-4">
-                                <span id="satuan2` + i + `"><input class="form-control" placeholder="SATUAN" readonly></span>
-                            </div>
+                        <label class="col-sm-2 col-form-label">Merk/Tipe</label>
+                        <div class="col-sm-4">
+                            <select name="atk_id[]" id="merktipe` + i + `" class="form-control text-capitalize select2-` + i + `-4 merktipe` + i + `" data-idtarget=` + i + `>
+                                <option value="">-- MERK/TIPE BARANG --</option>
+                            </select>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Keterangan</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
-                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Stok</label>
+                        <div class="col-sm-4">
+                            <span id="stok` + i + `"><input class="form-control" placeholder="STOK BARANG" readonly></span>
                         </div>
+                        <label class="col-sm-2 col-form-label">Satuan</label>
+                        <div class="col-sm-4">
+                            <span id="satuan1` + i + `"><input class="form-control" placeholder="SATUAN" readonly></span>
+                        </div>
+                    </div>
+                    <span id="list-baru` + i + `"></span>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Jumlah (*)</label>
+                        <div class="col-sm-4">
+                            @if ($aksi == 'pengadaan')
+                            <input type="number" class="form-control" name="jumlah[]" min="1" placeholder="MASUKAN JUMLAH BARANG" required>
+                            @else
+                            <span id="jumlahDistribusi` + i + `"><input class="form-control" placeholder="MASUKAN JUMLAH BARANG" readonly></span>
+                            @endif
+                        </div>
+                        <label class="col-sm-2 col-form-label">Satuan</label>
+                        <div class="col-sm-4">
+                            <span id="satuan2` + i + `"><input class="form-control" placeholder="SATUAN" readonly></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Keterangan</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
+                        </div>
+                    </div>
                     <div id="section-gdn"></div>
                 </div>`
             )
@@ -466,7 +677,8 @@
                                     $("#merktipe" + target).append(
                                         '<option value="' + row.id + '">' + row.text + '</option>'
                                     )
-                                });
+                                })
+                                $("#merktipe" + target).append('<option value="lain-lain">LAIN-LAIN</option>')
                             } else {
                                 $("#merktipe" + target).empty();
                             }
@@ -481,33 +693,79 @@
             $(document).on('change', '.merktipe' + i, function() {
                 let target = $(this).data('idtarget')
                 let merktipe = $(this).val()
+                let kategori = $('.barang' + target).val()
+                let usulan = '{{ $aksi }}'
+                console.log(kategori)
                 if (merktipe) {
                     $.ajax({
                         type: "GET",
                         url: `{{ url('super-user/atk/select2/5/` + merktipe + `') }}`,
                         dataType: 'JSON',
                         success: function(res) {
-                            if (res) {
+                            if (merktipe != 'lain-lain') {
+                                if (res) {
+                                    $("#list-baru" + target).empty()
+                                    $("#stok" + target).empty()
+                                    $("#satuan1" + target).empty()
+                                    $("#satuan2" + target).empty()
+                                    $("#jumlahDistribusi" + target).empty()
+                                    $.each(res, function(index, row) {
+                                        $("#stok" + target).append(
+                                            '<input type="number" class="form-control" value="' + row.stok + '" readonly>' +
+                                            '<input type="hidden" class="form-control text-uppercase" name="barang_lain[]">' +
+                                            '<input type="hidden" class="form-control text-uppercase" name="kategori_atk_id[]">'
+                                        )
+                                        $("#satuan1" + target).append(
+                                            '<input type="text" class="form-control text-uppercase" value="' + row.satuan + '" readonly>'
+                                        )
+                                        $("#satuan2" + target).append(
+                                            '<input type="text" class="form-control text-uppercase" name="satuan[]" value="' + row.satuan + '" readonly>'
+                                        )
+                                        $("#jumlahDistribusi" + target).append(
+                                            row.stok == 0 ? '<input type="text" class="form-control" name="jumlah[]" value="STOK TIDAK TERSEDIA" required readonly>' : '<input type="number" class="form-control" name="jumlah[]" min="1" max="' + row.stok + '" required>'
+                                        )
+
+                                        if (usulan == 'pengadaan') {
+                                            button.disabled = false
+                                        } else {
+                                            row.stok == 0 ? button.disabled = true : button.disabled = false
+                                        }
+
+                                    });
+                                } else {
+                                    $("#stok" + target).empty();
+                                }
+                            } else {
+
+                                $("#list-baru" + target).empty()
                                 $("#stok" + target).empty();
                                 $("#satuan1" + target).empty();
                                 $("#satuan2" + target).empty();
-                                $("#jumlahDistribusi" + target).empty();
-                                $.each(res, function(index, row) {
-                                    $("#stok" + target).append(
-                                        '<input type="number" class="form-control" value="' + row.stok + '" readonly>'
-                                    )
-                                    $("#satuan1" + target).append(
-                                        '<input type="text" class="form-control" value="' + row.satuan + '" readonly>'
-                                    )
-                                    $("#satuan2" + target).append(
-                                        '<input type="text" class="form-control" name="satuan[]" value="' + row.satuan + '" readonly>'
-                                    )
-                                    $("#jumlahDistribusi" + target).append(
-                                        '<input type="number" class="form-control" name="jumlah[]" min="1" max="' + row.stok + '" required>'
-                                    )
-                                });
-                            } else {
-                                $("#stok" + target).empty();
+
+                                $("#list-baru" + target).append(
+                                    `<div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Lain-lain</label>
+                                        <div class="col-md-10">
+                                            <input type="hidden" class="form-control text-uppercase" name="kategori_atk_id[]" value="` + kategori + `">
+                                            <input type="text" class="form-control text-uppercase" name="barang_lain[]" placeholder="MERK/TIPE LAINYA" required>
+                                        </div>
+                                    </div>`
+                                )
+
+                                $("#stok" + target).append(
+                                    '<input type="text" class="form-control" value="-" readonly>'
+                                )
+
+                                $("#satuan1" + target).append(
+                                    '<input type="text" class="form-control" value="-" readonly>'
+                                )
+
+                                $("#satuan2" + target).append(
+                                    '<input type="text" class="form-control text-uppercase" name="satuan[]" placeholder="SATUAN" required>'
+                                )
+
+                                button.disabled = false
+
                             }
                         }
                     })
@@ -520,10 +778,47 @@
 
         $(document).on('click', '.remove-list', function() {
             $(this).parents('.atk').remove();
-        });
+        })
 
+    })
+    // Pengadaan section
+    $(function() {
+        let i = 0
+        let no = 1
+        // More Item
+        $('#add-row-pengadaan').click(function() {
+            ++i
+            ++no
+            $("#section-input").append(
+                `<tr class="row-pengadaan">
+                    <td class="text-center">`+no+`</td>
+                    <td>
+                        <select name="jenis_barang[]" class="form-control text-uppercase" style="font-size: 13px;" required>
+                            <option value="">-- Pilih Jenis Barang --</option>
+                            <option value="atk">Alat Tulis Kantor (ATK)</option>
+                            <option value="alkom">Alat Komputer (Alkom)</option>
+                            <option value="lainya">Lain-lain</option>
+                        </select>
+                    </td>
+                    <td>
 
+                        <input type="text" name="barang[] small" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Buku/Pensil/Printer/Tinta/Toner, Dll">
+                    </td>
+                    <td><input type="text" name="spesifikasi[]" class="form-control text-uppercase" style="font-size: 13px;" placeholder="Contoh: Toner Canon Seri 6A, Buku Tulis Dudu, Dll"></td>
+                    <td><input type="number" name="jumlah[]"  class="form-control text-center" style="font-size: 13px;" min="1" value="0"></td>
+                    <td><input type="text" name="satuan[]"  class="form-control text-center text-uppercase" style="font-size: 13px;"></td>
+                    <td>
+                        <a id="remove-row-pengadaan" class="btn btn-dark text-uppercase font-weight-bold">
+                            <i class="fas fa-minus-circle"></i>
+                        </a>
+                    </td>
+                </tr>`
+            )
 
+            $(document).on('click', '#remove-row-pengadaan', function() {
+                $(this).parents('.row-pengadaan').remove();
+            });
+        })
     })
 </script>
 @endsection

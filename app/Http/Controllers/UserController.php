@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ATK\ImportAlkom;
 use App\Imports\ATK\ImportAtk;
 use App\Models\AADB\JadwalServis;
@@ -23,9 +24,9 @@ use App\Models\ATK\SubKelompokAtk;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkPengadaan;
-use App\Models\gdn\BidangKerusakan;
-use App\Models\gdn\UsulanGdn;
-use App\Models\gdn\UsulanGdnDetail;
+use App\Models\GDN\BidangKerusakan;
+use App\Models\GDN\UsulanGdn;
+use App\Models\GDN\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\FormUsulan;
 use App\Models\OLDAT\FormUsulanPengadaan;
@@ -46,7 +47,6 @@ use Google2FA;
 use DB;
 use Validator;
 use Hash;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
