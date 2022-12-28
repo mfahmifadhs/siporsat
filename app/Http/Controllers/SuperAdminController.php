@@ -65,6 +65,218 @@ class SuperAdminController extends Controller
         return view('v_super_admin.index');
     }
 
+    public function Letter(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'usulan-gdn') {
+            $modul = 'gdn';
+            $form  = UsulanGdn::where('id_form_usulan', $id)->first();
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $usulan = UsulanGdn::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_super_admin/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($aksi == 'usulan-atk') {
+            $modul = 'atk';
+            $form  = UsulanAtk::where('id_form_usulan', $id)->first();
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $usulan = UsulanAtk::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_super_admin/surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
+        } elseif ($aksi == 'usulan-aadb') {
+            $modul = 'aadb';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan = UsulanAadb::with('usulanKendaraan')
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_super_admin/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($aksi == 'usulan-oldat') {
+            $modul = 'oldat';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan  = FormUsulan::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_super_admin/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($aksi == 'bast-atk') {
+            $modul = 'atk';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $bast = UsulanAtk::where('id_form_usulan', $id)
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_super_admin/surat_bast', compact('pimpinan', 'bast', 'modul'));
+        } elseif ($aksi == 'bast-aadb') {
+            $modul = 'aadb';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $form      = UsulanAadb::where('id_form_usulan', $id)->pluck('id_form_usulan');
+            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $form)->first();
+
+            $bast = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_super_admin/surat_bast', compact('pimpinan', 'bast', 'modul', 'jenisAadb'));
+        } elseif ($aksi == 'bast-oldat') {
+            $modul = 'oldat';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $bast = FormUsulan::where('id_form_usulan', $id)
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_super_admin.surat_bast', compact('modul', 'bast', 'pimpinan'));
+        }
+    }
+
+    public function PrintLetter(Request $request, $modul, $id)
+    {
+        if ($modul == 'usulan-gdn') {
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $usulan = UsulanGdn::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_super_admin/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($modul == 'usulan-atk') {
+            $form  = UsulanAtk::where('id_form_usulan', $id)->first();
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $usulan = UsulanAtk::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_super_admin/print_surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
+        } elseif ($modul == 'usulan-aadb') {
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan = UsulanAadb::with('usulanKendaraan')
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_super_admin/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($modul == 'usulan-oldat') {
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan  = FormUsulan::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_super_admin/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+        } elseif ($modul == 'bast-atk') {
+            $modul = 'atk';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')
+                ->where('unit_kerja_id', 465930)
+                ->first();
+
+            $bast = UsulanAtk::where('id_form_usulan', $id)
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_super_admin/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul'));
+        } elseif ($modul == 'bast-aadb') {
+            $modul = 'aadb';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $form      = UsulanAadb::where('id_form_usulan', $id)->pluck('id_form_usulan');
+            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $form)->first();
+
+            $bast = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_super_admin/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul', 'jenisAadb'));
+        } elseif ($modul == 'bast-oldat') {
+            $modul = 'oldat';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $bast = FormUsulan::where('id_form_usulan', $id)
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_super_admin.print_surat_bast', compact('modul', 'bast', 'pimpinan'));
+        }
+    }
+
     public function Select2User(Request $request, $aksi, $id)
     {
         $search = $request->search;
