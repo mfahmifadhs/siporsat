@@ -7,8 +7,6 @@
     <meta name="description" content="Siporsat Kemenkes RI">
     <meta name="keywords" content="Siporsat Kemenkes RI">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="shortcut icon" />
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
