@@ -4,7 +4,7 @@ namespace App\Models\atk;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ATK\KategoriATK;
+use App\Models\ATK\KategoriAtk;
 
 class Atk extends Model
 {
