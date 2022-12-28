@@ -4,8 +4,8 @@
 <head>
     <title>SIPORSAT KEMENKES RI</title>
     <meta charset="UTF-8">
-    <meta name="description" content="Cryptocurrency Landing Page Template">
-    <meta name="keywords" content="cryptocurrency, unica, creative, html">
+    <meta name="description" content="Siporsat Kemenkes RI">
+    <meta name="keywords" content="Siporsat Kemenkes RI">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="shortcut icon" />

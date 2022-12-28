@@ -4,6 +4,7 @@ namespace App\Models\gdn;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\GDN\UsulanGdnDetail;
 
 class UsulanGdn extends Model
 {

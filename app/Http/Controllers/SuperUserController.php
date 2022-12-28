@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ATK\ImportAlkom;
+use App\Imports\ATK\ImportAtk;
 use App\Models\AADB\JadwalServis;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\JenisUsulan;
@@ -40,14 +43,11 @@ use App\Models\RDN\KondisiRumah;
 use App\Models\RDN\PenghuniRumah;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Hash;
 use Validator;
 use Google2FA;
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Psr7\Request as Psr7Request;
 
 use Carbon\Carbon;
 
@@ -793,6 +793,171 @@ class SuperUserController extends Controller
                 $detail->save();
             }
             return redirect('super-user/verif/usulan-atk/' . $idFormUsulan);
+        } elseif ($aksi == 'preview-pengadaan') {
+            if ($id == 'preview') {
+                $usulan = UsulanAtk::where('id_form_usulan', $request->id_form_usulan)->first();
+                $idUsulan = $usulan->id_form_usulan;
+                $noSurat  = $usulan->no_surat_usulan;
+                $tanggal  = $usulan->tanggal_usulan;
+                $rencana  = $usulan->rencana_pengguna;
+
+                $resultAtk   = UsulanAtkPengadaan::where('form_usulan_id', $request->id_form_usulan)->where('jenis_barang', 'ATK')->get();
+                $resultAlkom = UsulanAtkPengadaan::where('form_usulan_id', $request->id_form_usulan)->where('jenis_barang', 'ALKOM')->get();
+            } else {
+                $idUsulan = $request->id_usulan;
+                $noSurat  = $request->no_surat_usulan;
+                $tanggal  = $request->tanggal_usulan;
+                $rencana  = $request->rencana_pengguna;
+
+                if ($request->file_atk == null) {
+                    $resultAtk = null;
+                } else {
+                    $fileAtk = Excel::toArray(new ImportAtk(), $request->file_atk);
+                    foreach ($fileAtk as $key => $value) {
+                        foreach ($value as $dataAtk) {
+                            $dataArray['id_form_usulan_pengadaan'] = null;
+                            $dataArray['nama_barang'] = $dataAtk[1];
+                            $dataArray['spesifikasi'] = $dataAtk[2];
+                            $dataArray['jumlah']      = $dataAtk[3];
+                            $dataArray['satuan']      = $dataAtk[4];
+                            $resultAtk[]              = $dataArray;
+                            unset($dataArray);
+                        }
+                    }
+                }
+
+                if ($request->file_alkom == null) {
+                    $resultAlkom = null;
+                } else {
+                    $fileAlkom = Excel::toArray(new ImportAlkom(), $request->file_alkom);
+                    foreach ($fileAlkom as $key => $value) {
+                        foreach ($value as $dataAlkom) {
+                            $dataArray['id_form_usulan_pengadaan'] = null;
+                            $dataArray['nama_barang'] = $dataAlkom[1];
+                            $dataArray['spesifikasi'] = $dataAlkom[2];
+                            $dataArray['jumlah']      = $dataAlkom[3];
+                            $resultAlkom[]            = $dataArray;
+                            unset($dataArray);
+                        }
+                    }
+                }
+
+                if ($request->file_atk == null && $request->file_alkom == null) {
+                    return redirect('super-user/atk/usulan/pengadaan/baru')->with('failed', 'Anda belum mengunggah file kebutuhan Alkom atau Oldat');
+                }
+            }
+
+            return view('v_super_user.apk_atk.preview', compact('resultAtk', 'resultAlkom', 'idUsulan', 'noSurat', 'tanggal', 'rencana'));
+
+        } elseif ($aksi == 'proses-pengadaan') {
+            $cekUsulan = UsulanAtk::where('id_form_usulan', $request->id_usulan)->count();
+            if ($cekUsulan == 0) {
+                $id_usulan = Carbon::now()->format('dmy') . $request->id_usulan;
+                if ($request->atk_barang != null) {
+                    $totalAtk = count($request->atk_barang);
+                    $atk = $request->atk_barang;
+                    foreach ($atk as $i => $dataAtk) {
+                        $jumlahUsulan = UsulanAtkPengadaan::count();
+                        $pengadaanAtk = new UsulanAtkPengadaan();
+                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                        $pengadaanAtk->form_usulan_id = $id_usulan;
+                        $pengadaanAtk->jenis_barang = 'ATK';
+                        $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
+                        $pengadaanAtk->spesifikasi = strtoupper($request->atk_spesifikasi[$i]);
+                        $pengadaanAtk->jumlah = $request->atk_jumlah[$i];
+                        $pengadaanAtk->satuan = strtoupper($request->atk_satuan[$i]);
+                        $pengadaanAtk->tanggal = Carbon::now();
+                        $pengadaanAtk->status = 'proses';
+                        $pengadaanAtk->save();
+                    }
+                } else {
+                    $totalAtk = 0;
+                }
+
+                if ($request->alkom_barang != null) {
+                    $totalAlkom = count($request->alkom_barang);
+                    $alkom = $request->alkom_barang;
+                    foreach ($alkom as $i => $dataAtk) {
+                        if ($request->alkom_jumlah != 0) {
+                            $jumlahUsulan = UsulanAtkPengadaan::count();
+                            $pengadaanAtk = new UsulanAtkPengadaan();
+                            $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                            $pengadaanAtk->form_usulan_id = $id_usulan;
+                            $pengadaanAtk->jenis_barang = 'ALKOM';
+                            $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
+                            $pengadaanAtk->spesifikasi = strtoupper($request->alkom_spesifikasi[$i]);
+                            $pengadaanAtk->jumlah = $request->alkom_jumlah[$i];
+                            $pengadaanAtk->satuan = strtoupper($request->alkom_satuan[$i]);
+                            $pengadaanAtk->tanggal = Carbon::now();
+                            $pengadaanAtk->status = 'proses';
+                            $pengadaanAtk->save();
+                        }
+                    }
+                } else {
+                    $totalAlkom = 0;
+                }
+
+                if ($request->atk_barang == null && $request->alkom_barang == null) {
+                    $totalAtk = count($request->barang);
+                    $barang = $request->barang;
+                    foreach ($barang as $i => $dataAtk) {
+                        if ($request->jumlah != 0) {
+                            $jumlahUsulan = UsulanAtkPengadaan::count();
+                            $pengadaanAtk = new UsulanAtkPengadaan();
+                            $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                            $pengadaanAtk->form_usulan_id = $id_usulan;
+                            $pengadaanAtk->jenis_barang = strtoupper($request->jenis_barang[$i]);
+                            $pengadaanAtk->nama_barang = strtoupper($request->barang[$i]);
+                            $pengadaanAtk->spesifikasi = strtoupper($request->spesifikasi[$i]);
+                            $pengadaanAtk->jumlah = $request->jumlah[$i];
+                            $pengadaanAtk->satuan = strtoupper($request->satuan[$i]);
+                            $pengadaanAtk->tanggal = Carbon::now();
+                            $pengadaanAtk->status = 'proses';
+                            $pengadaanAtk->save();
+                        }
+                    }
+                }
+
+                $usulan = new UsulanAtk();
+                $usulan->id_form_usulan     = $id_usulan;
+                $usulan->pegawai_id         = Auth::user()->pegawai_id;
+                $usulan->jenis_form         = 'pengadaan';
+                $usulan->total_pengajuan    = $totalAtk + $totalAlkom;
+                $usulan->no_surat_usulan    = $request->no_surat_usulan;
+                $usulan->tanggal_usulan     = $request->tanggal_usulan;
+                $usulan->rencana_pengguna   = $request->rencana_pengguna;
+                $usulan->save();
+
+                return redirect('super-user/verif/usulan-atk/' . $id_usulan);
+            } else {
+                $id_usulan = $request->id_usulan;
+                if ($request->atk_id != null) {
+                    foreach ($request->atk_id as $i => $idAtk) {
+                        UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $idAtk)
+                            ->update([
+                                'nama_barang' => $request->atk_barang[$i],
+                                'spesifikasi' => $request->atk_spesifikasi[$i],
+                                'jumlah'      => $request->atk_jumlah[$i],
+                                'satuan'      => $request->atk_satuan[$i]
+                            ]);
+                    }
+                }
+
+                if ($request->alkom_id != null) {
+                    foreach ($request->alkom_id as $j => $idAlkom) {
+                        UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $idAlkom)
+                            ->update([
+                                'nama_barang' => $request->alkom_barang[$j],
+                                'spesifikasi' => $request->alkom_spesifikasi[$j],
+                                'jumlah'      => $request->alkom_jumlah[$j],
+                                'satuan'      => $request->alkom_satuan[$j]
+                            ]);
+                    }
+                }
+
+                return redirect('super-user/surat/usulan-atk/' . $id_usulan);
+            }
+
         } elseif ($aksi == 'proses-diterima') {
             if ($request->modul == 'pengadaan') {
                 $pengadaan = $request->id_pengadaan;
