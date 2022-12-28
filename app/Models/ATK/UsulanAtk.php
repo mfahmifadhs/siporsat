@@ -4,6 +4,7 @@ namespace App\Models\atk;
 
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkDetail;
+use App\Models\ATK\UsulanAtkLampiran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
