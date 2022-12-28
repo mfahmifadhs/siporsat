@@ -2,7 +2,7 @@
 
 namespace App\Models\atk;
 
-use App\Models\Atk\UsulanAtkPengadaan;
+use App\Models\ATK\UsulanAtkPengadaan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

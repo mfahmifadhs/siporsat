@@ -1741,7 +1741,7 @@ class UserController extends Controller
                 return redirect('unit-kerja/verif/usulan-atk/' . $id_usulan);
             } else {
                 $id_usulan = $request->id_usulan;
-                if (count($request->atk_id) > 0) {
+                if ($request->atk_id != null) {
                     foreach ($request->atk_id as $i => $idAtk) {
                         UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $idAtk)
                             ->update([
@@ -1753,7 +1753,7 @@ class UserController extends Controller
                     }
                 }
 
-                if (count($request->alkom_id) > 0) {
+                if ($request->alkom_id != null) {
                     foreach ($request->alkom_id as $j => $idAlkom) {
                         UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $idAlkom)
                             ->update([
