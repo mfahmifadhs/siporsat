@@ -23,6 +23,6 @@ class Atk extends Model
     ];
 
     public function KategoriATK() {
-        return $this->belongsTo(KategoriATK::class, 'kategori_atk_id');
+        return $this->belongsTo(KategoriAtk::class, 'kategori_atk_id');
     }
 }

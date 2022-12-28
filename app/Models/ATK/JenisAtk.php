@@ -21,6 +21,6 @@ class JenisAtk extends Model
     ];
 
     public function SubKelompokATK() {
-        return $this->belongsTo(SubKelompokATK::class, 'subkelompok_atk_id');
+        return $this->belongsTo(SubKelompokAtk::class, 'subkelompok_atk_id');
     }
 }

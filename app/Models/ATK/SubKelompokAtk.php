@@ -21,6 +21,6 @@ class SubKelompokAtk extends Model
     ];
 
     public function KelompokATK() {
-        return $this->belongsTo(KelompokATK::class, 'kelompok_atk_id');
+        return $this->belongsTo(KelompokAtk::class, 'kelompok_atk_id');
     }
 }
