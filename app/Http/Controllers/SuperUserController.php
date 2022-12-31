@@ -127,7 +127,7 @@ class SuperUserController extends Controller
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image   = $google2fa->getQRCodeInline(
-                $registration_data = 'Localhost',
+                $registration_data = 'Siporsat Kemenkes',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
@@ -788,7 +788,7 @@ class SuperUserController extends Controller
                 $detail->form_usulan_id        = $idFormUsulan;
                 $detail->atk_id                = $atk_id;
                 $detail->jumlah_pengajuan      = $request->jumlah[$i];
-                $detail->satuan                = $request->satuan[$i];
+                $detail->satuan_detail         = $request->satuan[$i];
                 $detail->keterangan            = $request->keterangan[$i];
                 $detail->save();
             }
