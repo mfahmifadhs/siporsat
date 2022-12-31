@@ -402,7 +402,6 @@ class SuperAdminController extends Controller
             $dataSearch = $dataRumah->get();
         }
 
-        // dd($dataSearch);
         foreach ($lokasi as $data) {
             $dataArray[]          = $data->lokasi_kota;
             $dataArray[]          = $dataSearch->where('lokasi_kota', $data->lokasi_kota)->count();
@@ -623,7 +622,6 @@ class SuperAdminController extends Controller
 
         $dataChart['atk'] = $dataAtk;
         $chart = json_encode($dataChart);
-        // dd($chart);
         return $chart;
     }
 
@@ -673,7 +671,7 @@ class SuperAdminController extends Controller
         }
         $dataChart['table'] = $resultSearchAtk;
         $chart = json_encode($dataChart);
-        // dd($chart);
+
         if (count($resultSearchAtk) > 0) {
             return response([
                 'status' => true,
@@ -825,7 +823,7 @@ class SuperAdminController extends Controller
                     }
                     $fotoKendaraan = $dataKendaraan->foto_kendaraan;
                 }
-                // dd($request->all());
+
                 $barang = Kendaraan::where('id_kendaraan', 'like', '%' . $id . '%')->update([
                     'unit_kerja_id'           => $request->unit_kerja_id,
                     'jenis_aadb'              => $request->jenis_aadb,
@@ -926,7 +924,6 @@ class SuperAdminController extends Controller
             $dataSearch = $dataKendaraan->get();
         }
 
-        // dd($dataSearch);
         foreach ($dataJenisKendaraan as $data) {
             $dataArray[]          = $data->jenis_kendaraan;
             $dataArray[]          = $dataSearch->where('jenis_kendaraan', $data->jenis_kendaraan)->count();
@@ -1271,7 +1268,7 @@ class SuperAdminController extends Controller
             $dataChart['chart'][] = $dataArray;
             unset($dataArray);
         }
-        // dd($dataChart);
+
         $dataChart['table'] = $dataSearchBarang;
         $chart = json_encode($dataChart);
 
@@ -1411,7 +1408,6 @@ class SuperAdminController extends Controller
             $jabatan   = PegawaiJabatan::get();
             $timKerja  = TimKerja::get();
             $unitKerja = UnitKerja::get();
-            dd($unitKerja);
             $pegawai   = Pegawai::leftjoin('tbl_pegawai_jabatan', 'tbl_pegawai_jabatan.id_jabatan', 'tbl_pegawai.jabatan_id')
                 ->leftjoin('tbl_tim_kerja', 'tbl_tim_kerja.id_tim_kerja', 'tbl_pegawai.tim_kerja_id')
                 ->leftjoin('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
