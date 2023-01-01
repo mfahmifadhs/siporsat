@@ -62,7 +62,7 @@
                         </div>
                         <input type="password" name="password" class="form-control" placeholder="Password">
                     </div>
-                    <!-- <div class="input-group">
+                    <div class="input-group">
                         <div class="mt-1 mb-2">
                             <div class="captcha">
                                 <span>{!! captcha_img() !!}</span>
@@ -75,7 +75,7 @@
                         <div class="mb-2">
                             <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha" required>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="social-auth-links text-center mt-2 mb-3">
                         <button type="submit" class="btn btn-block btn-primary">
                             Masuk
