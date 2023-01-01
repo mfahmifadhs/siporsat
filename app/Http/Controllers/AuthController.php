@@ -24,27 +24,20 @@ class AuthController extends Controller
             'password'  => 'required',
         ]);
 
-        $credentials = $request->only('username', 'password');
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')->with('success', 'Berhasil Masuk !');
+        if ( $request->captcha == null) {
+            return back()->with('failed','mohon isi kode captcha');
+        } elseif(captcha_check($request->captcha) == false ) {
+            return back()->with('failed','captcha salah');
+        } else {
+                $credentials = $request->only('username', 'password');
+                if (Auth::attempt($credentials)) {
+                    return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
+                }
+                return redirect("masuk")->with('failed', 'Username atau Password Salah !');
         }
-        return redirect("masuk")->with('failed', 'Username atau Password Salah !');
-
-        // if ( $request->captcha == null) {
-        //     return back()->with('failed','mohon isi kode captcha');
-        // } elseif(captcha_check($request->captcha) == false ) {
-        //     return back()->with('failed','captcha salah');
-        // } else {
-        //         $credentials = $request->only('username', 'password');
-        //         if (Auth::attempt($credentials)) {
-        //             return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
-        //         }
-        //         return redirect("masuk")->with('failed', 'Username atau Password Salah !');
-        // }
     }
 
-    public function reloadCaptcha()
-    {
+    public function reloadCaptcha() {
         return response()->json(['captcha' => captcha_img()]);
     }
 
@@ -82,20 +75,26 @@ class AuthController extends Controller
 
     public function dashboard()
     {
-        if (Auth::check() && Auth::user()->level_id == 1) {
+        if(Auth::check() && Auth::user()->level_id == 1)
+        {
             return redirect('super-admin/dashboard');
-        } elseif (Auth::check() && Auth::user()->level_id == 2) {
+        }
+        elseif (Auth::check() && Auth::user()->level_id == 2)
+        {
             return redirect('admin-user/dashboard');
-        } elseif (Auth::check() && Auth::user()->level_id == 3) {
+        }
+        elseif (Auth::check() && Auth::user()->level_id == 3)
+        {
             return redirect('super-user/dashboard');
-        } elseif (Auth::check() && Auth::user()->level_id == 4) {
+        }
+        elseif (Auth::check() && Auth::user()->level_id == 4)
+        {
             return redirect('unit-kerja/dashboard');
         }
     }
 
 
-    public function keluar()
-    {
+    public function keluar() {
         Session::flush();
         Auth::logout();
         return Redirect('/');
