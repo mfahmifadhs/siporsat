@@ -1533,7 +1533,7 @@ class UserController extends Controller
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses') {
             // dd($request->all());
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = Carbon::now()->format('dmyhi');
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
@@ -1547,9 +1547,9 @@ class UserController extends Controller
             // Daftar barang
             $daftar = $request->atk_id;
             foreach ($daftar as $i => $dataAtk) {
-                $idDetail = UsulanAtkDetail::count();
+                $idDetail = UsulanAtkDetail::count() + 1;
                 $detail   = new UsulanAtkDetail();
-                $detail->id_form_usulan_detail = $idDetail + 1;
+                $detail->id_form_usulan_detail = $idDetail;
                 $detail->form_usulan_id        = $idFormUsulan;
 
                 if ($dataAtk == 'lain-lain') {
@@ -1638,14 +1638,14 @@ class UserController extends Controller
         } elseif ($aksi == 'proses-pengadaan') {
             $cekUsulan = UsulanAtk::where('id_form_usulan', $request->id_usulan)->count();
             if ($cekUsulan == 0) {
-                $id_usulan = Carbon::now()->format('dmy') . $request->id_usulan;
+                $id_usulan = (int) Carbon::now()->format('dmyhi');
                 if ($request->atk_barang != null) {
                     $totalAtk = count($request->atk_barang);
                     $atk = $request->atk_barang;
                     foreach ($atk as $i => $dataAtk) {
-                        $jumlahUsulan = UsulanAtkPengadaan::count();
+                        $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                         $pengadaanAtk = new UsulanAtkPengadaan();
-                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                        $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
                         $pengadaanAtk->form_usulan_id = $id_usulan;
                         $pengadaanAtk->jenis_barang = 'ATK';
                         $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
@@ -1665,9 +1665,9 @@ class UserController extends Controller
                     $alkom = $request->alkom_barang;
                     foreach ($alkom as $i => $dataAtk) {
                         if ($request->alkom_jumlah != 0) {
-                            $jumlahUsulan = UsulanAtkPengadaan::count();
+                            $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = 'ALKOM';
                             $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
