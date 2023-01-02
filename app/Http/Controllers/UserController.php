@@ -1210,7 +1210,7 @@ class UserController extends Controller
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
@@ -1224,10 +1224,9 @@ class UserController extends Controller
             $usulan->save();
 
             if ($id == 'pengadaan') {
-                $totalUsulan    = UsulanKendaraan::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanKendaraan::count() + 1;
                 $usulanPengadaan = new UsulanKendaraan();
-                $usulanPengadaan->id_form_usulan_pengadaan  = $idUsulan;
+                $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan;
                 $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                 $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                 $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
@@ -1235,12 +1234,11 @@ class UserController extends Controller
                 $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
                 $usulanPengadaan->save();
             } elseif ($id == 'servis') {
-                $totalUsulan    = UsulanServis::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanServis::count() + 1;
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = $idUsulan + $i;
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan;
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1251,25 +1249,23 @@ class UserController extends Controller
                     $usulanServis->save();
                 }
             } elseif ($id == 'perpanjangan-stnk') {
-                $totalUsulan    = UsulanPerpanjanganSTNK::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                 $kendaraan = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = $idUsulan + $i;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan;
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $totalUsulan    = UsulanVoucherBBM::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanVoucherBBM::count() + 1;
                 $kendaraan = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $totalVoucher = ($request->voucher_25[$i] * 25000) + ($request->voucher_50[$i] * 50000) + ($request->voucher_100[$i] * 100000);
                     $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = $idUsulan + $i;
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
                     $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
                     $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
                     $usulanVoucherBBM->voucher_25                   = $request->voucher_25[$i];
@@ -1638,7 +1634,7 @@ class UserController extends Controller
         } elseif ($aksi == 'proses-pengadaan') {
             $cekUsulan = UsulanAtk::where('id_form_usulan', $request->id_usulan)->count();
             if ($cekUsulan == 0) {
-                $id_usulan = (int) Carbon::now()->format('dmyhi');
+                $id_usulan = (int) Carbon::now()->format('dhis');
                 if ($request->atk_barang != null) {
                     $totalAtk = count($request->atk_barang);
                     $atk = $request->atk_barang;
