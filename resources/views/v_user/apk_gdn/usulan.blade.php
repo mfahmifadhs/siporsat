@@ -82,6 +82,7 @@
                                 <select class="form-control bidang-kerusakan" data-idtarget="">
                                     <option value="">-- Pilih Jenis Perbaikan --</option>
                                     <option value="AR">ARSITEKTURAL (AR)</option>
+                                    <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
                                     <option value="ME">MEKANIKAL ENGINEERING (ME)</option>
                                     <option value="ST">STRUKTURAL (ST)</option>
                                 </select>
@@ -153,6 +154,7 @@
                             <select class="form-control bidang-kerusakan" data-idtarget="` + i + `">
                                 <option value="">-- Pilih Jenis Perbaikan --</option>
                                 <option value="AR">ARSITEKTURAL (AR)</option>
+                                <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
                                 <option value="ME">MEKANIKAL ENGINEERING (ME)</option>
                                 <option value="ST">STRUKTURAL (ST)</option>
                             </select>

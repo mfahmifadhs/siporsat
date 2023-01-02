@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\User;
 use Hash;
 use Auth;
@@ -17,23 +18,27 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function postMasuk(Request $request)
+    public function postMasuk(Request $request, $id)
     {
-        $request->validate([
-            'username'  => 'required',
-            'password'  => 'required',
-        ]);
+        if (Crypt::decrypt($id) == 'masuk.post') {
+            $request->validate([
+                'username'  => 'required',
+                'password'  => 'required',
+            ]);
 
-        if ( $request->captcha == null) {
-            return back()->with('failed','mohon isi kode captcha');
-        } elseif(captcha_check($request->captcha) == false ) {
-            return back()->with('failed','captcha salah');
+            if ( $request->captcha == null) {
+                return back()->with('failed','mohon isi kode captcha');
+            } elseif(captcha_check($request->captcha) == false ) {
+                return back()->with('failed','captcha salah');
+            } else {
+                    $credentials = $request->only('username', 'password');
+                    if (Auth::attempt($credentials)) {
+                        return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
+                    }
+                    return redirect("masuk")->with('failed', 'Username atau Password Salah !');
+            }
         } else {
-                $credentials = $request->only('username', 'password');
-                if (Auth::attempt($credentials)) {
-                    return redirect()->intended('dashboard')->with('success','Berhasil Masuk !');
-                }
-                return redirect("masuk")->with('failed', 'Username atau Password Salah !');
+            return back()->with('failed','Anda Tidak Memiliki Akses !');
         }
     }
 

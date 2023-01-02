@@ -44,7 +44,7 @@
                 </span>
             </div>
             <div class="card-body">
-                <form action="{{ route('masuk.post') }}" method="POST">
+                <form action="{{ route('lg', ['id' => Crypt::encrypt('masuk.post')]) }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
                         <div class="input-group-append">
