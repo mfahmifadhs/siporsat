@@ -775,7 +775,7 @@ class SuperUserController extends Controller
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $id;
-            $usulan->total_pengajuan    = $request->total_pengajuan;
+            $usulan->total_pengajuan    = count($request->atk_id);
             $usulan->no_surat_usulan    = $request->no_surat_usulan;
             $usulan->tanggal_usulan     = $request->tanggal_usulan;
             $usulan->rencana_pengguna   = $request->rencana_pengguna;
