@@ -35,7 +35,7 @@
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('super-userf/atk/usulan/proses/'. $aksi) }}" method="POST">
+                <form action="{{ url('super-user/atk/usulan/proses/'. $aksi) }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">

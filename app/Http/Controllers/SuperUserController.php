@@ -649,7 +649,7 @@ class SuperUserController extends Controller
             return view('v_super_user.apk_gdn.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses') {
             // $total = 0;
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
@@ -660,8 +660,9 @@ class SuperUserController extends Controller
 
             $detail = $request->lokasi_bangunan;
             foreach ($detail as $i => $detailUsulan) {
+                $idUsulan = UsulanGdnDetail::count() + 1;
                 $detail = new UsulanGdnDetail();
-                // $detail->id_form_usulan_detail  = ($request->id_usulan + 1) + $i;
+                $detail->id_form_usulan_detail  = (int) $idUsulan;
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -769,7 +770,7 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
@@ -782,9 +783,9 @@ class SuperUserController extends Controller
 
             $atk   = $request->atk_id;
             foreach ($atk as $i => $atk_id) {
-                $idDetail = UsulanAtkDetail::count();
+                $idDetail = UsulanAtkDetail::count() + 1;
                 $detail = new UsulanAtkDetail();
-                $detail->id_form_usulan_detail = $idDetail + 1;
+                $detail->id_form_usulan_detail = (int) $idDetail;
                 $detail->form_usulan_id        = $idFormUsulan;
                 $detail->atk_id                = $atk_id;
                 $detail->jumlah_pengajuan      = $request->jumlah[$i];
@@ -1457,7 +1458,7 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
@@ -1471,10 +1472,9 @@ class SuperUserController extends Controller
             $usulan->save();
 
             if ($id == 'pengadaan') {
-                $totalUsulan    = UsulanKendaraan::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanKendaraan::count() + 1;
                 $usulanPengadaan = new UsulanKendaraan();
-                $usulanPengadaan->id_form_usulan_pengadaan  = $idUsulan;
+                $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan;
                 $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                 $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                 $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
@@ -1482,12 +1482,11 @@ class SuperUserController extends Controller
                 $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
                 $usulanPengadaan->save();
             } elseif ($id == 'servis') {
-                $totalUsulan    = UsulanServis::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan       = UsulanServis::count() + 1;
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = $idUsulan + $i;
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan;
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1498,25 +1497,23 @@ class SuperUserController extends Controller
                     $usulanServis->save();
                 }
             } elseif ($id == 'perpanjangan-stnk') {
-                $totalUsulan    = UsulanPerpanjanganSTNK::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                 $kendaraan = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = $idUsulan + $i;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan;
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $totalUsulan    = UsulanVoucherBBM::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanVoucherBBM::count() + 1;
                 $kendaraan = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $totalVoucher = ($request->voucher_25[$i] * 25000) + ($request->voucher_50[$i] * 50000) + ($request->voucher_100[$i] * 100000);
                     $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = $idUsulan + $i;
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
                     $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
                     $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
                     $usulanVoucherBBM->voucher_25                   = $request->voucher_25[$i];
@@ -2348,7 +2345,7 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_oldat.form_usulan', compact('id', 'idUsulan', 'kategoriBarang', 'pegawai'));
         } elseif ($aksi == 'proses-pengajuan' && $id == 'pengadaan') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan       = $idFormUsulan;
             $formUsulan->pegawai_id           = $request->input('pegawai_id');
@@ -2365,9 +2362,9 @@ class SuperUserController extends Controller
             foreach ($barang as $i => $kategoriBarang) {
                 $jumlah = $request->jumlah_barang[$i];
                 for ($x = 1; $x <= $jumlah; $x++) {
-                    $cekDataDetail  = FormUsulanPengadaan::count();
+                    $idUsulan       = FormUsulanPengadaan::count() + 1;
                     $detailUsulan   = new FormUsulanPengadaan();
-                    $detailUsulan->id_form_usulan_pengadaan  = $idFormUsulan . $cekDataDetail . $i;
+                    $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan;
                     $detailUsulan->form_usulan_id         = $idFormUsulan;
                     $detailUsulan->kategori_barang_id     = $kategoriBarang;
                     $detailUsulan->merk_barang            = $request->merk_barang[$i];
@@ -2381,7 +2378,7 @@ class SuperUserController extends Controller
 
             return redirect('super-user/verif/usulan-oldat/' . $idFormUsulan);
         } elseif ($aksi == 'proses-pengajuan' && $id == 'perbaikan') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan      = $idFormUsulan;
             $formUsulan->pegawai_id          = $request->input('pegawai_id');
@@ -2395,9 +2392,9 @@ class SuperUserController extends Controller
 
             $barang = $request->kode_barang;
             foreach ($barang as $i => $kodeBarang) {
-                $cekDataDetail  = FormUsulanPerbaikan::count();
+                $idUsulan       = FormUsulanPerbaikan::count() + 1;
                 $detailUsulan   = new FormUsulanPerbaikan();
-                $detailUsulan->id_form_usulan_perbaikan  = $idFormUsulan . $cekDataDetail . $i;
+                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan;
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->save();
