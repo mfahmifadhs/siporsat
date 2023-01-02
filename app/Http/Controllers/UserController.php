@@ -530,7 +530,7 @@ class UserController extends Controller
     {
         if ($aksi == 'proses') {
             // $total = 0;
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
@@ -541,10 +541,9 @@ class UserController extends Controller
 
             $detail = $request->lokasi_bangunan;
             foreach ($detail as $i => $detailUsulan) {
-                $totalUsulan = UsulanGdnDetail::count();
-                $idUsulan    = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $idUsulan    = UsulanGdnDetail::count() + 1;
                 $detail      = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = $idFormUsulan . ($idUsulan + $i);
+                $detail->id_form_usulan_detail  = (int) $idUsulan;
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -727,7 +726,7 @@ class UserController extends Controller
     public function SubmissionOldat(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses-usulan' && $id == 'pengadaan') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan       = $idFormUsulan;
             $formUsulan->pegawai_id           = $request->input('pegawai_id');
@@ -743,9 +742,9 @@ class UserController extends Controller
             foreach ($barang as $i => $kategoriBarang) {
                 $jumlah = $request->jumlah_barang[$i];
                 for ($x = 1; $x <= $jumlah; $x++) {
-                    $cekDataDetail  = FormUsulanPengadaan::count();
+                    $idUsulan  = FormUsulanPengadaan::count() + 1;
                     $detailUsulan   = new FormUsulanPengadaan();
-                    $detailUsulan->id_form_usulan_pengadaan  = $idFormUsulan . $cekDataDetail . $i;
+                    $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan;
                     $detailUsulan->form_usulan_id         = $idFormUsulan;
                     $detailUsulan->kategori_barang_id     = $kategoriBarang;
                     $detailUsulan->merk_barang            = $request->merk_barang[$i];
@@ -759,7 +758,7 @@ class UserController extends Controller
 
             return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
         } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
-            $idFormUsulan = Carbon::now()->format('dmy') . $request->id_usulan;
+            $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan      = $idFormUsulan;
             $formUsulan->pegawai_id          = $request->input('pegawai_id');
@@ -773,9 +772,9 @@ class UserController extends Controller
 
             $barang = $request->kode_barang;
             foreach ($barang as $i => $kodeBarang) {
-                $cekDataDetail  = FormUsulanPerbaikan::count();
+                $idUsulan  = FormUsulanPerbaikan::count() + 1;
                 $detailUsulan   = new FormUsulanPerbaikan();
-                $detailUsulan->id_form_usulan_perbaikan  = $idFormUsulan . $cekDataDetail . $i;
+                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan;
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->keterangan_perbaikan      = $request->keterangan_kerusakan[$i];
