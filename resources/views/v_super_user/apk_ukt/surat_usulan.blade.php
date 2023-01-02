@@ -41,11 +41,11 @@
 <!-- Content Header -->
 <section class="content-header">
     <div class="container">
-        <div class="row mb-2 text-capitalize">
+        <div class="row text-capitalize">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
-                    <li class="breadcrumb-item active">Surat Pengajuan Usulan Gedung/Bangunan</li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/ukt/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Surat Usulan</li>
                 </ol>
             </div>
         </div>
@@ -68,17 +68,11 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/gdn/dashboard') }}" class="btn btn-primary print mr-2">
+                <a href="{{ url('super-user/ukt/dashboard') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                @if (Auth::user()->pegawai->jabatan_id == 2 && $bast->status_proses_id == 4)
-                <a href="{{ url('super-user/verif/usulan-gdn/'. $bast->id_form_usulan) }}" class="btn btn-success" title="Konfirmasi BAST" onclick="return confirm('Konfirmasi BAST')">
-                    <i class="fas fa-file-signature"></i>
-                </a>
-                @endif
-
-                @if($bast->otp_bast_kabag != null)
-                <a href="{{ url('super-user/gdn/surat/print-surat-bast/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                @if($usulan->otp_usulan_kabag != null)
+                <a href="{{ url('super-user/ukt/surat/print-surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
                 @endif
@@ -95,7 +89,7 @@
                             <div class="col-md-8 text-center">
                                 <h2 class="page-header">
                                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
+                                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
                                     <p style="font-size: 16px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
                                 </h2>
                             </div>
@@ -110,34 +104,36 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
+                                <div class="form-group row mb-3 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        usulan pengajuan <br>
+                                        nomor surat : {{ $usulan->no_surat_usulan }}
+                                    </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
-                                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
+                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
+                                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-9">: {{ $bast->total_pengajuan }} ruangan</div>
+                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} pekerjaan</div>
                                 </div>
-                                @if($bast->rencana_pengguna != null)
+                                @if($usulan->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
+                                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
                                 </div>
                                 @endif
                             </div>
@@ -146,21 +142,19 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Lokasi Perbaikan</th>
-                                            <th>Lokasi Spesifik</th>
-                                            <th>Bidang Kerusakan</th>
+                                            <th>Lokasi Pekerjaan</th>
+                                            <th>Spesifikasi Pekerjaan</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
-                                        @foreach($bast->detailUsulanGdn as $dataGdn)
-                                        <tr>
+                                        @foreach($usulan->detailUsulanUkt as $dataUkt)
+                                        <tr class="text-uppercase">
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                                            <td>{{ $dataGdn->lokasi_spesifik }}</td>
-                                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
-                                            <td>{{ $dataGdn->keterangan }}</td>
+                                            <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
+                                            <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                            <td>{{ $dataUkt->keterangan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -168,28 +162,25 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
-                                    <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
-                                    @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
+                                    @if ($usulan->otp_usulan_kabag != null)
+                                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-gdn/'.$bast->otp_bast_ppk) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-gdn/'.$bast->otp_bast_pengusul) !!}</label>
-                                    @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-gdn/'.$bast->otp_bast_kabag) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-ukt/'.$usulan->otp_usulan_pengusul) !!}</label>
+                                    @if ($usulan->otp_usulan_kabag != null)
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-ukt/'.$usulan->otp_usulan_kabag) !!}</label>
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">Marten Avero, Skm</label>
-                                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
-                                    @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
+                                    @if ($usulan->otp_usulan_kabag != null )
+                                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif
                                 </div>
                             </div>

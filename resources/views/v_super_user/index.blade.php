@@ -205,6 +205,54 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header">
+                                <i class="fas fa-suitcase"></i> Urusan Kerumah Tanggaan
+                            </div>
+                            <a href="{{ url('super-user/ukt/usulan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

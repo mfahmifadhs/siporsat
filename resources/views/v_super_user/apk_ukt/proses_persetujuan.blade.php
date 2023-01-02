@@ -7,9 +7,9 @@
         <div class="row">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
-                    <li class="breadcrumb-item active">Proses Persetujuan Usulan Gedung/Bangunan</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/ukt/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Proses Persetujuan Usulan Kerumah Tanggaan</li>
                 </ol>
             </div>
         </div>
@@ -32,10 +32,10 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Persetujuan Usulan ATK </h3>
+                <h3 class="card-title">Persetujuan Usulan Kerumah Tanggaan </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('super-user/gdn/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
+                <form action="{{ url('super-user/ukt/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
                     @csrf
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
@@ -77,18 +77,18 @@
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th>Lokasi Perbaikan</th>
-                                        <th>Bidang Kerusakan</th>
+                                        <th>Lokasi Pekerjaan</th>
+                                        <th>Spesifikasi Pekerjaan</th>
                                         <th style="width: 20%;">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                    @foreach($usulan->detailUsulanGdn as $dataPerbaikan)
-                                    <tr>
-                                        <td class="text-uppercase">{{ $dataPerbaikan->lokasi_bangunan.' / '.$dataPerbaikan->lokasi_spesifik }}</td>
-                                        <td>{{ $dataPerbaikan->bid_kerusakan }}</td>
-                                        <td>{{ $dataPerbaikan->keterangan }}</td>
+                                    @foreach($usulan->detailUsulanUkt as $dataUkt)
+                                    <tr class="text-uppercase">
+                                        <td class="text-uppercase">{{ $dataUkt->lokasi_pekerjaan }}</td>
+                                        <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                        <td>{{ $dataUkt->keterangan }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -116,7 +116,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form action="{{ url('super-user/gdn/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
+                            <form action="{{ url('super-user/ukt/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
                                 @csrf
                                 <div class="modal-body">
                                     <label class="col-form-label">Keterangan Penolakan</label>

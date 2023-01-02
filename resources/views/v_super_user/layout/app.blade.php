@@ -310,6 +310,32 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Dashboard</p>
                                     </a>
+                                    <a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Usulan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Urusan Kerumah Tanggaan -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-suitcase"></i>
+                                <p>
+                                    Kerumah Tanggaan
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/ukt/dashboard') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Dashboard</p>
+                                    </a>
+                                    <a href="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Usulan</p>
+                                    </a>
                                 </li>
                             </ul>
                         </li>

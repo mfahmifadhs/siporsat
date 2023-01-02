@@ -164,6 +164,14 @@
                                 <p>Gedung & Bangunan</p>
                             </a>
                         </li>
+                        </li>
+                        <!-- Gedung & Bangunan -->
+                        <li class="nav-item">
+                            <a href="{{ url('unit-kerja/ukt/dashboard') }}" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-suitcase"></i>
+                                <p>Kerumah Tanggaan</p>
+                            </a>
+                        </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan Rumah Dinas Negara</li> -->
                         <!-- <li class="nav-item">
                             <a href="{{ url('unit-kerja/rdn/rumah/daftar/seluruh-rumah') }}" class="nav-link font-weight-bold">

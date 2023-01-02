@@ -68,6 +68,9 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
+                <a href="{{ url('super-user/gdn/dashboard') }}" class="btn btn-primary print mr-2">
+                    <i class="fas fa-home"></i>
+                </a>
                 @if($usulan->otp_usulan_kabag != null)
                 <a href="{{ url('super-user/gdn/surat/print-surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>

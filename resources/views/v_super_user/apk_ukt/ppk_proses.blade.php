@@ -10,8 +10,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Pengajuan</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/ukt/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/ukt/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Pengajuan</a></li>
                     <li class="breadcrumb-item active">Buat Berita Acara</li>
                 </ol>
             </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="card">
             @foreach($pengajuan as $dataPengajuan)
-            <form class="form-pengajuan" action="{{ url('super-user/ppk/gdn/pengajuan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
+            <form class="form-pengajuan" action="{{ url('super-user/ppk/ukt/pengajuan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                 <div class="card-body">
                     <input type="hidden" name="id_form_usulan" value="{{ $id }}">
                     <input type="hidden" name="pegawai_id" value="{{ $dataPengajuan->id_pegawai }}">
@@ -44,7 +44,7 @@
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/gdn/'.$form.'/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$totalUsulan.'/'.Carbon\carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -73,28 +73,23 @@
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <div class="col-md-12"><label class="text-muted">Informasi Perbaikan</label></div>
+                        <div class="col-md-12"><label class="text-muted">Informasi Pekerjaan</label></div>
                     </div>
-                    @foreach($dataPengajuan->detailUsulanGdn as $i => $dataPerbaikan)
-                    <input type="hidden" name="id_barang[]" value="{{ $dataPerbaikan->id_barang }}">
+                    @foreach($dataPengajuan->detailUsulanUkt as $i => $dataUkt)
                     <hr>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan </label>
+                        <label class="col-sm-2 col-form-label">Lokasi Pekerjaan </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_bangunan }}" readonly>
+                            <input type="text" class="form-control text-uppercase" value="{{ $dataUkt->lokasi_pekerjaan }}" readonly>
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_spesifik }}" readonly>
+                            <input type="text" class="form-control text-uppercase" value="{{ $dataUkt->spesifikasi_pekerjaan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Bidang Kerusakan </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->bid_kerusakan }}" readonly>
-                        </div>
                         <label class="col-sm-2 col-form-label">Keterangan </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->keterangan }}" readonly>
+                        <div class="col-sm-10">
+                            <textarea type="text" class="form-control text-uppercase" value="{{ $dataUkt->keterangan }}" readonly></textarea>
                         </div>
                     </div>
                     @endforeach

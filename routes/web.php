@@ -234,6 +234,16 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionGdn']);
     });
 
+    // urusan kerumah tanggaan
+    Route::group(['prefix' => 'ukt', 'as' => 'ukt'], function() {
+        Route::get('dashboard', [SuperUserController::class, 'Ukt']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionUkt']);
+        Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterUkt']);
+
+        Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterUkt']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionUkt']);
+    });
+
     // rumah dinas
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
         Route::get('dashboard', [SuperUserController::class, 'Rdn']);
@@ -313,6 +323,14 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
         Route::get('js/{aksi}/{id}', [UserController::class, 'JsGdn']);
 
         Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionGdn']);
+    });
+
+    // Urusan Kerumah Tanggaan
+    Route::group(['prefix' => 'ukt', 'as' => 'ukt'], function () {
+        Route::get('dashboard', [UserController::class, 'Ukt']);
+        Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionUkt']);
+
+        Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionUkt']);
     });
 
     // Rumah Dinas Negara

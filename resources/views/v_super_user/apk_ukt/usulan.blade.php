@@ -4,11 +4,14 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Usulan Kerumah Tanggaan</h1>
+            </div>
+            <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active mt-2">Dashboard</li>
+                    <li class="breadcrumb-item active mt-2">Pekerjaan Kerumah Tanggaan</li>
                 </ol>
             </div>
         </div>
@@ -28,19 +31,19 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">
                 <h3 class="card-title">usulan pengajuan {{ $aksi }} gedung/bangunan </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('super-user/gdn/usulan/proses/'. $aksi) }}" method="POST">
+                <form action="{{ url('super-user/ukt/usulan/proses/pengajuan') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                    <input type="hidden" name="jenis_form" value="perbaikan">
+                    <input type="hidden" name="jenis_form" value="{{ $aksi }}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/GDN/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/UKT/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -50,7 +53,7 @@
                             <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
-                    <div id="main-gdn">
+                    <div id="main-ukt">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
                             <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
@@ -62,33 +65,15 @@
                         </div>
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                            <label class="col-sm-2 col-form-label">Lokasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
+                            <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jenis Perbaikan</label>
-                            <div class="col-sm-4">
-                                <select class="form-control bidang-kerusakan" data-idtarget="">
-                                    <option value="">-- Pilih Jenis Perbaikan --</option>
-                                    <option value="AR">ARSITEKTURAL (AR)</option>
-                                    <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
-                                    <option value="ME">MEKANIKAL ENGINEERING (ME)</option>
-                                    <option value="ST">STRUKTURAL (ST)</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Bidang Perbaikan</label>
-                            <div class="col-sm-4">
-                                <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan">
-                                    <option value="">-- Pilih Bidang Kerusakan --</option>
-                                </select>
+                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -97,11 +82,11 @@
                                 <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
                             </div>
                         </div>
-                        <div id="section-gdn"></div>
+                        <div id="section-ukt"></div>
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
                             <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin mengajukan usulan perbaikan ?')">SUBMIT</button>
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
                             </div>
                         </div>
                     </div>
@@ -121,8 +106,8 @@
         // More Item
         $('#btn-total').click(function() {
             ++i;
-            $("#section-gdn").append(
-                `<div class="gdn">
+            $("#section-ukt").append(
+                `<div class="ukt">
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
                         <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
@@ -134,33 +119,15 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                        <label class="col-sm-2 col-form-label">Lokasi Pekerjaan (*)</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                            <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
+                        <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan (*)</label>
                         <div class="col-sm-10">
-                            <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jenis Perbaikan</label>
-                        <div class="col-sm-4">
-                            <select class="form-control bidang-kerusakan" data-idtarget="` + i + `">
-                                <option value="">-- Pilih Jenis Perbaikan --</option>
-                                <option value="AR">ARSITEKTURAL (AR)</option>
-                                <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
-                                <option value="ME">MEKANIKAL ENGINEERING (ME)</option>
-                                <option value="ST">STRUKTURAL (ST)</option>
-                            </select>
-                        </div>
-                        <label class="col-sm-2 col-form-label">Bidang Perbaikan</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan`+i+`">
-                                <option value="">-- Pilih Bidang Kerusakan --</option>
-                            </select>
+                            <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -169,7 +136,7 @@
                             <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
                         </div>
                     </div>
-                    <div id="section-gdn"></div>
+                    <div id="section-ukt"></div>
                 </div>`
             )
         })
@@ -180,7 +147,7 @@
             if (jenisKerusakan) {
                 $.ajax({
                     type: "GET",
-                    url: `{{ url('super-user/gdn/js/bidang-kerusakan/` + jenisKerusakan + `') }}`,
+                    url: `{{ url('super-user/ukt/js/bidang-kerusakan/` + jenisKerusakan + `') }}`,
                     dataType: 'JSON',
                     success: function(res) {
                         if (res) {
@@ -203,7 +170,7 @@
         })
 
         $(document).on('click', '.remove-list', function() {
-            $(this).parents('.gdn').remove();
+            $(this).parents('.ukt').remove();
         });
 
 

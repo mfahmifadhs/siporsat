@@ -201,7 +201,8 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
+                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan == 1 && $dataUsulan->jenis_form == 'distribusi' )
+
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:

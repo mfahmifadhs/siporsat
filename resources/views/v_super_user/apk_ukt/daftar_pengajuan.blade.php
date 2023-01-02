@@ -7,7 +7,7 @@
         <div class="row mb-2">
             <div class="col-sm-12">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Daftar Usulan Pemeliharaan Gedung dan Bangunan</li>
+                    <li class="breadcrumb-item active">Daftar Usulan Kerumah Tanggaan</li>
                 </ol>
             </div>
         </div>
@@ -40,7 +40,6 @@
                                     <th>Jenis Usulan</th>
                                     <th>Pengusul</th>
                                     <th>Unit Kerja</th>
-                                    <th>Rencana Pengguna</th>
                                     <th class="text-center">Status Pengajuan</th>
                                     <th class="text-center">Status Proses</th>
                                     <th class="text-center">Aksi</th>
@@ -55,7 +54,6 @@
                                     <td>{{ $dataUsulan->jenis_form }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }}</td>
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
-                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
                                     <td class="text-center">
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
@@ -82,12 +80,16 @@
                                         </a>
                                         <div class="dropdown-menu">
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2   )
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2 )
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/ukt/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
+                                            </a>
+                                            @elseif ($dataUsulan->status_proses_id == 4 || $dataUsulan->status_proses_id == 5)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file"></i> BAST
                                             </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
@@ -152,7 +154,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/gdn/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/ukt/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
                                                     </div>
@@ -162,7 +164,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/gdn/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/ukt/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
@@ -170,23 +172,23 @@
                                                 @endif
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
-                                                        Informasi Perbaikan
+                                                        Informasi Pekerjaan
                                                     </h6>
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-4">Lokasi Bangunan</div>
-                                                            <div class="col-sm-4">Bidang Kerusakan</div>
+                                                            <div class="col-sm-4">Lokasi Pekerjaan</div>
+                                                            <div class="col-sm-4">Spesifikasi Pekerjaan</div>
                                                             <div class="col-sm-4">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanGdn as $dataPerbaikan)
-                                                        <div class="form-group row small">
-                                                            <div class="col-sm-4 text-uppercase">{{ $dataPerbaikan->lokasi_bangunan.' / '.$dataPerbaikan->lokasi_spesifik }}</div>
-                                                            <div class="col-sm-4">{{ $dataPerbaikan->bid_kerusakan }}</div>
-                                                            <div class="col-sm-4">{{ $dataPerbaikan->keterangan }}</div>
+                                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
+                                                        <div class="form-group row text-uppercase small">
+                                                            <div class="col-sm-4">{{ $dataUkt->lokasi_pekerjaan }}</div>
+                                                            <div class="col-sm-4">{{ $dataUkt->spesifikasi_pekerjaan }}</div>
+                                                            <div class="col-sm-4">{{ $dataUkt->keterangan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
@@ -219,14 +221,14 @@
             "info": false,
             "paging": true,
             buttons: [{
-                text: '(+) Usulan Perbaikan',
+                text: '(+) Usulan Pekerjaan',
                 className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
                 action: function(e, dt, node, config) {
-                    window.location.href = "{{ url('super-user/gdn/usulan/perbaikan/baru') }}"
+                    window.location.href = "{{ url('super-user/ukt/usulan/pekerjaan/baru') }}"
                 }
             }]
 
-        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)')
     })
 </script>
 

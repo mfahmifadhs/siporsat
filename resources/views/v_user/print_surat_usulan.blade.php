@@ -170,6 +170,28 @@
                         @endforeach
                     </tbody>
                 </table>
+                @elseif ($modul == 'usulan-ukt')
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Lokasi Pekerjaan</th>
+                            <th>Spesifikasi Pekerjaan</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <?php $no = 1; ?>
+                    <tbody class="text-uppercase">
+                        @foreach($usulan->detailUsulanUkt as $dataUkt)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
+                            <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                            <td>{{ $dataUkt->keterangan }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
                 @elseif ($modul == 'usulan-aadb')
                 @if($usulan->jenis_form == '1')
                 <table class="table table-bordered m-0">

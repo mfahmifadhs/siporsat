@@ -1,14 +1,12 @@
-@extends('v_super_user.layout.app')
+@extends('v_user.layout.app')
 
 @section('content')
 
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-12">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Daftar Usulan Pemeliharaan Gedung dan Bangunan</li>
-                </ol>
+            <div class="col-sm-6">
+                <h4 class="m-0 ml-2">GEDUNG DAN BANGUNAN</h4>
             </div>
         </div>
     </div>
@@ -29,49 +27,102 @@
                 </div>
                 @endif
             </div>
-            <div class="col-md-12 form-group">
-                <div class="card">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Sedang Diproses</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Selesai Diproses</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Selesai BAST</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h3>
+                    </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered">
+                        <table id="table-usulan" class="table table-bordered m-0" style="font-size: 80%;">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Jenis Usulan</th>
-                                    <th>Pengusul</th>
-                                    <th>Unit Kerja</th>
-                                    <th>Rencana Pengguna</th>
-                                    <th class="text-center">Status Pengajuan</th>
-                                    <th class="text-center">Status Proses</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center">No</th>
+                                    <th>No. Surat</th>
+                                    <th>Lokasi Kerusakan</th>
+                                    <th>Bidang Kerusakan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            @php $no = 1; @endphp
+                            <?php $no = 1;
+                            $no2 = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $dataUsulan->jenis_form }}</td>
-                                    <td>{{ $dataUsulan->nama_pegawai }}</td>
-                                    <td>{{ $dataUsulan->unit_kerja }}</td>
-                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
-                                    <td class="text-center">
+                                    <td class="pt-4 text-center">{{ $no++ }}</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
+                                        No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }}</p>
+                                    </td>
+                                    <td>
+                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
+                                        <p class="text-capitalize">
+                                            <span class="pl-1">○ {{ $dataUkt->lokasi_pekerjaan }} / {{ $dataUkt->spesifikasi_pekerjaan }}</span><br>
+                                        </p>
+                                        @endforeach
+                                    </td>
+                                    </td>
+                                    <td>
+                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
+                                        <p class="text-capitalize">
+                                            <span class="pl-1">○ {{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)).' : '.$dataUkt->keterangan  }}</span><br>
+                                        </p>
+                                        @endforeach
+                                    </td>
+                                    <td class="pt-2">
+                                        Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success">disetujui</span>
                                         @elseif($dataUsulan->status_pengajuan_id == 2)
                                         <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center text-capitalize  ">
+                                        @endif <br>
+                                        Status Proses : <br>
                                         @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan</span>
                                         @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses ppk</span>
                                         @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi pengusul</span>
                                         @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi <br> kabag rt</span>
+                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses petugas gudang</span>
                                         @elseif ($dataUsulan->status_proses_id == 5)
                                         <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                         @endif
@@ -81,18 +132,18 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses
-                                            </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2   )
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
-                                                <i class="fas fa-check-circle"></i> Selesai Proses
-                                            </a>
-                                            @endif
+                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+                                            @else
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/ukt/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -152,7 +203,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/gdn/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('unit-kerja/surat/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
                                                     </div>
@@ -162,7 +213,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/gdn/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('unit-kerja/surat/bast-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
@@ -170,23 +221,23 @@
                                                 @endif
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
-                                                        Informasi Perbaikan
+                                                        Informasi Pekerjaan
                                                     </h6>
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-4">Lokasi Bangunan</div>
-                                                            <div class="col-sm-4">Bidang Kerusakan</div>
+                                                            <div class="col-sm-4">Lokasi Pekerjaan</div>
+                                                            <div class="col-sm-4">Spesifikasi Pekerjaan</div>
                                                             <div class="col-sm-4">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanGdn as $dataPerbaikan)
-                                                        <div class="form-group row small">
-                                                            <div class="col-sm-4 text-uppercase">{{ $dataPerbaikan->lokasi_bangunan.' / '.$dataPerbaikan->lokasi_spesifik }}</div>
-                                                            <div class="col-sm-4">{{ $dataPerbaikan->bid_kerusakan }}</div>
-                                                            <div class="col-sm-4">{{ $dataPerbaikan->keterangan }}</div>
+                                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
+                                                        <div class="form-group row text-uppercase small">
+                                                            <div class="col-sm-4">{{ $dataUkt->lokasi_pekerjaan }}</div>
+                                                            <div class="col-sm-4">{{ $dataUkt->spesifikasi_pekerjaan }}</div>
+                                                            <div class="col-sm-4">{{ $dataUkt->keterangan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
@@ -198,7 +249,6 @@
                                 </div>
                                 @endforeach
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -219,10 +269,10 @@
             "info": false,
             "paging": true,
             buttons: [{
-                text: '(+) Usulan Perbaikan',
+                text: '(+) Usulan Pekerjaan',
                 className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
                 action: function(e, dt, node, config) {
-                    window.location.href = "{{ url('super-user/gdn/usulan/perbaikan/baru') }}"
+                    window.location.href = "{{ url('unit-kerja/ukt/usulan/pekerjaan/baru') }}"
                 }
             }]
 
@@ -231,4 +281,7 @@
 </script>
 
 @endsection
+
+
+
 @endsection
