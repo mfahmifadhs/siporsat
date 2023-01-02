@@ -4,6 +4,7 @@ namespace App\Models\Ukt;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UKT\UsulanUktDetail;
 
 class UsulanUkt extends Model
 {
