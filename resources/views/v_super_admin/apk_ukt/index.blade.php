@@ -63,7 +63,7 @@
                                         <p class="font-weight-bold"></p>
                                         @foreach($dataUsulan->detailUsulanUkt as $i =>$dataUkt)
                                         <p>
-                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }} }}</label> <br>
+                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }}</label> <br>
                                             <span class="pl-2">{{ ucfirst(strtolower($dataUkt->spesifikasi_pekerjaan.' : '.$dataUkt->keterangan))  }}</span>
                                         </p>
                                         @endforeach
