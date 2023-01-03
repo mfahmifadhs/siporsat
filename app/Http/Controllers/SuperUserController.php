@@ -24,7 +24,7 @@ use App\Models\ATK\StokAtk;
 use App\Models\ATK\SubKelompokAtk;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkDetail;
-use App\Models\Atk\UsulanAtkPengadaan;
+use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\GDN\BidangKerusakan;
 use App\Models\GDN\UsulanGdn;
 use App\Models\GDN\UsulanGdnDetail;

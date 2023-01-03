@@ -51,6 +51,8 @@ use App\Models\RDN\RumahDinas;
 use App\Models\User;
 use App\Models\UnitKerja;
 use App\Models\TimKerja;
+use App\Models\Ukt\UsulanUkt;
+use App\Models\Ukt\UsulanUktDetail;
 use App\Models\UserAkses;
 
 use DB;
@@ -425,6 +427,29 @@ class SuperAdminController extends Controller
                 'total'     => count($dataSearch),
                 'message'   => 'not found'
             ], 200);
+        }
+    }
+
+    // ====================================================
+    //                       GDN
+    // ====================================================
+
+    public function Ukt(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $usulan = UsulanUkt::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->orderBy('id_form_usulan','DESC')
+                // ->where('pegawai_id', Auth::user()->pegawai_id)
+                ->get();
+
+            return view('v_super_admin.apk_ukt.index', compact('usulan'));
+        } elseif ($aksi == 'hapus') {
+            // Hapus Detail Usulan
+            UsulanUkt::where('id_form_usulan', $id)->delete();
+            UsulanUktDetail::where('form_usulan_id', $id)->delete();
+
+            return redirect('super-admin/ukt/dashboard/daftar/seluruh-usulan')->with('success', 'Berhasil Menghapus Usulan');
         }
     }
 

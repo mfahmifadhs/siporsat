@@ -89,8 +89,10 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 
     Route::group(['prefix' => 'gdn', 'as' => 'gdn.'], function () {
         Route::get('dashboard/{aksi}/{id}', [SuperAdminController::class, 'Gdn']);
+    });
 
-        Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AtkDashboard']);
+    Route::group(['prefix' => 'ukt', 'as' => 'ukt.'], function () {
+        Route::get('dashboard/{aksi}/{id}', [SuperAdminController::class, 'Ukt']);
     });
 
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {

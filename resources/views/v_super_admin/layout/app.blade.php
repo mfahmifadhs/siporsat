@@ -203,6 +203,14 @@
                             </a>
                         </li>
 
+                        <!-- Pengelolaan Urusan Kerumah Tanggaan -->
+                        <li class="nav-item">
+                            <a href="{{ url('super-admin/ukt/dashboard/daftar/seluruh-usulan') }}" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-suitcase"></i>
+                                <p>Kerumah Tanggaan</p>
+                            </a>
+                        </li>
+
                         <!-- Pengelolaan Rumah Dinas -->
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
