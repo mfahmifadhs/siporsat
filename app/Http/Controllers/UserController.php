@@ -1306,7 +1306,7 @@ class UserController extends Controller
             $riwayat   = RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->first();
             RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->delete();
 
-            Kendaraan::where('pengguna', 'like', '%' . $riwayat->pengguna . '%')->update([
+            Kendaraan::where('pengguna', 'like', '%' . $riwayat->pengguna . '%')->where('status_pengguna', 1)->update([
                 'pengguna'  => null,
                 'jabatan'   => null,
                 'pengemudi' => null
