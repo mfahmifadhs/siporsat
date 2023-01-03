@@ -1305,12 +1305,13 @@ class UserController extends Controller
         } elseif ($aksi == 'hapus-riwayat') {
             $riwayat   = RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->first();
             RiwayatKendaraan::where('id_riwayat_kendaraan', $id)->delete();
-
-            Kendaraan::where('pengguna', 'like', '%' . $riwayat->pengguna . '%')->where('status_pengguna', 1)->update([
-                'pengguna'  => null,
-                'jabatan'   => null,
-                'pengemudi' => null
-            ]);
+            if ($riwayat->status_pengguna == 1) {
+                Kendaraan::where('pengguna', 'like', '%' . $riwayat->pengguna . '%')->update([
+                    'pengguna'  => null,
+                    'jabatan'   => null,
+                    'pengemudi' => null
+                ]);
+            }
 
             return redirect('unit-kerja/aadb/kendaraan/detail/' . $riwayat->kendaraan_id)->with('success', 'Berhasil Menghapus Riwayat Pengguna Kendaraan');
         } elseif ($aksi == 'detail-json') {
