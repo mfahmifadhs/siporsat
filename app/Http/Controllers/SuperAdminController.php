@@ -51,8 +51,8 @@ use App\Models\RDN\RumahDinas;
 use App\Models\User;
 use App\Models\UnitKerja;
 use App\Models\TimKerja;
-use App\Models\Ukt\UsulanUkt;
-use App\Models\Ukt\UsulanUktDetail;
+use App\Models\UKT\UsulanUkt;
+use App\Models\UKT\UsulanUktDetail;
 use App\Models\UserAkses;
 
 use DB;
