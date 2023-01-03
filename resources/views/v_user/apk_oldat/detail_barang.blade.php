@@ -180,9 +180,9 @@
                                                         <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
-                                                        <a class="btn btn-danger btn-xs" href="{{ url('unit-kerja/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}" onclick="return confirm('Hapus Riwayat Ini ?')">
+                                                        <!-- <a class="btn btn-danger btn-xs" href="{{ url('unit-kerja/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}" onclick="return confirm('Hapus Riwayat Ini ?')">
                                                             <i class="fas fa-trash"></i> Hapus
-                                                        </a>
+                                                        </a> -->
                                                     </div>
                                                 </div>
                                             </div>
