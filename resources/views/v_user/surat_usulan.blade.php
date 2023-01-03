@@ -342,8 +342,8 @@
                                             <td>
                                                 {{ $dataServis->no_plat_kendaraan }} <br>
                                                 {{ $dataServis->merk_tipe_kendaraan }}
-                                                @if ($dataServis->pengguna_kendaraan != null)
-                                                <br>{{ $dataServis->pengguna_kendaraan }}
+                                                @if ($dataServis->pengguna != null)
+                                                <br>{{ $dataServis->pengguna }}
                                                 @endif
                                             </td>
                                             <td>{{ $dataServis->kilometer_terakhir }}</td>
@@ -373,8 +373,8 @@
                                             <td>
                                                 {{ $dataSTNK->no_plat_kendaraan }} <br>
                                                 {{ $dataSTNK->merk_tipe_kendaraan }}
-                                                @if ($dataSTNK->pengguna_kendaraan != null)
-                                                <br>{{ $dataSTNK->pengguna_kendaraan }}
+                                                @if ($dataSTNK->pengguna != null)
+                                                <br>{{ $dataSTNK->pengguna }}
                                                 @endif
                                             </td>
                                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
@@ -400,8 +400,8 @@
                                             <td>
                                                 {{ $dataVoucher->no_plat_kendaraan }} <br>
                                                 {{ $dataVoucher->merk_tipe_kendaraan }}
-                                                @if ($dataVoucher->pengguna_kendaraan != null)
-                                                <br>{{ $dataVoucher->pengguna_kendaraan }}
+                                                @if ($dataVoucher->pengguna != null)
+                                                <br>{{ $dataVoucher->pengguna }}
                                                 @endif
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
