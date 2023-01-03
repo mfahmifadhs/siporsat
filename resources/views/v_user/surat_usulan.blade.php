@@ -339,7 +339,13 @@
                                         @foreach($usulan->usulanServis as $dataServis)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                                            <td>
+                                                {{ $dataServis->no_plat_kendaraan }} <br>
+                                                {{ $dataServis->merk_tipe_kendaraan }}
+                                                @if ($dataServis->pengguna_kendaraan != null)
+                                                <br>{{ $dataServis->pengguna_kendaraan }}
+                                                @endif
+                                            </td>
                                             <td>{{ $dataServis->kilometer_terakhir }}</td>
                                             <td>{{ $dataServis->tgl_servis_terakhir }}</td>
                                             <td>{{ $dataServis->jatuh_tempo_servis }}</td>
@@ -364,7 +370,13 @@
                                         @foreach($usulan->usulanSTNK as $dataSTNK)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                                            <td>
+                                                {{ $dataSTNK->no_plat_kendaraan }} <br>
+                                                {{ $dataSTNK->merk_tipe_kendaraan }}
+                                                @if ($dataSTNK->pengguna_kendaraan != null)
+                                                <br>{{ $dataSTNK->pengguna_kendaraan }}
+                                                @endif
+                                            </td>
                                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
@@ -389,7 +401,7 @@
                                                 {{ $dataVoucher->no_plat_kendaraan }} <br>
                                                 {{ $dataVoucher->merk_tipe_kendaraan }}
                                                 @if ($dataVoucher->pengguna_kendaraan != null)
-                                                <br>$dataVoucher->pengguna_kendaraan }}
+                                                <br>{{ $dataVoucher->pengguna_kendaraan }}
                                                 @endif
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
