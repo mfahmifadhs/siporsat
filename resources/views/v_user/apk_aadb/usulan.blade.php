@@ -181,6 +181,7 @@
                                     <option value="operasional">Kendaraan Operasional</option>
                                     <option value="bermotor">Kendaraan Bermotor</option>
                                 </select>
+
                             </div>
                         </div>
                         <div class="form-group row">
@@ -189,6 +190,9 @@
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
+                                <span class="text-danger" style="font-size:12px;">
+                                    Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -305,6 +309,9 @@
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
+                                <span class="text-danger" style="font-size:12px;">
+                                    Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -402,6 +409,9 @@
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
                             </div>
+                            <span class="text-danger" style="font-size:12px;">
+                                Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -502,6 +512,7 @@
                                     <option value="operasional">Kendaraan Operasional</option>
                                     <option value="bermotor">Kendaraan Bermotor</option>
                                 </select>
+
                             </div>
                         </div>
                         <div class="form-group row">
@@ -510,6 +521,9 @@
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
+                                <span class="text-danger" style="font-size:12px;">
+                                    Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                                </span>
                             </div>
                         </div>
                     </div>`
@@ -548,6 +562,9 @@
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
+                                <span class="text-danger" style="font-size:12px;">
+                                    Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -592,6 +609,9 @@
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
+                                <span class="text-danger" style="font-size:12px;">
+                                    Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
