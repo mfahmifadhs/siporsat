@@ -1706,25 +1706,6 @@ class SuperUserController extends Controller
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
-            } elseif ($id == 'voucher-bbm') {
-                $idUsulan    = UsulanVoucherBBM::count() + 1;
-                $kendaraan = $request->kendaraan_id;
-                foreach ($kendaraan as $i => $kendaraan_id) {
-                    $totalVoucher = ($request->voucher_25[$i] * 25000) + ($request->voucher_50[$i] * 50000) + ($request->voucher_100[$i] * 100000);
-                    $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
-                    $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
-                    $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
-                    $usulanVoucherBBM->voucher_25                   = $request->voucher_25[$i];
-                    $usulanVoucherBBM->voucher_50                   = $request->voucher_50[$i];
-                    $usulanVoucherBBM->voucher_100                  = $request->voucher_100[$i];
-                    $usulanVoucherBBM->total_biaya                  = $totalVoucher;
-                    $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
-                    $total[$i] = +$totalVoucher;
-                    $usulanVoucherBBM->save();
-                }
-
-                UsulanAadb::where('id_form_usulan')->update(['total_biaya' => array_sum($total)]);
             }
 
             return redirect('super-user/verif/usulan-aadb/' . $idFormUsulan);
@@ -1743,26 +1724,6 @@ class SuperUserController extends Controller
                     'status_proses_id'     => 5,
                     'otp_bast_kabag'    => $request->kode_otp
                 ]);
-            } else {
-                $cekUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
-                if ($cekUsulan->jenis_form == 4) {
-                    $form = $request->detail_usulan_id;
-                    foreach ($form as $i => $detail_usulan_id) {
-                        $totalVoucher = ($request->voucher_25[$i] * 25000) + ($request->voucher_50[$i] * 50000) + ($request->voucher_100[$i] * 100000);
-                        UsulanVoucherBBM::where('id_form_usulan_voucher_bbm', $detail_usulan_id)->update([
-                            'voucher_25'    => $request->voucher_25[$i],
-                            'voucher_50'    => $request->voucher_50[$i],
-                            'voucher_100'   => $request->voucher_100[$i],
-                            'total_biaya'   => $totalVoucher,
-                        ]);
-                        $total[$i] = +$totalVoucher;
-                    }
-                    UsulanAadb::where('id_form_usulan', $id)->update([
-                        'total_biaya'         => array_sum($total)
-                    ]);
-
-                    return redirect('super-user/verif/usulan-aadb/' . $id);
-                }
             }
 
             return redirect('super-user/verif/usulan-aadb/' . $id);
@@ -1792,7 +1753,7 @@ class SuperUserController extends Controller
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
@@ -1847,7 +1808,7 @@ class SuperUserController extends Controller
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
@@ -1883,7 +1844,7 @@ class SuperUserController extends Controller
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
@@ -1922,7 +1883,7 @@ class SuperUserController extends Controller
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
@@ -2003,7 +1964,7 @@ class SuperUserController extends Controller
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
@@ -2315,16 +2276,41 @@ class SuperUserController extends Controller
         if ($aksi == 'kendaraan') {
             $search = $request->search;
 
+            if ($request->kendaraan == ['']) {
+                $aadb = [];
+            } else {
+                foreach ($request->kendaraan as $data) {
+                    if ($data != null) {
+                        $aadb[] = $data;
+                    }
+                }
+            }
+
             if ($search == '') {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_tipe_kendaraan, " / ", pengguna) AS nama_kendaraan'))
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," - ",merk_tipe_kendaraan, " - ", pengguna) AS nama_kendaraan'))
                     ->orderby('nama_kendaraan', 'asc')
+                    ->where('kualifikasi', '!=', '')
+                    ->where('no_plat_kendaraan', '!=', '')
+                    ->where('no_plat_kendaraan', '!=', '-')
+                    ->where('pengguna', '!=', '')
+                    ->where('pengguna', '!=', '-')
+                    ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                    ->where('kualifikasi', $request->data)
+                    ->whereNotIn('id_kendaraan', $aadb)
                     ->get();
             } else {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," / ",merk_tipe_kendaraan, " / ", pengguna) AS nama_kendaraan'))
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," - ",merk_tipe_kendaraan, " - ", pengguna) AS nama_kendaraan'))
                     ->orderby('nama_kendaraan', 'asc')
+                    ->where('no_plat_kendaraan', '!=', '')
+                    ->where('no_plat_kendaraan', '!=', '-')
+                    ->where('pengguna', '!=', '')
+                    ->where('pengguna', '!=', '-')
+                    ->orWhere('kualifikasi', '!=', '')
                     ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
-                    ->orWhere('no_plat_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('pengguna', 'like', '%' . $search . '%')
+                    ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                    ->where('kualifikasi', $request->data)
+                    ->whereNotIn('id_kendaraan', $aadb)
                     ->get();
             }
 
@@ -3267,7 +3253,7 @@ class SuperUserController extends Controller
                     ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 
                 $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
-                    ->select('merk_tipe_kendaraan', 'voucher_25', 'voucher_50', 'voucher_100', 'aadb_tbl_form_usulan_voucher_bbm.total_biaya')
+                    ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                     ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                     ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
 

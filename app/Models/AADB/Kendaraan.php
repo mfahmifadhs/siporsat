@@ -17,6 +17,7 @@ class Kendaraan extends Model
         'form_usulan_id',
         'unit_kerja_id',
         'jenis_aadb',
+        'kualifikasi',
         'kode_barang',
         'jenis_kendaraan_id',
         'merk_tipe_kendaraan',

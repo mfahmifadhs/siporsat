@@ -142,7 +142,7 @@
                                                 <i class="fas fa-file"></i> Surat Usulan
                                             </a>
                                             @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul == null)
+                                            @if ($dataUsulan->otp_usulan_pengusul == null && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>

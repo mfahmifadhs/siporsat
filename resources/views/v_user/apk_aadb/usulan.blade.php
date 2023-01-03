@@ -71,7 +71,9 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
-                        <div class="col-sm-12"><hr></div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
                         <label class="col-sm-2 col-form-label">Jenis (*)</label>
                         <div class="col-sm-10">
                             <select name="jenis_kendaraan" class="form-control" required>
@@ -154,27 +156,38 @@
                             <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Jumlah Kendaraan</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="total_pengajuan" id="jumlahKendaraan" class="form-control" value="1" placeholder="Jumlah Kendaraan">
-                        </div>
-                        <div class="col-sm-1">
-                            <a id="btn-total" class="btn btn-primary btn-block">Pilih</a>
-                        </div>
-                    </div>
+                    <label class="col-form-label text-danger" style="font-size:13px;">
+                        Mohon untuk memilih kendaraan secara berurutan.
+                    </label>
                     <div id="section-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-2 mb-1">
+                            <div class="col-md-6">
+                                <label class="text-muted">Informasi Kendaraan 1</label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a id="btn-total" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus-circle"></i> list baru
+                                </a>
+                            </div>
+                        </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row">
-                            <label class="col-sm-12 mb-3 text-muted">Informasi Kendaraan</label>
                             <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
                             <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-uppercase select2-kendaraan" data-idtarget="1" required>
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' - '. $dataKendaraan->merk_tipe_kendaraan }}
-                                    </option>
-                                    @endforeach
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
                             </div>
                         </div>
@@ -202,6 +215,12 @@
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)*</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Keterangan Servis*</label>
+                            <div class="col-sm-9">
+                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb"></textarea>
                             </div>
                         </div>
                     </div>
@@ -253,27 +272,38 @@
                             <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Jumlah Pengajuan</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="total_pengajuan" id="jumlahKendaraan" class="form-control" value="1" placeholder="Jumlah Kendaraan">
-                        </div>
-                        <div class="col-sm-1">
-                            <a id="btn-total" class="btn btn-primary btn-block">Pilih</a>
-                        </div>
-                    </div>
+                    <label class="col-form-label text-danger" style="font-size:13px;">
+                        Mohon untuk memilih kendaraan secara berurutan.
+                    </label>
                     <div id="section-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-2 mb-1">
+                            <div class="col-md-6">
+                                <label class="text-muted">Informasi Kendaraan 1</label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a id="btn-total" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus-circle"></i> list baru
+                                </a>
+                            </div>
+                        </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row">
-                            <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
                             <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
                             <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize aadb select2-kendaraan" data-idtarget="1" required>
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
-                                    </option>
-                                    @endforeach
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
                             </div>
                         </div>
@@ -314,8 +344,8 @@
             <div class="card-header">
                 <h3 class="card-title">Usulan Pengajuan Pengadaan Voucher BBM </h3>
             </div>
-            <div class="card-body">
-                <form action="{{ url('unit-kerja/aadb/usulan/proses/voucher-bbm') }}" method="POST">
+            <form action="{{ url('unit-kerja/aadb/usulan/proses/voucher-bbm') }}" method="POST">
+                <div class="card-body">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="4">
@@ -334,60 +364,53 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
                         <div class="col-sm-10">
-                            <input type="month" class="form-control" name="bulan_pengadaan" required>
+                            <input type="month" class="form-control" name="bulan_pengadaan" value="{{ \Carbon\carbon::now()->isoFormat('Y-MM') }}" required>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Kendaraan</label>
-                        <div class="col-sm-9">
-                            <input type="number" name="total_pengajuan" id="jumlahKendaraan" class="form-control" value="1" placeholder="Jumlah Kendaraan">
-                        </div>
-                        <div class="col-sm-1">
-                            <a id="btn-total" class="btn btn-primary btn-block">Pilih</a>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Informasi Kendaraan</label>
-                        </div>
-                    </div>
+
+                    <label class="col-form-label text-danger" style="font-size:13px;">
+                        Mohon untuk memilih kendaraan secara berurutan.
+                    </label>
                     <div id="section-kendaraan">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
-                            <div class="col-sm-10">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan" data-idtarget="1" required>
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->merk_tipe_kendaraan.' / pengguna '. $dataKendaraan->pengguna }}
-                                    </option>
-                                    @endforeach
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-2 mb-1">
+                            <div class="col-md-6">
+                                <label class="text-muted">Informasi Kendaraan 1</label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a id="btn-total" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus-circle"></i> list baru
+                                </a>
+                            </div>
+                        </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label form-group">Voucher 25</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v251" name="voucher_25[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
-                            </div>
-                            <label class="col-sm-2 col-form-label form-group">Voucher 50</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v501" name="voucher_50[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
-                            </div>
-                            <label class="col-sm-2 col-form-label form-group">Voucher 100</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v1001" name="voucher_100[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
+                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-10">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
+                        <i class="fa fa-paper-plane"></i> SUBMIT
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </section>
@@ -400,213 +423,223 @@
     // Jumlah Kendaraan
     $(function() {
         let j = 1
+        let button = document.getElementById("btnSubmit");
+        $(".kualifikasi").select2()
+        let aadbData = []
 
-        // Select-2
-        $(".select2-kendaraan").select2({
-            ajax: {
-                url: "{{ url('unit-kerja/aadb/select2/kendaraan') }}",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        _token: CSRF_TOKEN,
-                        search: params.term // search term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
+        // Menyimpan data aadb dalam Array
+        $(document).on('change', '.kualifikasi', function() {
+            aadbData = $('.kendaraan').map(function() {
+                return this.value
+            }).get()
+        })
+
+        // Daftar Kualifikasi
+        $(document).on('change', '.kualifikasi', function() {
+            let kualifikasi = $(this).val()
+            let target = $(this).data('idtarget')
+            console.log(target)
+            if (kualifikasi) {
+                $.ajax({
+                    type: "GET",
+                    url: "/unit-kerja/aadb/select2/kendaraan",
+                    dataType: 'JSON',
+                    data: {
+                        "data": kualifikasi,
+                        "kendaraan": aadbData
+                    },
+                    success: function(res) {
+                        if (res.length != 0) {
+                            $("#kendaraan" + target).empty();
+                            $("#kendaraan" + target).select2();
+                            $("#kendaraan" + target).append('<option value="">-- Pilih Kendaraan --</option>');
+                            $.each(res, function(index, row) {
+                                $("#kendaraan" + target).append(
+                                    '<option value="' + row.id + '">' + row.text + '</option>'
+                                )
+                                button.disabled = false
+
+                            })
+
+                        } else {
+                            button.disabled = true
+                            $("#kendaraan" + target).empty();
+                            $("#kendaraan" + target).append('<option value="">-- Tidak ada kendaraan --</option>');
+                        }
+                    }
+                })
+            } else {
+                $("#kendaraan").empty();
             }
         })
 
         // More Item
         $('#btn-total').click(function() {
             let i
-            let total = ($('#jumlahKendaraan').val()) - 1
             let aksi = "{{ $aksi }}"
             if (aksi == 'voucher-bbm') {
-                $(".section-kendaraan").empty()
-                for (i = 1; i <= total; i++) {
-                    ++j
-
-                    $("#section-kendaraan").append(
-                        `<div class="section-kendaraan">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Pilih Kendaraan</label>
-                            <div class="col-sm-10">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan` + j + `">
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
-                                    </option>
-                                    @endforeach
+                ++j
+                $("#section-kendaraan").append(
+                    `<div class="row-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                            <div class="form-group row mt-2 mb-1">
+                                <div class="col-md-6">
+                                    <label class="text-muted">Informasi Kendaraan ` + j + `</label>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a class="btn btn-danger btn-sm remove-list">
+                                        <i class="fas fa-minus-circle"></i> hapus list
+                                    </a>
+                                </div>
+                            </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-3">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label form-group">Voucher 25</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v251" name="voucher_25[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
-                            </div>
-                            <label class="col-sm-2 col-form-label form-group">Voucher 50</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v501" name="voucher_50[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
-                            </div>
-                            <label class="col-sm-2 col-form-label form-group">Voucher 100</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control v1001" name="voucher_100[]" data-idtarget="1" placeholder="Jumlah Voucher 25">
+                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-10">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
+                                </select>
                             </div>
                         </div>
                     </div>`
-                    )
-                    $(".select2-kendaraan" + j).select2({
-                        ajax: {
-                            url: "{{ url('unit-kerja/aadb/select2/kendaraan') }}",
-                            type: "post",
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            },
-                            cache: true
-                        }
-                    })
-                }
+                )
+
             } else if (aksi == 'perpanjangan-stnk') {
-                $(".section-kendaraan").empty()
-                for (i = 1; i <= total; i++) {
-                    ++j
-                    $("#section-kendaraan").append(
-                        `<div class="form-group row section-kendaraan">
-                            <label class="col-sm-3 col-form-label form-group">Pilih Kendaraan</label>
-                            <div class="col-sm-9">
-                                <select name="kendaraan_id[]" class="form-control text-capitalize aadb select2-kendaraan` + j + `" data-idtarget="` + j + `">
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    @foreach($kendaraan as $dataKendaraan)
-                                    <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                        {{ $dataKendaraan->no_plat_kendaraan.' / '.$dataKendaraan->merk_tipe_kendaraan }}
-                                    </option>
-                                    @endforeach
+                ++j
+                $("#section-kendaraan").append(
+                    `<div class="row-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-2 mb-1">
+                            <div class="col-md-6">
+                                <label class="text-muted">Informasi Kendaraan ` + j + `</label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a class="btn btn-danger btn-sm remove-list">
+                                    <i class="fas fa-minus-circle"></i> hapus list
+                                </a>
+                            </div>
+                        </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-9">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Masa Berlaku STNK</label>
                             <span id="mb_stnk" class="col-sm-9">
                                 <span id="mb-stnk` + j + `"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                             </span>
-                        </div>`
-                    )
+                        </div>
+                    </div>`
+                )
 
-                    // Daftar Kendaraan
-                    $(".select2-kendaraan" + j).select2({
-                        ajax: {
-                            url: "{{ url('unit-kerja/aadb/select2/kendaraan') }}",
-                            type: "post",
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            },
-                            cache: true
-                        }
-                    })
-                }
             } else if (aksi == 'servis') {
-                $(".section-kendaraan").empty()
-                for (i = 1; i <= total; i++) {
-                    ++j
-                    $("#section-kendaraan").append(
-                        `<div class="section-kendaraan">
-                            <div class="form-group row">
-                                <label class="col-sm-12 mb-3 text-muted">Informasi Kendaraan</label>
-                                <label class="col-sm-3 col-form-label">Pilih Kendaraan</label>
-                                <div class="col-sm-9">
-                                    <select name="kendaraan_id[]" class="form-control text-capitalize select2-kendaraan`+j+`" data-idtarget="`+j+`">
-                                        <option value="">-- Pilih Kendaraan --</option>
-                                        @foreach($kendaraan as $dataKendaraan)
-                                        <option value="{{ $dataKendaraan->id_kendaraan }}">
-                                            {{ $dataKendaraan->no_plat_kendaraan.' - '.$dataKendaraan->merk_tipe_kendaraan }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                ++j
+                $("#section-kendaraan").append(
+                    `<div class="row-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                            <div class="form-group row mt-2 mb-1">
+                                <div class="col-md-6">
+                                    <label class="text-muted">Informasi Kendaraan ` + j + `</label>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a class="btn btn-danger btn-sm remove-list">
+                                        <i class="fas fa-minus-circle"></i> hapus list
+                                    </a>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
-                                </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select class="form-control text-capitalize kualifikasi" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
+                                </select>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis</label>
-                                <div class="col-sm-3">
-                                    <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
-                                </div>
-                                <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)</label>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000">
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-9">
+                                <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
+                                    <option value="">-- Pilih Kualifikasi Dahulu --</option>
+                                </select>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli</label>
-                                <div class="col-sm-3">
-                                    <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
-                                </div>
-                                <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000">
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
                             </div>
-                        </div>`
-                    )
-                }
-
-                // Daftar Kendaraan
-                $(".select2-kendaraan" + j).select2({
-                    ajax: {
-                        url: "{{ url('unit-kerja/aadb/select2/kendaraan') }}",
-                        type: "post",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                _token: CSRF_TOKEN,
-                                search: params.term // search term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    }
-                })
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                            </div>
+                            <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                            </div>
+                            <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Keterangan Servis*</label>
+                            <div class="col-sm-9">
+                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb"></textarea>
+                            </div>
+                        </div>
+                    </div>`
+                )
             }
+
+
+            $(".kualifikasi").select2();
+
+            $(document).on('click', '.remove-list', function() {
+                $(this).parents('.row-kendaraan').remove();
+            })
         })
 
         // Masa Berlaku STNK
-        $(document).on('change', '.aadb', function() {
+        $(document).on('change', '.kendaraan', function() {
             let target = $(this).data('idtarget')
             let kendaraanId = $(this).val()
             if (kendaraanId) {
@@ -634,7 +667,6 @@
         let target = $(this).data('idtarget');
 
     })
-
 </script>
 @endsection
 

@@ -248,14 +248,6 @@
                                                     <div class="row">
                                                         <div class="col-md-4"><label>Kendaraan </label></div>
                                                         <div class="col-md-8">: {{ $dataVoucher->merk_tipe_kendaraan }}</div>
-                                                        <div class="col-md-4"><label>Voucher 25 </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_25 }}</div>
-                                                        <div class="col-md-4"><label>Voucher 50 </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_50 }}</div>
-                                                        <div class="col-md-4"><label>Voucher 100 </label></div>
-                                                        <div class="col-md-8">: {{ $dataVoucher->voucher_100 }}</div>
-                                                        <div class="col-md-4"><label>Total </label></div>
-                                                        <div class="col-md-8">: Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</div>
                                                         <div class="col-md-4"><label>Bulan Pengadaan </label></div>
                                                         <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
                                                     </div>

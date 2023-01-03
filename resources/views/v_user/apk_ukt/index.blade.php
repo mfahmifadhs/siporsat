@@ -71,19 +71,17 @@
                         <h3 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h3>
                     </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered m-0" style="font-size: 80%;">
+                        <table id="table-usulan" class="table table-bordered m-0">
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th>No. Surat</th>
-                                    <th>Lokasi Kerusakan</th>
-                                    <th>Bidang Kerusakan</th>
+                                    <th>Usulan</th>
+                                    <th>Permintaan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <?php $no = 1;
-                            $no2 = 1; ?>
+                            <?php $no = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
@@ -93,17 +91,15 @@
                                         No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }}</p>
                                     </td>
                                     <td>
-                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
+                                        @foreach($dataUsulan->detailUsulanUkt as $i => $dataUkt)
                                         <p class="text-capitalize">
-                                            <span class="pl-1">○ {{ $dataUkt->lokasi_pekerjaan }} / {{ $dataUkt->spesifikasi_pekerjaan }}</span><br>
-                                        </p>
-                                        @endforeach
-                                    </td>
-                                    </td>
-                                    <td>
-                                        @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
-                                        <p class="text-capitalize">
-                                            <span class="pl-1">○ {{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)).' : '.$dataUkt->keterangan  }}</span><br>
+                                            @php $noDetail = $i + 1 @endphp
+                                            <span class="pl-1">{{$noDetail .'. '.$dataUkt->lokasi_pekerjaan }}</span><br>
+                                            <span class="pl-1">&emsp;{{ $dataUkt->spesifikasi_pekerjaan }}</span><br>
+                                            @if ($dataUkt->keterangan != null)
+                                            <span class="pl-1">&emsp;Keterangan:</span><br>
+                                            <span class="pl-1">&emsp;{{ $dataUkt->keterangan }}</span><br>
+                                            @endif
                                         </p>
                                         @endforeach
                                     </td>
@@ -209,7 +205,7 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan == 1)
+                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan_id == 1)
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:

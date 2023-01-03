@@ -131,12 +131,7 @@
                               <div class="col-md-6 form-group">
                                  <label>Unit Kerja :</label>
                                  <select name="unit_kerja_id" class="form-control">
-                                    <option value="">-- Pilih Unit Kerja --</option>
-                                    @foreach($unitKerja as $dataUnitKerja)
-                                    <option value="{{ $dataUnitKerja->id_unit_kerja }}" <?php if ($kendaraan->unit_kerja_id == $dataUnitKerja->id_unit_kerja) echo "selected"; ?>>
-                                       {{ $dataUnitKerja->unit_kerja }}
-                                    </option>
-                                    @endforeach
+                                    <option value="{{ Auth::user()->pegawai->unit_kerja_id }}">{{ Auth::user()->pegawai->unitKerja->unit_kerja }}</option>
                                  </select>
                               </div>
                               <div class="col-md-6 form-group">
@@ -210,6 +205,31 @@
                                  <input type="number" name="nilai_perolehan" class="form-control" value="{{ $kendaraan->nilai_perolehan }}">
                               </div>
                               <div class="col-md-6 form-group">
+                                 <label>Kualifikasi Kendaraan : </label>
+                                 <select name="kualifikasi" class="form-control" required>
+                                    @if ($kendaraan->kualifikasi != null)
+                                        @if ($kendaraan->kualifikasi == 'jabatan')
+                                        <option value="jabatan">Kendaraan Jabatan</option>
+                                        <option value="operasional">Kendaraan Operasional</option>
+                                        <option value="bermotor">Kendaraan Bermotor</option>
+                                        @elseif ($kendaraan->kualifikasi == 'operasional')
+                                        <option value="operasional">Kendaraan Operasional</option>
+                                        <option value="jabatan">Kendaraan Jabatan</option>
+                                        <option value="bermotor">Kendaraan Bermotor</option>
+                                        @else
+                                        <option value="bermotor">Kendaraan Bermotor</option>
+                                        <option value="jabatan">Kendaraan Jabatan</option>
+                                        <option value="operasional">Kendaraan Operasional</option>
+                                        @endif
+                                    @else
+                                        <option value="">-- Pilih Kualifikasi --</option>
+                                        <option value="jabatan">Kendaraan Jabatan</option>
+                                        <option value="operasional">Kendaraan Operasional</option>
+                                        <option value="bermotor">Kendaraan Bermotor</option>
+                                    @endif
+                                 </select>
+                              </div>
+                              <div class="col-md-12 form-group">
                                  <label class="mb-3">Status Kendaraan : </label> <br>
                                  <input type="radio" name="status_kendaraan_id" value="1" {{ $kendaraan->status_kendaraan_id == 1 ? 'checked' : '' }}>
                                  <span class="mr-3">Aktif </span>

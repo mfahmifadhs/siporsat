@@ -73,8 +73,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Pengusul</th>
-                                    <th>Usulan</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Usulan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -84,46 +85,10 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td class="text-center pt-3">{{ $no++ }}</td>
-                                    <td style="width: 25%;">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}
-                                            </div>
-                                            <div class="col-md-12">{{ $dataUsulan->no_surat_usulan }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="text-capitalize" style="width: 50%;">
-                                        <div class="row">
-                                            @if ($dataUsulan->jenis_form == 'perbaikan')
-                                            @foreach($dataUsulan->detailPerbaikan as $dataPerbaikan)
-                                            <div class="col-md-3">Kode Barang </div>
-                                            <div class="col-md-9">: {{ $dataPerbaikan->kode_barang.'.'.$dataPerbaikan->nup_barang }} </div>
-                                            <div class="col-md-3">Nama Barang</div>
-                                            <div class="col-md-9">: {{ $dataPerbaikan->kategori_barang}} </div>
-                                            <div class="col-md-3">Merk / Tipe </div>
-                                            <div class="col-md-9">: {{ $dataPerbaikan->merk_tipe_barang }} </div>
-                                            <div class="col-md-3">Keterangan Perbaikan</div>
-                                            <div class="col-md-9">: {{ $dataPerbaikan->keterangan_perbaikan }} </div>
-                                            <div class="col-md-12"><br></div>
-                                            @endforeach
-                                            @endif
-
-                                            @if ($dataUsulan->jenis_form == 'pengadaan')
-                                            @foreach($dataUsulan->detailPengadaan as $dataPengadaan)
-                                            <div class="col-md-3">Nama Barang </div>
-                                            <div class="col-md-9">: {{ $dataPengadaan->kategori_barang}} </div>
-                                            <div class="col-md-3">Merk / Tipe </div>
-                                            <div class="col-md-9">: {{ $dataPengadaan->kategori_barang}} </div>
-                                            <div class="col-md-3">Spesifikasi </div>
-                                            <div class="col-md-9">: {{ $dataPengadaan->spesifikasi_barang }} </div>
-                                            <div class="col-md-3">Estimasi Biaya </div>
-                                            <div class="col-md-9">: Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }} </div>
-                                            <div class="col-md-12"><br></div>
-                                            @endforeach
-                                            @endif
-                                        </div>
-                                    </td>
+                                    <td class="text-center pt-3" style="width: 5vh;">{{ $no++ }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td class="text-uppercase">{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td class="text-uppercase">{{ $dataUsulan->jenis_form_usulan }}</td>
                                     <td class="pt-2">
                                         Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
@@ -150,8 +115,8 @@
                                         </a>
                                         <div class="dropdown-menu">
                                             @if ($dataUsulan->otp_usulan_pengusul != null)
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/usulan-oldat/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-file"></i> Surat Usulan
+                                            <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
+                                                <i class="fas fa-info-circle"></i> Detail
                                             </a>
                                             @else
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-oldat/'. $dataUsulan->id_form_usulan) }}">
@@ -161,14 +126,143 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @endif
-                                            @if ($dataUsulan->status_proses_id == 5)
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/surat/bast-oldat/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-file"></i> Surat Bast
-                                            </a>
-                                            @endif
                                         </div>
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                @if ($dataUsulan->status_pengajuan == '')
+                                                @if($dataUsulan->status_proses == 'belum proses')
+                                                <span class="border border-warning">
+                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
+                                                </span>
+                                                @elseif($dataUsulan->status_proses == 'proses')
+                                                <span class="border border-primary">
+                                                    <b class="text-primary p-3">Proses</b>
+                                                </span>
+                                                @endif
+                                                @elseif ($dataUsulan->status_pengajuan == 'diterima')
+
+                                                @else
+
+                                                @endif
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body text-capitalize">
+                                                <div class="form-group row">
+                                                    <div class="col-md-12 text-center font-weight-bold">
+                                                        <h5>Detail Pengajuan Usulan {{ $dataUsulan->jenis_form }}
+                                                            <hr>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-2">
+                                                    <h6 class="col-md-12 font-weight-bold text-muted">
+                                                        Informasi Pengusul
+                                                    </h6>
+                                                </div>
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Nama Pengusul </label></div>
+                                                    <div class="col-md-8">: {{ $dataUsulan->nama_pegawai }}</div>
+                                                </div>
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Jabatan Pengusul </label></div>
+                                                    <div class="col-md-8">: {{ $dataUsulan->keterangan_pegawai }}</div>
+                                                </div>
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Unit Kerja</label></div>
+                                                    <div class="col-md-8">: {{ $dataUsulan->unit_kerja }}</div>
+                                                </div>
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Tanggal Usulan </label></div>
+                                                    <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                                </div>
+                                                @if ($dataUsulan->otp_usulan_pengusul != null)
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Surat Usulan </label></div>
+                                                    <div class="col-md-8">:
+                                                        <a href="{{ url('unit-kerja/surat/usulan-oldat/'. $dataUsulan->id_form_usulan) }}">
+                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi')
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Surat BAST </label></div>
+                                                    <div class="col-md-8">:
+                                                        <a href="{{ url('unit-kerja/surat/bast-oldat/'. $dataUsulan->id_form_usulan) }}">
+                                                            <i class="fas fa-file"></i> Surat BAST
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                <div class="row mt-4">
+                                                    <h6 class="col-md-12 font-weight-bold text-muted">
+                                                        Informasi Pekerjaan
+                                                    </h6>
+                                                </div>
+                                                <div class="form-group row ">
+                                                    @if ($dataUsulan->jenis_form == 'perbaikan')
+                                                    <div class="col-md-12 text-center">
+                                                        <hr class="bg-secondary">
+                                                        <div class="form-group row font-weight-bold">
+                                                            <div class="col-sm-1">No</div>
+                                                            <div class="col-sm-2">Kode Barang</div>
+                                                            <div class="col-sm-3">Nama Barang</div>
+                                                            <div class="col-sm-3">Merk / Tipe</div>
+                                                            <div class="col-sm-3">Keterangan Perbaikan</div>
+                                                        </div>
+                                                        <hr class="bg-secondary">
+                                                        @foreach($dataUsulan->detailPerbaikan as $i => $dataPerbaikan)
+                                                        @php $i = $i +1; @endphp
+                                                        <div class="form-group row text-uppercase small">
+                                                            <div class="col-md-1">{{ $i }}</div>
+                                                            <div class="col-md-2">
+                                                                {{ $dataPerbaikan->kode_barang.'.'.$dataPerbaikan->nup_barang }}
+                                                            </div>
+                                                            <div class="col-md-3">{{ $dataPerbaikan->kategori_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataPerbaikan->merk_tipe_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataPerbaikan->keterangan_perbaikan }}</div>
+                                                        </div>
+                                                        <hr>
+                                                        @endforeach
+                                                    </div>
+                                                    @else
+                                                    <div class="col-md-12 text-center">
+                                                        <hr class="bg-secondary">
+                                                        <div class="form-group row font-weight-bold">
+                                                            <div class="col-sm-1">No</div>
+                                                            <div class="col-sm-2">Nama Barang</div>
+                                                            <div class="col-sm-3">Merk / Tipe</div>
+                                                            <div class="col-sm-3">Spesifikasi</div>
+                                                            <div class="col-sm-3">Estimasi Biaya</div>
+                                                        </div>
+                                                        <hr class="bg-secondary">
+                                                        @foreach($dataUsulan->detailPengadaan as $i => $dataPengadaan)
+                                                        @php $i = $i +1; @endphp
+                                                        <div class="form-group row text-uppercase small">
+                                                            <div class="col-md-1">{{ $i }}</div>
+                                                            <div class="col-md-2">
+                                                                {{ $dataPengadaan->kode_barang.'.'.$dataPengadaan->nup_barang }}
+                                                            </div>
+                                                            <div class="col-md-3">{{ $dataPengadaan->kategori_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataPengadaan->spesifikasi_barang }}</div>
+                                                            <div class="col-md-3">Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }}</div>
+                                                        </div>
+                                                        <hr>
+                                                        @endforeach
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -322,14 +416,15 @@
             columnDefs: [{
                     targets: -1,
                     data: null,
-                    defaultContent: `<a type="button" class="btn btn-primary" data-toggle="dropdown">
-                                    <i class="fas fa-bars"></i>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item btn btn-detail">
-                                        <i class="fas fa-info-circle"></i> Detail
-                                    </a>
-                                </div>`,
+                    defaultContent:
+                        `<a type="button" class="btn btn-primary" data-toggle="dropdown">
+                            <i class="fas fa-bars"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item btn btn-detail">
+                                <i class="fas fa-info-circle"></i> Detail
+                            </a>
+                        </div>`,
                 },
                 {
                     "bVisible": false,

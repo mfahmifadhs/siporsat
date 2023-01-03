@@ -154,10 +154,6 @@
                         <tr>
                             <th>No</th>
                             <th>Kendaraan</th>
-                            <th>Voucher 25</th>
-                            <th>Voucher 50</th>
-                            <th>Voucher 100</th>
-                            <th>Total</th>
                             <th>Bulan Pengadaan</th>
                         </tr>
                     </thead>
@@ -167,10 +163,6 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
-                            <td>{{ $dataVoucher->voucher_25 }}</td>
-                            <td>{{ $dataVoucher->voucher_50 }}</td>
-                            <td>{{ $dataVoucher->voucher_100 }}</td>
-                            <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                         </tr>
                         @endforeach

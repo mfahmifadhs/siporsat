@@ -82,14 +82,7 @@
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Pengguna Barang :</label>
-                                            <select name="id_pegawai" class="form-control">
-                                                <option value="">-- Pilih Pegawai --</option>
-                                                @foreach($pegawai as $dataPegawai)
-                                                <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($barang->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
-                                                    {{ $dataPegawai->nama_pegawai }}
-                                                </option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control" name="pengguna_barang" value="{{ $barang->pengguna_barang }}" placeholder="Masukkan Pengguna Barang">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Kategori Barang :</label>
@@ -144,7 +137,7 @@
                                         <div class="col-md-12 form-group">
                                             <label>Proses : </label> <br>
                                             <input type="radio" name="proses" value="update" required>
-                                            <span>Update Data    </span>
+                                            <span>Update Data </span>
                                             <input type="radio" name="proses" value="pengguna-baru" required>
                                             <span>Pengguna Baru </span>
                                         </div>
@@ -170,7 +163,7 @@
                                             <span class="time"><i class="far fa-date"></i> {{ \Carbon\Carbon::parse($riwayatPengguna->tanggal_pengguna)->isoFormat('DD MMMM Y') }}</span>
 
                                             <h3 class="timeline-header text-capitalize">
-                                                <a href="#">{{ $riwayatPengguna->nama_pegawai }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
+                                                <a href="#">{{ $riwayatPengguna->pengguna_barang }}</a> <br> {{ $riwayatPengguna->jabatan.' '.$riwayatPengguna->keterangan_pegawai }}
                                             </h3>
 
                                             <div class="timeline-body">
@@ -186,6 +179,9 @@
                                                     <div class="col-sm-12">
                                                         <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default">
                                                             <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                        <a class="btn btn-danger btn-xs" href="{{ url('unit-kerja/oldat/barang/hapus-riwayat/'. $riwayatPengguna->id_riwayat_barang) }}" onclick="return confirm('Hapus Riwayat Ini ?')">
+                                                            <i class="fas fa-trash"></i> Hapus
                                                         </a>
                                                     </div>
                                                 </div>
@@ -209,7 +205,7 @@
                                                             <div class="form-group row">
                                                                 <label class="col-sm-4 col-form-label">Pengguna</label>
                                                                 <div class="col-sm-8">
-                                                                    <input type="text" class="form-control" value="{{ $riwayatPengguna->nama_pegawai }}" readonly>
+                                                                    <input type="text" name="pengguna_barang" class="form-control" value="{{ $riwayatPengguna->pengguna_barang }}">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">

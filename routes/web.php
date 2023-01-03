@@ -197,6 +197,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('rekapitulasi', [SuperUserController::class, 'RecapAadb']);
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAadb']);
+        Route::get('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
         Route::get('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AadbDashboard']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionAadb']);
         Route::post('kendaraan/{aksi}/{id}', [SuperUserController::class, 'Vehicle']);
@@ -308,7 +309,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
         Route::get('/grafik', [UserController::class, 'SearchChartDataAadb']);
         Route::get('kendaraan/{aksi}/{id}', [UserController::class, 'Vehicle']);
         Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAadb']);
-        Route::get('/select2/{aksi}', [SuperUserController::class, 'Select2Aadb']);
+        Route::get('/select2/{aksi}', [UserController::class, 'Select2Aadb']);
         Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AadbDashboard']);
 
         Route::post('kendaraan/{aksi}/{id}', [UserController::class, 'Vehicle']);

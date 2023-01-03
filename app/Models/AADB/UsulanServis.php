@@ -20,6 +20,7 @@ class UsulanServis extends Model
         'tgl_servis_terakhir',
         'jatuh_tempo_servis',
         'tgl_ganti_oli_terakhir',
-        'jatuh_tempo_ganti_oli'
+        'jatuh_tempo_ganti_oli',
+        'keterangan_servis'
     ];
 }

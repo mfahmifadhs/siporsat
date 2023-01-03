@@ -156,15 +156,11 @@
                         </div>
                         @else
                         <div class="col-sm-10">
-                            <table class="table table-bordered text-center">
+                            <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th>No</th>
+                                        <th class="text-center">No</th>
                                         <th>Kendaraan</th>
-                                        <th>Voucer 25</th>
-                                        <th>Voucer 50</th>
-                                        <th>Voucer 100</th>
-                                        <th>Total Biaya</th>
                                         <th>Bulan Pengadaan</th>
                                     </tr>
                                 </thead>
@@ -172,15 +168,11 @@
                                 <tbody>
                                     @foreach($usulan->usulanVoucher as $dataVoucher)
                                     <tr>
-                                        <td>{{ $no++ }}</td>
+                                        <td class="text-center">{{ $no++ }}</td>
                                         <td>
                                             <input type="hidden" name="detail_usulan_id[]" value="{{ $dataVoucher->id_form_usulan_voucher_bbm  }}">
-                                            {{ $dataVoucher->merk_tipe_kendaraan }}
+                                            {{ $dataVoucher->no_plat_kendaraan.' - '.$dataVoucher->merk_tipe_kendaraan.' '.$dataVoucher->tahun_kendaraan }}
                                         </td>
-                                        <td><input type="text" class="form-control text-center" name="voucher_25[]" value="{{ $dataVoucher->voucher_25 }}"></td>
-                                        <td><input type="text" class="form-control text-center" name="voucher_50[]" value="{{ $dataVoucher->voucher_50 }}"></td>
-                                        <td><input type="text" class="form-control text-center" name="voucher_100[]" value="{{ $dataVoucher->voucher_100 }}"></td>
-                                        <td>Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                                     </tr>
                                     @endforeach

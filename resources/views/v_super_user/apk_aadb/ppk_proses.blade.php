@@ -425,26 +425,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Voucher 25</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" value="{{ $dataVoucher->voucher_25 }}" readonly>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Voucher 50</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" value="{{ $dataVoucher->voucher_50 }}" readonly>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Voucher 100</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" value="{{ $dataVoucher->voucher_100 }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Total Biaya</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" value="Rp {{ number_format($dataVoucher->total_biaya, 0, ',', '.') }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}" readonly>
