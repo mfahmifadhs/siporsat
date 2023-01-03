@@ -56,7 +56,7 @@
                     <div id="main-ukt">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
+                            <label class="col-sm-8 text-muted float-left mt-2">Lokasi Pekerjaan</label>
                             <label class="col-sm-4 text-muted text-right">
                                 <a id="btn-total" class="btn btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah List Baru
@@ -110,7 +110,7 @@
                 `<div class="ukt">
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
+                        <label class="col-sm-8 text-muted float-left mt-2">Lokasi Pekerjaan</label>
                         <label class="col-sm-4 text-muted text-right">
                             <a class="btn btn-danger remove-list">
                                 <i class="fas fa-trash"></i> Hapus List
