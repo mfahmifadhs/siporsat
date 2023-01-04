@@ -90,6 +90,12 @@
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
                                             @endif
+
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 4)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/gdn/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-arrow-alt-circle-right"></i> BAST
+                                            </a>
+                                            @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
