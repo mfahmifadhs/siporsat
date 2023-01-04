@@ -1681,9 +1681,9 @@ class SuperUserController extends Controller
                 $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
                 $usulanPengadaan->save();
             } elseif ($id == 'servis') {
-                $idUsulan       = UsulanServis::count() + 1;
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
+                    $idUsulan       = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
                     $usulanServis->id_form_usulan_servis    = (int) $idUsulan;
                     $usulanServis->form_usulan_id           = $idFormUsulan;
@@ -1696,15 +1696,26 @@ class SuperUserController extends Controller
                     $usulanServis->save();
                 }
             } elseif ($id == 'perpanjangan-stnk') {
-                $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                 $kendaraan = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
+                    $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
                     $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan;
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
+                }
+            } elseif ($id == 'voucher-bbm') {
+                $kendaraan = $request->kendaraan_id;
+                foreach ($kendaraan as $i => $kendaraan_id) {
+                    $idUsulan    = UsulanVoucherBBM::count() + 1;
+                    $usulanVoucherBBM   = new UsulanVoucherBBM();
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
+                    $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
+                    $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
+                    $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                    $usulanVoucherBBM->save();
                 }
             }
 
