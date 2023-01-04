@@ -32,7 +32,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Persetujuan Usulan ATK </h3>
+                <h3 class="card-title">Persetujuan Usulan Gedung & Bangunan </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/gdn/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
@@ -66,13 +66,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Barang</label>
+                        <label class="col-sm-2 col-form-label">Jumlah</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }} Barang" readonly>
+                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label">Informasi Barang</label>
+                        <label class="col-sm-2 col-form-label">Informasi Kerusakan</label>
                         <div class="col-sm-10">
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">

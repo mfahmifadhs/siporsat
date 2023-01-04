@@ -1776,7 +1776,7 @@ class SuperUserController extends Controller
             UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
             UsulanAadb::where('id_form_usulan', $id)->delete();
 
-            return redirect('super-user/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
