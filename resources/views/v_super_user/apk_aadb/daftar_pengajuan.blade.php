@@ -109,11 +109,11 @@
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
                                             @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataPengajuan->status_proses_id == 2)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/aadb/usulan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/aadb/pengajuan/'. $dataPengajuan->jenis_form.'/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses Penyerahan
                                             </a>
-                                            @elseif ($dataPengajuan->status_proses_id == 4)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 4)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> BAST
                                             </a>
                                             @endif
