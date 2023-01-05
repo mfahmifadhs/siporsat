@@ -79,7 +79,7 @@
                                 </td>
                                 <td>{{ $row->nama_pegawai }}</td>
                                 <td>{{ $row->unit_kerja }}</td>
-                                <td>{{ $row->jenis_form }}</td>
+                                <td class="text-uppercase">{{ $row->jenis_form }}</td>
                                 <td>
                                     <span>Status Pengajuan : </span> <br>
                                     @if($row->status_pengajuan_id == 1)

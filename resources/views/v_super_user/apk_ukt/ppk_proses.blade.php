@@ -83,7 +83,7 @@
                             <input type="text" class="form-control text-uppercase" value="{{ $dataUkt->lokasi_pekerjaan }}" readonly>
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control text-uppercase" value="{{ $dataUkt->spesifikasi_pekerjaan }}" readonly>
+                            <textarea type="text" class="form-control text-uppercase spesifikasi" value="{!! $dataUkt->spesifikasi_pekerjaan !!}" readonly></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -120,6 +120,14 @@
 
     $(function() {
         let resOTP = ''
+        $('.spesifikasi').summernote({
+            height: 150,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                ['color', ['color']],
+                ['para', ['ol', 'ul', 'paragraph', 'height']],
+            ]
+        })
         $(document).on('click', '#btnKirimOTP', function() {
             let jenisForm = "{{ $id }}"
             let tujuan = "verifikasi {{ $form }} barang"

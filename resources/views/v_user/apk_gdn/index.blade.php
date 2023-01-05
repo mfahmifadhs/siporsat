@@ -65,20 +65,19 @@
                 </div>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h3>
                     </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered m-0" style="font-size: 80%;">
+                        <table id="table-usulan" class="table table-bordered m-0">
                             <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>No. Surat</th>
-                                    <th>Lokasi Kerusakan</th>
-                                    <th>Bidang Kerusakan</th>
-                                    <th>Status</th>
+                                <tr class="text-center">
+                                    <th style="width: 1%;">No</th>
+                                    <th class="text-left" style="width: 44%;">Tanggal / No. Surat</th>
+                                    <th style="width: 25%;">Status Pengajuan</th>
+                                    <th style="width: 25%;">Status Proses</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -86,46 +85,36 @@
                             $no2 = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
-                                <tr>
-                                    <td class="pt-4 text-center">{{ $no++ }}</td>
-                                    <td>
+                                <tr class="text-center">
+                                    <td class="pt-4">{{ $no++ }}</td>
+                                    <td class="text-left">
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
                                         No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }}</p>
                                     </td>
-                                    <td>
-                                        @foreach($dataUsulan->detailUsulanGdn as $dataGdn)
-                                        <p class="text-capitalize">
-                                            <span class="pl-1">○ {{ $dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</span><br>
-                                        </p>
-                                        @endforeach
-                                    </td>
-                                    </td>
-                                    <td>
-                                        @foreach($dataUsulan->detailUsulanGdn as $dataGdn)
-                                        <p class="text-capitalize">
-                                            <span class="pl-1">○ {{ ucfirst(strtolower($dataGdn->bid_kerusakan)).' : '.$dataGdn->keterangan  }}</span><br>
-                                        </p>
-                                        @endforeach
+                                    <td class="pt-2">
+                                        <h6 class="mt-3">
+                                            @if($dataUsulan->status_pengajuan_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-success">
+                                                Disetujui
+                                            </span>
+                                            @elseif($dataUsulan->status_pengajuan_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                            @if ($dataUsulan->keterangan != null)
+                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
+                                            @endif
+                                            @endif
+                                        </h6>
                                     </td>
                                     <td class="pt-2">
-                                        Status Pengajuan : <br>
-                                        @if($dataUsulan->status_pengajuan_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-success">disetujui</span>
-                                        @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif <br>
-                                        Status Proses : <br>
-                                        @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan</span>
-                                        @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses ppk</span>
-                                        @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi pengusul</span>
-                                        @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses petugas gudang</span>
-                                        @elseif ($dataUsulan->status_proses_id == 5)
-                                        <span class="badge badge-sm badge-pill badge-success">selesai</span>
-                                        @endif
+                                        <h6 class="mt-3">
+                                            @if($dataUsulan->status_proses_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
+                                            @elseif ($dataUsulan->status_proses_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            <span class="badge badge-sm badge-pill badge-success">Selesai</span>
+                                            @endif
+                                        </h6>
                                     </td>
                                     <td class="text-center">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
@@ -151,26 +140,6 @@
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                @if ($dataUsulan->status_pengajuan == '')
-                                                @if($dataUsulan->status_proses == 'belum proses')
-                                                <span class="border border-warning">
-                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
-                                                </span>
-                                                @elseif($dataUsulan->status_proses == 'proses')
-                                                <span class="border border-primary">
-                                                    <b class="text-primary p-3">Proses</b>
-                                                </span>
-                                                @endif
-                                                @elseif ($dataUsulan->status_pengajuan == 'diterima')
-
-                                                @else
-
-                                                @endif
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center font-weight-bold">
@@ -279,15 +248,13 @@
             "autoWidth": false,
             "info": false,
             "paging": true,
-            buttons: [
-                {
-                    text: '(+) Usulan Perbaikan',
-                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
-                    action: function(e, dt, node, config) {
-                        window.location.href = "{{ url('unit-kerja/gdn/usulan/perbaikan/baru') }}"
-                    }
+            buttons: [{
+                text: '(+) Usulan Perbaikan',
+                className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                action: function(e, dt, node, config) {
+                    window.location.href = "{{ url('unit-kerja/gdn/usulan/perbaikan/baru') }}"
                 }
-            ]
+            }]
 
         }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
     })

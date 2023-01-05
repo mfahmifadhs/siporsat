@@ -2108,10 +2108,10 @@ class UserController extends Controller
 
     public function ChartDataAtk()
     {
-        $dataAtk = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
-            ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
-            ->orderBy('total_atk', 'DESC')
-            ->get();
+        // $dataAtk = Atk::join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
+        //     ->join('atk_tbl_kelompok_sub_jenis', 'id_jenis_atk', 'jenis_atk_id')
+        //     ->orderBy('total_atk', 'DESC')
+        //     ->get();
 
         // $stok = $dataAtk->select(DB::raw('sum(total_atk) as stok'))->groupBy('total_atk');
         $totalAtk = Atk::select('id_kategori_atk', 'kategori_atk', DB::raw('sum(total_atk) as stok'))
@@ -2119,8 +2119,16 @@ class UserController extends Controller
             ->groupBy('id_kategori_atk', 'kategori_atk')
             ->get();
 
-        foreach ($totalAtk as $data) {
-            $dataArray[] = $data->kategori_atk;
+
+        $dataAtk = UsulanAtkPengadaan::select('id_form_usulan_pengadaan', 'jenis_barang', 'nama_barang','spesifikasi','satuan', DB::raw('sum(jumlah) as stok'))
+            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+            ->groupBy('id_form_usulan_pengadaan', 'jenis_barang', 'nama_barang','spesifikasi','satuan')
+            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('status_proses_id', 1)
+            ->get();
+
+        foreach ($dataAtk as $data) {
+            $dataArray[] = $data->jenis_barang;
             $dataArray[] = (int) $data->stok;
             // $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
             // $dataArray[] = $totalStok[$i]->stok;

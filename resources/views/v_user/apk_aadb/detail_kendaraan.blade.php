@@ -171,7 +171,7 @@
                               </div>
                               <div class="col-md-6 form-group">
                                  <label>Masa Berlaku STNK RHS: </label>
-                                 <input type="date" name="mb_stnk_plat_kendaraan" class="form-control" value="{{ \Carbon\Carbon::parse($kendaraan->mb_stnk_plat_rhs)->isoFormat('Y-MM-DD') }}">
+                                 <input type="date" name="mb_stnk_plat_rhs" class="form-control" value="{{ \Carbon\Carbon::parse($kendaraan->mb_stnk_plat_rhs)->isoFormat('Y-MM-DD') }}">
                               </div>
                               <div class="col-md-6 form-group">
                                  <label>Nomor BPKB </label>

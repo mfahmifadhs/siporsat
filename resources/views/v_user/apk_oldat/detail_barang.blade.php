@@ -11,7 +11,6 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('unit-kerja/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/oldat/barang/data/semua') }}">Daftar Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>

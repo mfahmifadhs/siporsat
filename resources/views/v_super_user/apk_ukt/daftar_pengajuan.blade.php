@@ -187,7 +187,7 @@
                                                         @foreach($dataUsulan->detailUsulanUkt as $dataUkt)
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-4">{{ $dataUkt->lokasi_pekerjaan }}</div>
-                                                            <div class="col-sm-4">{{ $dataUkt->spesifikasi_pekerjaan }}</div>
+                                                            <div class="col-sm-4">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
                                                             <div class="col-sm-4">{{ $dataUkt->keterangan }}</div>
                                                         </div>
                                                         <hr>

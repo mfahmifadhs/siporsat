@@ -87,7 +87,7 @@
                                     @foreach($usulan->detailUsulanUkt as $dataUkt)
                                     <tr class="text-uppercase">
                                         <td class="text-uppercase">{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                        <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                        <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
                                         <td>{{ $dataUkt->keterangan }}</td>
                                     </tr>
                                     @endforeach

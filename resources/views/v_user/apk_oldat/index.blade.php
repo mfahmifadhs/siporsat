@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-12">
+            <div class="col-md-8 col-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan</h3>
@@ -71,12 +71,11 @@
                     <div class="card-body">
                         <table id="table-usulan" class="table table-bordered m-0">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>No. Surat</th>
-                                    <th>Jenis Usulan</th>
-                                    <th>Status</th>
+                                <tr class="text-center">
+                                    <th style="width: 1%;">No</th>
+                                    <th class="text-left" style="width: 44%;">Tanggal / No. Surat</th>
+                                    <th style="width: 25%;">Status Pengajuan</th>
+                                    <th style="width: 25%;">Status Proses</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -84,33 +83,40 @@
                             $no2 = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
-                                <tr>
+                                <tr class="text-center">
                                     <td class="text-center pt-3" style="width: 5vh;">{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td class="text-uppercase">{{ $dataUsulan->no_surat_usulan }}</td>
-                                    <td class="text-uppercase">{{ $dataUsulan->jenis_form_usulan }}</td>
+                                    <td class="text-left">
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
+                                        No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }} <br>
+                                        {{ $dataUsulan->jenis_form_usulan }}
+                                    </td>
                                     <td class="pt-2">
-                                        Status Pengajuan : <br>
-                                        @if($dataUsulan->status_pengajuan_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-success">disetujui</span>
-                                        @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif <br>
-                                        Status Proses : <br>
-                                        @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
-                                        @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
-                                        @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
-                                        @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
-                                        @elseif ($dataUsulan->status_proses_id == 5)
-                                        <span class="badge badge-sm badge-pill badge-success">selesai</span>
-                                        @endif
+                                        <h6 class="mt-3">
+                                            @if($dataUsulan->status_pengajuan_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-success">
+                                                Disetujui
+                                            </span>
+                                            @elseif($dataUsulan->status_pengajuan_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                            @if ($dataUsulan->keterangan != null)
+                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
+                                            @endif
+                                            @endif
+                                        </h6>
+                                    </td>
+                                    <td class="pt-2">
+                                        <h6 class="mt-3">
+                                            @if($dataUsulan->status_proses_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
+                                            @elseif ($dataUsulan->status_proses_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            <span class="badge badge-sm badge-pill badge-success">Selesai</span>
+                                            @endif
+                                        </h6>
                                     </td>
                                     <td class="text-center pt-3">
-                                        <a type="button" class="btn btn-primary btn-sm" data-toggle="dropdown">
+                                        <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
@@ -206,7 +212,7 @@
                                                         Informasi Pekerjaan
                                                     </h6>
                                                 </div>
-                                                <div class="form-group row ">
+                                                <div class="form-group row small">
                                                     @if ($dataUsulan->jenis_form == 'perbaikan')
                                                     <div class="col-md-12 text-center">
                                                         <hr class="bg-secondary">
@@ -220,7 +226,7 @@
                                                         <hr class="bg-secondary">
                                                         @foreach($dataUsulan->detailPerbaikan as $i => $dataPerbaikan)
                                                         @php $i = $i +1; @endphp
-                                                        <div class="form-group row text-uppercase small">
+                                                        <div class="form-group row text-uppercase">
                                                             <div class="col-md-1">{{ $i }}</div>
                                                             <div class="col-md-2">
                                                                 {{ $dataPerbaikan->kode_barang.'.'.$dataPerbaikan->nup_barang }}
@@ -245,7 +251,7 @@
                                                         <hr class="bg-secondary">
                                                         @foreach($dataUsulan->detailPengadaan as $i => $dataPengadaan)
                                                         @php $i = $i +1; @endphp
-                                                        <div class="form-group row text-uppercase small">
+                                                        <div class="form-group row text-uppercase">
                                                             <div class="col-md-1">{{ $i }}</div>
                                                             <div class="col-md-2">
                                                                 {{ $dataPengadaan->kode_barang.'.'.$dataPengadaan->nup_barang }}
@@ -416,8 +422,7 @@
             columnDefs: [{
                     targets: -1,
                     data: null,
-                    defaultContent:
-                        `<a type="button" class="btn btn-primary" data-toggle="dropdown">
+                    defaultContent: `<a type="button" class="btn btn-primary" data-toggle="dropdown">
                             <i class="fas fa-bars"></i>
                         </a>
                         <div class="dropdown-menu">

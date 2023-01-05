@@ -701,8 +701,11 @@ class SuperUserController extends Controller
 
             return redirect('super-user/verif/usulan-ukt/' . $id)->with('success', 'Pembelian barang telah selesai dilakukan');
         } elseif ($aksi == 'proses-ditolak') {
-
-            UsulanUkt::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
+            UsulanUkt::where('id_form_usulan', $id)->update([
+                'keterangan'          => $request->keterangan,
+                'status_pengajuan_id' => 2,
+                'status_proses_id'    => null
+            ]);
             return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
             $usulan = UsulanUkt::with(['detailUsulanUkt'])
@@ -877,7 +880,11 @@ class SuperUserController extends Controller
             return redirect('super-user/verif/usulan-gdn/' . $id)->with('success', 'Pembelian barang telah selesai dilakukan');
         } elseif ($aksi == 'proses-ditolak') {
 
-            UsulanGdn::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
+            UsulanGdn::where('id_form_usulan', $id)->update([
+                'keterangan'          => $request->keterangan,
+                'status_pengajuan_id' => 2,
+                'status_proses_id'    => 5
+            ]);
             return redirect('super-user/gdn/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
             $usulan = UsulanGdn::with(['detailUsulanGdn'])
@@ -1052,14 +1059,14 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-pengadaan') {
             $cekUsulan = UsulanAtk::where('id_form_usulan', $request->id_usulan)->count();
             if ($cekUsulan == 0) {
-                $id_usulan = Carbon::now()->format('dmy') . $request->id_usulan;
+                $id_usulan = (int) Carbon::now()->format('dhis');
                 if ($request->atk_barang != null) {
                     $totalAtk = count($request->atk_barang);
                     $atk = $request->atk_barang;
                     foreach ($atk as $i => $dataAtk) {
-                        $jumlahUsulan = UsulanAtkPengadaan::count();
+                        $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                         $pengadaanAtk = new UsulanAtkPengadaan();
-                        $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                        $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
                         $pengadaanAtk->form_usulan_id = $id_usulan;
                         $pengadaanAtk->jenis_barang = 'ATK';
                         $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
@@ -1079,9 +1086,9 @@ class SuperUserController extends Controller
                     $alkom = $request->alkom_barang;
                     foreach ($alkom as $i => $dataAtk) {
                         if ($request->alkom_jumlah != 0) {
-                            $jumlahUsulan = UsulanAtkPengadaan::count();
+                            $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = $jumlahUsulan . Carbon::now()->format('dmy') . rand(000, 999);
+                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = 'ALKOM';
                             $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);

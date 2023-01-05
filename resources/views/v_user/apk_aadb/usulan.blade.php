@@ -204,7 +204,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" required>
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" required>
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)*</label>
                             <div class="col-sm-3">
@@ -214,7 +214,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" required>
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" required>
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)*</label>
                             <div class="col-sm-3">
@@ -617,13 +617,13 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
+                                <input type="text" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" required>
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)</label>
                             <div class="col-sm-3">
@@ -633,7 +633,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}">
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" required>
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
                             <div class="col-sm-3">

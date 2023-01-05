@@ -115,7 +115,7 @@
                                     <tr>
                                         <td>No</td>
                                         <td>Jenis Barang</td>
-                                        <td>Merk Barang</td>\
+                                        <td>Merk Barang</td>
                                         <td>Unit Kerja</td>
                                         <td>Tahun Perolehan</td>
                                     </tr>

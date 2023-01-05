@@ -290,7 +290,7 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                            <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
                                             <td>{{ $dataUkt->keterangan }}</td>
                                         </tr>
                                         @endforeach
@@ -328,10 +328,11 @@
                                             <th>No</th>
                                             <th>Kendaraan</th>
                                             <th>Kilometer Terakhir</th>
-                                            <th>Tanggal Servis Terakhir</th>
+                                            <th>Servis Terakhir</th>
                                             <th>Jatuh Tempo Servis</th>
-                                            <th>Tanggal Ganti Oli Terakhir</th>
+                                            <th>Ganti Oli Terakhir</th>
                                             <th>Jatuh Tempo Ganti Oli</th>
+                                            <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -346,11 +347,12 @@
                                                 <br>{{ $dataServis->pengguna }}
                                                 @endif
                                             </td>
-                                            <td>{{ $dataServis->kilometer_terakhir }}</td>
+                                            <td>{{ $dataServis->kilometer_terakhir }} KM</td>
                                             <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_servis }}</td>
+                                            <td>{{ $dataServis->jatuh_tempo_servis }} KM</td>
                                             <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
+                                            <td>{{ $dataServis->jatuh_tempo_ganti_oli }} KM</td>
+                                            <td>{{ $dataServis->keterangan_servis }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

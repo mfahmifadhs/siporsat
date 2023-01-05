@@ -186,7 +186,7 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                            <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
                             <td>{{ $dataUkt->keterangan }}</td>
                         </tr>
                         @endforeach
