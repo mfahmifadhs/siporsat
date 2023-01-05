@@ -79,17 +79,20 @@
                     <hr>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Lokasi Pekerjaan </label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" value="{{ $dataUkt->lokasi_pekerjaan }}" readonly>
                         </div>
-                        <div class="col-sm-6">
-                            <textarea type="text" class="form-control text-uppercase spesifikasi" value="{!! $dataUkt->spesifikasi_pekerjaan !!}" readonly></textarea>
+		    </div>
+		    <div class="form-group row">	
+			<label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan </label>
+                        <div class="col-sm-10">
+                            <textarea type="text" class="form-control text-uppercase spesifikasi" disable>{!! $dataUkt->spesifikasi_pekerjaan !!}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Keterangan </label>
                         <div class="col-sm-10">
-                            <textarea type="text" class="form-control text-uppercase" value="{{ $dataUkt->keterangan }}" readonly></textarea>
+                            <textarea type="text" class="form-control text-uppercase" readonly>{{ $dataUkt->keterangan }}</textarea>
                         </div>
                     </div>
                     @endforeach
@@ -120,14 +123,7 @@
 
     $(function() {
         let resOTP = ''
-        $('.spesifikasi').summernote({
-            height: 150,
-            toolbar: [
-                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                ['color', ['color']],
-                ['para', ['ol', 'ul', 'paragraph', 'height']],
-            ]
-        })
+        $('.spesifikasi').summernote('disable')
         $(document).on('click', '#btnKirimOTP', function() {
             let jenisForm = "{{ $id }}"
             let tujuan = "verifikasi {{ $form }} barang"
