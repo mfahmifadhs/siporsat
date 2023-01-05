@@ -61,7 +61,7 @@
                                     </td>
                                     <td>
                                         @foreach($dataUsulan->detailUsulanUkt as $i =>$dataUkt)
-                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }}</label>
+                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }}</label> <br>
                                             <span class="pl-2">{!! $dataUkt->spesifikasi_pekerjaan !!}</span>
                                             @if ($dataUkt->keterangan != null)
                                             <p>Keterangan : {{ $dataUkt->keterangan }}</p>
