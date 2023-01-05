@@ -805,13 +805,15 @@
                     let no = 1
 
                     data.table.forEach(element => {
+                        let noplat      = element.no_plat_kendaraan != null ? '<br> <span class="text-uppercase">' + element.no_plat_kendaraan + '</span>' : ''
+                        let kualifikasi = element.kualifikasi != null ? '<br> <span class="text-capitalize">Kendaraan ' + element.kualifikasi + '</span>' : ''
                         dataTable.row.add([
                             no++,
                             '<b class="text-primary">' + element.kode_barang + '.' + element.nup_barang + '</b>' +
                             '<br>' + element.merk_tipe_kendaraan + ' ' + element.tahun_kendaraan +
-                            '<br>' + element.no_plat_kendaraan +
-                            '<br>' + element.jenis_aadb,
-                            '<br>' + element.kualifikasi,
+                            noplat +
+                            '<br>' + element.jenis_aadb +
+                            kualifikasi,
                             'No. BPKB :' + element.no_bpkb +
                             '<br> No. Rangka :' + element.no_rangka +
                             '<br> No. Mesin :' + element.no_mesin +

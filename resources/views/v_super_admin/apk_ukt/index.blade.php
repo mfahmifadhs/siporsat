@@ -53,22 +53,22 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="pt-4 text-center">{{ $no2++ }}</td>
-                                    <td class="pt-3 small">
+                                    <td class="pt-3">
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
                                         No. Surat : {{ $dataUsulan->no_surat_usulan }} <br>
                                         Pengusul : {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
                                         Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
-                                    <td class="small">
-                                        <p class="font-weight-bold"></p>
+                                    <td>
                                         @foreach($dataUsulan->detailUsulanUkt as $i =>$dataUkt)
-                                        <p>
-                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }}</label> <br>
-                                            <span class="pl-2">{{ ucfirst(strtolower($dataUkt->spesifikasi_pekerjaan.' : '.$dataUkt->keterangan))  }}</span>
-                                        </p>
+                                            <label>{{ $no = $i + 1 }}. {{ $dataUkt->lokasi_pekerjaan }}</label>
+                                            <span class="pl-2">{!! $dataUkt->spesifikasi_pekerjaan !!}</span>
+                                            @if ($dataUkt->keterangan != null)
+                                            <p>Keterangan : {{ $dataUkt->keterangan }}</p>
+                                            @endif
                                         @endforeach
                                     </td>
-                                    <td class="pt-2 small text-center">
+                                    <td class="pt-2 text-center">
                                         Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success py-2">disetujui</span>
@@ -93,7 +93,7 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item btn" href="{{ url('super-admin/gdn/dashboard/hapus/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin menghapus usulan ini ?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-admin/ukt/dashboard/hapus/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin menghapus usulan ini ?')">
                                                 <i class="fas fa-trash"></i> Hapus
                                             </a>
                                         </div>
@@ -108,5 +108,39 @@
         </div>
     </div>
 </section>
+
+@section('js')
+<script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+    // Jumlah Kendaraan
+    $(function() {
+
+        $("#table-usulan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+        })
+
+        $("#table-aadb").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+        })
+    })
+</script>
+@endsection
 
 @endsection
