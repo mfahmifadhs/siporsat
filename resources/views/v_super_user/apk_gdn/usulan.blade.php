@@ -118,6 +118,15 @@
     $(function() {
         let total = 1
         let i = 0
+	
+	$('.spesifikasi').summernote({
+                height: 150,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ol', 'ul', 'paragraph', 'height']],
+                ]
+        })
         // More Item
         $('#btn-total').click(function() {
             ++i;
@@ -172,6 +181,14 @@
                     <div id="section-gdn"></div>
                 </div>`
             )
+	    $('.spesifikasi').summernote({
+                height: 150,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ol', 'ul', 'paragraph', 'height']],
+                ]
+            })
         })
 
         $(document).on('change', '.bidang-kerusakan', function() {
