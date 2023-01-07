@@ -56,7 +56,7 @@
                     <div id="main-ukt">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
+                            <label class="col-sm-8 text-muted float-left mt-2">Informasi Pekerjaan</label>
                             <label class="col-sm-4 text-muted text-right">
                                 <a id="btn-total" class="btn btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah List Baru
@@ -67,7 +67,11 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Lokasi Pekerjaan*</label>
                             <div class="col-sm-10">
+<<<<<<< HEAD
                                 <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan/ Judul Pekerjaan" required>
+=======
+                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
+>>>>>>> 08d67af882b7614bda291cf3e36467801a3cf335
                             </div>
                         </div>
                         <div class="form-group row">

@@ -104,6 +104,15 @@
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+					    @if ($dataUsulan->otp_usulan_pengusul == null && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Verifikasi
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
+
                                         </div>
                                     </td>
                                 </tr>
