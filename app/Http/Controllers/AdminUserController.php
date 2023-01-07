@@ -27,6 +27,8 @@ use App\Models\ATK\SubKelompokATK;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkLampiran;
+use App\Models\Atk\UsulanAtkPengadaan;
+use App\Models\Atk\UsulanAtkPermintaan;
 use App\Models\RDN\RumahDinas;
 use App\Models\UnitKerja;
 use App\Models\User;
@@ -40,12 +42,12 @@ class AdminUserController extends Controller
 {
     public function index()
     {
-        $atk = UsulanAtk::join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->join('tbl_pegawai_jabatan','id_jabatan','jabatan_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                ->leftjoin('tbl_status_pengajuan','id_status_pengajuan','status_pengajuan_id')
-                ->join('tbl_status_proses','id_status_proses','status_proses_id')
-                ->get();
+        $atk = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->get();
         return view('v_admin_user.index', compact('atk'));
     }
 
@@ -63,7 +65,7 @@ class AdminUserController extends Controller
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
             $QR_Image = $google2fa->getQRCodeInline(
-                $registration_data = 'Siporsat',
+                $registration_data = 'Siporsat Kemenkes',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
@@ -216,12 +218,26 @@ class AdminUserController extends Controller
     public function OfficeStationery(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
-            $kategoriAtk    = KategoriATK::get();
-            $jenisAtk       = JenisATK::get();
-            $subkelompokAtk = SubKelompokATK::get();
-            $kelompokAtk    = KelompokATK::get();
-            $atk = ATK::get();
-            return view('v_admin_user.apk_atk.daftar_atk', compact('kategoriAtk', 'jenisAtk', 'subkelompokAtk', 'kelompokAtk', 'atk'));
+            $googleChartData = $this->ChartDataAtk();
+            $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
+            $usDistribusi = UsulanAtk::where('jenis_form', 'distribusi')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
+            return view('v_admin_user.apk_atk.daftar_atk', compact('googleChartData', 'usPengadaan', 'usDistribusi'));
         } elseif ($aksi == 'tambah-atk') {
             $kategori = 'atk';
             return view('v_admin_user.apk_atk.tambah_atk', compact('kategori', 'id'));
@@ -274,6 +290,34 @@ class AdminUserController extends Controller
                 SubKelompokATK::where('id_subkelompok_atk', $request->id_subkelompok_atk)->update(['subkelompok_atk' => strtoupper($request->subkelompok_atk)]);
                 return redirect('admin-user/atk/barang/detail-kategori/kelompok')->with('success', 'Berhasil mengubah informasi kelompok barang');
             }
+        } elseif ($aksi == 'riwayat-semua') {
+            $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+                    ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                    ->where('spesifikasi', $id)
+                    ->where('status_proses_id', 5)
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->get();
+
+            $permintaan = UsulanAtkPermintaan::select('atk_tbl_form_usulan.*','atk_tbl_form_usulan_pengadaan.*','tbl_pegawai.*','tbl_unit_kerja.*',
+                    'atk_tbl_form_usulan_permintaan.jumlah','atk_tbl_form_usulan_permintaan.jumlah_disetujui')
+                    ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
+                    ->join('atk_tbl_form_usulan','id_form_usulan','atk_tbl_form_usulan_permintaan.form_usulan_id')
+                    ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                    ->where('spesifikasi', $id)
+                    ->where('status_proses_id', 5)
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->get();
+
+            $atk = UsulanAtkPengadaan::where('spesifikasi', $id)
+                    ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+                    ->select('jenis_barang','nama_barang','spesifikasi', DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+                    ->where('status_proses_id', 5)
+                    ->groupBy('jenis_barang','nama_barang','spesifikasi')
+                    ->first();
+            return view ('v_admin_user.apk_atk.riwayat', compact('atk','pengadaan','permintaan'));
         }
     }
 
@@ -461,34 +505,7 @@ class AdminUserController extends Controller
             // return redirect('admin-user/atk/surat/surat-bast/'. $id)->with('success', 'Pembelian barang telah selesai dilakukan');
 
         } elseif ($aksi == 'proses-input' && $id == 'distribusi') {
-            // Update form usulan
-            UsulanAtk::where('id_form_usulan', $request->form_id)->update([
-                'no_surat_bast'     => $request->no_surat_bast,
-                'tanggal_bast'      => Carbon::now()
-            ]);
-
-            $atk = $request->atk_id;
-            foreach ($atk as $i => $atk_id) {
-                // Riwayat stok barang
-                $totalStok  = StokAtk::count();
-                $idStok     = str_pad($totalStok + ($i + 1), 6, 0, STR_PAD_LEFT);
-                $stok       = new StokAtk();
-                $stok->id_stok        = $idStok;
-                $stok->atk_id         = $atk_id;
-                $stok->form_usulan_id = $request->form_id;
-                $stok->stok_atk       = $request->jumlah[$i];
-                $stok->satuan         = $request->satuan[$i];
-                $stok->save();
-
-                // Update Stok Barang
-                $stokAtk = Atk::where('id_atk', $atk_id)->first();
-                Atk::where('id_atk', $atk_id)->update([
-                    'total_atk' => $stokAtk->total_atk - $request->jumlah[$i]
-                ]);
-            }
             return redirect('admin-user/verif/usulan-atk/' . $request->form_id);
-            // return redirect('admin-user/atk/surat/surat-bast/'. $id)->with('success', 'Pembelian barang telah selesai dilakukan');
-
         }
     }
 
@@ -549,6 +566,40 @@ class AdminUserController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function ChartDataAtk()
+    {
+        $dataAtk = UsulanAtkPengadaan::select('jenis_barang', 'nama_barang','spesifikasi', 'satuan',
+            DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'), DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            ->groupBy('jenis_barang', 'nama_barang','spesifikasi','satuan')
+            ->where('status_proses_id', 5)
+            ->get();
+
+        $totalAtk = UsulanAtkPengadaan::select('nama_barang', DB::raw('sum(jumlah_disetujui) as stok'))
+            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+            ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            ->groupBy('nama_barang')
+            ->where('status_proses_id', 5)
+            ->get();
+
+        foreach ($totalAtk as $data) {
+            $dataArray[] = $data->nama_barang;
+            $dataArray[] = (int) $data->stok;
+            // $totalStok =  $stok->where('id_kategori_atk', $data->id_kategori_atk)->get();
+            // $dataArray[] = $totalStok[$i]->stok;
+            $dataChart['all'][] = $dataArray;
+            unset($dataArray);
+        }
+
+        $dataChart['atk'] = $dataAtk;
+        $chart = json_encode($dataChart);
+        // dd($chart);
+        return $chart;
     }
 
     // ====================================================

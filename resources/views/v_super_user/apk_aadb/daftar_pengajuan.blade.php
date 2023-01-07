@@ -122,7 +122,7 @@
                                             </a>
 
                                             @if ($dataPengajuan->otp_usulan_pengusul == null && $dataPengajuan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $dataPengajuan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-aadb/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
                                             <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/proses-pembatalan/'. $dataPengajuan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">

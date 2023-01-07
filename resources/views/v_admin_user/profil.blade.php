@@ -22,11 +22,11 @@
                     @endif
                     <div class="card-footer">
                         @if ($user->status_google2fa == 1)
-                        <a href="{{ url('unit-kerja/profil/reset-autentikasi/'. $user->id) }}" class="btn btn-danger" onclick="return confirm('Apakah anda ingin mereset ulang 2fa autentikasi ?')">
+                        <a href="{{ url('admin-user/profil/reset-autentikasi/'. $user->id) }}" class="btn btn-danger" onclick="return confirm('Apakah anda ingin mereset ulang 2fa autentikasi ?')">
                             <i class="fas fa-sync"></i> Reset Autentikasi
                         </a>
                         @else
-                        <form action="{{ url('unit-kerja/profil/regist-user/'. Auth::user()->id ) }}" method="POST">
+                        <form action="{{ url('admin-user/profil/regist-user/'. Auth::user()->id ) }}" method="POST">
                             @csrf
                             <input type="hidden" name="secretkey" value="{{ $secretkey }}">
                             <button type="submit" class="btn btn-primary btn-sm">SUBMIT</button>

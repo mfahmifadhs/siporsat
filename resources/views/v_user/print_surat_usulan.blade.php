@@ -99,16 +99,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            @if ($form->jenis_form == 'pengadaan')
-                            <th>Jenis Barang</th>
-                            @endif
                             <th>Nama Barang</th>
                             <th>Merk/Tipe</th>
-                            <th>Jumlah</th>
-                            <th>Satuan</th>
-                            @if ($form->jenis_form == 'pengadaan')
+                            <th>Permintaan</th>
+                            <th>Disetujui</th>
                             <th>Keterangan</th>
-                            @endif
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -117,30 +112,32 @@
                         @foreach($usulan->pengadaanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataAtk->jenis_barang }}</td>
-                            <td>{{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
                             <td>{{ $dataAtk->spesifikasi }}</td>
-                            <td>{{ $dataAtk->jumlah }}</td>
-                            <td>{{ $dataAtk->satuan }}</td>
-                            <td>{{ $dataAtk->status.' '.$dataAtk->keterangan }}</td>
+                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td>
+                                {{ $dataAtk->status }}
+                                @if ($dataAtk->keterangan != null)
+                                ({{ $dataAtk->keterangan }})
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                         @else
-                        @foreach($usulan->detailUsulanAtk as $dataAtk)
+                        @foreach($usulan->permintaanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataAtk->kategori_atk }}</td>
-                            @if ($dataAtk->atk_lain != null)
-                            <td>{{ $dataAtk->atk_lain }}</td>
-                            @else
-                            <td>{{ $dataAtk->merk_atk }}</td>
-                            @endif
-                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                            @if ($dataAtk->atk_lain != null)
-                            <td>{{ $dataAtk->satuan_detail }}</td>
-                            @else
-                            <td>{{ $dataAtk->satuan }}</td>
-                            @endif
+                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->spesifikasi }}</td>
+                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td>
+                                {{ $dataAtk->status }}
+                                @if ($dataAtk->keterangan != null)
+                                ({{ $dataAtk->keterangan }})
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                         @endif
@@ -300,9 +297,9 @@
             </div>
             <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
                     @endif
                 </div>
             </div>

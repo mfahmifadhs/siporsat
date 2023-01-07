@@ -66,13 +66,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Barang</label>
+                        <label class="col-sm-2 col-form-label">Jumlah Pekerjaan</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }} Barang" readonly>
+                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }} Pekerjaan" readonly>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label">Informasi Barang</label>
+                        <label class="col-sm-2 col-form-label">Informasi Pekerjaan</label>
                         <div class="col-sm-10">
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">

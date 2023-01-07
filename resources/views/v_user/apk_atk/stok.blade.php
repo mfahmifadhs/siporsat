@@ -1,4 +1,4 @@
-@extends('v_super_user.layout.app')
+@extends('v_user.layout.app')
 
 @section('content')
 
@@ -6,11 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard Pengelolaan ATK</h1>
+                <h4 class="m-0">Alat Tulis Kantor (ATK)</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Dashboard ATK</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/atk/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Stok ATK</li>
                 </ol>
             </div>
         </div>
@@ -23,9 +24,9 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
-                        <b class="font-weight-bold mt-1 text-primary">
-                            <i class="fas fa-table"></i> TABEL BARANG ATK
-                        </b>
+                        <h3 class="card-title mt-1 font-weight-bold text-uppercase">
+                            Daftar dan Stok ATK {{ Auth::user()->pegawai->unitKerja->unit_kerja }}
+                        </h3>
                         <!-- <div class="card-tools">
                             <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
                                 <span class="btn btn-primary btn-sm">
@@ -65,7 +66,7 @@
                                     <button id="searchChartData" class="btn btn-primary">
                                         <i class="fas fa-search"></i> Cari
                                     </button>
-                                    <a href="{{ url('super-user/atk/dashboard') }}" class="btn btn-danger">
+                                    <a href="{{ url('unit-kerja/atk/dashboard') }}" class="btn btn-danger">
                                         <i class="fas fa-undo"></i>
                                     </a>
                                 </div>
@@ -89,12 +90,12 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis</th>
-                                            <th>Barang</th>
+                                            <th>Jenis Barang</th>
+                                            <th>Nama Barang</th>
                                             <th>Spesifikasi</th>
-                                            <th>Pengadaan</th>
-                                            <th>Distribusi</th>
-                                            <th>Stok</th>
+                                            <th>Jumlah Pengadaan</th>
+                                            <th>Jumlah Permintaan</th>
+                                            <th>Sisa Stok</th>
                                             <th>Riwayat</th>
                                         </tr>
                                     </thead>
@@ -110,7 +111,7 @@
                                             <td class="text-center">{{ (int) $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">{{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">
-                                                <a href="{{ url('super-user/atk/barang/riwayat-semua/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
+                                                <a href="{{ url('unit-kerja/atk/barang/riwayat/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
                                                     <i class="fas fa-list"></i>
                                                 </a>
                                             </td>
@@ -127,7 +128,6 @@
     </div>
 </section>
 
-
 @section('js')
 <script>
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
@@ -140,31 +140,52 @@
             "autoWidth": false,
             "info": false,
             "paging": true,
-            "searching": true,
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Semua"]
-            ],
-        })
+            buttons: [{
+                    text: '(+) Usulan Pengadaan',
+                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                    action: function(e, dt, node, config) {
+                        window.location.href = "{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}";
+                    }
+                },
+                {
+                    text: '(+) Usulan Distribusi',
+                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                    action: function(e, dt, node, config) {
+                        window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
+                    }
+                }
+            ]
+
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
 
         $("#table-atk").DataTable({
             "responsive": true,
-            "lengthChange": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true
+        })
+
+        $("#table-penggunaan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
             "autoWidth": false,
             "info": false,
             "paging": true,
+            "searching": false,
             "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Semua"]
-            ],
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ]
         })
 
+        let total = 1
         let j = 0
 
         for (let i = 1; i <= 4; i++) {
             $(".select2-" + i).select2({
                 ajax: {
-                    url: `{{ url('super-user/atk/select2-dashboard/` + i + `/barang') }}`,
+                    url: `{{ url('unit-kerja/atk/select2-dashboard/` + i + `/distribusi') }}`,
                     type: "post",
                     dataType: 'json',
                     delay: 250,
@@ -183,7 +204,8 @@
                 }
             })
         }
-    })
+
+    });
 
     // Chart
     let chart
@@ -232,9 +254,9 @@
         let url = ''
 
         if (kategori || jenis || nama || merk) {
-            url = '<?= url("/super-user/atk/grafik?kategori='+kategori+'&jenis='+jenis+'&nama='+nama+'&merk='+merk+'") ?>'
+            url = '<?= url("/unit-kerja/atk/grafik?kategori='+kategori+'&jenis='+jenis+'&nama='+nama+'&merk='+merk+'") ?>'
         } else {
-            url = '<?= url("/super-user/atk/grafik") ?>'
+            url = '<?= url("/unit-kerja/atk/grafik") ?>'
         }
 
         jQuery.ajax({
@@ -258,7 +280,7 @@
                             `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
                             `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
                             element.total_atk,
-                            element.satuan
+                            element.satuan,
                         ]).draw(false)
                     })
 

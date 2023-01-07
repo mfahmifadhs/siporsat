@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
-                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Jabatan</div>
@@ -60,8 +60,8 @@
                     <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-2">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-md-2">Tanggal BAST</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -77,27 +77,26 @@
                             <th>No</th>
                             <th>Nama Barang</th>
                             <th>Merk/Tipe</th>
-                            <th>Jumlah</th>
-                            <th>Satuan</th>
-                            @if ($bast->jenis_form == 'pengadaan')
-                            <th>Harga</th>
-                            @endif
+                            <th>Permintaan</th>
+                            <th>Disetujui</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
-                        @foreach($bast->detailUsulanAtk as $dataAtk)
+                        @foreach($bast->permintaanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataAtk->kategori_atk }}</td>
-                            <td>{{ $dataAtk->merk_atk }}</td>
-                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                            <td>{{ $dataAtk->satuan }}</td>
-                            @if ($bast->jenis_form == 'pengadaan')
-                            <td>Rp {{ number_format($dataAtk->harga, 0, ',', '.') }}</td>
-                            @endif
-                            <td>{{ $dataAtk->keterangan }}</td>
+                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->spesifikasi }}</td>
+                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td>
+                                {{ $dataAtk->status }}
+                                @if ($dataAtk->keterangan != null)
+                                ({{ $dataAtk->keterangan }})
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -107,21 +106,21 @@
                 <div class="row text-center">
                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
                     <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
-                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="row text-center">
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="row text-center">
                     <label class="col-sm-4">Marten Avero, Skm</label>
-                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
-                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai))  }}</label>
+                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai))  }}</label>
                 </div>
             </div>
         </div>

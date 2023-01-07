@@ -47,7 +47,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/atk/dashboard/'. $bast->jenis_form) }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/atk/dashboard/') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/usulan/daftar/seluruh-pengajuan') }}">Daftar Pengajuan Barang</a></li>
                     <li class="breadcrumb-item active">BAST {{ $bast->otp_bast_pengusul }}</li>
                 </ol>
@@ -64,7 +64,7 @@
                 <a href="{{ url('super-user/atk/dashboard/pengadaan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                @if($bast->status_proses_id == 5)
+                @if($bast->status_proses_id == 4)
                 <a href="{{ url('super-user/atk/surat/print-surat-bast/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
@@ -116,8 +116,8 @@
                                     <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                    <div class="col-md-2">Tanggal BAST</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 @if($bast->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
@@ -131,31 +131,48 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis AADB</th>
-                                            <th>Jenis Kendaraan</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
-                                            @if ($bast->jenis_form == 'pengadaan')
-                                            <th>Harga</th>
-                                            @endif
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe</th>
+                                            <th>Permintaan</th>
+                                            <th>Disetujui</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
-                                        @foreach($bast->detailUsulanAtk as $dataAtk)
+                                        @if ($form->jenis_form == 'pengadaan')
+                                        @foreach($bast->pengadaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->kategori_atk }}</td>
-                                            <td>{{ $dataAtk->merk_atk }}</td>
-                                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                                            <td>{{ $dataAtk->satuan }}</td>
-                                            @if ($bast->jenis_form == 'pengadaan')
-                                            <td>Rp {{ number_format($dataAtk->harga, 0, ',', '.') }}</td>
-                                            @endif
-                                            <td>{{ $dataAtk->keterangan }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
                                         </tr>
                                         @endforeach
+                                        @else
+                                        @foreach($bast->permintaanAtk as $dataAtk)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -168,9 +185,9 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
                                 </div>
                             </div>
                             <div class="col-md-12">

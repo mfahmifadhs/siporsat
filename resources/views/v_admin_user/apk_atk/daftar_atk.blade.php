@@ -15,6 +15,71 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-outline" id="accordion">
+                    <div class="card-header">
+                        <b class="font-weight-bold mt-1 text-primary">
+                            <i class="fas fa-table"></i> TABEL BARANG ATK
+                        </b>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="notif-konten-chart"></div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="card-body border border-default">
+                                <div id="konten-chart-google-chart">
+                                    <div id="piechart" style="height: 400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-12">
+                            <div class="card-body border border-default">
+                                <table id="table-atk" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Jenis</th>
+                                            <th>Barang</th>
+                                            <th>Spesifikasi</th>
+                                            <th>Pengadaan</th>
+                                            <th>Distribusi</th>
+                                            <th>Stok</th>
+                                            <th>Riwayat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
+                                        @foreach ($googleChartData1->atk as $dataAtk)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }}</td>
+                                            <td>{{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</td>
+                                            <td class="text-center">{{ (int) $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
+                                            <td class="text-center">{{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ url('admin-user/atk/barang/riwayat-semua/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
+                                                    <i class="fas fa-list"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row">
             <div class="col-md-12 form-group">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success">
@@ -39,10 +104,7 @@
                         <div class="card-tools">
                             <a href="{{ url('admin-user/atk/barang/tambah-atk/4') }}" type="button" class="btn btn-primary btn-sm">
                                 <i class="fas fa-plus-square"></i> TAMBAH
-                            </a>
-                            <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button> -->
+                            </a>=
                         </div>
                     </div>
                     <div class="card-body">
@@ -60,69 +122,7 @@
                             </thead>
                             @php $no = 1; @endphp
                             <tbody>
-                                @foreach($atk as $dataAtk)
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td class="text-left">
-                                        <b class="text-info">{{ $dataAtk->KategoriATK->JenisATK->SubKelompokATK->KelompokATK->id_kelompok_atk }}</b><br>
-                                        {{ $dataAtk->KategoriATK->JenisATK->SubKelompokATK->KelompokATK->kelompok_atk }}
-                                    </td>
-                                    <td class="text-left">
-                                        <b class="text-info">{{ $dataAtk->KategoriATK->JenisATK->SubKelompokATK->id_subkelompok_atk }}</b><br>
-                                        {{ $dataAtk->KategoriATK->JenisATK->SubKelompokATK->subkelompok_atk }}
-                                    </td>
-                                    <td class="text-left">
-                                        <b class="text-info">{{ $dataAtk->KategoriATK->JenisATK->id_jenis_atk }}</b><br>
-                                        {{ $dataAtk->KategoriATK->JenisATK->jenis_atk }}
-                                    </td>
-                                    <td class="text-left">
-                                        <b class="text-info">{{ $dataAtk->KategoriATK->id_kategori_atk }}</b><br>
-                                        {{ $dataAtk->KategoriATK->kategori_atk }}
-                                    </td>
-                                    <td class="text-left">
-                                        <b class="text-info">{{ $dataAtk->id_atk }}</b><br>
-                                        {{ $dataAtk->merk_atk }}
-                                    </td>
-                                    <td>
-                                        <a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ $dataAtk->id_atk }}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <!-- Modal -->
-                                <div class="modal fade" id="edit{{ $dataAtk->id_atk }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Ubah Merk Barang</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action="{{ url('admin-user/atk/barang/edit-atk/'. $dataAtk->id_atk) }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="atk" value="merk_atk">
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">ID Barang</label>
-                                                        <input type="text" class="form-control" name="id_atk" value="{{ $dataAtk->id_atk }}" readonly>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Barang</label>
-                                                        <input type="text" class="form-control text-uppercase" name="merk_atk" value="{{ $dataAtk->merk_atk }}">
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Ubah data barang ini ?')">
-                                                        <i class="fas fa-edit"></i> Ubah
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -130,39 +130,12 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 @section('js')
 <script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
-        $("#table-kategori-atk").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
-        })
-        $("#table-jenis-atk").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
-        })
-        $("#table-sub-atk").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
-        })
-        $("#table-kelompok-atk").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
-        })
         $("#table-atk").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -170,6 +143,45 @@
             "info": false,
             "paging": true
         })
+
+        // Chart
+        let chart
+        let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
+        let dataChart = chartData.all
+        google.charts.load('current', {
+            'packages': ['corechart']
+        })
+        google.charts.setOnLoadCallback(function() {
+            drawChart(dataChart)
+        })
+
+        function drawChart(dataChart) {
+
+            chartData = [
+                ['Jenis Kendaraan', 'Jumlah']
+            ]
+
+            dataChart.forEach(data => {
+                chartData.push(data)
+            })
+
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                title: 'Total Kendaraan',
+                titlePosition: 'none',
+                is3D: false,
+                legend: {
+                    'position': 'top',
+                    'alignment': 'center',
+                    'maxLines': '5'
+                },
+            }
+
+            chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
     })
 </script>
 

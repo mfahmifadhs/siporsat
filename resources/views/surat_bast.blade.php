@@ -340,9 +340,9 @@
                                 </div>
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 7px;">
                                     <div class="row text-center">
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.app/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 7px;">

@@ -2,6 +2,7 @@
 
 namespace App\Models\atk;
 
+use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkLampiran;
@@ -39,6 +40,16 @@ class UsulanAtk extends Model
 
     public function pengadaanAtk() {
         return $this->hasMany(UsulanAtkPengadaan::class, 'form_usulan_id');
+    }
+
+    public function permintaanAtk() {
+        return $this->hasMany(UsulanAtkPermintaan::class, 'form_usulan_id')
+            ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
+            ->select('id_permintaan', 'jenis_barang','nama_barang','satuan','spesifikasi',
+                     'atk_tbl_form_usulan_permintaan.jumlah as jumlah',
+                     'atk_tbl_form_usulan_permintaan.jumlah_disetujui as jumlah_disetujui',
+                     'atk_tbl_form_usulan_permintaan.status as status',
+                     'atk_tbl_form_usulan_permintaan.keterangan as keterangan');
     }
 
     public function lampiranAtk() {

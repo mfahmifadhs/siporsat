@@ -55,24 +55,33 @@
                                     <td>{{ $dataUsulan->nama_pegawai }}</td>
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-center">
-                                        @if($dataUsulan->status_pengajuan_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-success">disetujui</span>
-                                        @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-danger">ditolak</span>
-                                        @endif
+                                        <h6 class="mt-3">
+                                            @if($dataUsulan->status_pengajuan_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-success">
+                                                Disetujui
+                                            </span>
+                                            @elseif($dataUsulan->status_pengajuan_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                            @if ($dataUsulan->keterangan != null)
+                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
+                                            @endif
+                                            @endif
+                                        </h6>
                                     </td>
-                                    <td class="text-center text-capitalize  ">
-                                        @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> persetujuan</span>
-                                        @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
-                                        @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
-                                        @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi <br> kabag rt</span>
-                                        @elseif ($dataUsulan->status_proses_id == 5)
-                                        <span class="badge badge-sm badge-pill badge-success">selesai</span>
-                                        @endif
+                                    <td class="text-center text-capitalize">
+                                        <h6 class="mt-2">
+                                            @if($dataUsulan->status_proses_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
+                                            @elseif ($dataUsulan->status_proses_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                            @elseif ($dataUsulan->status_proses_id == 4)
+                                            <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
+                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                            @endif
+                                        </h6>
                                     </td>
                                     <td class="text-center">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">

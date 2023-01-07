@@ -115,8 +115,8 @@
                                     <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                    <div class="col-md-2">Tanggal</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 @if($bast->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
@@ -177,27 +177,50 @@
                                             <th>No</th>
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
-                                            @if ($bast->jenis_form == 'pengadaan')
-                                            <th>Harga</th>
-                                            @endif
+                                            <th>Permintaan</th>
+                                            <th>Disetujui</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
-                                        @foreach($bast->detailUsulanAtk as $dataAtk)
+                                        @foreach($bast->permintaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->kategori_atk }}</td>
-                                            <td>{{ $dataAtk->merk_atk }}</td>
-                                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                                            <td>{{ $dataAtk->satuan }}</td>
-                                            @if ($bast->jenis_form == 'pengadaan')
-                                            <td>Rp {{ number_format($dataAtk->harga, 0, ',', '.') }}</td>
-                                            @endif
-                                            <td>{{ $dataAtk->keterangan }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                @elseif ($modul == 'gdn')
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Lokasi Perbaikan</th>
+                                            <th>Lokasi Spesifik</th>
+                                            <th>Bidang Kerusakan</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach($bast->detailUsulanGdn as $dataGdn)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
+                                            <td>{{ $dataGdn->lokasi_spesifik }}</td>
+                                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
+                                            <td>{{ $dataGdn->keterangan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

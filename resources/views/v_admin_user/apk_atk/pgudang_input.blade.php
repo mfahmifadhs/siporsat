@@ -70,44 +70,42 @@
                             <textarea name="rencana_pengguna" class="form-control" rows="3" readonly>{{ $usulan->rencana_pengguna }}</textarea>
                         </div>
                     </div>
-                    <hr style="border: 0.5px solid grey;">
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-form-label text-muted">Informasi Barang</label>
-                        <label class="col-sm-2 col-form-label">Jumlah Pengajuan</label>
-                        <label class="col-sm-4 col-form-label">: {{ $usulan->total_pengajuan }} barang</label>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label text-muted">Informasi Barang</label>
+                        <div class="col-sm-10">
+                            <table class="table table-bordered text-center">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th style="width: 2%;">No</th>
+                                        <th style="width: 20%;">Nama Barang</th>
+                                        <th style="width: 25%;">Merk/Tipe</th>
+                                        <th style="width: 14%;">Jumlah</th>
+                                        <th>Status</th>
+                                        <th style="width: 20%;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody style="font-size: 13px;">
+                                    @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
+                                    <tr>
+                                        <td> {{ $i + 1 }}</td>
+                                        <td>
+                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            <input type="hidden" name="jumlah_permintaan[]" value="{{ $dataPermintaan->jumlah_disetujui }}">
+                                            {{ $dataPermintaan->jenis_barang }} <br> {{ $dataPermintaan->nama_barang }}
+                                        </td>
+                                        <td class="pt-3">{{ $dataPermintaan->spesifikasi }}</td>
+                                        <td class="pt-3">{{ $dataPermintaan->jumlah_disetujui.' '.$dataPermintaan->satuan }}</td>
+                                        <td class="text-center text-uppercase pt-3">
+                                            <label for="checkbox_id{{$i}}">{{ $dataPermintaan->status }}</label>
+                                        </td>
+                                        <td class="pt-3">{{ $dataPermintaan->keterangan }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    @foreach($usulan->detailUsulanAtk as $detailUsulan)
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nama Barang</label>
-                        <div class="col-sm-4">
-                            <input type="hidden" class="form-control" name="form_detail_id[]" value="{{ $detailUsulan->id_form_usulan_detail }}" readonly>
-                            <input type="text" class="form-control" value="{{ $detailUsulan->kategori_atk }}" readonly>
-                        </div>
-                        <label class="col-sm-1 col-form-label">Merk/Tipe</label>
-                        <div class="col-sm-5">
-                            <input type="hidden" class="form-control" name="atk_id[]" value="{{ $detailUsulan->atk_id }}" readonly>
-                            <input type="text" class="form-control" value="{{ $detailUsulan->merk_atk }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="jumlah[]" value="{{ $detailUsulan->jumlah_pengajuan }}" readonly>
-                        </div>
-                        <label class="col-sm-1 col-form-label">Satuan</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="satuan[]" value="{{ $detailUsulan->satuan }}" readonly>
-                        </div>
-                    </div>
-                    @if($usulan->jenis_form == 'pengadaan')
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Harga Barang (*) </label>
-                        <div class="col-sm-4">
-                            <input type="number" class="form-control" name="harga[]" placeholder="Masukan Harga Barang" required>
-                        </div>
-                    </div>
-                    @endif
-                    @endforeach
                     @if($usulan->jenis_form == 'pengadaan')
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
@@ -143,11 +141,11 @@
                         </div>
                     </div>
                     @endif
-                    <div class="form-group row">
+                    <div class="form-group row text-right">
                         <label class="col-sm-2">&nbsp;</label>
-                        <div class="col-sm-4">
-                            <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah data terisi dengan benar ?');">
-                                Submit
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah data sudah benar ?');">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
                             </button>
                         </div>
 

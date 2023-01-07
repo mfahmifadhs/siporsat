@@ -80,14 +80,16 @@
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th style="width: 20%;">Nama Barang</th>
-                                        <th style="width: 25%;">Merk/Tipe</th>
-                                        <th style="width: 14%;">Jumlah</th>
-                                        <th>Satuan</th>
-                                        @if ($usulan->jenis_form == 'pengadaan')
-                                        <th>Status</th>
-                                        <th style="width: 20%;">Keterangan</th>
-                                        @endif
+                                        <th style="width: 2%;" class="pb-4">No</th>
+                                        <th style="width: 20%;" class="pb-4">Nama Barang</th>
+                                        <th style="width: 25%;" class="pb-4">Merk/Tipe</th>
+                                        <th style="width: 14%;" class="pb-4">Jumlah</th>
+                                        <th class="pb-4">Satuan</th>
+                                        <th>
+                                            Status <br>
+                                            <input type="checkbox" id="selectAll">
+                                        </th>
+                                        <th style="width: 20%;" class="pb-4">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -95,6 +97,7 @@
                                     @if ($usulan->jenis_form == 'pengadaan')
                                     @foreach($usulan->pengadaanAtk as $i => $dataPengadaan)
                                     <tr>
+                                        <td> {{ $i + 1 }}</td>
                                         <td>
                                             <input type="hidden" name="modul" value="pengadaan">
                                             <input type="hidden" name="id_pengadaan[]" value="{{ $dataPengadaan->id_form_usulan_pengadaan }}">
@@ -105,9 +108,10 @@
                                             <input type="number" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPengadaan->jumlah }}">
                                         </td>
                                         <td>{{ $dataPengadaan->satuan }}</td>
-                                        <td class="text-left">
-                                            <input type="radio" name="konfirmasi_atk[{{$i}}]" value="diterima" required> Terima <br>
-                                            <input type="radio" name="konfirmasi_atk[{{$i}}]" value="ditolak" required> Tolak
+                                        <td class="text-center">
+                                            <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima" required> <br>
+                                            <label for="checkbox_id{{$i}}">Diterima</label>
                                         </td>
                                         <td>
                                             <input name="keterangan[]" class="form-control" style="font-size: 13px;">
@@ -115,18 +119,27 @@
                                     </tr>
                                     @endforeach
                                     @else
-                                    @foreach($usulan->detailUsulanAtk as $dataDistribusi)
+                                    @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
                                     <tr>
+                                        <td> {{ $i + 1 }}</td>
                                         <td>
                                             <input type="hidden" name="modul" value="distribusi">
-                                            <input type="hidden" name="detail_form_id[]" value="{{ $dataDistribusi->id_form_usulan_detail }}">
-                                            {{ $dataDistribusi->kategori_atk }}
+                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            {{ $dataPermintaan->jenis_barang }} <br> {{ $dataPermintaan->nama_barang }}
                                         </td>
-                                        <td>{{ $dataDistribusi->merk_atk }}</td>
+                                        <td>{{ $dataPermintaan->spesifikasi }}</td>
                                         <td>
-                                            <input type="text" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataDistribusi->jumlah_pengajuan }}">
+                                            <input type="text" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPermintaan->jumlah }}">
                                         </td>
-                                        <td>{{ $dataDistribusi->satuan }}</td>
+                                        <td>{{ $dataPermintaan->satuan }}</td>
+                                        <td class="text-center">
+                                            <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima" required> <br>
+                                            <label for="checkbox_id{{$i}}">Diterima</label>
+                                        </td>
+                                        <td>
+                                            <input name="keterangan[]" class="form-control" style="font-size: 13px;">
+                                        </td>
                                     </tr>
                                     @endforeach
                                     @endif
@@ -176,5 +189,21 @@
         </div>
     </div>
 </section>
+
+@section('js')
+<script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+    // Jumlah Kendaraan
+    $(function() {
+        $('#selectAll').click(function() {
+            if ($(this).prop('checked')) {
+                $('.confirm-check').prop('checked', true);
+            } else {
+                $('.confirm-check').prop('checked', false);
+            }
+        })
+    })
+</script>
+@endsection
 
 @endsection

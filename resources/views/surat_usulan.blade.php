@@ -160,27 +160,52 @@
                                         </tbody>
                                     </table>
                                     @elseif ($modul == 'atk')
-                                    <table class="table table-bordered m-0 table-responsive">
-                                        <thead style="font-size: 9px;">
+                                    <table class="table table-bordered m-0">
+                                        <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Barang</th>
                                                 <th>Merk/Tipe</th>
-                                                <th>Jumlah</th>
-                                                <th>Satuan</th>
+                                                <th>Permintaan</th>
+                                                <th>Disetujui</th>
+                                                <th>Keterangan</th>
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
-                                        <tbody style="font-size: 8px;">
-                                            @foreach($usulan->detailUsulanAtk as $dataAtk)
+                                        <tbody>
+                                            @if ($form->jenis_form == 'pengadaan')
+                                            @foreach($usulan->pengadaanAtk as $dataAtk)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $dataAtk->kategori_atk }}</td>
-                                                <td>{{ $dataAtk->merk_atk }}</td>
-                                                <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                                                <td>{{ $dataAtk->satuan }}</td>
+                                                <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                                <td>{{ $dataAtk->spesifikasi }}</td>
+                                                <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                                <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                                <td>
+                                                    {{ $dataAtk->status }}
+                                                    @if ($dataAtk->keterangan != null)
+                                                    ({{ $dataAtk->keterangan }})
+                                                    @endif
+                                                </td>
                                             </tr>
                                             @endforeach
+                                            @else
+                                            @foreach($usulan->permintaanAtk as $dataAtk)
+                                            <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                                <td>{{ $dataAtk->spesifikasi }}</td>
+                                                <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                                <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                                <td>
+                                                    {{ $dataAtk->status }}
+                                                    @if ($dataAtk->keterangan != null)
+                                                    ({{ $dataAtk->keterangan }})
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                     @elseif ($modul == 'gdn')
@@ -337,9 +362,9 @@
                                 </div>
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 10px;">
                                     <div class="row text-center">
-                                        <label class="col-sm-6 col-6">{!! QrCode::size(40)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
+                                        <label class="col-sm-6 col-6">{!! QrCode::size(40)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
                                         @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                                        <label class="col-sm-6 col-6">{!! QrCode::size(40)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
+                                        <label class="col-sm-6 col-6">{!! QrCode::size(40)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
                                         @endif
                                     </div>
                                 </div>

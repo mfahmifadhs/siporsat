@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
@@ -62,37 +62,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_pengajuan_id', 2)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Ditolak</h6>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3 col-12">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <h3 class="card-title font-weight-bold">Daftar Penggunaan ATK</h3>
-                    </div>
-                    <div class="card-body table-responsive p-1">
-                        <table id="table-penggunaan" class="table table-valign-middle small">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Barang</th>
-                                    <th>Jumlah</th>
-                                </tr>
-                            </thead>
-                            @php $no = 1; @endphp
-                            <tbody>
-                                @foreach($atk as $row)
-                                @if($row->jenis_form == 'distribusi')
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\carbon::parse($row->tanggal_usulan)->isoFormat('DD MMM Y') }} <br>
-                                        {{ $row->merk_atk }}
-                                    </td>
-                                    <td>{{ $row->total_atk.' '.$row->satuan }}</td>
-                                </tr>
-                                @endif
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="info-box mb-3 bg-primary">
+                    <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
+                    <div class="info-box-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="info-box-text">STOK BARANG</span>
+                                <span class="info-box-number">
+                                    {{ $stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') }}
+                                </span>
+                            </div>
+                            <div class="col-md-6 pt-3">
+                                <a href="{{ url('unit-kerja/atk/barang/stok/semua') }}" class="text-black btn btn-default btn-sm">
+                                    Lihat stok &nbsp;<i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -142,6 +138,8 @@
                                             <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 4)
+                                            <span class="badge badge-sm badge-pill badge-warning">Barang Sudah Dapat <br> Diambil di Gudang</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">Selesai</span>
                                             @endif
@@ -225,54 +223,59 @@
                                                     </h6>
                                                 </div>
                                                 <div class="form-group row small">
-                                                    @if ($dataUsulan->jenis_form == 'pengadaan')
-                                                    <div class="col-md-12 text-center">
+                                                    <div class="col-md-12 ">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1">No</div>
                                                             <div class="col-sm-2">Nama Barang</div>
-                                                            <div class="col-sm-3">Merk/Tipe</div>
-                                                            <div class="col-sm-2">Jumlah</div>
-                                                            <div class="col-sm-4">Keterangan</div>
+                                                            <div class="col-sm-2">Merk/Tipe</div>
+                                                            <div class="col-sm-2">Permintaan</div>
+                                                            <div class="col-sm-2">Disetujui</div>
+                                                            <div class="col-sm-3">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
+                                                        @if ($dataUsulan->jenis_form == 'pengadaan')
                                                         @foreach($dataUsulan->pengadaanAtk as $i => $dataAtk)
-                                                        @php $i = $i +1; @endphp
                                                         <div class="form-group row text-uppercase">
-                                                            <div class="col-md-1">{{ $i }}</div>
+                                                            <div class="col-md-1">{{ $i + 1 }}</div>
                                                             <div class="col-md-2">
                                                                 {{ $dataAtk->jenis_barang }} <br>
                                                                 {{ $dataAtk->nama_barang }}
                                                             </div>
-                                                            <div class="col-md-3">{{ $dataAtk->spesifikasi }}</div>
+                                                            <div class="col-md-2">{{ $dataAtk->spesifikasi }}</div>
                                                             <div class="col-md-2">{{ $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
-                                                            <div class="col-md-4">{{ $dataAtk->status.' '.$dataAtk->keterangan }}</div>
+                                                            <div class="col-md-2">{{ $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-3">
+                                                                {{ $dataAtk->status }}
+                                                                @if ($dataAtk->keterangan != null)
+                                                                <br>({{ $dataAtk->keterangan }})
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
-                                                    </div>
-                                                    @else
-                                                    <div class="col-md-12 text-center">
-                                                        <hr class="bg-secondary">
-                                                        <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-1">No</div>
-                                                            <div class="col-sm-4">Nama Barang</div>
-                                                            <div class="col-sm-4">Merk/Tipe</div>
-                                                            <div class="col-sm-3">Jumlah</div>
-                                                        </div>
-                                                        <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanAtk as $i => $distribusiAtk)
-                                                        @php $i = $i +1; @endphp
+                                                        @else
+                                                        @foreach($dataUsulan->permintaanAtk as $i => $dataAtk)
                                                         <div class="form-group row text-uppercase">
-                                                            <div class="col-md-1">{{ $i }}</div>
-                                                            <div class="col-md-4">{{ $distribusiAtk->kategori_atk }}</div>
-                                                            <div class="col-md-4">{{ $distribusiAtk->merk_atk }}</div>
-                                                            <div class="col-md-3">{{ $distribusiAtk->jumlah_pengajuan.' '.$distribusiAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ $i + 1 }}</div>
+                                                            <div class="col-md-2">
+                                                                {{ $dataAtk->jenis_barang }} <br>
+                                                                {{ $dataAtk->nama_barang }}
+                                                            </div>
+                                                            <div class="col-md-2">{{ $dataAtk->spesifikasi }}</div>
+                                                            <div class="col-md-2">{{ $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-2">{{ $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-3">
+                                                                {{ $dataAtk->status }}
+                                                                @if ($dataAtk->keterangan != null)
+                                                                <br>({{ $dataAtk->keterangan }})
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
+                                                        @endif
                                                     </div>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -281,104 +284,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-primary card-outline" id="accordion">
-                    <div class="card-header">
-                        <h3 class="card-title mt-1 font-weight-bold">Daftar dan Stok ATK pada Gudang</h3>
-                        <div class="card-tools">
-                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-primary btn-sm">
-                                    <i class="fas fa-filter"></i> Filter
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-header">
-                            <div class="form-group row">
-                                <div class="col-sm-3">
-                                    <label>Kategori</label> <br>
-                                    <select name="kategori" class="form-control text-capitalize select2-1" style="width: 100%;">
-                                        <option value="">-- KATEGORI BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Jenis</label> <br>
-                                    <select name="jenis" id="jenis`+ i +`" class="form-control text-capitalize select2-2" style="width: 100%;">
-                                        <option value="">-- JENIS BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Nama Barang</label> <br>
-                                    <select name="nama" id="barang`+ i +`" class="form-control text-capitalize select2-3" style="width: 100%;">
-                                        <option value="">-- NAMA BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Merk/Tipe</label> <br>
-                                    <select name="merk" id="merktipe`+ i +`" class="form-control text-capitalize select2-4" style="width: 100%;">
-                                        <option value="">-- MERK/TIPE BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 mt-2 text-right">
-                                    <button id="searchChartData" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="{{ url('unit-kerja/atk/dashboard') }}" class="btn btn-danger">
-                                        <i class="fas fa-undo"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="notif-konten-chart"></div>
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <div class="card-body border border-default">
-                                <div id="konten-chart-google-chart">
-                                    <div id="piechart" style="height: 400px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-12">
-                            <div class="card-body border border-default">
-                                <table id="table-atk" class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Jenis Barang</th>
-                                            <th>Nama Barang</th>
-                                            <th>Spesifikasi</th>
-                                            <th>Jumlah</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php $no = 1; $googleChartData1 = json_decode($googleChartData) @endphp
-                                        @foreach ($googleChartData1->atk as $dataAtk)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }}</td>
-                                            <td>{{ $dataAtk->nama_barang }}</td>
-                                            <td>{{ $dataAtk->spesifikasi }}</td>
-                                            <td>{{ $dataAtk->stok.' '.$dataAtk->satuan }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -463,104 +368,6 @@
             })
         }
 
-    });
-
-    // Chart
-    let chart
-    let chartData = JSON.parse(`<?php echo $googleChartData; ?>`)
-    let dataChart = chartData.all
-    google.charts.load('current', {
-        'packages': ['corechart']
-    })
-    google.charts.setOnLoadCallback(function() {
-        drawChart(dataChart)
-    })
-
-    function drawChart(dataChart) {
-
-        chartData = [
-            ['Jenis Kendaraan', 'Jumlah']
-        ]
-
-        dataChart.forEach(data => {
-            chartData.push(data)
-        })
-
-        var data = google.visualization.arrayToDataTable(chartData);
-
-        var options = {
-            title: 'Total Kendaraan',
-            titlePosition: 'none',
-            is3D: false,
-            legend: {
-                'position': 'top',
-                'alignment': 'center',
-                'maxLines': '5'
-            },
-        }
-
-        chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-    }
-
-    $('body').on('click', '#searchChartData', function() {
-        let kategori = $('select[name="kategori"').val()
-        let jenis = $('select[name="jenis"').val()
-        let nama = $('select[name="nama"').val()
-        let merk = $('select[name="merk"').val()
-        let url = ''
-
-        if (kategori || jenis || nama || merk) {
-            url = '<?= url("/unit-kerja/atk/grafik?kategori='+kategori+'&jenis='+jenis+'&nama='+nama+'&merk='+merk+'") ?>'
-        } else {
-            url = '<?= url("/unit-kerja/atk/grafik") ?>'
-        }
-
-        jQuery.ajax({
-            url: url,
-            type: "GET",
-            success: function(res) {
-                let dataTable = $('#table-atk').DataTable()
-                if (res.message == 'success') {
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart-google-chart').show();
-                    let data = JSON.parse(res.data)
-                    drawChart(data.chart)
-
-                    dataTable.clear()
-                    dataTable.draw()
-                    let no = 1
-
-                    data.table.forEach(element => {
-                        dataTable.row.add([
-                            no++,
-                            `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
-                            `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
-                            element.total_atk,
-                            element.satuan,
-                        ]).draw(false)
-                    })
-
-                } else {
-                    dataTable.clear()
-                    dataTable.draw()
-                    $('.notif-tidak-ditemukan').remove();
-                    $('#konten-chart-google-chart').hide();
-                    var html = ''
-                    html += '<div class="notif-tidak-ditemukan">'
-                    html += '<div class="card bg-secondary py-4">'
-                    html += '<div class="card-body text-white">'
-                    html += '<h5 class="mb-4 font-weight-bold text-center">'
-                    html += 'Data tidak dapat ditemukan'
-                    html += '</h5>'
-                    html += '</div>'
-                    html += '</div>'
-                    html += '</div>'
-                    $('#notif-konten-chart').append(html)
-                }
-            },
-        })
     })
 </script>
 @endsection

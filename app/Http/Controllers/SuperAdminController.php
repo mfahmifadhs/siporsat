@@ -528,9 +528,10 @@ class SuperAdminController extends Controller
                 {
                     $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
                     $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk - $atk->total)]);
-                    UsulanAtk::where('id_form_usulan', $id)->delete();
                     UsulanAtkDetail::where('form_usulan_id', $id)->delete();
                 }
+
+                UsulanAtk::where('id_form_usulan', $id)->delete();
             } elseif ($usulan->jenis_form == 'distribusi' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5) {
                 foreach ($detail as $atk)
                 {

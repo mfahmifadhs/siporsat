@@ -67,13 +67,13 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Lokasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan/ Judul Pekerjaan" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                                <textarea name="spesifikasi_pekerjaan[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -121,13 +121,13 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Lokasi Pekerjaan (*)</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                            <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan (*)</label>
                         <div class="col-sm-10">
-                            <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                            <textarea name="spesifikasi_pekerjaan[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -139,6 +139,14 @@
                     <div id="section-ukt"></div>
                 </div>`
             )
+            $('.spesifikasi').summernote({
+                height: 150,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ol', 'ul', 'paragraph', 'height']],
+                ]
+            })
         })
 
         $(document).on('change', '.bidang-kerusakan', function() {
@@ -171,9 +179,16 @@
 
         $(document).on('click', '.remove-list', function() {
             $(this).parents('.ukt').remove();
-        });
+        })
 
-
+        $('.spesifikasi').summernote({
+            height: 150,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                ['color', ['color']],
+                ['para', ['ol', 'ul', 'paragraph', 'height']],
+            ]
+        })
 
     })
 </script>

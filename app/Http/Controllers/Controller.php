@@ -66,7 +66,7 @@ class Controller extends BaseController
 
         } elseif ($modul== 'usulan-atk') {
             $modul = 'atk';
-
+            $form  = UsulanAtk::where('otp_usulan_pengusul', $id)->first();
 
             $usulan = UsulanAtk::with(['detailUsulanAtk'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -76,18 +76,9 @@ class Controller extends BaseController
                 ->where('otp_usulan_pengusul', $id)
                 ->orWhere('otp_usulan_pimpinan', $id)
                 ->first();
-            dd($usulan);
-            if($usulan->jenis_form == 'pengadaan')
-            {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            }
 
             if ($usulan != null) {
-                return view('surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+                return view('surat_usulan', compact('form', 'modul', 'usulan', 'pimpinan'));
             } else {
                 return redirect('/');
             }

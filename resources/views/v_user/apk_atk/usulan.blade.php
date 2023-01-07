@@ -34,11 +34,10 @@
             <div class="card-header">
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
+                <form action="{{ url('unit-kerja/atk/usulan/proses-distribusi/'. $aksi) }}" method="POST">
             <div class="card-body">
-                <form action="{{ url('unit-kerja/atk/usulan/proses/'. $aksi) }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                    <input type="hidden" name="jenis_form" value="1">
+                    <input type="hidden" name="jenis_form" value="distribusi">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
@@ -48,7 +47,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -57,7 +56,41 @@
                             <textarea name="rencana_pengguna" class="form-control" rows="3" placeholder="Rencana Pemakaian Barang" required></textarea>
                         </div>
                     </div>
-                    <div id="main-gdn">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Stok Barang</label>
+                        <div class="col-sm-10">
+                            <table id="table-atk" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 1%;" class="text-center">No</th>
+                                        <th style="width: 20%;">Nama Barang</th>
+                                        <th style="width: 20%;">Spesifikasi</th>
+                                        <th style="width: 10%;">Stok Barang</th>
+                                        <th style="width: 10%;">Jumlah Permintaan</th>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody>
+                                    @foreach($stok as $dataStok)
+
+                                    @if ($dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian != 0)
+                                    <tr>
+                                        <td class="text-center pt-3">
+                                            <input type="hidden" name="id_pengadaan[]" value="{{ $dataStok->id_form_usulan_pengadaan }}">
+                                            {{ $no++ }}
+                                        </td>
+                                        <td><input type="text" class="form-control" value="{{ $dataStok->nama_barang }}" style="font-size: 13px;" readonly></td>
+                                        <td><input type="text" class="form-control" value="{{ $dataStok->spesifikasi }}" style="font-size: 13px;" readonly></td>
+                                        <td><input type="text" class="form-control text-center" value="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian.' '.$dataStok->satuan }}" style="font-size: 13px;" min="1" readonly></td>
+                                        <td><input type="number" class="form-control text-center" name="jumlah_permintaan[]" max="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian }}" style="font-size: 13px;" value="0" min="1" oninput="this.value = Math.abs(this.value)"></td>
+                                    </tr>
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- <div id="main-gdn">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
                             <label class="col-sm-8 text-muted float-left mt-2">Merk/Tipe ATK</label>
@@ -134,9 +167,16 @@
                                 <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </div> -->
             </div>
+            <div class="card-footer">
+                @if ($stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') != 0)
+                <button type="submit" class="btn btn-primary btn-md font-weight-bold float-right" onclick="return confirm('Apakah data sudah benar ?')">
+                    <i class="fas fa-paper-plane"></i> SUBMIT
+                </button>
+                @endif
+            </div>
+                </form>
         </div>
     </div>
 </section>
@@ -175,8 +215,8 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
-                        <div class="col-sm-4">
-                            <input type="text" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
+                        <div class="col-sm-10">
+                            <input type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Barang" required>
                         </div>
                     </div>
                     <hr style="border: 0.5px solid grey;">
@@ -236,7 +276,9 @@
                     <div class="form-group row">
                         <label class="col-sm-2">&nbsp;</label>
                         <div class="col-sm-12 text-right">
-                            <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
+                            <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">
+                                <i class="fas fa-paper-plane btn-md"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -250,7 +292,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Upload Kebutuhan ATK</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -790,7 +832,7 @@
             ++no
             $("#section-input").append(
                 `<tr class="row-pengadaan">
-                    <td class="text-center">`+no+`</td>
+                    <td class="text-center">` + no + `</td>
                     <td>
                         <select name="jenis_barang[]" class="form-control text-uppercase" style="font-size: 13px;" required>
                             <option value="">-- Pilih Jenis Barang --</option>

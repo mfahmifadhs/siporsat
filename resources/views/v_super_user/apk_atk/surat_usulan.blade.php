@@ -73,6 +73,9 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
+                <a href="{{ url('super-user/atk/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
+                    <i class="fas fa-home"></i>
+                </a>
                 <a href="{{ url('super-user/atk/surat/print-surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
@@ -138,13 +141,10 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            @if ($form->jenis_form == 'pengadaan')
-                                            <th>Jenis Barang</th>
-                                            @endif
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
+                                            <th>Permintaan</th>
+                                            <th>Disetujui</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
@@ -154,23 +154,32 @@
                                         @foreach($dataUsulan->pengadaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }}</td>
-                                            <td>{{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
                                             <td>{{ $dataAtk->spesifikasi }}</td>
-                                            <td>{{ $dataAtk->jumlah }}</td>
-                                            <td>{{ $dataAtk->satuan }}</td>
-                                            <td>{{ $dataAtk->status.' '.$dataAtk->keterangan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
                                         </tr>
                                         @endforeach
                                         @else
-                                        @foreach($dataUsulan->detailUsulanAtk as $dataAtk)
+                                        @foreach($dataUsulan->permintaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->kategori_atk }}</td>
-                                            <td>{{ $dataAtk->merk_atk }}</td>
-                                            <td>{{ $dataAtk->jumlah_pengajuan }}</td>
-                                            <td>{{ $dataAtk->satuan }}</td>
-                                            <td>{{ $dataAtk->keterangan }}</td>
+                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
                                         </tr>
                                         @endforeach
                                         @endif
@@ -187,9 +196,9 @@
                             </div>
                             <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-atk/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-atk/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
                                     @if ($dataUsulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-atk/'.$dataUsulan->otp_usulan_pimpinan) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-atk/'.$dataUsulan->otp_usulan_pimpinan) !!}</label>
                                     @endif
                                 </div>
                             </div>

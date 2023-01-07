@@ -6,11 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard Pengelolaan ATK</h1>
+                <h4 class="m-0">Alat Tulis Kantor (ATK)</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Dashboard ATK</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Stok ATK</li>
                 </ol>
             </div>
         </div>
@@ -23,55 +24,10 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
-                        <b class="font-weight-bold mt-1 text-primary">
-                            <i class="fas fa-table"></i> TABEL BARANG ATK
-                        </b>
-                        <!-- <div class="card-tools">
-                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-primary btn-sm">
-                                    <i class="fas fa-filter"></i> Filter
-                                </span>
-                            </a>
-                        </div> -->
+                        <h3 class="card-title mt-1 font-weight-bold text-uppercase">
+                            Daftar dan Stok ATK {{ Auth::user()->pegawai->unitKerja->unit_kerja }}
+                        </h3>
                     </div>
-                    <!-- <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-header">
-                            <div class="form-group row">
-                                <div class="col-sm-3">
-                                    <label>Kategori</label> <br>
-                                    <select name="kategori" class="form-control text-capitalize select2-1" style="width: 100%;">
-                                        <option value="">-- KATEGORI BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Jenis</label> <br>
-                                    <select name="jenis" id="jenis`+ i +`" class="form-control text-capitalize select2-2" style="width: 100%;">
-                                        <option value="">-- JENIS BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Nama Barang</label> <br>
-                                    <select name="nama" id="barang`+ i +`" class="form-control text-capitalize select2-3" style="width: 100%;">
-                                        <option value="">-- NAMA BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Merk/Tipe</label> <br>
-                                    <select name="merk" id="merktipe`+ i +`" class="form-control text-capitalize select2-4" style="width: 100%;">
-                                        <option value="">-- MERK/TIPE BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 mt-2 text-right">
-                                    <button id="searchChartData" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="{{ url('super-user/atk/dashboard') }}" class="btn btn-danger">
-                                        <i class="fas fa-undo"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row">
                         <div class="col-12">
                             <div id="notif-konten-chart"></div>
@@ -89,12 +45,12 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis</th>
-                                            <th>Barang</th>
+                                            <th>Jenis Barang</th>
+                                            <th>Nama Barang</th>
                                             <th>Spesifikasi</th>
-                                            <th>Pengadaan</th>
-                                            <th>Distribusi</th>
-                                            <th>Stok</th>
+                                            <th>Jumlah Pengadaan</th>
+                                            <th>Jumlah Permintaan</th>
+                                            <th>Sisa Stok</th>
                                             <th>Riwayat</th>
                                         </tr>
                                     </thead>
@@ -110,7 +66,7 @@
                                             <td class="text-center">{{ (int) $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">{{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">
-                                                <a href="{{ url('super-user/atk/barang/riwayat-semua/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
+                                                <a href="{{ url('super-user/atk/barang/riwayat/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
                                                     <i class="fas fa-list"></i>
                                                 </a>
                                             </td>
@@ -127,7 +83,6 @@
     </div>
 </section>
 
-
 @section('js')
 <script>
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
@@ -139,32 +94,38 @@
             "lengthChange": false,
             "autoWidth": false,
             "info": false,
-            "paging": true,
-            "searching": true,
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Semua"]
-            ],
+            "paging": true
+
         })
 
         $("#table-atk").DataTable({
             "responsive": true,
-            "lengthChange": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true
+        })
+
+        $("#table-penggunaan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
             "autoWidth": false,
             "info": false,
             "paging": true,
+            "searching": false,
             "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Semua"]
-            ],
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ]
         })
 
+        let total = 1
         let j = 0
 
         for (let i = 1; i <= 4; i++) {
             $(".select2-" + i).select2({
                 ajax: {
-                    url: `{{ url('super-user/atk/select2-dashboard/` + i + `/barang') }}`,
+                    url: `{{ url('super-user/atk/select2-dashboard/` + i + `/distribusi') }}`,
                     type: "post",
                     dataType: 'json',
                     delay: 250,
@@ -183,7 +144,8 @@
                 }
             })
         }
-    })
+
+    });
 
     // Chart
     let chart
@@ -258,7 +220,7 @@
                             `<b class="text-primary">` + element.id_kategori_atk + `</b> <br>` + element.kategori_atk,
                             `<b class="text-primary">` + element.id_atk + `</b> <br>` + element.merk_atk,
                             element.total_atk,
-                            element.satuan
+                            element.satuan,
                         ]).draw(false)
                     })
 

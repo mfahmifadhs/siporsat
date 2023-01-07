@@ -19,6 +19,8 @@ class UsulanAtkPengadaan extends Model
         'nama_barang',
         'spesifikasi',
         'jumlah',
+        'jumlah_disetujui',
+        'jumlah_pemakaian',
         'satuan',
         'tanggal',
         'status',
