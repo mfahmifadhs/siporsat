@@ -236,10 +236,10 @@
                                     <table class="table table-bordered m-0 table-responsive">
                                         <thead style="font-size: 9px;">
                                             <tr>
-                                                <th>No</th>
-                                                <th>Lokasi Pekerjaan</th>
+                                                <th style="width: 1%;">No</th>
+                                                <th style="width: 20%;">Pekerjaan</th>
                                                 <th>Spesifikasi Pekerjaan</th>
-                                                <th>Keterangan</th>
+                                                <th style="width: 15%;">Keterangan</th>
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
@@ -248,7 +248,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                                <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                                <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
                                                 <td>{{ $dataUkt->keterangan }}</td>
                                             </tr>
                                             @endforeach

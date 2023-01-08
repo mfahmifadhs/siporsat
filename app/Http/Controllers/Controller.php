@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\AADB\UsulanAadb;
 use App\Models\AADB\UsulanKendaraan;
-use App\Models\atk\UsulanAtk;
-use App\Models\gdn\UsulanGdn;
+use App\Models\ATK\UsulanAtk;
+use App\Models\GDN\UsulanGdn;
 use App\Models\OLDAT\FormUsulan;
 use App\Models\Pegawai;
+use App\Models\UKT\UsulanUkt;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,7 +20,10 @@ class Controller extends BaseController
 
     public function Links($modul, $id)
     {
-        if ($modul== 'usulan-gdn') {
+        if ($modul== 'usulan-ukt') {
+            return redirect('usulan/'. $modul.'/'.$id)->with('success', 'Dokumen Telah Terverifikasi!');
+
+        } elseif ($modul== 'usulan-gdn') {
             return redirect('usulan/'. $modul.'/'.$id)->with('success', 'Dokumen Telah Terverifikasi!');
 
         } elseif ($modul== 'usulan-atk') {
@@ -45,7 +49,26 @@ class Controller extends BaseController
 
     public function Letters($modul, $id)
     {
-        if ($modul== 'usulan-gdn') {
+        if ($modul == 'usulan-ukt') {
+            $modul = 'ukt';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $usulan = UsulanUkt::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('otp_usulan_pengusul', $id)
+                ->orWhere('otp_usulan_kabag', $id)
+                ->first();
+
+            if ($usulan != null) {
+                return view('surat_usulan', compact('modul', 'usulan', 'pimpinan'));
+            } else {
+                return redirect('/');
+            }
+
+        } elseif ($modul== 'usulan-gdn') {
             $modul = 'gdn';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();

@@ -216,7 +216,7 @@
                                         <thead style="font-size: 9px;">
                                             <tr>
                                                 <th>No</th>
-                                                <th>Lokasi Pekerjaan</th>
+                                                <th>Pekerjaan</th>
                                                 <th>Spesifikasi Pekerjaan</th>
                                                 <th>Keterangan</th>
                                             </tr>
@@ -227,7 +227,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                                <td>{{ $dataUkt->spesifikasi_pekerjaan }}</td>
+                                                <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
                                                 <td>{{ $dataUkt->keterangan }}</td>
                                             </tr>
                                             @endforeach

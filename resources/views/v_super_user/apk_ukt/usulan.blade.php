@@ -6,12 +6,13 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Usulan Kerumah Tanggaan</h1>
+                <h4 class="m-0">Buat Usulan Kerumahtanggaan</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active mt-2">Pekerjaan Kerumah Tanggaan</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/ukt/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}"> Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Buat Usulan</li>
                 </ol>
             </div>
         </div>
@@ -65,13 +66,9 @@
                         </div>
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Pekerjaan*</label>
+                            <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                             <div class="col-sm-10">
-<<<<<<< HEAD
                                 <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan/ Judul Pekerjaan" required>
-=======
-                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
->>>>>>> 08d67af882b7614bda291cf3e36467801a3cf335
                             </div>
                         </div>
                         <div class="form-group row">
@@ -89,8 +86,10 @@
                         <div id="section-ukt"></div>
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
+                            <div class="col-sm-10 text-right">
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan pekerjaan ?')">
+                                   <i class="fas fa-paper-plane"></i> SUBMIT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -123,13 +122,13 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Pekerjaan (*)</label>
+                        <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan (*)</label>
+                        <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                         <div class="col-sm-10">
                             <textarea name="spesifikasi_pekerjaan[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>

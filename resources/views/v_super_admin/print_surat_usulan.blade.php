@@ -278,9 +278,9 @@
             </div>
             <div class="col-md-12 mt-4 text-capitalize">
                 <div class="row text-center">
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_pengusul) !!}</label>
                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/usulan/'.$usulan->otp_usulan_kabag) !!}</label>
                     @endif
                 </div>
             </div>

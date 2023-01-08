@@ -197,10 +197,10 @@
             </div>
             <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-aadb/'.$bast->otp_bast_ppk) !!}</label>
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-aadb/'.$bast->otp_bast_pengusul) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-aadb/'.$bast->otp_bast_ppk) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-aadb/'.$bast->otp_bast_pengusul) !!}</label>
                     @if($bast->status_proses_id == 5)
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.app/surat/bast-aadb/'.$bast->otp_bast_kabag) !!}</label>
+                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-aadb/'.$bast->otp_bast_kabag) !!}</label>
                     @endif
                 </div>
             </div>

@@ -659,7 +659,7 @@ class UserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan    = UsulanUktDetail::count() + 1;
                 $detail      = new UsulanUktDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan;
+                $detail->id_form_usulan_detail  = (int) $idUsulan . Carbon::now()->format('dm');
                 $detail->form_usulan_id         = $idFormUsulan;
                 $detail->lokasi_pekerjaan       = $detailUsulan;
                 $detail->spesifikasi_pekerjaan  = $request->spesifikasi_pekerjaan[$i];

@@ -47,6 +47,10 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-3">Tanggal Usulan</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                 </div>
@@ -59,22 +63,18 @@
                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
                     <div class="col-md-3">Total Pengajuan</div>
                     <div class="col-md-9">: {{ $usulan->total_pengajuan }} pekerjaan</div>
                 </div>
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Lokasi Pekerjaan</th>
+                            <th style="width: 1%;">No</th>
+                            <th style="width: 20%;">Pekerjaan</th>
                             <th>Spesifikasi Pekerjaan</th>
-                            <th>Keterangan</th>
+                            <th style="width: 15%;">Keterangan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -100,9 +100,9 @@
             </div>
             <div class="col-md-12 mt-4">
                 <div class="row text-center">
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-gdn/'.$usulan->otp_usulan_pengusul) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-gdn/'.$usulan->otp_usulan_pengusul) !!}</label>
                     @if ($usulan->otp_usulan_kabag != null)
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-gdn/'.$usulan->otp_usulan_kabag) !!}</label>
+                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-gdn/'.$usulan->otp_usulan_kabag) !!}</label>
                     @endif
                 </div>
             </div>

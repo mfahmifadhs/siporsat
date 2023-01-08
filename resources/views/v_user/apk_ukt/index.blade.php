@@ -110,6 +110,8 @@
                                             <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 4)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">Selesai</span>
                                             @endif
@@ -136,12 +138,12 @@
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-xl">
                                         <div class="modal-content">
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
-                                                    <div class="col-md-12 text-center font-weight-bold">
-                                                        <h5>Detail Pengajuan Usulan {{ $dataUsulan->jenis_form }}
+                                                    <div class="col-md-12 text-center text-uppercase font-weight-bold">
+                                                        <h5>Detail Pengajuan Usulan {{ $dataUsulan->jenis_form }} urusan kerumahtanggaan
                                                             <hr>
                                                         </h5>
                                                     </div>
@@ -152,25 +154,25 @@
                                                     </h6>
                                                 </div>
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->nama_pegawai }}</div>
+                                                    <div class="col-md-2"><label>Nama Pengusul </label></div>
+                                                    <div class="col-md-10">: {{ $dataUsulan->nama_pegawai }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->keterangan_pegawai }}</div>
+                                                    <div class="col-md-2"><label>Jabatan Pengusul </label></div>
+                                                    <div class="col-md-10">: {{ $dataUsulan->keterangan_pegawai }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Unit Kerja</label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->unit_kerja }}</div>
+                                                    <div class="col-md-2"><label>Unit Kerja</label></div>
+                                                    <div class="col-md-10">: {{ $dataUsulan->unit_kerja }}</div>
                                                 </div>
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Tanggal Usulan </label></div>
-                                                    <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                                    <div class="col-md-2"><label>Tanggal Usulan </label></div>
+                                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                                 </div>
                                                 @if ($dataUsulan->otp_usulan_pengusul != null)
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat Usulan </label></div>
-                                                    <div class="col-md-8">:
+                                                    <div class="col-md-2"><label>Surat Usulan </label></div>
+                                                    <div class="col-md-10">:
                                                         <a href="{{ url('unit-kerja/surat/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
@@ -179,8 +181,8 @@
                                                 @endif
                                                 @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan_id == 1)
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat BAST </label></div>
-                                                    <div class="col-md-8">:
+                                                    <div class="col-md-2"><label>Surat BAST </label></div>
+                                                    <div class="col-md-10">:
                                                         <a href="{{ url('unit-kerja/surat/bast-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
@@ -197,9 +199,9 @@
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Lokasi Pekerjaan</div>
-                                                            <div class="col-sm-4">Spesifikasi Pekerjaan</div>
-                                                            <div class="col-sm-4">Keterangan</div>
+                                                            <div class="col-sm-3">Lokasi</div>
+                                                            <div class="col-sm-5">Spesifikasi Pekerjaan</div>
+                                                            <div class="col-sm-3">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @foreach($dataUsulan->detailUsulanUkt as $i => $dataUkt)
@@ -207,8 +209,8 @@
                                                         <div class="form-group row text-uppercase">
                                                             <div class="col-sm-1 text-center">{{ $i }}</div>
                                                             <div class="col-sm-3">{{ $dataUkt->lokasi_pekerjaan }}</div>
-                                                            <div class="col-sm-4">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
-                                                            <div class="col-sm-4">{{ $dataUkt->keterangan }}</div>
+                                                            <div class="col-sm-5">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
+                                                            <div class="col-sm-3">{{ $dataUkt->keterangan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

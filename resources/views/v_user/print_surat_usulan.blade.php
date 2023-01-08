@@ -47,6 +47,10 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-3">Tanggal Usulan</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                 </div>
@@ -59,8 +63,8 @@
                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-md-3">Total Pengajuan</div>
+                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} pekerjaan</div>
                 </div>
                 @if($usulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -168,13 +172,13 @@
                     </tbody>
                 </table>
                 @elseif ($modul == 'usulan-ukt')
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Lokasi Pekerjaan</th>
+                            <th style="width: 1%;">No</th>
+                            <th style="width: 20%;">Pekerjaan</th>
                             <th>Spesifikasi Pekerjaan</th>
-                            <th>Keterangan</th>
+                            <th style="width: 15%;">Keterangan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>

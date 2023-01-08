@@ -575,6 +575,8 @@ class SuperUserController extends Controller
             ->orderBy('tanggal_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
+            ->where('status_proses_id', '!=', 5)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         return view('v_super_user.apk_ukt.index', compact('usulan'));
@@ -597,13 +599,8 @@ class SuperUserController extends Controller
             return view('v_super_user/apk_ukt/surat_usulan', compact('pimpinan', 'usulan'));
         } elseif ($aksi == 'print-surat-usulan') {
             $form = UsulanUkt::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -683,7 +680,7 @@ class SuperUserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan = UsulanUktDetail::count() + 1;
                 $detail = new UsulanUktDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan;
+                $detail->id_form_usulan_detail  = (int) $idUsulan . Carbon::now()->format('dm');
                 $detail->form_usulan_id         = $idFormUsulan;
                 $detail->lokasi_pekerjaan       = $detailUsulan;
                 $detail->spesifikasi_pekerjaan  = $request->spesifikasi_pekerjaan[$i];
@@ -3568,7 +3565,7 @@ class SuperUserController extends Controller
 
         if ($modul == 'ukt') {
             if ($tujuan == 'usulan') {
-                $usulan      = UsulanUkt::count();
+                $usulan      = UsulanUkt::where('no_surat_bast', '!=', NULL)->count();
                 $totalUsulan = str_pad($usulan + 1, 4, 0, STR_PAD_LEFT);
                 $form        = $aksi;
                 $pengajuan   = UsulanUkt::with(['detailUsulanUkt'])
@@ -3581,6 +3578,7 @@ class SuperUserController extends Controller
 
                 return view('v_super_user.apk_ukt.ppk_proses', compact('pengajuan', 'id', 'totalUsulan', 'form'));
             } else {
+                dd($request->all());
                 UsulanUkt::where('id_form_usulan', $id)->update([
                     'tanggal_bast'     => $request->tanggal_bast,
                     'no_surat_bast'    => $request->no_surat_bast

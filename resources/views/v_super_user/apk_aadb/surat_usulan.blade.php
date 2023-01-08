@@ -236,9 +236,9 @@
                             </div>
                             <div class="col-md-12 mt-4">
                                 <div class="row text-center">
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-aadb/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-aadb/'.$dataUsulan->otp_usulan_pengusul) !!}</label>
                                     @if ($dataUsulan->otp_usulan_kabag != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.app/surat/usulan-aadb/'.$dataUsulan->otp_usulan_kabag) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-aadb/'.$dataUsulan->otp_usulan_kabag) !!}</label>
                                     @endif
                                 </div>
                             </div>

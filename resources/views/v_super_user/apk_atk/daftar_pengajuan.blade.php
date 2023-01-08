@@ -65,7 +65,7 @@
                                     <th style="width: 5%;">Usulan</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
-                                    <th>Pengusul</th>
+                                    <th>Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>

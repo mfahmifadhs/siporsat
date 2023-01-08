@@ -48,6 +48,10 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-2">Tanggal Usulan</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
                     <div class="col-md-10">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
                 </div>
@@ -60,8 +64,8 @@
                     <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-2">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-md-2">Total Pengajuan</div>
+                    <div class="col-md-9">: {{ $bast->total_pengajuan }} pekerjaan</div>
                 </div>
                 @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -174,10 +178,10 @@
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Lokasi Pekerjaan</th>
+                            <th style="width: 1%;">No</th>
+                            <th style="width: 20%;">Pekerjaan</th>
                             <th>Spesifikasi Pekerjaan</th>
-                            <th>Keterangan</th>
+                            <th style="width: 15%;">Keterangan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>

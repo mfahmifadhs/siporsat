@@ -33,7 +33,7 @@
         </div>
         <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">
-                <h3 class="card-title">usulan pengajuan {{ $aksi }} gedung/bangunan </h3>
+                <h3 class="card-title">usulan pengajuan pekerjaan kerumahtanggaan </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('unit-kerja/ukt/usulan/proses/pengajuan') }}" method="POST">
@@ -65,7 +65,7 @@
                         </div>
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Pekerjaan*</label>
+                            <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                             </div>
@@ -85,8 +85,10 @@
                         <div id="section-ukt"></div>
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan pekerjaan ?')">SUBMIT</button>
+                            <div class="col-sm-10 text-right">
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan pekerjaan ?')">
+                                   <i class="fas fa-paper-plane"></i> SUBMIT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -127,7 +129,7 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Pekerjaan (*)</label>
+                        <label class="col-sm-2 col-form-label">Pekerjaan (*)</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                         </div>
