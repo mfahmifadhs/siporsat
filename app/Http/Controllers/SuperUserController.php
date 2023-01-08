@@ -1936,7 +1936,6 @@ class SuperUserController extends Controller
                 ->groupBy('kualifikasi')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('kualifikasi', '!=', null)
-                ->orderBy('jenis_kendaraan', 'ASC')
                 ->get();
             return view('v_super_user.apk_aadb.usulan', compact('idUsulan', 'aksi', 'jenisKendaraan', 'kendaraan'));
         }
