@@ -33,7 +33,7 @@ use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkLampiran;
-use App\Models\Atk\UsulanAtkPermintaan;
+use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\GDN\UsulanGdn;
 use App\Models\GDN\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
