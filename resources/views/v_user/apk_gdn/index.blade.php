@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
@@ -54,11 +54,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
                                 <h6 class="font-weight-bold">Selesai BAST</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_pengajuan_id', 2)->count() }} <small>usulan</small> </h5>
+                                <h6 class="font-weight-bold">Ditolak</h6>
                             </div>
                         </div>
                     </div>
@@ -138,7 +146,7 @@
                                 </tr>
 
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-xl">
                                         <div class="modal-content">
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
@@ -215,7 +223,7 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-1 text-center">{{ $i+1 }}</div>
                                                             <div class="col-sm-2">{{ $dataGdn->lokasi_bangunan }}</div>
-                                                            <div class="col-sm-2">{{ $dataGdn->lokasi_spesifik }}</div>
+                                                            <div class="col-sm-2">{!! $dataGdn->lokasi_spesifik !!}</div>
                                                             <div class="col-sm-3">{{ $dataGdn->bid_kerusakan }}</div>
                                                             <div class="col-sm-2">{{ $dataGdn->keterangan }}</div>
                                                         </div>

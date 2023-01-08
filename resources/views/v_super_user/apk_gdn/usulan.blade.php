@@ -4,11 +4,15 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h4 class="m-0">Buat Usulan Pemeliharaan</h4>
+            </div>
+            <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active mt-2">Dashboard</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}"> Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Buat Usulan</li>
                 </ol>
             </div>
         </div>
@@ -28,7 +32,7 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">
                 <h3 class="card-title">usulan pengajuan {{ $aksi }} gedung/bangunan </h3>
             </div>
@@ -62,21 +66,15 @@
                         </div>
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                            <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
-                            <div class="col-sm-10">
-                                <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jenis Perbaikan</label>
+                            <label class="col-sm-2 col-form-label">Jenis Perbaikan*</label>
                             <div class="col-sm-4">
-                                <select class="form-control bidang-kerusakan" data-idtarget="">
+                                <select class="form-control bidang-kerusakan" data-idtarget="" required>
                                     <option value="">-- Pilih Jenis Perbaikan --</option>
                                     <option value="AR">ARSITEKTURAL (AR)</option>
                                     <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
@@ -92,6 +90,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
+                            <div class="col-sm-10">
+                                <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
@@ -100,8 +104,10 @@
                         <div id="section-gdn"></div>
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin mengajukan usulan perbaikan ?')">SUBMIT</button>
+                            <div class="col-sm-10 text-right">
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin mengajukan usulan perbaikan ?')">
+                                    <i class="fas fa-paper-plane"></i> SUBMIT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -118,7 +124,7 @@
     $(function() {
         let total = 1
         let i = 0
-	
+
 	$('.spesifikasi').summernote({
                 height: 150,
                 toolbar: [
@@ -143,21 +149,15 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
-                        <div class="col-sm-10">
-                            <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jenis Perbaikan</label>
+                        <label class="col-sm-2 col-form-label">Jenis Perbaikan*</label>
                         <div class="col-sm-4">
-                            <select class="form-control bidang-kerusakan" data-idtarget="` + i + `">
+                            <select class="form-control bidang-kerusakan" data-idtarget="` + i + `" required>
                                 <option value="">-- Pilih Jenis Perbaikan --</option>
                                 <option value="AR">ARSITEKTURAL (AR)</option>
                                 <option value="LT">LANDSCAPE & TATA GRAHA (LT)</option>
@@ -170,6 +170,12 @@
                             <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan`+i+`">
                                 <option value="">-- Pilih Bidang Kerusakan --</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
+                        <div class="col-sm-10">
+                            <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">

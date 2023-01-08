@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} pekerjaan</div>
+                    <div class="col-md-9">: {{ $usulan->total_pengajuan }}</div>
                 </div>
                 @if($usulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">
@@ -164,7 +164,7 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                            <td>{{ $dataGdn->lokasi_spesifik }}</td>
+                            <td>{!! $dataGdn->lokasi_spesifik !!}</td>
                             <td>{{ $dataGdn->bid_kerusakan }}</td>
                             <td>{{ $dataGdn->keterangan }}</td>
                         </tr>

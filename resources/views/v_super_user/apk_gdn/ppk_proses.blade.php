@@ -4,14 +4,14 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row mb-2 text-capitalize">
+        <div class="row">
             <div class="col-sm-6">
-                <h1 class="m-0">proses penyelesaian pekerjaan </h1>
+                <h4 class="m-0">Pemeliharaan Gedung/Bangunan</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Pengajuan</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Buat Berita Acara</li>
                 </ol>
             </div>
@@ -32,7 +32,10 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Penyelesaian Pekerjaan (Berita Acara Serah Terima)</h3>
+            </div>
             @foreach($pengajuan as $dataPengajuan)
             <form class="form-pengajuan" action="{{ url('super-user/ppk/gdn/pengajuan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                 <div class="card-body">
@@ -44,7 +47,7 @@
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/gdn/'.$form.'/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.01/2/'.$idBast.'/'.Carbon\carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -73,36 +76,39 @@
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <div class="col-md-12"><label class="text-muted">Informasi Perbaikan</label></div>
+                        <label class="col-sm-2 col-form-label">Informasi Kerusakan</label>
+                        <div class="col-sm-10">
+                            <table class="table table-bordered">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th class="text-center" style="width: 1%;">No</th>
+                                        <th style="width: 20%;">Bidang Kerusakan</th>
+                                        <th style="width: 20%;">Lokasi Perbaikan</th>
+                                        <th>Lokasi Spesifik</th>
+                                        <th style="width: 20%;">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                    @foreach($dataPengajuan->detailUsulanGdn as $i => $dataPerbaikan)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td class="text-uppercase">{{ $dataPerbaikan->lokasi_bangunan}}</td>
+                                        <td>{!! $dataPerbaikan->lokasi_spesifik !!}</td>
+                                        <td>{{ $dataPerbaikan->bid_kerusakan }}</td>
+                                        <td>{{ $dataPerbaikan->keterangan }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    @foreach($dataPengajuan->detailUsulanGdn as $i => $dataPerbaikan)
-                    <input type="hidden" name="id_barang[]" value="{{ $dataPerbaikan->id_barang }}">
-                    <hr>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_bangunan }}" readonly>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->lokasi_spesifik }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Bidang Kerusakan </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->bid_kerusakan }}" readonly>
-                        </div>
-                        <label class="col-sm-2 col-form-label">Keterangan </label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPerbaikan->keterangan }}" readonly>
-                        </div>
-                    </div>
-                    @endforeach
 
                     <div class="form-group row">
                         <label class="col-sm-2">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
+                        <div class="col-sm-10 text-right">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT</button>
                         </div>
                     </div>
                 </div>

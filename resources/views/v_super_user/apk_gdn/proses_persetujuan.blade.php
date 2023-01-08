@@ -5,11 +5,14 @@
 <div class="content-header">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
+                <h4 class="m-0">Pemeliharaan Gedung / Bangunan</h4>
+            </div>
+            <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
-                    <li class="breadcrumb-item active">Proses Persetujuan Usulan Gedung/Bangunan</li>
+                    <li class="breadcrumb-item active">Proses Persetujuan</li>
                 </ol>
             </div>
         </div>
@@ -30,9 +33,9 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Persetujuan Usulan Gedung & Bangunan </h3>
+                <h3 class="card-title">Proses Persetujuan </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/gdn/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
@@ -45,24 +48,20 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pengusul</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" value="{{ $usulan->nama_pegawai }}" readonly>
                         </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jabatan</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" value="{{ $usulan->keterangan_pegawai }}" readonly>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" value="{{ $usulan->tanggal_usulan }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('MMMM Y') }}" readonly>
+                            <input type="text" class="form-control" value="{{ Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -74,19 +73,23 @@
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label">Informasi Kerusakan</label>
                         <div class="col-sm-10">
-                            <table class="table table-bordered text-center">
+                            <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th>Lokasi Perbaikan</th>
-                                        <th>Bidang Kerusakan</th>
+                                        <th class="text-center" style="width: 1%;">No</th>
+                                        <th style="width: 20%;">Bidang Kerusakan</th>
+                                        <th style="width: 20%;">Lokasi Perbaikan</th>
+                                        <th>Lokasi Spesifik</th>
                                         <th style="width: 20%;">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                    @foreach($usulan->detailUsulanGdn as $dataPerbaikan)
+                                    @foreach($usulan->detailUsulanGdn as $i => $dataPerbaikan)
                                     <tr>
-                                        <td class="text-uppercase">{{ $dataPerbaikan->lokasi_bangunan.' / '.$dataPerbaikan->lokasi_spesifik }}</td>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td class="text-uppercase">{{ $dataPerbaikan->lokasi_bangunan}}</td>
+                                        <td>{!! $dataPerbaikan->lokasi_spesifik !!}</td>
                                         <td>{{ $dataPerbaikan->bid_kerusakan }}</td>
                                         <td>{{ $dataPerbaikan->keterangan }}</td>
                                     </tr>

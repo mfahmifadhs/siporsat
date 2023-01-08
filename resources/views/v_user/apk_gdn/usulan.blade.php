@@ -65,15 +65,9 @@
                         </div>
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                            <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
-                            <div class="col-sm-10">
-                                <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -95,6 +89,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
+                            <div class="col-sm-10">
+                                <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
@@ -103,8 +103,10 @@
                         <div id="section-gdn"></div>
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
+                            <div class="col-sm-10 text-right">
+                                <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">
+                                   <i class="fas fa-paper-plane"></i> SUBMIT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -121,6 +123,14 @@
     $(function() {
         let total = 1
         let i = 0
+        $('.spesifikasi').summernote({
+            height: 150,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                ['color', ['color']],
+                ['para', ['ol', 'ul', 'paragraph', 'height']],
+            ]
+        })
         // More Item
         $('#btn-total').click(function() {
             ++i;
@@ -137,15 +147,9 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan (*)</label>
+                        <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Lokasi Spesifik (*)</label>
-                        <div class="col-sm-10">
-                            <textarea name="lokasi_spesifik[]" class="form-control" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -161,9 +165,15 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Bidang Perbaikan</label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan`+i+`">
+                            <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan` + i + `">
                                 <option value="">-- Pilih Bidang Kerusakan --</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
+                        <div class="col-sm-10">
+                            <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -175,6 +185,14 @@
                     <div id="section-gdn"></div>
                 </div>`
             )
+            $('.spesifikasi').summernote({
+                height: 150,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ol', 'ul', 'paragraph', 'height']],
+                ]
+            })
         })
 
         $(document).on('change', '.bidang-kerusakan', function() {

@@ -80,9 +80,11 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Surat Usulan</th>
-                                    <th>Lokasi Perbaikan</th>
-                                    <th>Status</th>
+                                    <th style="width: 12%;">Tanggal</th>
+                                    <th style="width: 10%;">Usulan</th>
+                                    <th>Pengusul</th>
+                                    <th class="text-center" style="width: 15%;">Status Pengajuan</th>
+                                    <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -92,42 +94,39 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="pt-4 text-center">{{ $no++ }}</td>
-                                    <td class="pt-3 small">
-                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
-                                        No. Surat : {{ $dataUsulan->no_surat_usulan }} <br>
-                                        Pengusul : {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
-                                        Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
+                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td class="pt-4">{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td class="pt-3">{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
+                                    <td class="text-center">
+                                        <h6 class="mt-2">
+                                            @if($dataUsulan->status_pengajuan_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-success">
+                                                Disetujui
+                                            </span>
+                                            @elseif($dataUsulan->status_pengajuan_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                            @if ($dataUsulan->keterangan != null)
+                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
+                                            @endif
+                                            @endif
+                                        </h6>
                                     </td>
-                                    <td class="small">
-                                        <p class="font-weight-bold"></p>
-                                        @foreach($dataUsulan->detailUsulanGdn as $i =>$dataGdn)
-                                        <p>
-                                            <label>{{ $no = $i + 1 }}. {{ $dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label> <br>
-                                            <span class="pl-2">{{ ucfirst(strtolower($dataGdn->bid_kerusakan.' : '.$dataGdn->keterangan))  }}</span>
-                                        </p>
-                                        @endforeach
+                                    <td class="text-center text-capitalize">
+                                        <h6 class="mt-2">
+                                            @if($dataUsulan->status_proses_id == 1)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
+                                            @elseif ($dataUsulan->status_proses_id == 2)
+                                            <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                            @elseif ($dataUsulan->status_proses_id == 4)
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
+                                            @elseif ($dataUsulan->status_proses_id == 5)
+                                            <span class="badge badge-sm badge-pill badge-success">selesai <br> bast</span>
+                                            @endif
+                                        </h6>
                                     </td>
-                                    <td class="pt-2 small text-center">
-                                        Status Pengajuan : <br>
-                                        @if($dataUsulan->status_pengajuan_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-success py-2">disetujui</span>
-                                        @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-danger py-2">ditolak</span>
-                                        @endif <br>
-                                        Status Proses : <br>
-                                        @if($dataUsulan->status_proses_id == 1)
-                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu persetujuan</span>
-                                        @elseif ($dataUsulan->status_proses_id == 2)
-                                        <span class="badge badge-sm badge-pill badge-warning py-2">sedang diproses ppk</span>
-                                        @elseif ($dataUsulan->status_proses_id == 3)
-                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu <br> konfirmasi pengusul</span>
-                                        @elseif ($dataUsulan->status_proses_id == 4)
-                                        <span class="badge badge-sm badge-pill badge-warning py-2">menunggu <br> konfirmasi kabag rt</span>
-                                        @elseif ($dataUsulan->status_proses_id == 5)
-                                        <span class="badge badge-sm badge-pill badge-success py-2">selesai</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center pt-4">
+                                    <td class="text-center">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
@@ -137,16 +136,18 @@
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
                                             @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2 )
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/'. $dataUsulan->jenis_form.'/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/gdn/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 4)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
                                             @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
-                                            @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul == null)
+                                            @if ($dataUsulan->otp_usulan_pengusul == null && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
@@ -154,32 +155,13 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @endif
+
                                         </div>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-xl">
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                @if ($dataUsulan->status_pengajuan == '')
-                                                @if($dataUsulan->status_proses == 'belum proses')
-                                                <span class="border border-warning">
-                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
-                                                </span>
-                                                @elseif($dataUsulan->status_proses == 'proses')
-                                                <span class="border border-primary">
-                                                    <b class="text-primary p-3">Proses</b>
-                                                </span>
-                                                @endif
-                                                @elseif ($dataUsulan->status_pengajuan == 'diterima')
-
-                                                @else
-
-                                                @endif
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center font-weight-bold">
@@ -219,7 +201,7 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan == 1)
+                                                @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan == 1)
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
@@ -235,20 +217,23 @@
                                                     </h6>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <div class="col-md-12 text-center">
+                                                    <div class="col-md-12">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-4">Lokasi Pekerjaan</div>
-                                                            <div class="col-sm-4">Spesifikasi Pekerjaan</div>
-                                                            <div class="col-sm-4">Keterangan</div>
+                                                            <div class="col-sm-1 text-center">No</div>
+                                                            <div class="col-sm-3">Bidang Kerusakan</div>
+                                                            <div class="col-sm-3">Lokasi</div>
+                                                            <div class="col-sm-3">Spesifikasi</div>
+                                                            <div class="col-sm-2">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanGdn as $dataGdn)
+                                                        @foreach($dataUsulan->detailUsulanGdn as $i => $dataGdn)
                                                         <div class="form-group row text-uppercase small">
-                                                            <div class="col-sm-4">{{ $dataGdn->lokasi_bangunan }}</div>
-                                                            <div class="col-sm-4">{{ $dataGdn->lokasi_spesifik }}</div>
-                                                            <div class="col-sm-4">{{ $dataGdn->bid_kerusakan }}</div>
-                                                            <div class="col-sm-4">{{ $dataGdn->keterangan }}</div>
+                                                            <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
+                                                            <div class="col-sm-3">{{ $dataGdn->bid_kerusakan }}</div>
+                                                            <div class="col-sm-3">{{ $dataGdn->lokasi_bangunan }}</div>
+                                                            <div class="col-sm-3">{!! $dataGdn->lokasi_spesifik !!}</div>
+                                                            <div class="col-sm-2">{{ $dataGdn->keterangan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

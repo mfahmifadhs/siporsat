@@ -129,13 +129,13 @@
                     </div>
                     <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Pekerjaan (*)</label>
+                        <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan (*)</label>
+                        <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                         <div class="col-sm-10">
                             <textarea name="spesifikasi_pekerjaan[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
                         </div>

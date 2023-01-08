@@ -204,7 +204,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                                                <td>{{ $dataGdn->lokasi_spesifik }}</td>
+                                                <td>{!! $dataGdn->lokasi_spesifik !!}</td>
                                                 <td>{{ $dataGdn->bid_kerusakan }}</td>
                                                 <td>{{ $dataGdn->keterangan }}</td>
                                             </tr>

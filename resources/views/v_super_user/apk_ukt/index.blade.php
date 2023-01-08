@@ -98,7 +98,7 @@
                                     <td class="pt-4">{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td class="pt-3">{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-center">
-                                        <h6 class="mt-3">
+                                        <h6 class="mt-2">
                                             @if($dataUsulan->status_pengajuan_id == 1)
                                             <span class="badge badge-sm badge-pill badge-success">
                                                 Disetujui

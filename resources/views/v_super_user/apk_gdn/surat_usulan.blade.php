@@ -104,9 +104,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
+                                <div class="form-group row mb-3 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        usulan pengajuan <br>
+                                        nomor surat : {{ $usulan->no_surat_usulan }}
+                                    </div>
+                                </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                    <div class="col-md-2">Tanggal Usulan</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -121,12 +127,8 @@
                                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }} ruangan</div>
+                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }}</div>
                                 </div>
                                 @if($usulan->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
@@ -139,21 +141,21 @@
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Lokasi Perbaikan</th>
+                                            <th class="text-center" style="width: 1%;">No</th>
+                                            <th style="width: 20%;">Bidang Kerusakan</th>
+                                            <th style="width: 20%;">Lokasi Perbaikan</th>
                                             <th>Lokasi Spesifik</th>
-                                            <th>Bidang Kerusakan</th>
-                                            <th>Keterangan</th>
+                                            <th style="width: 20%;">Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
                                     <tbody>
                                         @foreach($usulan->detailUsulanGdn as $dataGdn)
                                         <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                                            <td>{{ $dataGdn->lokasi_spesifik }}</td>
-                                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
+                                            <td class="text-center">{{ $no++ }}</td>
+                                            <td>{{ $dataGdn->bid_kerusakan }}</td>
+                                            <td class="text-uppercase">{{ $dataGdn->lokasi_bangunan }}</td>
+                                            <td>{!! $dataGdn->lokasi_spesifik !!}</td>
                                             <td>{{ $dataGdn->keterangan }}</td>
                                         </tr>
                                         @endforeach

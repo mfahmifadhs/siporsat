@@ -729,10 +729,11 @@ class SuperUserController extends Controller
             ->orderBy('tanggal_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
+            ->where('status_proses_id', '!=', 5)
+            ->where('status_proses_id', '!=', null)
             ->get();
-        $googleChartData = $this->ChartDataAtk();
 
-        return view('v_super_user.apk_gdn.index', compact('googleChartData', 'usulan'));
+        return view('v_super_user.apk_gdn.index', compact('usulan'));
     }
 
     public function LetterGdn(Request $request, $aksi, $id)
@@ -753,13 +754,8 @@ class SuperUserController extends Controller
             return view('v_super_user/apk_gdn/surat_usulan', compact('pimpinan', 'usulan'));
         } elseif ($aksi == 'print-surat-usulan') {
             $form = UsulanGdn::where('id_form_usulan', $id)->first();
-            if (Auth::user()->pegawai->unit_kerja_id == 465930) {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '5')->where('unit_kerja_id', 465930)->first();
-            } else {
-                $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                    ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
-            }
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -832,9 +828,9 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_gdn.daftar_pengajuan', compact('usulan'));
@@ -853,7 +849,7 @@ class SuperUserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan = UsulanGdnDetail::count() + 1;
                 $detail = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan;
+                $detail->id_form_usulan_detail  = (int) $idUsulan . Carbon::now()->format('dm');;
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -872,7 +868,7 @@ class SuperUserController extends Controller
             UsulanGdn::where('id_form_usulan', $id)->update([
                 'keterangan'          => $request->keterangan,
                 'status_pengajuan_id' => 2,
-                'status_proses_id'    => 5
+                'status_proses_id'    => null
             ]);
             return redirect('super-user/gdn/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
@@ -3542,7 +3538,7 @@ class SuperUserController extends Controller
 
         if ($modul == 'gdn') {
             if ($tujuan == 'usulan') {
-                $totalUsulan = UsulanGdn::count();
+                $totalUsulan = UsulanGdn::where('no_surat_bast', '!=', NULL)->count();
                 $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $form        = $aksi;
                 $pengajuan  = UsulanGdn::with(['detailUsulanGdn'])

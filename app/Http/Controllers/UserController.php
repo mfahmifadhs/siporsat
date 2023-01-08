@@ -688,9 +688,9 @@ class UserController extends Controller
     {
         $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('tanggal_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
             ->where('gdn_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
@@ -714,7 +714,7 @@ class UserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan    = UsulanGdnDetail::count() + 1;
                 $detail      = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan;
+                $detail->id_form_usulan_detail  = (int) $idUsulan . Carbon::now()->format('dm');;
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;

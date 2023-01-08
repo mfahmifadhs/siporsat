@@ -34,7 +34,7 @@
         </div>
         <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">
-                <h3 class="card-title">usulan pengajuan {{ $aksi }} gedung/bangunan </h3>
+                <h3 class="card-title">usulan pengajuan urusan kerumahtanggaan </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/ukt/usulan/proses/pengajuan') }}" method="POST">
