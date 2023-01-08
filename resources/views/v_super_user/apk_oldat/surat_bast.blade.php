@@ -102,11 +102,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <div class="form-group row mb-5 text-center">
+                                <div class="form-group row text-center">
                                     <div class="col-md-12 text-uppercase">
                                         berita acara serah terima <br>
                                         nomor surat : {{ ucfirst(strtolower($bast->no_surat_bast)) }}
                                     </div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Tanggal</div>
+                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -120,14 +124,6 @@
                                     <div class="col-md-2">Unit Kerja</div>
                                     <div class="col-md-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Total Biaya</div>
-                                    <div class="col-md-10">: Rp {{ number_format($bast->total_biaya, 0, ',', '.') }}</div>
-                                </div>
                                 @if($bast->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>
@@ -136,9 +132,9 @@
                                 @endif
                                 <div class="form-group row mb-0">
                                     <div class="col-md-12 text-justify mt-4">
-                                    Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
-                                    dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
-                                    berfungsi normal sebagaimana mestinya.
+                                        Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
+                                        dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
+                                        berfungsi normal sebagaimana mestinya.
                                     </div>
                                 </div>
                             </div>
@@ -151,8 +147,8 @@
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe Barang</th>
                                             @if($bast->jenis_form == 'pengadaan')
-                                            <th>Spesifikasi</th>
-                                            <th>Tahun Perolehan </th>
+                                            <th>Jumlah</th>
+                                            <th>Estimasi Biaya</th>
                                             @else
                                             <th>Tahun Perolehan</th>
                                             <th>Keterangan Kerusakan</th>
@@ -162,14 +158,14 @@
                                     <?php $no = 1; ?>
                                     <tbody>
                                         @if($bast->jenis_form == 'pengadaan')
-                                        @foreach($bast->barang as $dataBarang)
+                                        @foreach($bast->detailPengadaan as $dataBarang)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                            <td>{{ $dataBarang->kategori_barang_id }}</td>
                                             <td>{{ $dataBarang->kategori_barang }}</td>
-                                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                                            <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                                         </tr>
                                         @endforeach
                                         @else

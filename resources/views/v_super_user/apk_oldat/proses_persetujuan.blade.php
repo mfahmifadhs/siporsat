@@ -4,15 +4,15 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-6">
-                <h1 class="m-0">Proses Persetujuan Usulan Oldat</h1>
+                <h4 class="m-0">Olah Data & Meubelair</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
-                    <li class="breadcrumb-item active">Proses Persetujuan Usulan Oldat</li>
+                    <li class="breadcrumb-item active">Proses Persetujuan</li>
                 </ol>
             </div>
         </div>
@@ -33,7 +33,10 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Proses Persetujuan </h3>
+            </div>
             <div class="card-body">
                 <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
                     @csrf
@@ -45,12 +48,14 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pengusul</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" value="{{ $usulan->nama_pegawai }}" readonly>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($usulan->nama_pegawai)) }}" readonly>
                         </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jabatan</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" value="{{ $usulan->keterangan_pegawai }}" readonly>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -88,7 +93,6 @@
                                         <th>Merk Barang</th>
                                         <th>Spesifikasi</th>
                                         <th>Jumlah</th>
-                                        <th>Satuan</th>
                                         <th>Estimasi Biaya</th>
                                     </tr>
                                 </thead>
@@ -100,8 +104,7 @@
                                         <td>{{ $dataBarangPengadaan->kategori_barang }}</td>
                                         <td>{{ $dataBarangPengadaan->merk_barang }}</td>
                                         <td>{{ $dataBarangPengadaan->spesifikasi_barang }}</td>
-                                        <td>{{ $dataBarangPengadaan->jumlah_barang }}</td>
-                                        <td>{{ $dataBarangPengadaan->satuan_barang }}</td>
+                                        <td>{{ $dataBarangPengadaan->jumlah_barang.' '.$dataBarangPengadaan->satuan_barang }}</td>
                                         <td>Rp {{ number_format($dataBarangPengadaan->estimasi_biaya, 0, ',', '.') }}</td>
                                     </tr>
                                     @endforeach

@@ -48,6 +48,10 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-3">Tanggal Usulan</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
                     <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
                 </div>
@@ -58,10 +62,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Unit Kerja</div>
                     <div class="col-md-9">: {{ $usulan->unit_kerja }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 @if($usulan->rencana_pengguna != null)
                 <div class="form-group row mb-0">

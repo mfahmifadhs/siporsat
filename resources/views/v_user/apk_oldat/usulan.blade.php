@@ -6,12 +6,12 @@
     <div class="container">
         <div class="row mb-2 text-capitalize">
             <div class="col-sm-6">
-                <h1 class="m-0">Usulan Pemeliharaan Barang</h1>
+                <h1 class="m-0">Usulan Olah Data BMN / Meubelair</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('unit-kerja/oldat/dashboard') }}"> Dashboard</a></li>
-                    <li class="breadcrumb-item active">Pemeliharaan Barang</li>
+                    <li class="breadcrumb-item active">Buat Usulan {{ $aksi }}</li>
                 </ol>
             </div>
         </div>
@@ -34,181 +34,175 @@
                 @endif
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header font-weight-bold">
+        <div class="card card-primary card-outline">
+            <div class="card-header font-weight-bold">
+                @if($aksi == 'pengadaan')
+                <h3 class="card-title font-weight-bold">Usulan Pengajuan Pengadaan Oldat </h3>
+                @else
+                <h3 class="card-title font-weight-bold">Usulan Pengajuan Perbaikan Oldat </h3>
+                @endif
+            </div>
+            <div class="card-body">
+                <form class="form-pengajuan" action="{{ url('unit-kerja/oldat/usulan/proses-usulan/'. $aksi ) }}" method="POST">
+                    <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
+                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+                    <span id="kode_otp"></span>
+                    @csrf
+                    <div class="form-group row">
+                        <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
+                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/oldat/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal Usulan </label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control text-capitalize" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Nama Pengusul </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-capitalize" value="{{ $pegawai->keterangan_pegawai }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Unit Kerja </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-capitalize" value="{{ $pegawai->unit_kerja }}" readonly>
+                        </div>
+                    </div>
                     @if($aksi == 'pengadaan')
-                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Pengadaan Oldat </h3>
-                    @else
-                    <h3 class="card-title font-weight-bold">Usulan Pengajuan Perbaikan Oldat </h3>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Rencana Pengguna (*)</label>
+                        <div class="col-sm-10">
+                            <textarea type="date" name="rencana_pengguna" class="form-control text-capitalize" required></textarea>
+                        </div>
+                    </div>
                     @endif
-                </div>
-                <div class="card-body">
-                    <form class="form-pengajuan" action="{{ url('unit-kerja/oldat/usulan/proses-usulan/'. $aksi ) }}" method="POST">
-                        <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
-                        <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                        <span id="kode_otp"></span>
-                        @csrf
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label">Jumlah Jenis Barang</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" name="total_pengajuan" id="jumlahBarang" minlength="1" value="1">
+                            <small>Jumlah barang disesuaikan dengan kebutuhan jenis barang</small>
+                        </div>
+                        <div class="col-sm-2">
+                            <a id="btnJumlah" class="btn btn-primary">PILIH</a>
+                        </div>
+                    </div>
+                    @if($aksi == 'pengadaan')
+                    <div id="input-barang-pengadaan">
+                        <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
-                            <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
-                            <label class="col-sm-2 col-form-label">Nomor Surat</label>
+                            <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang 1</label>
+                        </div>
+                        <hr style="border: 0.5px solid grey;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Jenis Barang (*)</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/oldat/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                                <select name="kategori_barang_id[]" class="form-control kategori">
+                                    <option value="">-- Pilih Jenis Barang --</option>
+                                    @foreach($kategoriBarang as $dataKategoriBarang)
+                                    <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tanggal Usulan </label>
+                            <label class="col-sm-2 col-form-label">Merk Barang (*)</label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control text-capitalize" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                                <input type="text" class="form-control" name="merk_barang[]" placeholder="Merk">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Pengusul </label>
+                            <label class="col-sm-2 col-form-label">Jumlah</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" value="{{ $pegawai->nama_pegawai }}" readonly>
+                                <input type="number" class="form-control" name="jumlah_barang[]">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
+                            <label class="col-sm-2 col-form-label">Satuan</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->keterangan_pegawai }}" readonly>
+                                <input type="text" class="form-control" name="satuan_barang[]" value="unit" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Unit Kerja </label>
+                            <label class="col-sm-2 col-form-label">Estimasi Harga (*)</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-capitalize" value="{{ $pegawai->unit_kerja }}" readonly>
+                                <input type="number" class="form-control price" name="estimasi_biaya[]" placeholder="Estimasi Harga / Barang" required>
                             </div>
                         </div>
-                        @if($aksi == 'pengadaan')
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Rencana Pengguna (*)</label>
+                            <label class="col-sm-2 col-form-label">Spesifikasi (*)</label>
                             <div class="col-sm-10">
-                                <textarea type="date" name="rencana_pengguna" class="form-control text-capitalize" required></textarea>
+                                <textarea class="form-control" name="spesifikasi_barang[]" placeholder="Contoh: Lenovo, RAM 8 GB" rows="3"></textarea>
                             </div>
                         </div>
-                        @endif
-                        <div class="form-group row mt-4">
-                            <label class="text-muted col-md-12">Informasi Barang</label>
+                    </div>
+                    @else
+                    <div id="input-barang-perbaikan">
+                        <hr style="border: 0.5px solid grey;">
+                        <div class="form-group row">
+                            <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang 1</label>
                         </div>
-                        <div class="form-group row mt-4">
-                            <label class="col-sm-2 col-form-label">Jumlah Jenis Barang</label>
+                        <hr style="border: 0.5px solid grey;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Pilih Barang (*)</label>
+                            <div class="col-sm-10">
+                                <select class="form-control kategori" data-idtarget="1">
+                                    <option value="">-- Pilih Barang --</option>
+                                    @foreach($kategoriBarang as $dataKategoriBarang)
+                                    <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Merk</label>
+                            <div class="col-sm-10">
+                                <select name="kode_barang[]" class="form-control spekBarang select2-barang" id="barang1" data-idtarget="1">
+                                    <option value="">-- Pilih Barang --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Kode Barang</label>
                             <div class="col-sm-4">
-                                <input type="number" class="form-control" name="total_pengajuan" id="jumlahBarang" minlength="1" value="1">
-                                <small>Jumlah barang disesuaikan dengan kebutuhan jenis barang</small>
+                                <span id="kode_barang1"><input type="text" class="form-control" readonly></span>
                             </div>
+                            <label class="col-sm-1 col-form-label">NUP</label>
                             <div class="col-sm-2">
-                                <a id="btnJumlah" class="btn btn-default">PILIH</a>
+                                <span id="nup_barang1"><input type="text" class="form-control" readonly></span>
+                            </div>
+                            <label class="col-sm-1 col-form-label">Tahun</label>
+                            <div class="col-sm-2">
+                                <span id="tahun_perolehan1"><input class="form-control" readonly></span>
                             </div>
                         </div>
-                        @if($aksi == 'pengadaan')
-                        <div id="input-barang-pengadaan">
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Jenis Barang (*)</label>
-                                <div class="col-sm-10">
-                                    <select name="kategori_barang_id[]" class="form-control">
-                                        <option value="">-- Pilih Jenis Barang --</option>
-                                        @foreach($kategoriBarang as $dataKategoriBarang)
-                                        <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Merk Barang (*)</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="merk_barang[]" placeholder="Merk">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Jumlah</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" name="jumlah_barang[]">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Satuan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="satuan_barang[]" value="unit" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Estimasi Harga (*)</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control price" name="estimasi_biaya[]" placeholder="Estimasi Harga / Barang" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Spesifikasi (*)</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="spesifikasi_barang[]" placeholder="Contoh: Lenovo, RAM 8 GB" rows="3"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        @else
-                        <div id="input-barang-perbaikan">
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Pilih Barang (*)</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control kategori" data-idtarget="1">
-                                        <option value="">-- Pilih Barang --</option>
-                                        @foreach($kategoriBarang as $dataKategoriBarang)
-                                        <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Merk</label>
-                                <div class="col-sm-10">
-                                    <select name="kode_barang[]" class="form-control spekBarang select2-barang" id="barang1" data-idtarget="1">
-                                        <option value="">-- Pilih Barang --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Kode Barang</label>
-                                <div class="col-sm-4">
-                                    <span id="kode_barang1"><input type="text" class="form-control" readonly></span>
-                                </div>
-                                <label class="col-sm-2 col-form-label">NUP</label>
-                                <div class="col-sm-4">
-                                    <span id="nup_barang1"><input type="text" class="form-control" readonly></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Jumlah</label>
-                                <div class="col-sm-4">
-                                    <span id="jumlah_barang1"><input class="form-control" readonly></span>
-                                </div>
-                                <label class="col-sm-2 col-form-label">Satuan</label>
-                                <div class="col-sm-4">
-                                    <span id="satuan_barang1"><input class="form-control" readonly></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Tahun Perolehan</label>
-                                <div class="col-sm-4">
-                                    <span id="tahun_perolehan1"><input class="form-control" readonly></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Keterangan Kerusakan</label>
-                                <div class="col-sm-10">
-                                    <textarea name="keterangan_kerusakan[]" class="form-control" rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">&nbsp;</label>
+                            <label class="col-sm-2 col-form-label">Keterangan Kerusakan</label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">Submit</button>
-                                <button type="reset" class="btn btn-default">BATAL</button>
+                                <textarea name="keterangan_kerusakan[]" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    @endif
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <div class="col-sm-10 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah terisi dengan benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -220,7 +214,7 @@
     $(function() {
         let j = 1;
         let id = "{{ $aksi }}"
-
+        $('.kategori').select2()
 
         // Jumlah Barang yang akan diperbaiki
         $('#btnJumlah').click(function() {
@@ -233,11 +227,15 @@
                     ++j;
                     $("#input-barang-pengadaan").append(
                         `<div class="input-barang-pengadaan">
-                            <hr>
+                            <hr style="border: 0.5px solid grey;">
+                            <div class="form-group row">
+                                <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang `+j+`</label>
+                            </div>
+                            <hr style="border: 0.5px solid grey;">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Jenis Barang</label>
                                 <div class="col-sm-10">
-                                    <select name="kategori_barang_id[]" class="form-control">
+                                    <select name="kategori_barang_id[]" class="form-control kategori">
                                         <option value="">-- Pilih Jenis Barang --</option>
                                         @foreach($kategoriBarang as $dataKategoriBarang)
                                         <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
@@ -287,11 +285,15 @@
                     ++j;
                     $("#input-barang-perbaikan").append(
                         `<div class="input-barang-perbaikan">
-                            <hr>
+                            <hr style="border: 0.5px solid grey;">
+                            <div class="form-group row">
+                                <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang ` + j + `</label>
+                            </div>
+                            <hr style="border: 0.5px solid grey;">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Pilih Barang (*)</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control kategori" data-idtarget="`+j+`">
+                                    <select class="form-control barang kategori" data-idtarget="` + j + `">
                                         <option value="">-- Pilih Barang --</option>
                                         @foreach($kategoriBarang as $dataKategoriBarang)
                                         <option value="{{ $dataKategoriBarang->id_kategori_barang }}">{{ $dataKategoriBarang->kategori_barang }}</option>
@@ -302,7 +304,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Merk</label>
                                 <div class="col-sm-10">
-                                    <select name="kode_barang[]" class="form-control spekBarang" id="barang`+j+`" data-idtarget="`+j+`">
+                                    <select name="kode_barang[]" class="form-control spekBarang" id="barang` + j + `" data-idtarget="` + j + `">
                                         <option value="">-- Pilih Barang --</option>
                                     </select>
                                 </div>
@@ -310,40 +312,31 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Kode Barang</label>
                                 <div class="col-sm-4">
-                                    <span id="kode_barang`+j+`"><input type="text" class="form-control" readonly></span>
+                                    <span id="kode_barang` + j + `"><input type="text" class="form-control" readonly></span>
                                 </div>
-                                <label class="col-sm-2 col-form-label">NUP</label>
-                                <div class="col-sm-4">
-                                    <span id="nup_barang`+j+`"><input type="text" class="form-control" readonly></span>
+                                <label class="col-sm-1 col-form-label">NUP</label>
+                                <div class="col-sm-2">
+                                    <span id="nup_barang` + j + `"><input type="text" class="form-control" readonly></span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Jumlah</label>
-                                <div class="col-sm-4">
-                                    <span id="jumlah_barang`+j+`"><input class="form-control" readonly></span>
-                                </div>
-                                <label class="col-sm-2 col-form-label">Satuan</label>
-                                <div class="col-sm-4">
-                                    <span id="satuan_barang`+j+`"><input class="form-control" readonly></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Tahun Perolehan</label>
-                                <div class="col-sm-10">
-                                    <span id="tahun_perolehan`+j+`"><input class="form-control" readonly></span>
+                                <label class="col-sm-1 col-form-label">Tahun Perolehan</label>
+                                <div class="col-sm-2">
+                                    <span id="tahun_perolehan` + j + `"><input class="form-control" readonly></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Keterangan Kerusakan</label>
                                 <div class="col-sm-10">
-                                    <textarea name="keterangan_kerusakan[`+i+`]" class="form-control" rows="2"></textarea>
+                                    <textarea name="keterangan_kerusakan[` + i + `]" class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>`
                     )
                 }
             }
-        });
+
+            $('.kategori').select2()
+        })
+
 
         // Menampilkan informasi barang yang dipilih
         $(document).on('change', '.kategori', function() {
@@ -372,7 +365,7 @@
             } else {
                 $("#barang" + target).empty();
             }
-        });
+        })
 
         // Menampilkan detail informasi barang
         $(document).on('change', '.spekBarang', function() {
@@ -403,7 +396,7 @@
                                 '<input type="text" class="form-control" value="' + row.satuan_barang + '" readonly>'
                             );
                             $("#tahun_perolehan" + target).append(
-                                `<input type="text" class="form-control" value="{{ \Carbon\Carbon::parse(` + row.tahun_perolehan + `)->isoFormat('Y') }}" readonly>`
+                                '<input type="text" class="form-control" value="' + row.tahun_perolehan + '" readonly>'
                             );
                         });
                     }

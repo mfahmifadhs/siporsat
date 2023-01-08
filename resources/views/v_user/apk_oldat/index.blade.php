@@ -138,26 +138,6 @@
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                @if ($dataUsulan->status_pengajuan == '')
-                                                @if($dataUsulan->status_proses == 'belum proses')
-                                                <span class="border border-warning">
-                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
-                                                </span>
-                                                @elseif($dataUsulan->status_proses == 'proses')
-                                                <span class="border border-primary">
-                                                    <b class="text-primary p-3">Proses</b>
-                                                </span>
-                                                @endif
-                                                @elseif ($dataUsulan->status_pengajuan == 'diterima')
-
-                                                @else
-
-                                                @endif
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center font-weight-bold">
@@ -197,7 +177,7 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi')
+                                                @if ($dataUsulan->status_proses_id == 5 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'perbaikan')
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:

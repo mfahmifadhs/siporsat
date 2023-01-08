@@ -169,6 +169,7 @@
                                             <th>Nama Barang</th>
                                             <th>Merk/Tipe Barang</th>
                                             @if($usulan->jenis_form == 'pengadaan')
+                                            <th>Jumlah</th>
                                             <th>Estimasi Biaya</th>
                                             @else
                                             <th>Tahun Perolehan</th>
@@ -185,6 +186,7 @@
                                             <td>{{ $dataBarang->kategori_barang_id }}</td>
                                             <td>{{ $dataBarang->kategori_barang }}</td>
                                             <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
                                             <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                                         </tr>
                                         @endforeach

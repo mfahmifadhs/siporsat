@@ -32,7 +32,10 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title text-capitalize">Proses {{ $form }} </h3>
+            </div>
             @foreach($pengajuan as $dataPengajuan)
             <form class="form-pengajuan" action="{{ url('super-user/ppk/oldat/pengajuan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                 <div class="card-body">
@@ -70,7 +73,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->jabatan }}" readonly>
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($dataPengajuan->keterangan_pegawai)) }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -94,8 +97,66 @@
                         </div>
                     </div>
                     @endif
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2">Informasi Barang</label>
+                        @if ($dataPengajuan->jenis_form == 'pengadaan')
+                        <div class="col-sm-10">
+                            <table class="table table-bordered text-center">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis Barang</th>
+                                        <th>Merk Barang</th>
+                                        <th>Spesifikasi</th>
+                                        <th>Jumlah</th>
+                                        <th>Estimasi Biaya</th>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                    @foreach($dataPengajuan->detailPengadaan as $dataBarangPengadaan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarangPengadaan->kategori_barang }}</td>
+                                        <td>{{ $dataBarangPengadaan->merk_barang }}</td>
+                                        <td>{{ $dataBarangPengadaan->spesifikasi_barang }}</td>
+                                        <td>{{ $dataBarangPengadaan->jumlah_barang.' '.$dataBarangPengadaan->satuan_barang }}</td>
+                                        <td>Rp {{ number_format($dataBarangPengadaan->estimasi_biaya, 0, ',', '.') }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @else
+                        <div class="col-sm-10">
+                            <table class="table table-bordered text-center">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <td>No</td>
+                                        <td>Jenis Barang</td>
+                                        <td>Merk Barang</td>
+                                        <td>Unit Kerja</td>
+                                        <td>Tahun Perolehan</td>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                    @foreach($dataPengajuan->detailPerbaikan as $dataBarangPerbaikan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarangPerbaikan->kategori_barang }}</td>
+                                        <td>{{ $dataBarangPerbaikan->merk_tipe_barang }}</td>
+                                        <td>{{ $dataBarangPerbaikan->unit_kerja }}</td>
+                                        <td>{{ $dataBarangPerbaikan->tahun_perolehan }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @endif
+                    </div>
 
-                    @if ($form == 'pengadaan')
+                    <!-- @if ($form == 'pengadaan')
                     @foreach($dataPengajuan->detailPengadaan as $i => $dataBarang)
                     <input type="hidden" name="id_barang[]" value="1{{ \Carbon\Carbon::now()->isoFormat('DDMMYY').rand(100,999) }}">
                     <input type="hidden" name="detail_usulan_id[]" value="{{ $dataBarang->id_form_usulan_pengadaan }}">
@@ -240,12 +301,12 @@
                             </p>
                         </div>
                     </div>
-                    @endif
+                    @endif -->
                 </div>
 
-                <div class="card-footer">
-                    <button type="reset" class="btn btn-default btn-md">BATAL</button>
-                    <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
+                <div class="card-footer text-right">
+                    <button type="submit" id="btnSubmit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah data sudah benar ?')">
+                        <i class="fas fa-paper-plane"></i> SUBMIT</button>
                 </div>
             </form>
             @endforeach

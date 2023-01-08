@@ -917,20 +917,17 @@ class UserController extends Controller
 
             $barang = $request->kategori_barang_id;
             foreach ($barang as $i => $kategoriBarang) {
-                $jumlah = $request->jumlah_barang[$i];
-                for ($x = 1; $x <= $jumlah; $x++) {
-                    $idUsulan  = FormUsulanPengadaan::count() + 1;
-                    $detailUsulan   = new FormUsulanPengadaan();
-                    $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan;
-                    $detailUsulan->form_usulan_id         = $idFormUsulan;
-                    $detailUsulan->kategori_barang_id     = $kategoriBarang;
-                    $detailUsulan->merk_barang            = $request->merk_barang[$i];
-                    $detailUsulan->spesifikasi_barang     = $request->spesifikasi_barang[$i];
-                    $detailUsulan->jumlah_barang          = 1;
-                    $detailUsulan->satuan_barang          = $request->satuan_barang[$i];
-                    $detailUsulan->estimasi_biaya         = $request->estimasi_biaya[$i];
-                    $detailUsulan->save();
-                }
+                $idUsulan       = FormUsulanPengadaan::count() + 1;
+                $detailUsulan   = new FormUsulanPengadaan();
+                $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                $detailUsulan->form_usulan_id         = $idFormUsulan;
+                $detailUsulan->kategori_barang_id     = $kategoriBarang;
+                $detailUsulan->merk_barang            = $request->merk_barang[$i];
+                $detailUsulan->spesifikasi_barang     = $request->spesifikasi_barang[$i];
+                $detailUsulan->jumlah_barang          = $request->jumlah_barang[$i];
+                $detailUsulan->satuan_barang          = $request->satuan_barang[$i];
+                $detailUsulan->estimasi_biaya         = $request->estimasi_biaya[$i];
+                $detailUsulan->save();
             }
 
             return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
@@ -951,7 +948,7 @@ class UserController extends Controller
             foreach ($barang as $i => $kodeBarang) {
                 $idUsulan  = FormUsulanPerbaikan::count() + 1;
                 $detailUsulan   = new FormUsulanPerbaikan();
-                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan;
+                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan . Carbon::now()->format('dm');
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->keterangan_perbaikan      = $request->keterangan_kerusakan[$i];
@@ -965,7 +962,7 @@ class UserController extends Controller
             FormUsulan::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = FormUsulan::count();
+            $totalUsulan    = FormUsulan::where('jenis_form', $id)->count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')

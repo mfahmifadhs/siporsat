@@ -32,22 +32,9 @@
                 @endif
             </div>
             <div class="col-md-5 col-12">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/pengadaan') }}" class="btn btn-primary btn-sm btn-block">
-                            <i class="fas fa-laptop fa-2x"></i> <br>
-                            Usulan <br> Pengadaan </a>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <a href="{{ url('super-user/oldat/pengajuan/form-usulan/perbaikan') }}" class="btn btn-primary btn-sm btn-block">
-                            <i class="fas fa-tools fa-2x"></i> <br>
-                            Usulan <br> Perbaikan
-                        </a>
-                    </div>
-                </div>
                 <div class="form-group row">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h3 class="card-title"><small class="font-weight-bold">Usulan Pengadaan</small></h3>
                             </div>
@@ -86,7 +73,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h3 class="card-title"><small class="font-weight-bold">Usulan Servis</small></h3>
                             </div>
