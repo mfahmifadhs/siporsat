@@ -17,8 +17,10 @@ class UsulanKendaraan extends Model
         'form_usulan_id',
         'jenis_aadb',
         'jenis_kendaraan_id',
+        'kualifikasi',
         'merk_tipe_kendaraan',
         'tipe_kendaraan',
-        'tahun_kendaraan'
+        'tahun_kendaraan',
+        'jumlah_pengajuan'
     ];
 }

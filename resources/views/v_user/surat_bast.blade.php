@@ -341,27 +341,29 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
                                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 @elseif($bast->jenis_form == '4')
-                                <table class="table table-bordered m-0 text-capitalize">
+                                <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kendaraan</th>
                                             <th>Bulan Pengadaan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Jumlah Kendaraan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody>
+                                    <tbody class="text-capitalize">
                                         @foreach($bast->usulanVoucher as $dataVoucher)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

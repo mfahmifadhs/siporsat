@@ -308,7 +308,9 @@
                                             <th>Jenis AADB</th>
                                             <th>Jenis Kendaraan</th>
                                             <th>Merk/Tipe</th>
-                                            <th>Tahun Perolehan</th>
+                                            <th>Kualifikasi</th>
+                                            <th>Jumlah Pengajuan</th>
+                                            <th>Tahun</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -319,6 +321,8 @@
                                             <td>{{ $dataKendaraan->jenis_aadb }}</td>
                                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
                                             <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                                            <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                                            <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
                                             <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                         </tr>
                                         @endforeach
@@ -391,23 +395,19 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kendaraan</th>
                                             <th>Bulan Pengadaan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Jumlah Kendaraan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody>
+                                    <tbody class="text-capitalize">
                                         @foreach($usulan->usulanVoucher as $dataVoucher)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>
-                                                {{ $dataVoucher->no_plat_kendaraan }} <br>
-                                                {{ $dataVoucher->merk_tipe_kendaraan }}
-                                                @if ($dataVoucher->pengguna != null)
-                                                <br>{{ $dataVoucher->pengguna }}
-                                                @endif
-                                            </td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

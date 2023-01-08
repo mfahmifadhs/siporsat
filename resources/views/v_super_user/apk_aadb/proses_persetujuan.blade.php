@@ -33,9 +33,9 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Proses Persetujuan Usulan AADB </h3>
+                <h3 class="card-title">Proses Persetujuan </h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
@@ -48,18 +48,20 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pengusul</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" value="{{ $usulan->nama_pegawai }}" readonly>
                         </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jabatan</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" value="{{ $usulan->keterangan_pegawai }}" readonly>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" value="{{ $usulan->tanggal_usulan }}" readonly>
+                            <input type="text" class="form-control" value="{{ Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     @if ($usulan->jenis_form == 4)
@@ -85,8 +87,10 @@
                                     <tr>
                                         <th>No</td>
                                         <th>Jenis AADB</td>
+                                        <th>Kualifikasi</td>
                                         <th>Merk/Tipe Kendaraan</td>
-                                        <th>Tahun Kendaraan</td>
+                                        <th>Jumlah Pengajuan </td>
+                                        <th>Tahun</td>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -95,7 +99,9 @@
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                                        <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
                                         <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
                                         <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                     </tr>
                                     @endforeach
@@ -160,20 +166,19 @@
                                 <thead class="bg-secondary">
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th>Kendaraan</th>
                                         <th>Bulan Pengadaan</th>
+                                        <th>Kendaraan</th>
+                                        <th>Jumlah Pengajuan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
-                                <tbody>
+                                <tbody class="text-capitalize">
                                     @foreach($usulan->usulanVoucher as $dataVoucher)
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td>
-                                            <input type="hidden" name="detail_usulan_id[]" value="{{ $dataVoucher->id_form_usulan_voucher_bbm  }}">
-                                            {{ $dataVoucher->no_plat_kendaraan.' - '.$dataVoucher->merk_tipe_kendaraan.' '.$dataVoucher->tahun_kendaraan }}
-                                        </td>
                                         <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                        <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                        <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

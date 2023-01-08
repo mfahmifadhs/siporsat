@@ -276,7 +276,6 @@ class SuperUserController extends Controller
                         Google2FA::logout();
                         return redirect('super-user/oldat/surat/surat-bast/' . Auth::user()->sess_form_id);
                     }
-
                 } elseif ($usulan->status_proses_id == 4) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_kabag'    => $request->one_time_password,
@@ -1806,7 +1805,7 @@ class SuperUserController extends Controller
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
             $usulan->kode_form           = 'AADB_001';
             $usulan->jenis_form          = $request->jenis_form;
-            $usulan->total_pengajuan     = $request->total_pengajuan;
+            $usulan->total_pengajuan     = count($request->kendaraan_id);
             $usulan->tanggal_usulan      = $request->tanggal_usulan;
             $usulan->rencana_pengguna    = $request->rencana_pengguna;
             $usulan->otp_usulan_pengusul = $request->kode_otp_usulan;
@@ -1814,21 +1813,26 @@ class SuperUserController extends Controller
             $usulan->save();
 
             if ($id == 'pengadaan') {
-                $idUsulan    = UsulanKendaraan::count() + 1;
-                $usulanPengadaan = new UsulanKendaraan();
-                $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan;
-                $usulanPengadaan->form_usulan_id            = $idFormUsulan;
-                $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
-                $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
-                $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_kendaraan . ' ' . $request->tipe_kendaraan;
-                $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
-                $usulanPengadaan->save();
+                $aadb = $request->kendaraan_id;
+                foreach ($aadb as $i => $jenis_kendaraan) {
+                    $idUsulan    = UsulanKendaraan::count() + 1;
+                    $usulanPengadaan = new UsulanKendaraan();
+                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                    $usulanPengadaan->form_usulan_id            = $idFormUsulan;
+                    $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
+                    $usulanPengadaan->jenis_kendaraan_id        = $jenis_kendaraan;
+                    $usulanPengadaan->kualifikasi               = $request->kualifikasi[$i];
+                    $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_tipe_kendaraan[$i];
+                    $usulanPengadaan->jumlah_pengajuan          = $request->jumlah_pengajuan[$i];
+                    $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan[$i];
+                    $usulanPengadaan->save();
+                }
             } elseif ($id == 'servis') {
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan       = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan;
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . Carbon::now()->format('dm');
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1843,21 +1847,22 @@ class SuperUserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . Carbon::now()->format('dm');
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $kendaraan = $request->kendaraan_id;
-                foreach ($kendaraan as $i => $kendaraan_id) {
+                $kualifikasi = $request->kendaraan_id;
+                foreach ($kualifikasi as $i => $kualifikasi) {
                     $idUsulan    = UsulanVoucherBBM::count() + 1;
                     $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . Carbon::now()->format('dm');;
                     $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
-                    $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
                     $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                    $usulanVoucherBBM->kualifikasi                  = $kualifikasi;
+                    $usulanVoucherBBM->jumlah_pengajuan             = $request->jumlah_pengajuan[$i];
                     $usulanVoucherBBM->save();
                 }
             }
@@ -1924,7 +1929,11 @@ class SuperUserController extends Controller
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
-            $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            $kendaraan      = Kendaraan::select('kualifikasi', DB::raw('count(id_kendaraan) as jumlah'))
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+                ->groupBy('kualifikasi')
+                ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                ->where('kualifikasi', '!=', null)
                 ->orderBy('jenis_kendaraan', 'ASC')
                 ->get();
             return view('v_super_user.apk_aadb.usulan', compact('idUsulan', 'aksi', 'jenisKendaraan', 'kendaraan'));
@@ -3275,7 +3284,7 @@ class SuperUserController extends Controller
     public function SubmissionPpk(Request $request, $modul, $tujuan, $aksi, $id)
     {
         if ($modul == 'oldat') {
-            $totalUsulan    = FormUsulan::where('jenis_form', $aksi)->where('no_surat_bast','!=', null)->count();
+            $totalUsulan    = FormUsulan::where('jenis_form', $aksi)->where('no_surat_bast', '!=', null)->count();
             $idBast         = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             if ($aksi == 'proses-pengadaan') {
                 // $idForm = $request->detail_usulan_id;
@@ -3375,9 +3384,14 @@ class SuperUserController extends Controller
 
         if ($modul == 'aadb') {
             if ($tujuan == 'pengajuan') {
+                if ($aksi == 'pengadaan') {
+                    $totalUsulan = UsulanAadb::where('jenis_form', 1)->where('no_surat_bast', null)->count();
+                    $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                } else {
+                    $totalUsulan = UsulanAadb::where('jenis_form', '!=', 1)->where('no_surat_bast', null)->count();
+                    $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                }
 
-                $totalUsulan = UsulanAadb::count();
-                $idBast      = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $form        = $aksi;
                 $tujuan      = 'BAST';
                 $pengajuan   = UsulanAadb::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -3410,87 +3424,83 @@ class SuperUserController extends Controller
 
             if ($tujuan == 'proses-usulan') {
                 if ($aksi == 'pengadaan') {
-                    if ($request->foto_kwitansi == null) {
-                        $fotoKwitansi = $request->foto_lama;
-                    } else {
-                        $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
+                    // if ($request->foto_kwitansi == null) {
+                    //     $fotoKwitansi = $request->foto_lama;
+                    // } else {
+                    //     $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
 
-                        if ($request->hasfile('foto_kwitansi')) {
-                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
-                                $file_old = public_path() . '\gambar\kwitansi\pengadaan\\' . $dataUsulan->lampiran;
-                                unlink($file_old);
-                            }
-                            $file       = $request->file('foto_kwitansi');
-                            $filename   = $file->getClientOriginalName();
-                            $file->move('gambar/kwitansi/pengadaan/', $filename);
-                            $dataUsulan->lampiran = $filename;
-                        } else {
-                            $dataUsulan->lampiran = '';
-                        }
-                        $fotoKwitansi = $dataUsulan->lampiran;
-                    }
+                    //     if ($request->hasfile('foto_kwitansi')) {
+                    //         if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                    //             $file_old = public_path() . '\gambar\kwitansi\pengadaan\\' . $dataUsulan->lampiran;
+                    //             unlink($file_old);
+                    //         }
+                    //         $file       = $request->file('foto_kwitansi');
+                    //         $filename   = $file->getClientOriginalName();
+                    //         $file->move('gambar/kwitansi/pengadaan/', $filename);
+                    //         $dataUsulan->lampiran = $filename;
+                    //     } else {
+                    //         $dataUsulan->lampiran = '';
+                    //     }
+                    //     $fotoKwitansi = $dataUsulan->lampiran;
+                    // }
 
                     UsulanAadb::where('id_form_usulan', $request->id_form_usulan)->update([
                         'tanggal_bast'     => $request->tanggal_bast,
-                        'total_biaya'      => $request->total_biaya,
-                        'lampiran'         => $fotoKwitansi,
                         'no_surat_bast'    => $request->no_surat_bast
                     ]);
 
-                    $kendaraan = new Kendaraan();
-                    $kendaraan->id_kendaraan            = $request->id_kendaraan;
-                    $kendaraan->form_usulan_id          = $request->id_form_usulan;
-                    $kendaraan->unit_kerja_id           = $request->unit_kerja_id;
-                    $kendaraan->jenis_aadb              = $request->jenis_aadb;
-                    $kendaraan->kode_barang             = $request->kode_barang;
-                    $kendaraan->jenis_kendaraan_id      = $request->jenis_kendaraan;
-                    $kendaraan->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
-                    $kendaraan->no_plat_kendaraan       = $request->no_plat_kendaraan;
-                    $kendaraan->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
-                    $kendaraan->no_plat_rhs             = $request->no_plat_rhs;
-                    $kendaraan->mb_stnk_plat_rhs        = $request->mb_stnk_plat_rhs;
-                    $kendaraan->tahun_kendaraan         = $request->tahun_kendaraan;
-                    $kendaraan->kondisi_kendaraan_id    = 1;
-                    $kendaraan->pengguna                = '-';
-                    $kendaraan->save();
+                    // $kendaraan = new Kendaraan();
+                    // $kendaraan->id_kendaraan            = $request->id_kendaraan;
+                    // $kendaraan->form_usulan_id          = $request->id_form_usulan;
+                    // $kendaraan->unit_kerja_id           = $request->unit_kerja_id;
+                    // $kendaraan->jenis_aadb              = $request->jenis_aadb;
+                    // $kendaraan->kode_barang             = $request->kode_barang;
+                    // $kendaraan->jenis_kendaraan_id      = $request->jenis_kendaraan;
+                    // $kendaraan->merk_tipe_kendaraan     = $request->merk_tipe_kendaraan;
+                    // $kendaraan->no_plat_kendaraan       = $request->no_plat_kendaraan;
+                    // $kendaraan->mb_stnk_plat_kendaraan  = $request->mb_stnk_plat_kendaraan;
+                    // $kendaraan->no_plat_rhs             = $request->no_plat_rhs;
+                    // $kendaraan->mb_stnk_plat_rhs        = $request->mb_stnk_plat_rhs;
+                    // $kendaraan->tahun_kendaraan         = $request->tahun_kendaraan;
+                    // $kendaraan->kondisi_kendaraan_id    = 1;
+                    // $kendaraan->pengguna                = '-';
+                    // $kendaraan->save();
 
-                    if ($request->jenis_aadb == 'sewa') {
-                        $idKendaraanSewa = KendaraanSewa::where('id_kendaraan_sewa', 'like', '%' . $request->id_kendaraan . '%')->count();
-                        $kendaraanSewa = new KendaraanSewa();
-                        $kendaraanSewa->id_kendaraan_sewa   = $request->id_kendaraan . $idKendaraanSewa + 1;
-                        $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
-                        $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
-                        $kendaraanSewa->penyedia            = $request->penyedia;
-                        $kendaraanSewa->status_sewa         = 1;
-                        $kendaraanSewa->save();
-                    }
+                    // if ($request->jenis_aadb == 'sewa') {
+                    //     $idKendaraanSewa = KendaraanSewa::where('id_kendaraan_sewa', 'like', '%' . $request->id_kendaraan . '%')->count();
+                    //     $kendaraanSewa = new KendaraanSewa();
+                    //     $kendaraanSewa->id_kendaraan_sewa   = $request->id_kendaraan . $idKendaraanSewa + 1;
+                    //     $kendaraanSewa->kendaraan_id        = $request->id_kendaraan;
+                    //     $kendaraanSewa->mulai_sewa          = $request->mulai_sewa;
+                    //     $kendaraanSewa->penyedia            = $request->penyedia;
+                    //     $kendaraanSewa->status_sewa         = 1;
+                    //     $kendaraanSewa->save();
+                    // }
 
                     return redirect('super-user/verif/usulan-aadb/' . $id);
                 } elseif ($aksi == 'servis') {
-                    if ($request->foto_kwitansi == null) {
-                        $fotoKwitansi = $request->foto_lama;
-                    } else {
-                        $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
+                    // if ($request->foto_kwitansi == null) {
+                    //     $fotoKwitansi = $request->foto_lama;
+                    // } else {
+                    //     $dataUsulan = UsulanAadb::where('id_form_usulan', $id)->first();
 
-                        if ($request->hasfile('foto_kwitansi')) {
-                            if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
-                                $file_old = public_path() . '\gambar\kwitansi\servis\\' . $dataUsulan->lampiran;
-                                unlink($file_old);
-                            }
-                            $file       = $request->file('foto_kwitansi');
-                            $filename   = $file->getClientOriginalName();
-                            $file->move('gambar/kwitansi/servis/', $filename);
-                            $dataUsulan->lampiran = $filename;
-                        } else {
-                            $dataUsulan->lampiran = '';
-                        }
-                        $fotoKwitansi = $dataUsulan->lampiran;
-                    }
+                    //     if ($request->hasfile('foto_kwitansi')) {
+                    //         if ($dataUsulan->lampiran != ''  && $dataUsulan->lampiran != null) {
+                    //             $file_old = public_path() . '\gambar\kwitansi\servis\\' . $dataUsulan->lampiran;
+                    //             unlink($file_old);
+                    //         }
+                    //         $file       = $request->file('foto_kwitansi');
+                    //         $filename   = $file->getClientOriginalName();
+                    //         $file->move('gambar/kwitansi/servis/', $filename);
+                    //         $dataUsulan->lampiran = $filename;
+                    //     } else {
+                    //         $dataUsulan->lampiran = '';
+                    //     }
+                    //     $fotoKwitansi = $dataUsulan->lampiran;
+                    // }
 
                     UsulanAadb::where('id_form_usulan', $id)->update([
                         'tanggal_bast'     => $request->tanggal_bast,
-                        'total_biaya'      => $request->total_biaya,
-                        'lampiran'         => $fotoKwitansi,
                         'no_surat_bast'    => $request->no_surat_bast
                     ]);
 
@@ -3524,6 +3534,10 @@ class SuperUserController extends Controller
                         UsulanPerpanjanganSTNK::where('id_form_usulan_perpanjangan_stnk', $detail_usulan_id)
                             ->update([
                                 'mb_stnk_baru' => $request->mb_stnk_baru[$i]
+                            ]);
+                        Kendaraan::where('id_kendaraan', $request->id_kendaraan[$i])
+                            ->update([
+                                'mb_stnk_plat_kendaraan' => $request->mb_stnk_baru[$i]
                             ]);
                     }
 
@@ -3600,7 +3614,6 @@ class SuperUserController extends Controller
 
                 return view('v_super_user.apk_ukt.ppk_proses', compact('pengajuan', 'id', 'totalUsulan', 'form'));
             } else {
-                dd($request->all());
                 UsulanUkt::where('id_form_usulan', $id)->update([
                     'tanggal_bast'     => $request->tanggal_bast,
                     'no_surat_bast'    => $request->no_surat_bast

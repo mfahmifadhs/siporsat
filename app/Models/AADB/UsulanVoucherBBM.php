@@ -16,6 +16,8 @@ class UsulanVoucherBBM extends Model
         'id_form_usulan_voucher_bbm',
         'form_usulan_id',
         'kendaraan_id',
-        'bulan_pengadaan'
+        'bulan_pengadaan',
+        'kualifikasi',
+        'jumlah_pengajuan'
     ];
 }

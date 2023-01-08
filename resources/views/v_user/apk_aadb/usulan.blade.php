@@ -33,7 +33,7 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Usulan Pengajuan Pengadaan Kendaraan </h3>
             </div>
@@ -63,54 +63,64 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jumlah Pengajuan (*)</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" name="total_pengajuan" placeholder="Jumlah Pengajuan Kendaraan" required>
                         </div>
+                    </div> -->
+                    <hr style="border: 0.5px solid grey;">
+                    <div class="form-group row">
+                        <label class="col-sm-8 text-muted float-left mt-2">Informasi Kendaraan</label>
+                        <label class="col-sm-4 text-muted text-right">
+                            <a id="btn-total" class="btn btn-primary">
+                                <i class="fas fa-plus-circle"></i> Tambah List Baru
+                            </a>
+                        </label>
+                    </div>
+                    <hr style="border: 0.5px solid grey;">
+
+                    <div id="section-kendaraan">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Jenis*</label>
+                            <div class="col-sm-4">
+                                <select name="kendaraan_id[]" class="form-control" required>
+                                    @foreach($jenisKendaraan as $dataJenisKendaraan)
+                                    <option value="{{ $dataJenisKendaraan->id_jenis_kendaraan }}">{{ $dataJenisKendaraan->jenis_kendaraan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Merk/Tipe*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="merk_tipe_kendaraan[]" placeholder="Contoh : Toyota Avanza" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Jumlah*</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" name="jumlah_pengajuan[]" value="1" min="1" required>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Tahun*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="tahun_kendaraan[]" placeholder="Tahun Kendaraan" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select name="kualifikasi[]" class="form-control" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 text-muted">Informasi Kendaraan</label>
-                        <div class="col-sm-12">
-                            <hr>
-                        </div>
-                        <label class="col-sm-2 col-form-label">Jenis (*)</label>
-                        <div class="col-sm-10">
-                            <select name="jenis_kendaraan" class="form-control" required>
-                                @foreach($jenisKendaraan as $dataJenisKendaraan)
-                                <option value="{{ $dataJenisKendaraan->id_jenis_kendaraan }}">{{ $dataJenisKendaraan->jenis_kendaraan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Merk (*)</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="merk_kendaraan" placeholder="Contoh : Toyota, Honda" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tipe (*)</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="tipe_kendaraan" placeholder="Contoh: CRV, HRV" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tahun (*)</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="tahun_kendaraan" placeholder="Tahun Kendaraan" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Rencana Pengguna (*)</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" name="rencana_pengguna" placeholder="Contoh: Untuk Operasional" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')">Submit</button>
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT</button>
                         </div>
                     </div>
                 </form>
@@ -134,7 +144,7 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Usulan Pengajuan Servis Kendaraan </h3>
             </div>
@@ -255,7 +265,7 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Usulan Pengajuan Perpanjangan STNK</h3>
             </div>
@@ -347,7 +357,7 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">Usulan Pengajuan Pengadaan Voucher BBM </h3>
             </div>
@@ -374,8 +384,39 @@
                             <input type="month" class="form-control" name="bulan_pengadaan" value="{{ \Carbon\carbon::now()->isoFormat('Y-MM') }}" required>
                         </div>
                     </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label">Kualifikasi</label>
+                        <div class="col-sm-10">
+                            <table class="table table-bordered">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th class="text-center pt-3" style="width: 1%;">No</th>
+                                        <th>Kualifikasi</th>
+                                        <th class="text-center" style="width: 20%;">Jumlah Kendaraan</th>
+                                        <th class="text-center" style="width: 20%;">Jumlah Permintaan</th>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                @foreach ($kendaraan as $i => $dataKualifikasi)
+                                    <tr class="text-uppercase">
+                                        <td class="text-center pt-3">{{ $i + 1 }}</td>
+                                        <td class="text-uppercase pt-3">
+                                            <input type="hidden" name="kendaraan_id[]" value="{{ $dataKualifikasi->kualifikasi }}">
+                                            KENDARAAN {{ $dataKualifikasi->kualifikasi }}
+                                        </td>
+                                        <td class="text-center pt-3">{{ $dataKualifikasi->jumlah }} KENDARAAN</td>
+                                        <td class="text-center">
+                                            <input type="number" class="form-control text-center" name="jumlah_pengajuan[]" min="1" max="{{ $dataKualifikasi->jumlah }}" value="1">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                    <label class="col-form-label text-danger" style="font-size:13px;">
+                    <!-- <label class="col-form-label text-danger" style="font-size:13px;">
                         Mohon untuk memilih kendaraan secara berurutan.
                     </label>
                     <div id="section-kendaraan">
@@ -413,7 +454,7 @@
                                 Jika kendaraan tidak muncul, mohon untuk melengkapi no plat, dan pengguna kendaraan dahulu pada halaman detail kendaraan.
                             </span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="card-footer text-right">
                     <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
@@ -487,7 +528,62 @@
         $('#btn-total').click(function() {
             let i
             let aksi = "{{ $aksi }}"
-            if (aksi == 'voucher-bbm') {
+            console.log(aksi)
+            if (aksi == 'pengadaan') {
+                ++j
+                $("#section-kendaraan").append(
+                    `<div class="row-kendaraan">
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-2 mb-1">
+                            <div class="col-md-6">
+                                <label class="text-muted">Informasi Kendaraan ` + j + `</label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a class="btn btn-danger btn-sm remove-list">
+                                    <i class="fas fa-minus-circle"></i> hapus list
+                                </a>
+                            </div>
+                        </div>
+                        <hr style="border: 0.1px solid grey;" class="m-0">
+                        <div class="form-group row mt-3">
+                            <label class="col-sm-2 col-form-label">Jenis*</label>
+                            <div class="col-sm-4">
+                                <select name="kendaraan_id[]" class="form-control" required>
+                                    @foreach($jenisKendaraan as $dataJenisKendaraan)
+                                    <option value="{{ $dataJenisKendaraan->id_jenis_kendaraan }}">{{ $dataJenisKendaraan->jenis_kendaraan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Merk/Tipe*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="merk_tipe_kendaraan[]" placeholder="Contoh : Toyota Avanza" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Jumlah*</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" name="jumlah_pengajuan[]" value="1" min="1" required>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Tahun*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="tahun_kendaraan[]" placeholder="Tahun Kendaraan" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
+                            <div class="col-sm-4">
+                                <select name="kualifikasi[]" class="form-control" required>
+                                    <option value="">-- Pilih Kualifikasi --</option>
+                                    <option value="jabatan">Kendaraan Jabatan</option>
+                                    <option value="operasional">Kendaraan Operasional</option>
+                                    <option value="bermotor">Kendaraan Bermotor</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                )
+            } else if (aksi == 'voucher-bbm') {
                 ++j
                 $("#section-kendaraan").append(
                     `<div class="row-kendaraan">

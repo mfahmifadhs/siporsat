@@ -253,28 +253,8 @@
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-xl">
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                @if ($dataUsulan->status_pengajuan == '')
-                                                @if($dataUsulan->status_proses == 'belum proses')
-                                                <span class="border border-warning">
-                                                    <b class="text-warning p-3">Menunggu Persetujuan</b>
-                                                </span>
-                                                @elseif($dataUsulan->status_proses == 'proses')
-                                                <span class="border border-primary">
-                                                    <b class="text-primary p-3">Proses</b>
-                                                </span>
-                                                @endif
-                                                @elseif ($dataUsulan->status_pengajuan == 'diterima')
-
-                                                @else
-
-                                                @endif
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center font-weight-bold">
@@ -304,12 +284,6 @@
                                                     <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                                     <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                                 </div>
-                                                @if($dataUsulan->jenis_form == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Rencana Pengguna </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
-                                                </div>
-                                                @endif
                                                 @if ($dataUsulan->otp_usulan_pengusul != null)
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
@@ -362,8 +336,9 @@
                                                             <div class="col-sm-2">Bukti Pembayaran</div>
                                                             @elseif ($dataUsulan->jenis_form == 4)
                                                             <div class="col-sm-2 text-center">No</div>
-                                                            <div class="col-sm-5">Kendaraan</div>
-                                                            <div class="col-sm-5">Bulan Pengadaan</div>
+                                                            <div class="col-sm-4">Bulan Pengadaan</div>
+                                                            <div class="col-sm-3">Kendaraan</div>
+                                                            <div class="col-sm-3">Jumlah Kendaraan</div>
                                                             @endif
                                                         </div>
                                                         <hr class="bg-secondary">
@@ -445,11 +420,9 @@
                                                         @foreach($dataUsulan->usulanVoucher as $i =>$dataVoucher)
                                                         <div class="form-group row">
                                                             <div class="col-sm-2 text-center">{{ $i+1 }}</div>
-                                                            <div class="col-sm-5">
-                                                                {{ $dataVoucher->no_plat_kendaraan }} <br>
-                                                                {{ $dataVoucher->merk_tipe_kendaraan.' '.$dataVoucher->tahun_kendaraan }}
-                                                            </div>
-                                                            <div class="col-sm-5">{{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
+                                                            <div class="col-sm-4">{{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
+                                                            <div class="col-sm-3 text-capitalize">Kendaraan {{ $dataVoucher->kualifikasi }}</div>
+                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

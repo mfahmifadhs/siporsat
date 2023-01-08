@@ -61,9 +61,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 form-group">
-                <!-- <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
+                <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
-                </a> -->
+                </a>
                 @if (Auth::user()->pegawai->jabatan_id == 2 && $bast->status_proses_id == 4)
                 <a href="{{ url('super-user/verif/usulan-aadb/'. $bast->id_form_usulan) }}" class="btn btn-success" title="Konfirmasi BAST" onclick="return confirm('Konfirmasi BAST')">
                     <i class="fas fa-file-signature"></i>
@@ -102,9 +102,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group text-capitalize">
+                                <div class="form-group row mb-3 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        berita acara serah terima <br>
+                                        nomor surat : {{ $bast->no_surat_bast }}
+                                    </div>
+                                </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $bast->no_surat_bast }}</div>
+                                    <div class="col-md-2">Tanggal</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -119,19 +125,9 @@
                                     <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
                                     <div class="col-md-9">: {{ $bast->total_pengajuan }} kendaraan</div>
                                 </div>
-                                @if($bast->rencana_pengguna != null)
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
-                                </div>
-                                @endif
                             </div>
                             <div class="col-12 table-responsive mt-4 mb-5">
                                 @if($bast->jenis_form == '1')
@@ -139,39 +135,25 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            @if($jenisAadb->jenis_aadb == 'bmn')
-                                            <th>Kode Barang</th>
-                                            @endif
                                             <th>Jenis AADB</th>
-                                            <th>Nama Kendaraan</th>
+                                            <th>Jenis Kendaraan</th>
                                             <th>Merk/Tipe</th>
-                                            @if($jenisAadb->jenis_aadb == 'sewa')
-                                            <th>Mulai Sewa</th>
-                                            <th>Penyedia</th>
-                                            @endif
+                                            <th>Kualifikasi</th>
+                                            <th>Jumlah Pengajuan</th>
+                                            <th>Tahun</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody class="text-capitalize">
-                                        @foreach($kendaraan as $dataKendaraan)
+                                    <tbody>
+                                        @foreach($bast->usulanKendaraan as $dataKendaraan)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            @if($dataKendaraan->jenis_aadb == 'bmn')
-                                            <td>{{ $dataKendaraan->kode_barang }}</td>
-                                            @endif
                                             <td>{{ $dataKendaraan->jenis_aadb }}</td>
                                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
-                                            <td>
-                                                <span class="text-uppercase">{{ $dataKendaraan->no_plat_kendaraan }}</span> <br>
-                                                {{ $dataKendaraan->merk_tipe_kendaraan.' '.$dataKendaraan->tahun_kendaraan }}
-                                            </td>
-                                            @if($dataKendaraan->jenis_aadb == 'sewa')
-                                            @foreach($dataKendaraan->kendaraanSewa as $dataSewa)
-                                            <td>{{ $dataSewa->mulai_sewa }}</td>
-                                            <td>{{ $dataSewa->penyedia }}</td>
-                                            @endforeach
-                                            @endif
-
+                                            <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                                            <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                                            <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
+                                            <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -221,27 +203,29 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
                                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 @elseif($bast->jenis_form == '4')
-                                <table class="table table-bordered m-0 text-capitalize">
+                                <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kendaraan</th>
                                             <th>Bulan Pengadaan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Jumlah Kendaraan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody>
+                                    <tbody class="text-capitalize">
                                         @foreach($bast->usulanVoucher as $dataVoucher)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

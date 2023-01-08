@@ -1142,6 +1142,7 @@ class UserController extends Controller
             ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
             ->where('pegawai_id', Auth::user()->pegawai_id)
@@ -1348,7 +1349,6 @@ class UserController extends Controller
     public function SubmissionAadb(Request $request, $aksi, $id)
     {
         if ($aksi == 'status') {
-
             $pengajuan  = UsulanAadb::with('usulanKendaraan')
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1384,18 +1384,13 @@ class UserController extends Controller
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
-            if ($request->jenis_form == 1) {
-                $totalPengajuan = $request->total_pengajuan;
-            } else {
-                $totalPengajuan = count($request->kendaraan_id);
-            }
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
             $usulan->kode_form           = 'AADB_001';
             $usulan->jenis_form          = $request->jenis_form;
-            $usulan->total_pengajuan     = $totalPengajuan;
+            $usulan->total_pengajuan     = count($request->kendaraan_id);
             $usulan->tanggal_usulan      = $request->tanggal_usulan;
             $usulan->rencana_pengguna    = $request->rencana_pengguna;
             $usulan->otp_usulan_pengusul = $request->kode_otp_usulan;
@@ -1403,21 +1398,27 @@ class UserController extends Controller
             $usulan->save();
 
             if ($id == 'pengadaan') {
-                $idUsulan    = UsulanKendaraan::count() + 1;
-                $usulanPengadaan = new UsulanKendaraan();
-                $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan;
-                $usulanPengadaan->form_usulan_id            = $idFormUsulan;
-                $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
-                $usulanPengadaan->jenis_kendaraan_id        = $request->jenis_kendaraan;
-                $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_kendaraan . ' ' . $request->tipe_kendaraan;
-                $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan;
-                $usulanPengadaan->save();
+                $aadb = $request->kendaraan_id;
+                foreach ($aadb as $i => $jenis_kendaraan) {
+                    $idUsulan    = UsulanKendaraan::count() + 1;
+                    $usulanPengadaan = new UsulanKendaraan();
+                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                    $usulanPengadaan->form_usulan_id            = $idFormUsulan;
+                    $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
+                    $usulanPengadaan->jenis_kendaraan_id        = $jenis_kendaraan;
+                    $usulanPengadaan->kualifikasi               = $request->kualifikasi[$i];
+                    $usulanPengadaan->merk_tipe_kendaraan       = $request->merk_tipe_kendaraan[$i];
+                    $usulanPengadaan->jumlah_pengajuan          = $request->jumlah_pengajuan[$i];
+                    $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan[$i];
+                    $usulanPengadaan->save();
+                }
+
             } elseif ($id == 'servis') {
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan;
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . Carbon::now()->format('dm');;
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1433,21 +1434,22 @@ class UserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . Carbon::now()->format('dm');;
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $kendaraan = $request->kendaraan_id;
-                foreach ($kendaraan as $i => $kendaraan_id) {
+                $kualifikasi = $request->kendaraan_id;
+                foreach ($kualifikasi as $i => $kualifikasi) {
                     $idUsulan    = UsulanVoucherBBM::count() + 1;
                     $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan;
+                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . Carbon::now()->format('dm');;
                     $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
-                    $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
                     $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                    $usulanVoucherBBM->kualifikasi                  = $kualifikasi;
+                    $usulanVoucherBBM->jumlah_pengajuan             = $request->jumlah_pengajuan[$i];
                     $usulanVoucherBBM->save();
                 }
             }
@@ -1465,7 +1467,11 @@ class UserController extends Controller
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
-            $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            $kendaraan      = Kendaraan::select('kualifikasi', DB::raw('count(id_kendaraan) as jumlah'))
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+                ->groupBy('kualifikasi')
+                ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                ->where('kualifikasi', '!=', null)
                 ->orderBy('jenis_kendaraan', 'ASC')
                 ->get();
             return view('v_user.apk_aadb.usulan', compact('idUsulan', 'aksi', 'jenisKendaraan', 'kendaraan'));

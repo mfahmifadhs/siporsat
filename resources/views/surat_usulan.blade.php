@@ -343,7 +343,7 @@
                                             @foreach($usulan->usulanVoucher as $dataVoucher)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                                                <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                                             </tr>
                                             @endforeach

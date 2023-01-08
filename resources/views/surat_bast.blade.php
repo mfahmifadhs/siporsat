@@ -303,7 +303,7 @@
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
                                                 <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

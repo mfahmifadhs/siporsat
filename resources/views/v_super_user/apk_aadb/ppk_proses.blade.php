@@ -4,28 +4,29 @@
 
 <div class="content-header">
     <div class="container">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-6">
-                <h1 class="m-0">Usulan Pengajuan AADB</h1>
+                <h4 class="m-0">Alat Angkutan Darat Bermotor</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/aadb/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Usulan Pengajuan AADB</li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Buat Berita Acara</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
 
+
 @if ($aksi == 1)
 
-@foreach($pengajuan->usulanKendaraan as $dataPengajuan)
 <section class="content">
     <div class="container">
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Pengadaan Kendaraan </h3>
+                <h3 class="card-title">Penyelesaian Pekerjaan (Berita Acara Serah Terima)</h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/ppk/aadb/proses-usulan/pengadaan/'. $pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
@@ -36,7 +37,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nomor BAST</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/pengadaan/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KN.01.03/2/'.$idBast.'/'.Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,12 +47,18 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jenis AADB</label>
+                        <label class="col-sm-2 col-form-label">Nama Pengusul </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="jenis_aadb" value="{{ $dataPengajuan->jenis_aadb }}" readonly>
+                            <input type="text" class="form-control" value="{{ $pengajuan->nama_pegawai }}" readonly>
                         </div>
                     </div>
-                    @if($dataPengajuan->jenis_aadb == 'sewa')
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Jabatan Pengusul </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($pengajuan->keterangan_pegawai)) }}" readonly>
+                        </div>
+                    </div>
+                    <!-- @if($pengajuan->jenis_aadb == 'sewa')
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Mulai Sewa (*)</label>
                         <div class="col-sm-10">
@@ -64,32 +71,62 @@
                             <input type="text" class="form-control" name="penyedia" placeholder="Perusahaan Penyedia Sewa Kendaraan" required>
                         </div>
                     </div>
-                    @endif
-                    <div class="form-group row">
+                    @endif -->
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label">Informasi Kendaraan</label>
+                        <div class="col-sm-10">
+                            <table class="table table-bordered text-center">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th>No</td>
+                                        <th>Jenis AADB</td>
+                                        <th>Kualifikasi</td>
+                                        <th>Merk/Tipe Kendaraan</td>
+                                        <th>Jumlah Pengajuan </td>
+                                        <th>Tahun</td>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                    @foreach($pengajuan->usulanKendaraan as $dataKendaraan)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                                        <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                                        <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                                        <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
+                                        <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row">
                         <label class="col-sm-12 form-group text-muted">Informasi Kendaraan</label>
                         <label class="col-sm-2 col-form-label">Kode Barang</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="kode_barang" value="{{ $dataPengajuan->id_jenis_kendaraan }}" readonly>
+                            <input type="text" class="form-control" name="kode_barang" value="{{ $pengajuan->id_jenis_kendaraan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jenis </label>
                         <div class="col-sm-10">
                             <select class="form-control" name="jenis_kendaraan" readonly>
-                                <option value="{{ $dataPengajuan->id_jenis_kendaraan }}">{{ $dataPengajuan->jenis_kendaraan }}</option>
+                                <option value="{{ $pengajuan->id_jenis_kendaraan }}">{{ $pengajuan->jenis_kendaraan }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Merk/Tipe</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="merk_tipe_kendaraan" value="{{ $dataPengajuan->merk_tipe_kendaraan }}" readonly>
+                            <input type="text" class="form-control" name="merk_tipe_kendaraan" value="{{ $pengajuan->merk_tipe_kendaraan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tahun</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="tahun_kendaraan" value="{{ $dataPengajuan->tahun_kendaraan }}" readonly>
+                            <input type="text" class="form-control" name="tahun_kendaraan" value="{{ $pengajuan->tahun_kendaraan }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -145,11 +182,12 @@
                             <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
                             </p>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan pengadaan kendaraan ?')">Submit</button>
+                    </div> -->
+                    <div class="form-group row pt-3">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -157,7 +195,6 @@
         </div>
     </div>
 </section>
-@endforeach
 
 @elseif ($aksi == 2)
 
@@ -174,9 +211,9 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Servis Kendaraan </h3>
+                <h3 class="card-title">Penyelesaian Pekerjaan (Berita Acara Serah Terima)</h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/ppk/aadb/proses-usulan/servis/'.$pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
@@ -184,7 +221,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">No. Surat BAST</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/servis/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KN.04.02/2/'.$idBast.'/'.Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -236,7 +273,7 @@
                         </div>
                     </div>
                     @endforeach
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-sm-12 text-muted">Bukti Pembayaran</label>
                         <label class="col-sm-3 col-form-label">Biaya Perbaikan (*)</label>
                         <div class="col-sm-9">
@@ -262,11 +299,12 @@
                             <span class="help-block" style="font-size: 12px;">Format foto jpg/jpeg/png dan max 4 MB</span>
                             </p>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">&nbsp;</label>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                    </div> -->
+                    <div class="form-group row pt-3">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -290,9 +328,9 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Perpanjangan STNK</h3>
+                <h3 class="card-title">Penyelesaian Pekerjaan (Berita Acara Serah Terima)</h3>
             </div>
             <div class="card-body">
                 <form action="{{ url('super-user/ppk/aadb/proses-usulan/perpanjangan-stnk/'.$pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
@@ -302,7 +340,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">No. Surat BAST</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/perpanjanganstnk/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KN.04.02/2/'.$idBast.'/'.Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -328,6 +366,7 @@
                             <label class="col-sm-3 col-form-label">Nama Kendaraan</label>
                             <div class="col-sm-3">
                                 <input type="hidden" name="detail_usulan_id[]" value="{{  $dataStnk->id_form_usulan_perpanjangan_stnk }}">
+                                <input type="hidden" name="id_kendaraan[]" value="{{  $dataStnk->kendaraan_id }}">
                                 <input type="text" class="form-control" value="{{ $dataStnk->merk_tipe_kendaraan }}" readonly>
                             </div>
                             <label class="col-sm-3 col-form-label">Masa Berlaku STNK</label>
@@ -339,7 +378,7 @@
                         </div>
                     </div>
                     @endforeach
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-sm-12 text-muted">Bukti Pembayaran</label>
                         <label class="col-sm-3 col-form-label">Total Biaya Perpanjangan STNK (*)</label>
                         <div class="col-sm-9">
@@ -354,17 +393,17 @@
                             <span class="help-block" style="font-size: 12px;">Jika lebih dari 1 kendaraan, foto STNK dijadikan 1 dalam file dengan format PDF.</span>
                             </p>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">&nbsp;</label>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                    </div> -->
+                    <div class="form-group row pt-3">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
     </div>
 </section>
 
@@ -383,25 +422,43 @@
             </div>
             @endif
         </div>
-        <div class="card">
+        <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title">Usulan Pengajuan Pengadaan Voucher BBM </h3>
+                <h3 class="card-title">Penyelesaian Pekerjaan (Berita Acara Serah Terima)</h3>
             </div>
             <div class="card-body">
-            <form action="{{ url('super-user/ppk/aadb/proses-usulan/voucher-bbm/'.$pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('super-user/ppk/aadb/proses-usulan/voucher-bbm/'.$pengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ rand(1000,9999) }}">
                     <input type="hidden" name="jenis_form" value="4">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat BAST</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'bast/aadb/voucherbbm/'.$idBast.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KN.04.02/2/'.$idBast.'/'.Carbon\Carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal Selesai Proses</label>
+                        <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ Carbon\carbon::parse($pengajuan->tanggal_bast)->isoFormat('DD MMMM Y') }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Pengusul</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ $pengajuan->nama_pegawai }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Jabatan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($pengajuan->keterangan_pegawai)) }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Unit Kerja</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($pengajuan->unit_kerja)) }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -410,32 +467,37 @@
                             <input type="number" class="form-control" value="{{ $pengajuan->total_pengajuan }}" readonly>
                         </div>
                     </div>
-                    <div class="form-group row mt-4">
-                        <div class="col-md-12">
-                            <label class="text-muted">Informasi Kendaraan</label>
-                        </div>
-                    </div>
-                    @foreach($pengajuan->usulanVoucher as $dataVoucher)
-                    <div id="section-kendaraan" class="mb-4">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Kendaraan</label>
-                            <div class="col-sm-10">
-                                <input type="hidden" name="detail_usulan_id[]" value="{{  $dataVoucher->id_form_usulan_voucher_bbm }}">
-                                <input type="text" class="form-control" value="{{ $dataVoucher->merk_tipe_kendaraan }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <label class="text-muted col-sm-2">Informasi Kendaraan</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                            <table class="table table-bordered">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th>Bulan Pengadaan</th>
+                                        <th>Kendaraan</th>
+                                        <th>Jumlah Pengajuan</th>
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody class="text-capitalize">
+                                    @foreach($pengajuan->usulanVoucher as $dataVoucher)
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                        <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                        <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group row pt-3">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -443,7 +505,6 @@
         </div>
     </div>
 </section>
-
 @endif
 
 @section('js')

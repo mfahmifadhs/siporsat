@@ -33,6 +33,7 @@ use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkLampiran;
+use App\Models\Atk\UsulanAtkPermintaan;
 use App\Models\GDN\UsulanGdn;
 use App\Models\GDN\UsulanGdnDetail;
 use App\Models\OLDAT\Barang;
@@ -509,40 +510,60 @@ class SuperAdminController extends Controller
         } elseif ($aksi == 'hapus') {
             // Hapus Detail Usulan
             $usulan = UsulanAtk::where('id_form_usulan', $id)->first();
-            $detail = UsulanAtkDetail::select('atk_id', DB::raw('sum(jumlah_pengajuan) as total'))
-                ->groupBy('atk_id')
-                ->where('form_usulan_id', $id)
-                ->get();
-
-            if ($usulan->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5)
-            {
-                $lampiran = UsulanAtkLampiran::where('form_usulan_id', $id)->get();
-                foreach ($lampiran as $atkLampiran)
-                {
-                    $file_old = public_path() . '\gambar\kwitansi\atk_pengadaan\\' . $atkLampiran->file_kwitansi;
-                    unlink($file_old);
-                    UsulanAtkLampiran::where('form_usulan_id', $id)->delete();
+            if ($usulan->jenis_form == 'pengadaan') {
+                $pengadaan = UsulanAtkPengadaan::where('form_usulan_id',$id)->get();
+                foreach ($pengadaan as $dataPengadaan) {
+                    UsulanAtkPermintaan::where('pengadaan_id', $dataPengadaan->id_form_usulan_pengadaan)->delete();
                 }
-
-                foreach ($detail as $atk)
-                {
-                    $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
-                    $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk - $atk->total)]);
-                    UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+                UsulanAtkPengadaan::where('form_usulan_id',$id)->delete();
+                UsulanAtk::where('id_form_usulan',$id)->delete();
+            } elseif ($usulan->jenis_form == 'distribusi') {
+                $permintaan = UsulanAtkPermintaan::where('form_usulan_id',$id)->get();
+                foreach ($permintaan as $dataPermintaan) {
+                    $pengadaan = UsulanAtkPengadaan::where('id_form_usulan_pengadaan',$dataPermintaan->pengadaan_id)->first();
+                    UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $dataPermintaan->pengadaan_id)
+                        ->update([
+                            'jumlah_pemakaian' => $pengadaan->jumlah_pemakaian - $dataPermintaan->jumlah_disetujui
+                        ]);
                 }
-
-                UsulanAtk::where('id_form_usulan', $id)->delete();
-            } elseif ($usulan->jenis_form == 'distribusi' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5) {
-                foreach ($detail as $atk)
-                {
-                    $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
-                    $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk + $atk->total)]);
-                    UsulanAtk::where('id_form_usulan', $id)->delete();
-                    UsulanAtkDetail::where('form_usulan_id', $id)->delete();
-                }
-            } else {
-                UsulanAtk::where('id_form_usulan', $id)->delete();
+                UsulanAtkPermintaan::where('form_usulan_id',$id)->delete();
+                UsulanAtk::where('id_form_usulan',$id)->delete();
             }
+
+            // $detail = UsulanAtkDetail::select('atk_id', DB::raw('sum(jumlah_pengajuan) as total'))
+            //     ->groupBy('atk_id')
+            //     ->where('form_usulan_id', $id)
+            //     ->get();
+
+            // if ($usulan->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5)
+            // {
+            //     $lampiran = UsulanAtkLampiran::where('form_usulan_id', $id)->get();
+            //     foreach ($lampiran as $atkLampiran)
+            //     {
+            //         $file_old = public_path() . '\gambar\kwitansi\atk_pengadaan\\' . $atkLampiran->file_kwitansi;
+            //         unlink($file_old);
+            //         UsulanAtkLampiran::where('form_usulan_id', $id)->delete();
+            //     }
+
+            //     foreach ($detail as $atk)
+            //     {
+            //         $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
+            //         $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk - $atk->total)]);
+            //         UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+            //     }
+
+            //     UsulanAtk::where('id_form_usulan', $id)->delete();
+            // } elseif ($usulan->jenis_form == 'distribusi' && $usulan->status_pengajuan_id != null && $usulan->status_proses_id == 5) {
+            //     foreach ($detail as $atk)
+            //     {
+            //         $volumeAtk = Atk::where('id_atk', $atk->atk_id)->first();
+            //         $update    = Atk::where('id_atk', $atk->atk_id)->update(['total_atk' => ($volumeAtk->total_atk + $atk->total)]);
+            //         UsulanAtk::where('id_form_usulan', $id)->delete();
+            //         UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+            //     }
+            // } else {
+            //     UsulanAtk::where('id_form_usulan', $id)->delete();
+            // }
 
             return redirect('super-admin/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Menghapus Usulan');
         }

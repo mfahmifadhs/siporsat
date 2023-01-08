@@ -98,9 +98,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group text-capitalize">
+                                <div class="form-group row mb-3 text-center">
+                                    <div class="col-md-12 text-uppercase">
+                                        usulan pengajuan <br>
+                                        nomor surat : {{ $dataUsulan->no_surat_usulan }}
+                                    </div>
+                                </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Nomor Surat</div>
-                                    <div class="col-md-10 text-uppercase">: {{ $dataUsulan->no_surat_usulan }}</div>
+                                    <div class="col-md-2">Tanggal Usulan</div>
+                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Pengusul</div>
@@ -115,19 +121,9 @@
                                     <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
                                 </div>
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
                                     <div class="col-md-2">Total Pengajuan</div>
                                     <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} kendaraan</div>
                                 </div>
-                                @if($dataUsulan->rencana_pengguna != null)
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-9">: {{ $dataUsulan->rencana_pengguna }}</div>
-                                </div>
-                                @endif
                             </div>
                             <div class="col-12 table-responsive mt-4 mb-5">
                                 @if($dataUsulan->jenis_form == '1')
@@ -138,7 +134,9 @@
                                             <th>Jenis AADB</th>
                                             <th>Jenis Kendaraan</th>
                                             <th>Merk/Tipe</th>
-                                            <th>Tahun Perolehan</th>
+                                            <th>Kualifikasi</th>
+                                            <th>Jumlah Pengajuan</th>
+                                            <th>Tahun</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -149,6 +147,8 @@
                                             <td>{{ $dataKendaraan->jenis_aadb }}</td>
                                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
                                             <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
+                                            <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                                            <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
                                             <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                         </tr>
                                         @endforeach
@@ -209,17 +209,19 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kendaraan</th>
                                             <th>Bulan Pengadaan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Jumlah Kendaraan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody>
+                                    <tbody class="text-capitalize">
                                         @foreach($dataUsulan->usulanVoucher as $dataVoucher)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
