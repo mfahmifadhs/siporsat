@@ -66,7 +66,7 @@
                                             <td class="text-center">{{ (int) $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">{{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
                                             <td class="text-center">
-                                                <a href="{{ url('super-user/atk/barang/riwayat/'. $dataAtk->spesifikasi) }}" class="btn btn-primary">
+                                                <a href="{{ url('super-user/atk/barang/riwayat/'. Crypt::encrypt($dataAtk->spesifikasi)) }}" class="btn btn-primary">
                                                     <i class="fas fa-list"></i>
                                                 </a>
                                             </td>

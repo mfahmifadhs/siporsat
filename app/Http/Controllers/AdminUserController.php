@@ -291,10 +291,11 @@ class AdminUserController extends Controller
                 return redirect('admin-user/atk/barang/detail-kategori/kelompok')->with('success', 'Berhasil mengubah informasi kelompok barang');
             }
         } elseif ($aksi == 'riwayat-semua') {
+            $spek = Crypt::decrypt($id);
             $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
                     ->join('tbl_pegawai','id_pegawai','pegawai_id')
                     ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                    ->where('spesifikasi', $id)
+                    ->where('spesifikasi', $spek)
                     ->where('status_proses_id', 5)
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->get();
@@ -305,12 +306,12 @@ class AdminUserController extends Controller
                     ->join('atk_tbl_form_usulan','id_form_usulan','atk_tbl_form_usulan_permintaan.form_usulan_id')
                     ->join('tbl_pegawai','id_pegawai','pegawai_id')
                     ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                    ->where('spesifikasi', $id)
+                    ->where('spesifikasi', $spek)
                     ->where('status_proses_id', 5)
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->get();
 
-            $atk = UsulanAtkPengadaan::where('spesifikasi', $id)
+            $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
                     ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
                     ->select('jenis_barang','nama_barang','spesifikasi', DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
                     DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))

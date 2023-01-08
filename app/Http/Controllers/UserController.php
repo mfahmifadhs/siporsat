@@ -50,6 +50,7 @@ use Google2FA;
 use DB;
 use Validator;
 use Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -1707,9 +1708,10 @@ class UserController extends Controller
             $googleChartData = $this->ChartDataAtk();
             return view('v_user.apk_atk.stok', compact('googleChartData'));
         } elseif ($aksi == 'riwayat') {
+            $spek = Crypt::decrypt($id);
             $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
@@ -1720,7 +1722,7 @@ class UserController extends Controller
                 ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
                 ->join('atk_tbl_form_usulan','id_form_usulan','atk_tbl_form_usulan_permintaan.form_usulan_id')
                 ->join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')

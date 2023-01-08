@@ -947,9 +947,10 @@ class SuperUserController extends Controller
                 return view('v_super_user.apk_atk.stok', compact('googleChartData'));
             }
         } elseif ($aksi == 'riwayat') {
+            $spek = Crypt::decrypt($id);
             $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
@@ -964,7 +965,7 @@ class SuperUserController extends Controller
                 ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
@@ -973,10 +974,11 @@ class SuperUserController extends Controller
             $atk    = $pengadaan->first();
             return view('v_super_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         } elseif ($aksi == 'riwayat-semua') {
+            $spek = Crypt::decrypt($id);
             $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
@@ -993,7 +995,7 @@ class SuperUserController extends Controller
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                ->where('spesifikasi', $id)
+                ->where('spesifikasi', $spek)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
