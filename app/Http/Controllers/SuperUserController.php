@@ -690,7 +690,7 @@ class SuperUserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan = UsulanUktDetail::count() + 1;
                 $detail = new UsulanUktDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan . Carbon::now()->format('dm');
+                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000,9999);
                 $detail->form_usulan_id         = $idFormUsulan;
                 $detail->lokasi_pekerjaan       = $detailUsulan;
                 $detail->spesifikasi_pekerjaan  = $request->spesifikasi_pekerjaan[$i];
