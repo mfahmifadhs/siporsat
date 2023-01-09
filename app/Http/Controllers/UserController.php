@@ -7,6 +7,7 @@ use App\Imports\ATK\ImportAlkom;
 use App\Imports\ATK\ImportAtk;
 use App\Models\AADB\JadwalServis;
 use App\Models\AADB\JenisKendaraan;
+use App\Models\AADB\JenisUsulan;
 use App\Models\AADB\Kendaraan;
 use App\Models\AADB\KondisiKendaraan;
 use App\Models\AADB\RiwayatKendaraan;
