@@ -74,7 +74,7 @@ class Controller extends BaseController
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('otp_usulan_pengusul', $id)
