@@ -53,6 +53,7 @@ use Validator;
 use Google2FA;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 
 class SuperUserController extends Controller
 {
