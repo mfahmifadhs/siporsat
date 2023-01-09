@@ -109,4 +109,38 @@
     </div>
 </section>
 
+@section('js')
+<script>
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+    // Jumlah Kendaraan
+    $(function() {
+
+        $("#table-usulan").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "searching": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+        })
+
+        $("#table-aadb").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "info": false,
+            "paging": true,
+            "lengthMenu": [
+                [5, 10, 25, -1],
+                [5, 10, 25, "Semua"]
+            ],
+        })
+    })
+</script>
+@endsection
+
 @endsection
