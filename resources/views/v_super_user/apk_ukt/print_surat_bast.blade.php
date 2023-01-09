@@ -48,7 +48,7 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Tanggal</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Pengusul</div>
