@@ -39,13 +39,11 @@
                             <thead>
                                 <th>No</th>
                                 <th>Pengusul</th>
-                                <th style="width: 30%;">Usulan</th>
-                                <th>Lampiran</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </thead>
                             @php $no = 1; @endphp
-                            <tbody class="small">
+                            <tbody>
                                 @foreach($pengajuan as $dataUsulan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
@@ -55,7 +53,7 @@
                                         Pengusul : {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
                                         Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         @foreach($dataUsulan->detailUsulanAtk as $detailUsulan)
                                         {{ ucfirst(strtolower($detailUsulan->merk_atk)) }}<br>
                                         Jumlah Pengajuan : {{ $detailUsulan->jumlah_pengajuan.' '.$detailUsulan->satuan }}<br>
@@ -72,7 +70,7 @@
                                             <i class="fas fa-download"></i> Unduh
                                         </a>
                                         @endforeach
-                                    </td>
+                                    </td> -->
                                     <td class="text-center">
                                         <span>Status Pengajuan : </span> <br>
                                         @if($dataUsulan->status_proses_id == 1)
@@ -190,7 +188,7 @@
                                                         Informasi ATK
                                                     </h6>
                                                 </div>
-                                                <div class="form-group row small">
+                                                <div class="form-group row">
                                                     <div class="col-md-12 text-center">
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">

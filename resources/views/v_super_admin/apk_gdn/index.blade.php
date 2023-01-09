@@ -53,13 +53,13 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="pt-4 text-center">{{ $no2++ }}</td>
-                                    <td class="pt-3 small">
+                                    <td class="pt-3">
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
                                         No. Surat : {{ $dataUsulan->no_surat_usulan }} <br>
                                         Pengusul : {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }} <br>
                                         Unit Kerja : {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
-                                    <td class="small">
+                                    <td>
                                         <p class="font-weight-bold"></p>
                                         @foreach($dataUsulan->detailUsulanGdn as $i =>$dataGdn)
                                         <p>
@@ -68,7 +68,7 @@
                                         </p>
                                         @endforeach
                                     </td>
-                                    <td class="pt-2 small text-center">
+                                    <td class="pt-2 text-center">
                                         Status Pengajuan : <br>
                                         @if($dataUsulan->status_pengajuan_id == 1)
                                         <span class="badge badge-sm badge-pill badge-success py-2">disetujui</span>
