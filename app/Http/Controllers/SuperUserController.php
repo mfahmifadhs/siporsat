@@ -1001,18 +1001,14 @@ class SuperUserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            $atk = UsulanAtkPengadaan::where('spesifikasi', $id)
+            $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->select(
-                    'jenis_barang',
-                    'nama_barang',
-                    'spesifikasi',
-                    DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
-                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
-                )
+                ->select('jenis_barang','nama_barang','spesifikasi', DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
                 ->where('status_proses_id', 5)
                 ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
                 ->first();
+
             return view('v_super_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         }
     }
