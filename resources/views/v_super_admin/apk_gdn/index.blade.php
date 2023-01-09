@@ -63,7 +63,7 @@
                                         <p class="font-weight-bold"></p>
                                         @foreach($dataUsulan->detailUsulanGdn as $i =>$dataGdn)
                                         <p>
-                                            <label>{{ $no = $i + 1 }}. {{ $dataGdn->lokasi_bangunan }} / {{ $dataGdn->lokasi_spesifik }}</label> <br>
+                                            <label>{{ $no = $i + 1 }}. {{ $dataGdn->lokasi_bangunan }} / {!! $dataGdn->lokasi_spesifik !!}</label> <br>
                                             <span class="pl-2">{{ ucfirst(strtolower($dataGdn->bid_kerusakan.' : '.$dataGdn->keterangan))  }}</span>
                                         </p>
                                         @endforeach
