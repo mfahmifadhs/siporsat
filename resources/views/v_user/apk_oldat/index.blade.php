@@ -233,11 +233,9 @@
                                                         @php $i = $i +1; @endphp
                                                         <div class="form-group row text-uppercase">
                                                             <div class="col-md-1">{{ $i }}</div>
-                                                            <div class="col-md-2">
-                                                                {{ $dataPengadaan->kode_barang.'.'.$dataPengadaan->nup_barang }}
-                                                            </div>
-                                                            <div class="col-md-3">{{ $dataPengadaan->kategori_barang }}</div>
-                                                            <div class="col-md-3">{{ $dataPengadaan->spesifikasi_barang }}</div>
+                                                            <div class="col-md-2">{{ $dataPengadaan->kategori_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataPengadaan->merk_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataPengadaan->jumlah_barang.' '.$dataPengadaan->satuan_barang }}</div>
                                                             <div class="col-md-3">Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }}</div>
                                                         </div>
                                                         <hr>

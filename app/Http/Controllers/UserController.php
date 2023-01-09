@@ -963,7 +963,7 @@ class UserController extends Controller
             FormUsulan::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = FormUsulan::where('jenis_form', $id)->count();
+            $totalUsulan    = FormUsulan::where('jenis_form', $aksi)->count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
