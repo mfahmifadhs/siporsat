@@ -1892,7 +1892,7 @@ class UserController extends Controller
                     foreach ($atk as $i => $dataAtk) {
                         $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                         $pengadaanAtk = new UsulanAtkPengadaan();
-                        $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
+                        $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);
                         $pengadaanAtk->form_usulan_id = $id_usulan;
                         $pengadaanAtk->jenis_barang = 'ATK';
                         $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
