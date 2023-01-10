@@ -27,7 +27,6 @@ class AtkExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        dd($this->id);
         return UsulanAtkPengadaan::select(
             'unit_kerja',
             'tanggal',
@@ -43,7 +42,6 @@ class AtkExport implements FromCollection, WithHeadings
             ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
             ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->where('form_usulan_id', $this->id)
             ->get();
     }
 

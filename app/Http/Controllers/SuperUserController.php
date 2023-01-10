@@ -1431,7 +1431,7 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
                 ->where('id_form_usulan', $id)
                 ->first();
-            return Excel::download(new AtkExport($request->$id), 'PENGADAAN_ATK_'.$usulan->unit_kerja.'.xlsx');
+            return Excel::download(new AtkExport($id), 'PENGADAAN_ATK_'.$usulan->unit_kerja.'.xlsx');
         }
     }
 
