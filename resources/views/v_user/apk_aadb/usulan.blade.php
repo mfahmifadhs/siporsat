@@ -413,7 +413,7 @@
                                         <td class="">{{ $dataAadb->merk_tipe_kendaraan }}</td>
                                         <td class="text-center">
                                             <input type="hidden" value="false" name="status_pengajuan[{{$i}}]">
-                                            <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true"  >
+                                            <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
                                         </td>
                                     </tr>
                                     @endforeach
@@ -463,9 +463,11 @@
                     </div> -->
                 </div>
                 <div class="card-footer text-right">
+                    @if (count($kendaraan) != 0)
                     <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
                         <i class="fa fa-paper-plane"></i> SUBMIT
                     </button>
+                    @endif
                 </div>
             </form>
         </div>
