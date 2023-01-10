@@ -220,6 +220,7 @@
                                                     </div>
                                                 </div>
                                                 @endif
+                                                @if ($dataUsulan->jenis_form == 'pengadaan')
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Data Pengadaan </label></div>
                                                     <div class="col-md-8">:
@@ -228,6 +229,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                @endif
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi ATK

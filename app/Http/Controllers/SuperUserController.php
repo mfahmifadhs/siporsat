@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AtkExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ATK\ImportAlkom;
 use App\Imports\ATK\ImportAtk;
@@ -1426,7 +1427,11 @@ class SuperUserController extends Controller
 
             return view('v_super_user/apk_atk/print_surat_bast', compact('form', 'pimpinan', 'bast', 'id'));
         } elseif ($aksi == 'download-pengadaan') {
-            dd($request->all());
+            $usulan = UsulanAtk::join('tbl_pegawai','id_pegawai','pegawai_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+            return Excel::download(new AtkExport($request->$id), 'PENGADAAN_ATK_'.$usulan->unit_kerja.'.xlsx');
         }
     }
 

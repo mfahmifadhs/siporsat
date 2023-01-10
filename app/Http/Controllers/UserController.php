@@ -1914,7 +1914,7 @@ class UserController extends Controller
                         if ($request->alkom_jumlah != 0) {
                             $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan;
+                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = 'ALKOM';
                             $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
@@ -1939,7 +1939,7 @@ class UserController extends Controller
                         if ($request->jumlah != 0) {
                             $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . (int) Carbon::now()->isoFormat('dm');
+                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = strtoupper($request->jenis_barang[$i]);
                             $pengadaanAtk->nama_barang = strtoupper($request->barang[$i]);
