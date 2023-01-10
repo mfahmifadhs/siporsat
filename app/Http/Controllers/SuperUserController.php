@@ -600,7 +600,7 @@ class SuperUserController extends Controller
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
             $usulan = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('id_form_usulan', $id)
@@ -614,7 +614,7 @@ class SuperUserController extends Controller
 
             $usulan = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('id_form_usulan', $id)
@@ -627,7 +627,7 @@ class SuperUserController extends Controller
 
             $bast = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('id_form_usulan', $id)
@@ -640,7 +640,7 @@ class SuperUserController extends Controller
 
             $bast = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->where('id_form_usulan', $id)
@@ -713,7 +713,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'persetujuan') {
             $usulan = UsulanUkt::with(['detailUsulanUkt'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_form_usulan', $id)
                 ->first();
 
