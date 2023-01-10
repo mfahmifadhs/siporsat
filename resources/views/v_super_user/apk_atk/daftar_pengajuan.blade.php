@@ -211,7 +211,6 @@
                                                 </div>
                                                 @endif
                                                 @if ($dataUsulan->status_proses_id == 4 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi' )
-
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
@@ -221,6 +220,14 @@
                                                     </div>
                                                 </div>
                                                 @endif
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Data Pengadaan </label></div>
+                                                    <div class="col-md-8">:
+                                                        <a href="{{ url('super-user/atk/surat/download-pengadaan/'. $dataUsulan->id_form_usulan) }}">
+                                                            <i class="fas fa-download"></i> Download File
+                                                        </a>
+                                                    </div>
+                                                </div>
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi ATK

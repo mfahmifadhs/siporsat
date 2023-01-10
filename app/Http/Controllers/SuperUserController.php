@@ -884,7 +884,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'persetujuan') {
             $usulan = UsulanGdn::with(['detailUsulanGdn'])
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_form_usulan', $id)
                 ->first();
 
@@ -1425,6 +1425,8 @@ class SuperUserController extends Controller
                 ->first();
 
             return view('v_super_user/apk_atk/print_surat_bast', compact('form', 'pimpinan', 'bast', 'id'));
+        } elseif ($aksi == 'download-pengadaan') {
+            dd($request->all());
         }
     }
 
