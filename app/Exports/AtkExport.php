@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Atk\UsulanAtkPengadaan;
+use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\Barang;
 use App\Models\KondisiBarang;
 use App\Models\KategoriBarang;
