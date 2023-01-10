@@ -379,29 +379,35 @@
                     </div>
 
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label">Kualifikasi</label>
+                        <label class="col-sm-2 col-form-label">Pilih Kendaraan</label>
                         <div class="col-sm-10">
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th class="text-center pt-3" style="width: 1%;">No</th>
-                                        <th>Kualifikasi</th>
-                                        <th class="text-center" style="width: 20%;">Jumlah Kendaraan</th>
-                                        <th class="text-center" style="width: 20%;">Jumlah Permintaan</th>
+                                        <th class="text-center pb-4" style="width: 1%;">No</th>
+                                        <th style="width: 15%;" class="pb-4">Jenis AADB</th>
+                                        <th style="width: 20%;" class="pb-4">No. Plat</th>
+                                        <th class=" pb-4">Kendaraan</th>
+                                        <th class="text-center" style="width: 20%;">
+                                            Pilih Kendaraan <br>
+                                            <input type="checkbox" id="selectAll" style="scale: 1.7;">
+                                        </th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                @foreach ($kendaraan as $i => $dataKualifikasi)
+                                    @foreach ($kendaraan as $i => $dataAadb)
                                     <tr class="text-uppercase">
-                                        <td class="text-center pt-3">{{ $i + 1 }}</td>
-                                        <td class="text-uppercase pt-3">
-                                            <input type="hidden" name="kendaraan_id[]" value="{{ $dataKualifikasi->kualifikasi }}">
-                                            KENDARAAN {{ $dataKualifikasi->kualifikasi }}
+                                        <td class="text-center">{{ $i + 1 }}</td>
+                                        <td class="text-uppercase">
+                                            <input type="hidden" name="kendaraan_id[]" value="{{ $dataAadb->id_kendaraan }}">
+                                            {{ $dataAadb->jenis_aadb }}
                                         </td>
-                                        <td class="text-center pt-3">{{ $dataKualifikasi->jumlah }} KENDARAAN</td>
+                                        <td class="">{{ $dataAadb->no_plat_kendaraan }}</td>
+                                        <td class="">{{ $dataAadb->merk_tipe_kendaraan }}</td>
                                         <td class="text-center">
-                                            <input type="number" class="form-control text-center" name="jumlah_pengajuan[]" min="1" max="{{ $dataKualifikasi->jumlah }}" value="1">
+                                            <input type="hidden" value="false" name="status_pengajuan[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
                                         </td>
                                     </tr>
                                     @endforeach
@@ -447,11 +453,11 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="card-footer text-right">
-                    <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
-                        <i class="fa fa-paper-plane"></i> SUBMIT
-                    </button>
-                </div>
+                    <div class="card-footer text-right">
+                        <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
+                            <i class="fa fa-paper-plane"></i> SUBMIT
+                        </button>
+                    </div>
             </form>
         </div>
     </div>
@@ -755,6 +761,14 @@
                         }
                     }
                 })
+            }
+        })
+
+        $('#selectAll').click(function() {
+            if ($(this).prop('checked')) {
+                $('.confirm-check').prop('checked', true);
+            } else {
+                $('.confirm-check').prop('checked', false);
             }
         })
     })

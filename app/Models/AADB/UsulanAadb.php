@@ -52,6 +52,7 @@ class UsulanAadb extends Model
     }
 
     public function usulanVoucher() {
-        return $this->hasMany(UsulanVoucherBBM::class, 'form_usulan_id','id_form_usulan');
+        return $this->hasMany(UsulanVoucherBBM::class, 'form_usulan_id','id_form_usulan')
+            ->join('aadb_tbl_kendaraan','id_kendaraan','kendaraan_id');
     }
 }

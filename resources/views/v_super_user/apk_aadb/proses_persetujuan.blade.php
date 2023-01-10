@@ -165,10 +165,11 @@
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Bulan Pengadaan</th>
-                                        <th>Kendaraan</th>
-                                        <th>Jumlah Pengajuan</th>
+                                        <th class="text-center pb-4" style="width: 1%;">No</th>
+                                        <th style="width: 15%;" class="pb-4">Bulan Pengadaan</th>
+                                        <th style="width: 15%;" class="pb-4">Jenis AADB</th>
+                                        <th style="width: 20%;" class="pb-4">No. Plat</th>
+                                        <th class=" pb-4">Kendaraan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -177,8 +178,9 @@
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
                                         <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                        <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
-                                        <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
+                                        <td>{{ $dataVoucher->jenis_aadb }}</td>
+                                        <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                        <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

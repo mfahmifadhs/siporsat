@@ -154,19 +154,23 @@
                         <tr>
                             <th>No</th>
                             <th>Bulan Pengadaan</th>
+                            <th>Jenis AADB</th>
+                            <th>No. Plat</th>
                             <th>Kendaraan</th>
-                            <th>Jumlah Kendaraan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody class="text-capitalize">
                         @foreach($dataUsulan->usulanVoucher as $dataVoucher)
-                        <tr>
+                        @if($dataVoucher->status_pengajuan == 'true')
+                        <tr class="text-uppercase">
                             <td>{{ $no++ }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
-                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
+                            <td>{{ $dataVoucher->jenis_aadb }}</td>
+                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                         </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>

@@ -690,7 +690,7 @@ class SuperUserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan = UsulanUktDetail::count() + 1;
                 $detail = new UsulanUktDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000,9999);
+                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000, 9999);
                 $detail->form_usulan_id         = $idFormUsulan;
                 $detail->lokasi_pekerjaan       = $detailUsulan;
                 $detail->spesifikasi_pekerjaan  = $request->spesifikasi_pekerjaan[$i];
@@ -1003,8 +1003,13 @@ class SuperUserController extends Controller
 
             $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->select('jenis_barang','nama_barang','spesifikasi', DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
-                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+                ->select(
+                    'jenis_barang',
+                    'nama_barang',
+                    'spesifikasi',
+                    DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+                )
                 ->where('status_proses_id', 5)
                 ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
                 ->first();
@@ -1853,17 +1858,24 @@ class SuperUserController extends Controller
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $kualifikasi = $request->kendaraan_id;
-                foreach ($kualifikasi as $i => $kualifikasi) {
-                    $idUsulan    = UsulanVoucherBBM::count() + 1;
-                    $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . Carbon::now()->format('dm');;
-                    $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
-                    $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
-                    $usulanVoucherBBM->kualifikasi                  = $kualifikasi;
-                    $usulanVoucherBBM->jumlah_pengajuan             = $request->jumlah_pengajuan[$i];
-                    $usulanVoucherBBM->save();
+                $totalPengajuan = 0;
+                $kendaraan = $request->kendaraan_id;
+                foreach ($kendaraan as $i => $kendaraan_id) {
+                    if ($request->status_pengajuan[$i] == 'true') {
+                        $idUsulan    = UsulanVoucherBBM::count() + 1;
+                        $usulanVoucherBBM   = new UsulanVoucherBBM();
+                        $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000, 9999);;
+                        $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
+                        $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                        $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
+                        $usulanVoucherBBM->status_pengajuan             = $request->status_pengajuan[$i];
+                        $usulanVoucherBBM->save();
+                        $totalPengajuan++;
+                    }
                 }
+
+                UsulanAadb::where('id_form_usulan', $idFormUsulan)
+                    ->update(['total_pengajuan' => $totalPengajuan]);
             }
 
             return redirect('super-user/verif/usulan-aadb/' . $idFormUsulan);
@@ -1928,9 +1940,7 @@ class SuperUserController extends Controller
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
-            $kendaraan      = Kendaraan::select('kualifikasi', DB::raw('count(id_kendaraan) as jumlah'))
-                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-                ->groupBy('kualifikasi')
+            $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('kualifikasi', '!=', null)
                 ->get();

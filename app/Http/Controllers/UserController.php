@@ -921,7 +921,7 @@ class UserController extends Controller
             foreach ($barang as $i => $kategoriBarang) {
                 $idUsulan       = FormUsulanPengadaan::count() + 1;
                 $detailUsulan   = new FormUsulanPengadaan();
-                $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000,9999);
                 $detailUsulan->form_usulan_id         = $idFormUsulan;
                 $detailUsulan->kategori_barang_id     = $kategoriBarang;
                 $detailUsulan->merk_barang            = $request->merk_barang[$i];
@@ -950,7 +950,7 @@ class UserController extends Controller
             foreach ($barang as $i => $kodeBarang) {
                 $idUsulan  = FormUsulanPerbaikan::count() + 1;
                 $detailUsulan   = new FormUsulanPerbaikan();
-                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan . Carbon::now()->format('dm');
+                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan . rand(0000,9999);
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->keterangan_perbaikan      = $request->keterangan_kerusakan[$i];
@@ -1404,7 +1404,7 @@ class UserController extends Controller
                 foreach ($aadb as $i => $jenis_kendaraan) {
                     $idUsulan    = UsulanKendaraan::count() + 1;
                     $usulanPengadaan = new UsulanKendaraan();
-                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000,9999);
                     $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                     $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                     $usulanPengadaan->jenis_kendaraan_id        = $jenis_kendaraan;
@@ -1420,7 +1420,7 @@ class UserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . Carbon::now()->format('dm');;
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . rand(0000,9999);
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1436,24 +1436,31 @@ class UserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . Carbon::now()->format('dm');;
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . rand(0000,9999);
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
                     $usulanPerpanjangan->save();
                 }
             } elseif ($id == 'voucher-bbm') {
-                $kualifikasi = $request->kendaraan_id;
-                foreach ($kualifikasi as $i => $kualifikasi) {
-                    $idUsulan    = UsulanVoucherBBM::count() + 1;
-                    $usulanVoucherBBM   = new UsulanVoucherBBM();
-                    $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . Carbon::now()->format('dm');;
-                    $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
-                    $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
-                    $usulanVoucherBBM->kualifikasi                  = $kualifikasi;
-                    $usulanVoucherBBM->jumlah_pengajuan             = $request->jumlah_pengajuan[$i];
-                    $usulanVoucherBBM->save();
+                $totalPengajuan = 0;
+                $kendaraan = $request->kendaraan_id;
+                foreach ($kendaraan as $i => $kendaraan_id) {
+                    if ($request->status_pengajuan[$i] == 'true') {
+                        $idUsulan    = UsulanVoucherBBM::count() + 1;
+                        $usulanVoucherBBM   = new UsulanVoucherBBM();
+                        $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000,9999);
+                        $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
+                        $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
+                        $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
+                        $usulanVoucherBBM->status_pengajuan             = $request->status_pengajuan[$i];
+                        $usulanVoucherBBM->save();
+                        $totalPengajuan++;
+                    }
                 }
+
+                UsulanAadb::where('id_form_usulan', $idFormUsulan)
+                    ->update(['total_pengajuan' => $totalPengajuan]);
             }
 
             return redirect('unit-kerja/verif/usulan-aadb/' . $idFormUsulan);
@@ -1469,9 +1476,7 @@ class UserController extends Controller
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
-            $kendaraan      = Kendaraan::select('kualifikasi', DB::raw('count(id_kendaraan) as jumlah'))
-                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-                ->groupBy('kualifikasi')
+            $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('kualifikasi', '!=', null)
                 ->get();
@@ -1779,7 +1784,7 @@ class UserController extends Controller
                 if ($request->jumlah_permintaan[$i] != 0) {
                     $id     = UsulanAtkPermintaan::count() + 1;
                     $detail = new UsulanAtkPermintaan();
-                    $detail->id_permintaan  = (int) $id . Carbon::now()->format('dm');
+                    $detail->id_permintaan  = (int) $id . rand(0000,9999);
                     $detail->form_usulan_id = $idFormUsulan;
                     $detail->pengadaan_id   = $id_pengadaan;
                     $detail->jumlah         = $request->jumlah_permintaan[$i];
