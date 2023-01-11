@@ -634,7 +634,7 @@ class UserController extends Controller
     {
         $usulan = UsulanUkt::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('no_surat_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->where('ukt_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
@@ -654,7 +654,7 @@ class UserController extends Controller
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->no_surat_usulan    = $request->no_surat_usulan;
-            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->tanggal_usulan     = Carbon::now();
             $usulan->save();
 
             $detail = $request->lokasi_pekerjaan;

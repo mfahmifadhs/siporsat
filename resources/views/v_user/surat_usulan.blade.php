@@ -293,8 +293,8 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
-                                            <td>{{ $dataUkt->keterangan }}</td>
+                                            <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>
+                                            <td>{!! nl2br(e($dataUkt->keterangan)) !!}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -432,10 +432,10 @@
                             <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
                                     @if ($usulan->otp_usulan_pengusul != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000//surat/usulan-'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
                                     @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-'.$modul.'/'.$usulan->otp_usulan_kabag) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000//surat/usulan-'.$modul.'/'.$usulan->otp_usulan_kabag) !!}</label>
                                     @endif
                                 </div>
                             </div>

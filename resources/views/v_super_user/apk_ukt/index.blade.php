@@ -230,8 +230,8 @@
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1">{{ $i + 1 }}</div>
                                                             <div class="col-sm-3">{{ $dataUkt->lokasi_pekerjaan }}</div>
-                                                            <div class="col-sm-5">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
-                                                            <div class="col-sm-3">{{ $dataUkt->keterangan }}</div>
+                                                            <div class="col-sm-5">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                                                            <div class="col-sm-3">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

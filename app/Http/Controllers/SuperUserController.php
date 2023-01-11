@@ -659,8 +659,9 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('tanggal_usulan', 'DESC')
-                ->where('status_proses_id', $id)
+                ->orderBy('no_surat_usulan', 'DESC')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
                 ->get();
 
             return view('v_super_user.apk_ukt.daftar_pengajuan', compact('usulan'));
@@ -670,7 +671,7 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('tanggal_usulan', 'DESC')
+                ->orderBy('no_surat_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
                 ->get();
@@ -684,7 +685,7 @@ class SuperUserController extends Controller
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->no_surat_usulan    = $request->no_surat_usulan;
-            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->tanggal_usulan     = Carbon::now();
             $usulan->save();
 
             $detail = $request->lokasi_pekerjaan;

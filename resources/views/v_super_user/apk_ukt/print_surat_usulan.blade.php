@@ -83,8 +83,8 @@
                         <tr class="text-uppercase">
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
-                            <td>{{ $dataUkt->keterangan }}</td>
+                            <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>
+                            <td>{!! nl2br(e($dataUkt->keterangan)) !!}</td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -209,7 +209,7 @@
                                                         <div class="form-group row text-uppercase">
                                                             <div class="col-sm-1 text-center">{{ $i }}</div>
                                                             <div class="col-sm-3">{{ $dataUkt->lokasi_pekerjaan }}</div>
-                                                            <div class="col-sm-5">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
+                                                            <div class="col-sm-5">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
                                                             <div class="col-sm-3">{{ $dataUkt->keterangan }}</div>
                                                         </div>
                                                         <hr>

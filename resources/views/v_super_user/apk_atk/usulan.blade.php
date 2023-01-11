@@ -216,7 +216,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
                         <div class="col-sm-10">
-                            <input type="text" name="rencana_pengguna" class="form-control" value="Rencana Pengadaan Barang" required>
+                            <input type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Barang" required>
                         </div>
                     </div>
                     <hr style="border: 0.5px solid grey;">

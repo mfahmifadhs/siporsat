@@ -58,7 +58,7 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('HH:mm DD MMMM Y') }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-center">
@@ -194,8 +194,8 @@
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1">{{ $i + 1 }}</div>
                                                             <div class="col-sm-3">{{ $dataUkt->lokasi_pekerjaan }}</div>
-                                                            <div class="col-sm-5">{!! $dataUkt->spesifikasi_pekerjaan !!}</div>
-                                                            <div class="col-sm-3">{{ $dataUkt->keterangan }}</div>
+                                                            <div class="col-sm-5">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                                                            <div class="col-sm-3">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

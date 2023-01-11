@@ -225,7 +225,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                                                <td>{!! $dataGdn->lokasi_spesifik !!}</td>
+                                                <td>{!! nl2br(e( $dataGdn->lokasi_spesifik)) !!}</td>
                                                 <td>{{ $dataGdn->bid_kerusakan }}</td>
                                                 <td>{{ $dataGdn->keterangan }}</td>
                                             </tr>
@@ -248,7 +248,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                                                <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
+                                                <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>
                                                 <td>{{ $dataUkt->keterangan }}</td>
                                             </tr>
                                             @endforeach
