@@ -73,7 +73,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10" placeholder="Detail atau Spesifikasi Pekerjaan" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -137,7 +137,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                         <div class="col-sm-10">
-                            <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                            <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10" placeholder="Detail atau Spesifikasi Pekerjaan" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
