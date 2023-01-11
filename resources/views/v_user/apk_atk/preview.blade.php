@@ -116,7 +116,7 @@
                                         </td>
                                         <td><input type="text" name="alkom_spesifikasi[]" class="form-control" value="{{ $dataAlkom['spesifikasi'] }}"></td>
                                         <td><input type="text" name="alkom_jumlah[]" class="form-control text-center" value="{{ $dataAlkom['jumlah'] }}"></td>
-                                        <td><input type="text" name="alkom_satuan[]" class="form-control text-center" value="BUAH" readonly></td>
+                                        <td><input type="text" name="alkom_satuan[]" class="form-control text-center" value="BUAH"></td>
                                     </tr>
                                     @endif
                                     @endforeach
