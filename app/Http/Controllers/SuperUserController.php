@@ -671,9 +671,9 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('no_surat_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('no_surat_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_ukt.daftar_pengajuan', compact('usulan'));
