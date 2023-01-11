@@ -167,9 +167,9 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                            <td>{!! $dataGdn->lokasi_spesifik !!}</td>
+                            <td>{!! nl2br(e($dataGdn->lokasi_spesifik)) !!}</td>
                             <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
-                            <td>{{ $dataGdn->keterangan }}</td>
+                            <td>{!! nl2br(e($dataGdn->keterangan)) !!}</td>
                         </tr>
                         @endforeach
                     </tbody>

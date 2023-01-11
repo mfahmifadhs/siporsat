@@ -92,13 +92,13 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
                             <div class="col-sm-10">
-                                <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                                <textarea name="lokasi_spesifik[]" class="form-control" rows="10" placeholder="Detail atau Spesifikasi Lokasi dan Kerusakan" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
+                                <textarea class="form-control" name="keterangan[]" rows="3" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
                             </div>
                         </div>
                         <div id="section-gdn"></div>
@@ -175,13 +175,13 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Lokasi Spesifik*</label>
                         <div class="col-sm-10">
-                            <textarea name="lokasi_spesifik[]" class="form-control spesifikasi" rows="3" placeholder="Contoh: Lantai 4, Ruang Rapat" required></textarea>
+                            <textarea name="lokasi_spesifik[]" class="form-control" rows="10" placeholder="Detail atau Spesifikasi Lokasi dan Kerusakan" required></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Keterangan</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
+                            <textarea class="form-control" name="keterangan[]" rows="3" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
                         </div>
                     </div>
                     <div id="section-gdn"></div>

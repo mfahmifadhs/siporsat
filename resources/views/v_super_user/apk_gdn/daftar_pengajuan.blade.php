@@ -197,8 +197,8 @@
                                                             <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
                                                             <div class="col-sm-3">{{ $dataGdn->bid_kerusakan }}</div>
                                                             <div class="col-sm-3">{{ $dataGdn->lokasi_bangunan }}</div>
-                                                            <div class="col-sm-3">{!! $dataGdn->lokasi_spesifik !!}</div>
-                                                            <div class="col-sm-2">{{ $dataGdn->keterangan }}</div>
+                                                            <div class="col-sm-3">{!! nl2br(e($dataGdn->lokasi_spesifik)) !!}</div>
+                                                            <div class="col-sm-2">{!! nl2br(e($dataGdn->keterangan)) !!}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

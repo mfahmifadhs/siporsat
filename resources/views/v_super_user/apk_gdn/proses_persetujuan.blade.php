@@ -89,9 +89,9 @@
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
                                         <td class="text-uppercase">{{ $dataPerbaikan->lokasi_bangunan}}</td>
-                                        <td>{!! $dataPerbaikan->lokasi_spesifik !!}</td>
+                                        <td>{!! nl2br(e($dataPerbaikan->lokasi_spesifik)) !!}</td>
                                         <td>{{ $dataPerbaikan->bid_kerusakan }}</td>
-                                        <td>{{ $dataPerbaikan->keterangan }}</td>
+                                        <td>{!! nl2br(e($dataPerbaikan->keterangan)) !!}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
