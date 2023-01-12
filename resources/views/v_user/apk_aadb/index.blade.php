@@ -337,10 +337,12 @@
                                                             <div class="col-sm-2">Biaya Perpanjangan</div>
                                                             <div class="col-sm-2">Bukti Pembayaran</div>
                                                             @elseif ($dataUsulan->jenis_form == 4)
-                                                            <div class="col-sm-2 text-center">No</div>
-                                                            <div class="col-sm-4">Bulan Pengadaan</div>
+                                                            <div class="col-sm-1 text-center">No</div>
+                                                            <div class="col-sm-2">Bulan Pengadaan</div>
+                                                            <div class="col-sm-2">Jenis AADB</div>
+                                                            <div class="col-sm-2">No. Plat</div>
                                                             <div class="col-sm-3">Kendaraan</div>
-                                                            <div class="col-sm-3">Jumlah Kendaraan</div>
+                                                            <div class="col-sm-2">Kualifikasi</div>
                                                             @endif
                                                         </div>
                                                         <hr class="bg-secondary">
@@ -421,10 +423,12 @@
                                                         @elseif ($dataUsulan->jenis_form == 4)
                                                         @foreach($dataUsulan->usulanVoucher as $i =>$dataVoucher)
                                                         <div class="form-group row">
-                                                            <div class="col-sm-2 text-center">{{ $i+1 }}</div>
-                                                            <div class="col-sm-4">{{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
-                                                            <div class="col-sm-3 text-capitalize">Kendaraan {{ $dataVoucher->kualifikasi }}</div>
-                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</div>
+                                                            <div class="col-sm-1 text-center">{{ $i+1 }}</div>
+                                                            <div class="col-sm-2">{{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
+                                                            <div class="col-sm-2 text-capitalize">{{ $dataVoucher->jenis_aadb }}</div>
+                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->no_plat_kendaraan }}</div>
+                                                            <div class="col-sm-2 text-capitalize">{{ $dataVoucher->merk_tipe_kendaraan }} Kendaraan</div>
+                                                            <div class="col-sm-2 text-capitalize">Kendaraan {{ $dataVoucher->kualifikasi }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
