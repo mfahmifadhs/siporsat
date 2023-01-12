@@ -352,8 +352,10 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan Pengadaan</th>
+                                            <th>Jenis AADB</th>
+                                            <th>No. Plat</th>
                                             <th>Kendaraan</th>
-                                            <th>Jumlah Kendaraan</th>
+                                            <th>Kualifikasi</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -362,8 +364,10 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>{{ $dataVoucher->jenis_aadb }}</td>
+                                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
                                             <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
-                                            <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

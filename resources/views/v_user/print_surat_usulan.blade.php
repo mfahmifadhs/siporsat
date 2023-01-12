@@ -277,6 +277,7 @@
                             <th>Jenis AADB</th>
                             <th>No. Plat</th>
                             <th>Kendaraan</th>
+                            <th>Kualifikasi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -289,6 +290,7 @@
                             <td>{{ $dataVoucher->jenis_aadb }}</td>
                             <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
                             <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataVoucher->kualifikasi }}</td>
                         </tr>
                         @endif
                         @endforeach
