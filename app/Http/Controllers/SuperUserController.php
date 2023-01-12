@@ -662,6 +662,7 @@ class SuperUserController extends Controller
                 ->orderBy('status_proses_id', 'ASC')
                 ->orderBy('no_surat_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
+                ->where('status_proses_id', $id)
                 ->get();
 
             return view('v_super_user.apk_ukt.daftar_pengajuan', compact('usulan'));
