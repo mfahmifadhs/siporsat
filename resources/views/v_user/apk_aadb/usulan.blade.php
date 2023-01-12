@@ -395,7 +395,7 @@
                                     <i class="icon fas fa-info-circle fa-1x"></i>
                                     Pengajuan Voucher BBM untuk bulan berikutnya, maksimal tanggal 20 bulan berjalan
                                 </h6>
-                                Info alert preview. This alert is dismissable.
+                                1. Kendaraan Jabatan : Rp 2.000.000, 2. Kendaraan Operasional : Rp 1.500.000, 3. Kendaraan Bermotor : Rp 200.000
                             </div>
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
