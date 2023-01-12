@@ -301,11 +301,14 @@
                 @csrf
                 <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                 <input type="hidden" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                <input type="hidden" name="rencana_pengguna" class="form-control" value="Kebutuhan Barang Tahun 2023" readonly>
                 <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                 <div class="modal-body">
                     <div class="form-group row">
                         <input type="hidden" name="proses" value="upload">
+                        <label class="col-sm-5 col-form-label">Rencana Pengguna*</label>
+                        <div class="col-sm-12">
+                            <input type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengguna" required>
+                        </div>
                         <label class="col-sm-5 col-form-label">Kebutuhan ATK (*)</label>
                         <div class="col-sm-12">
                             <input type="file" name="file_atk" class="form-control">

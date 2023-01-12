@@ -1828,6 +1828,7 @@ class UserController extends Controller
 
             return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
         } elseif ($aksi == 'preview-pengadaan') {
+            dd($request->all());
             if ($id == 'preview') {
                 $usulan = UsulanAtk::where('id_form_usulan', $request->id_form_usulan)->first();
                 $idUsulan = $usulan->id_form_usulan;
