@@ -111,7 +111,7 @@
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Konfirmasi BAST <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">Selesai</span>
                                             @endif
