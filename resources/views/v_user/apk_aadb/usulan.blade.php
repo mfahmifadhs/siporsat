@@ -385,8 +385,18 @@
                         </div>
                     </div>
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label">Pilih Kendaraan</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                                <h6>
+                                    <i class="icon fas fa-info-circle fa-1x"></i>
+                                    Pengajuan Voucher BBM untuk bulan berikutnya, maksimal tanggal 20 bulan berjalan
+                                </h6>
+                                Info alert preview. This alert is dismissable.
+                            </div>
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
