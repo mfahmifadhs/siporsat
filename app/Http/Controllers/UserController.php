@@ -1834,6 +1834,7 @@ class UserController extends Controller
                 $noSurat  = $usulan->no_surat_usulan;
                 $tanggal  = $usulan->tanggal_usulan;
                 $rencana  = $usulan->rencana_pengguna;
+                dd($rencana);
 
                 $resultAtk   = UsulanAtkPengadaan::where('form_usulan_id', $request->id_form_usulan)->where('jenis_barang', 'ATK')->get();
                 $resultAlkom = UsulanAtkPengadaan::where('form_usulan_id', $request->id_form_usulan)->where('jenis_barang', 'ALKOM')->get();
