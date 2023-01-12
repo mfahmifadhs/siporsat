@@ -404,6 +404,7 @@
                                         <th style="width: 15%;" class="pb-4">Jenis AADB</th>
                                         <th style="width: 20%;" class="pb-4">No. Plat</th>
                                         <th class=" pb-4">Kendaraan</th>
+                                        <th style="width: 10%;" class=" pb-4">Kualifikasi</th>
                                         <th class="text-center" style="width: 20%;">
                                             Pilih Kendaraan <br>
                                             <input type="checkbox" id="selectAll" style="scale: 1.7;">
@@ -421,6 +422,7 @@
                                         </td>
                                         <td class="">{{ $dataAadb->no_plat_kendaraan }}</td>
                                         <td class="">{{ $dataAadb->merk_tipe_kendaraan }}</td>
+                                        <td class="">{{ $dataAadb->kualifikasi }}</td>
                                         <td class="text-center">
                                             <input type="hidden" value="false" name="status_pengajuan[{{$i}}]">
                                             <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
