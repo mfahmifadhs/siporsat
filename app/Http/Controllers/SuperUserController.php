@@ -1853,6 +1853,7 @@ class SuperUserController extends Controller
                     $usulanServis->jatuh_tempo_servis       = $request->jatuh_tempo_servis[$i];
                     $usulanServis->tgl_ganti_oli_terakhir   = $request->tgl_ganti_oli_terakhir[$i];
                     $usulanServis->jatuh_tempo_ganti_oli    = $request->jatuh_tempo_ganti_oli[$i];
+                    $usulanServis->keterangan_servis        = $request->keterangan_servis[$i];
                     $usulanServis->save();
                 }
             } elseif ($id == 'perpanjangan-stnk') {
