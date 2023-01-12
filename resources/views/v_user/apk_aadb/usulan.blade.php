@@ -214,27 +214,27 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" required>
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]">
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)*</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000" required>
+                                <input type="text" class="form-control" name="jatuh_tempo_servis[]" placeholder="Contoh: 50000">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli*</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" required>
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]">
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)*</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000" required>
+                                <input type="text" class="form-control" name="jatuh_tempo_ganti_oli[]" placeholder="Contoh: 50000">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Keterangan Servis*</label>
                             <div class="col-sm-9">
-                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb"></textarea>
+                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -739,7 +739,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_servis_terakhir[]" required>
+                                <input type="date" class="form-control" name="tgl_servis_terakhir[]">
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Servis (KM)</label>
                             <div class="col-sm-3">
@@ -749,7 +749,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Ganti Oli</label>
                             <div class="col-sm-3">
-                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]" required>
+                                <input type="date" class="form-control" name="tgl_ganti_oli_terakhir[]">
                             </div>
                             <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
                             <div class="col-sm-3">
@@ -759,7 +759,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Keterangan Servis*</label>
                             <div class="col-sm-9">
-                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb"></textarea>
+                                <textarea name="keterangan_servis[]" class="form-control" placeholder="Contoh: Servis Rutin, Perbaikan Mesin, Dsb" required></textarea>
                             </div>
                         </div>
                     </div>`
