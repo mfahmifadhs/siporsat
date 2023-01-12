@@ -174,8 +174,8 @@
                                             <input type="text" name="no_plat_rhs" class="form-control" value="{{ $kendaraan->no_plat_rhs }}">
                                         </div>
                                         <div class="col-md-6 form-group">
-                                            @if ($kendaraan->mb_stnk_plat_kendaraan != null)
                                             <label>Masa Berlaku STNK RHS: </label>
+                                            @if ($kendaraan->mb_stnk_plat_kendaraan != null)
                                             <input type="date" name="mb_stnk_plat_rhs" class="form-control" value="{{ \Carbon\Carbon::parse($kendaraan->mb_stnk_plat_rhs)->isoFormat('Y-MM-DD') }}">
                                             @else
                                             <input type="date" name="mb_stnk_plat_rhs" class="form-control">
