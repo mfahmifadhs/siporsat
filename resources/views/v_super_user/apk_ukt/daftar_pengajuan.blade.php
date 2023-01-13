@@ -119,7 +119,11 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @endif
-
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_pengajuan_id == NULL)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/hapus/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-trash-alt"></i> Hapus
+                                            </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

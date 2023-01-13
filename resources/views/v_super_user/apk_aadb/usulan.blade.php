@@ -117,12 +117,14 @@
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
                         <div class="col-sm-12 text-right">
                             <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
                                 <i class="fas fa-paper-plane"></i> SUBMIT</button>
                         </div>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -234,12 +236,14 @@
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
                             <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -322,12 +326,15 @@
                             <span id="mb-stnk1" class="col-sm-9"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                         </div>
                     </div>
+
+                    @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
                             <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
                         </div>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -453,11 +460,13 @@
                         </div>
                     </div>
                 </div> -->
+                    @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="card-footer text-right">
                         <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
                             <i class="fa fa-paper-plane"></i> SUBMIT
                         </button>
                     </div>
+                    @endif
             </form>
         </div>
     </div>

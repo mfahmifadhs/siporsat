@@ -672,9 +672,9 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('status_proses_id', 'ASC')
-                ->orderBy('no_surat_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_ukt.daftar_pengajuan', compact('usulan'));
@@ -725,6 +725,10 @@ class SuperUserController extends Controller
             UsulanUktDetail::where('form_usulan_id', $id)->delete();
             UsulanUkt::where('id_form_usulan', $id)->delete();
             return redirect('super-user/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'hapus') {
+            UsulanUkt::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
+
         } else {
             $totalUsulan    = UsulanUkt::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -896,6 +900,9 @@ class SuperUserController extends Controller
             UsulanGdnDetail::where('form_usulan_id', $id)->delete();
             UsulanGdn::where('id_form_usulan', $id)->delete();
             return redirect('super-user/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'hapus') {
+            UsulanGdn::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/gdn/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
         } else {
             $totalUsulan    = UsulanGdn::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1040,9 +1047,9 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_atk.daftar_pengajuan', compact('usulan'));
@@ -1309,7 +1316,10 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-pembatalan') {
             UsulanAtkDetail::where('form_usulan_id', $id)->delete();
             UsulanAtk::where('id_form_usulan', $id)->delete();
-            return redirect('super-user/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+            return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'hapus') {
+            UsulanAtk::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
         } else {
             $totalUsulan    = UsulanAtk::where('jenis_form', $aksi)->count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1805,9 +1815,9 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                ->orderBy('tanggal_usulan', 'DESC')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
@@ -1946,6 +1956,10 @@ class SuperUserController extends Controller
             UsulanAadb::where('id_form_usulan', $id)->delete();
 
             return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'hapus') {
+            UsulanAadb::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
+
         } else {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -2784,6 +2798,9 @@ class SuperUserController extends Controller
             FormUsulanPengadaan::where('form_usulan_id', $id)->delete();
             FormUsulan::where('id_form_usulan', $id)->delete();
             return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'hapus') {
+            FormUsulan::where('id_form_usulan', $id)->delete();
+            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
         } else {
             if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5) {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2791,9 +2808,9 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                    ->orderBy('tanggal_usulan', 'DESC')
                     ->orderBy('status_pengajuan_id', 'ASC')
                     ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
                     ->get();
             } else {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')

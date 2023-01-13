@@ -102,6 +102,8 @@
                             </div>
                         </div>
                         <div id="section-gdn"></div>
+
+                        @if (Auth::user()->pegawai->jabatan_id != 7)
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
                             <div class="col-sm-10 text-right">
@@ -110,6 +112,7 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -125,13 +128,13 @@
         let total = 1
         let i = 0
 
-	$('.spesifikasi').summernote({
-                height: 150,
-                toolbar: [
-                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ol', 'ul', 'paragraph', 'height']],
-                ]
+        $('.spesifikasi').summernote({
+            height: 150,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                ['color', ['color']],
+                ['para', ['ol', 'ul', 'paragraph', 'height']],
+            ]
         })
         // More Item
         $('#btn-total').click(function() {
@@ -167,7 +170,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Bidang Perbaikan</label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan`+i+`">
+                            <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan` + i + `">
                                 <option value="">-- Pilih Bidang Kerusakan --</option>
                             </select>
                         </div>
@@ -187,7 +190,7 @@
                     <div id="section-gdn"></div>
                 </div>`
             )
-	    $('.spesifikasi').summernote({
+            $('.spesifikasi').summernote({
                 height: 150,
                 toolbar: [
                     ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],

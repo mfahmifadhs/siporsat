@@ -8,10 +8,13 @@ use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkLampiran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsulanAtk extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table        = "atk_tbl_form_usulan";
     protected $primaryKey   = "id_form_usulan";
     public $timestamps      = false;

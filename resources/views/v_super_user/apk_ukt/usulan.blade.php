@@ -84,14 +84,17 @@
                             </div>
                         </div>
                         <div id="section-ukt"></div>
+
+                        @if (Auth::user()->pegawai->jabatan_id != 7)
                         <div class="form-group row">
                             <label class="col-sm-2">&nbsp;</label>
                             <div class="col-sm-10 text-right">
                                 <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah anda ingin melakukan pengajuan pekerjaan ?')">
-                                   <i class="fas fa-paper-plane"></i> SUBMIT
+                                    <i class="fas fa-paper-plane"></i> SUBMIT
                                 </button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </form>
             </div>

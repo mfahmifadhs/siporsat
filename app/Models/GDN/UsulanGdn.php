@@ -5,10 +5,13 @@ namespace App\Models\gdn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\GDN\UsulanGdnDetail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsulanGdn extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table        = "gdn_tbl_form_usulan";
     protected $primaryKey   = "id_form_usulan";
     public $timestamps      = false;

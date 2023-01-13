@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\OLDAT\FormUsulanPengadaan;
 use App\Models\OLDAT\FormUsulanPerbaikan;
 use App\Models\OLDAT\Barang;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FormUsulan extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table        = "oldat_tbl_form_usulan";
     public $timestamps      = false;
 

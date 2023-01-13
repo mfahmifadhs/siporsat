@@ -169,6 +169,8 @@
                         </div>
                     </div> -->
                 </div>
+
+                @if (Auth::user()->pegawai->jabatan_id != 7)
                 <div class="card-footer">
                     @if ($stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') != 0)
                     <button type="submit" class="btn btn-primary btn-md font-weight-bold float-right" onclick="return confirm('Apakah data sudah benar ?')">
@@ -176,6 +178,7 @@
                     </button>
                     @endif
                 </div>
+                @endif
             </form>
         </div>
     </div>

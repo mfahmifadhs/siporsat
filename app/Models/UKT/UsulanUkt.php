@@ -5,10 +5,13 @@ namespace App\Models\Ukt;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\UKT\UsulanUktDetail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsulanUkt extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table        = "ukt_tbl_form_usulan";
     protected $primaryKey   = "id_form_usulan";
     public $timestamps      = false;

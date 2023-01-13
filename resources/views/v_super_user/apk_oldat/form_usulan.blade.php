@@ -195,6 +195,8 @@
                         </div>
                     </div>
                     @endif
+
+                    @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">&nbsp;</label>
                         <div class="col-sm-10 text-right">
@@ -203,6 +205,7 @@
                             </button>
                         </div>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>
