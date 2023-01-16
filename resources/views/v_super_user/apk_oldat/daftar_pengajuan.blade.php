@@ -35,11 +35,11 @@
 
             <div class="col-md-12 float-right form-group">
                 <div class="float-right">
-                    <a class="btn btn-primary btn-xs" href="{{ url('super-user/oldat/pengajuan/usulan/pengadaan') }}">
+                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/pengajuan/usulan/pengadaan') }}">
                         <i class="fa fa-laptop fa-2x py-1"></i> <br>
                         Usulan Pengadaan
                     </a>
-                    <a class="btn btn-primary btn-xs" href="{{ url('super-user/oldat/pengajuan/usulan/perbaikan') }}">
+                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/pengajuan/usulan/perbaikan') }}">
                         <i class="fa fa-tools fa-2x py-1"></i> <br>
                         Usulan Perbaikan
                     </a>
@@ -61,6 +61,7 @@
                                     <th style="width: 9%;">Tanggal</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
+                                    <th style="width: 15%;">Usulan</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
@@ -74,6 +75,17 @@
                                     <td>{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                                     <td>{{ $usulan->no_surat_usulan }}</td>
                                     <td>{{ $usulan->nama_pegawai }} <br> {{ $usulan->unit_kerja }}</td>
+                                    <td class="text-uppercase">
+                                        @if ($usulan->jenis_form == 'pengadaan')
+                                        @foreach ($usulan->detailPengadaan as $detailOldat)
+                                            {!! nl2br(e(Str::limit($detailOldat->kategori_barang, 50))) !!}
+                                        @endforeach
+                                        @else
+                                        @foreach ($usulan->detailPerbaikan as $detailOldat)
+                                            {!! nl2br(e(Str::limit($detailOldat->merk_tipe_barang, 50))) !!}
+                                        @endforeach
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <h6 class="mt-2">
                                             @if($usulan->status_pengajuan_id == 1)
@@ -283,7 +295,7 @@
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ],
+            ]
         })
     })
 </script>

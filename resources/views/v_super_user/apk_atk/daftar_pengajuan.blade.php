@@ -65,7 +65,7 @@
                                     <th style="width: 5%;">Usulan</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
-                                    <th>Rencana Pemakaian</th>
+                                    <th style="width: 15%;">Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
@@ -316,10 +316,14 @@
     $(function() {
         $("#table-usulan").DataTable({
             "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": false,
-            "paging": true
+            "lengthChange": true,
+            "autoWidth": true,
+            "info": true,
+            "paging": true,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ]
         })
     })
 </script>

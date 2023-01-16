@@ -34,19 +34,19 @@
 
         <div class="col-md-12 float-right form-group">
             <div class="float-right">
-                <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn btn-primary btn-sm mr-1">
                     <i class="fas fa-car fa-2x py-2"></i> <br>
                     Usulan Pengadaan
                 </a>
-                <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn btn-primary btn-sm mr-1">
                     <i class="fas fa-tools fa-2x py-2"></i> <br>
                     Usulan Servis
                 </a>
-                <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn btn-primary btn-xs mr-1">
+                <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn btn-primary btn-sm mr-1">
                     <i class="fas fa-id-card-alt fa-2x py-2"></i> <br>
                     Usulan Perpanjang STNK
                 </a>
-                <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn btn-primary btn-xs">
+                <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn btn-primary btn-sm">
                     <i class="fas fa-gas-pump fa-2x py-2"></i> <br>
                     Usulan Voucher BBM
                 </a>
@@ -68,6 +68,7 @@
                                     <th style="width: 9%;">Tanggal</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
+                                    <th style="width: 15%;">Usulan</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
@@ -81,6 +82,25 @@
                                     <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                                     <td>{{ $dataPengajuan->no_surat_usulan }}</td>
                                     <td>{{ $dataPengajuan->nama_pegawai }} <br> {{ $dataPengajuan->unit_kerja }}</td>
+                                    <td class="text-uppercase">
+                                        @if ($dataPengajuan->jenis_form == 1)
+                                        @foreach ($dataPengajuan->usulanKendaraan as $detailAadb)
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        @endforeach
+                                        @elseif ($dataPengajuan->jenis_form == 2)
+                                        @foreach ($dataPengajuan->usulanServis as $detailAadb)
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        @endforeach
+                                        @elseif ($dataPengajuan->jenis_form == 3)
+                                        @foreach ($dataPengajuan->usulanSTNK as $detailAadb)
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        @endforeach
+                                        @else
+                                        @foreach ($dataPengajuan->usulanVoucher as $detailAadb)
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        @endforeach
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <h6 class="mt-2">
                                             @if($dataPengajuan->status_pengajuan_id == 1)

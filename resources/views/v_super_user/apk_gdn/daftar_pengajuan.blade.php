@@ -34,6 +34,14 @@
                 </div>
                 @endif
             </div>
+            <div class="col-md-12 float-right form-group">
+                <div class="float-right">
+                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/gdn/usulan/perbaikan/baru') }}">
+                        <i class="fa fa-tools fa-2x py-1"></i> <br>
+                        Usulan Perbaikan
+                    </a>
+                </div>
+            </div>
             <div class="col-md-12 form-group">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -49,6 +57,7 @@
                                     <th style="width: 9%;">Tanggal</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
+                                    <th style="width: 15%;">Usulan</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
@@ -62,6 +71,11 @@
                                     <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
+                                    <td class="text-uppercase">
+                                        @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
+                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_spesifik, 50))) !!}
+                                        @endforeach
+                                    </td>
                                     <td class="text-center">
                                         <h6 class="mt-2">
                                             @if($dataUsulan->status_pengajuan_id == 1)
@@ -235,20 +249,11 @@
             "autoWidth": true,
             "info": true,
             "paging": true,
-            buttons: [{
-                text: '(+) Usulan Perbaikan',
-                className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
-                action: function(e, dt, node, config) {
-                    window.location.href = "{{ url('super-user/gdn/usulan/perbaikan/baru') }}"
-                }
-            }],
-            lengthMenu: [
-                [5, 10, 20, -1],
-                [5, 10, 20, 'Semua']
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
             ]
-
-
-        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
+        });
     })
 </script>
 
