@@ -14,6 +14,18 @@
 
 <!-- Main content -->
 <section class="content">
+    <div class="col-md-12 col-12 form-group">
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+        </div>
+        @endif
+        @if ($message = Session::get('failed'))
+        <div class="alert alert-danger">
+            <p class="fw-light" style="margin: auto;">{{ $message }}</p>
+        </div>
+        @endif
+    </div>
     <div class="container-fluid text-center">
         <div class="card-header">
             <h4>Prosedur Pengajuan Usulan</h4>

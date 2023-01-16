@@ -123,6 +123,7 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        @if (Auth::user()->pegawai->unitKerja->unit_utama_id == '02401')
                         <li class="nav-item">
                             <a href="{{ url('unit-kerja/dashboard') }}" class="nav-link {{ Request::is('unit-kerja/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -157,6 +158,7 @@
                                 </p>
                             </a>
                         </li>
+                        @endif
                         <!-- Gedung & Bangunan -->
                         <li class="nav-item">
                             <a href="{{ url('unit-kerja/gdn/dashboard') }}" class="nav-link font-weight-bold">

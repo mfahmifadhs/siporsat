@@ -289,7 +289,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     Route::post('verif/{aksi}/{id}', [UserController::class, 'Verification'])->middleware('2fa');
 
     // Oldat
-    Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
+    Route::group(['middleware' => ['uker:02401'], 'prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [UserController::class, 'Oldat']);
         Route::get('barang/{aksi}/{id}', [UserController::class, 'Items']);
         Route::get('/grafik', [UserController::class, 'SearchChartDataOldat']);
@@ -304,7 +304,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     });
 
     // Aadb
-    Route::group(['prefix' => 'aadb', 'as' => 'aadb'], function () {
+    Route::group(['middleware' => ['uker:02401'], 'prefix' => 'aadb', 'as' => 'aadb'], function () {
         Route::get('dashboard', [UserController::class, 'Aadb']);
         Route::get('/grafik', [UserController::class, 'SearchChartDataAadb']);
         Route::get('kendaraan/{aksi}/{id}', [UserController::class, 'Vehicle']);
@@ -337,12 +337,12 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     });
 
     // Rumah Dinas Negara
-    Route::group(['prefix' => 'rdn', 'as' => 'rdn'], function () {
+    Route::group(['middleware' => ['uker:02401'], 'prefix' => 'rdn', 'as' => 'rdn'], function () {
         Route::get('rumah/{aksi}/{id}', [UserController::class, 'OfficialResidence']);
     });
 
     // ATK
-    Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
+    Route::group(['middleware' => ['uker:02401'], 'prefix' => 'atk', 'as' => 'atk.'], function() {
         Route::get('dashboard', [UserController::class, 'Atk']);
         Route::get('barang/{aksi}/{id}', [UserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAtk']);
