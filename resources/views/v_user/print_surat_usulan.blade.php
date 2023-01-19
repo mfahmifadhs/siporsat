@@ -76,27 +76,49 @@
             <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'usulan-oldat')
                 <table class="table table-bordered m-0">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode Barang</th>
-                            <th>Nama Barang</th>
-                            <th>Merk/Tipe Barang</th>
-                            <th>Tahun Perolehan</th>
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody>
-                        @foreach($usulan->detailPerbaikan as $dataBarang)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
-                            <td>{{ $dataBarang->kategori_barang }}</td>
-                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->tahun_perolehan }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe Barang</th>
+                                            @if($usulan->jenis_form == 'pengadaan')
+                                            <th>Spesifikasi</th>
+                                            <th>Jumlah</th>
+                                            <th>Estimasi Biaya</th>
+                                            @else
+                                            <th>Tahun Perolehan</th>
+                                            <th>Keterangan Kerusakan</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @if($usulan->jenis_form == 'pengadaan')
+                                        @foreach($usulan->detailPengadaan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kategori_barang_id }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>{!! nl2br(e($dataBarang->spesifikasi_barang)) !!}</td>
+                                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                        @foreach($usulan->detailPerbaikan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                            <td>{{ $dataBarang->tahun_perolehan }}</td>
+                                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
                 </table>
                 @elseif ($modul == 'usulan-atk')
                 <table class="table table-bordered m-0">

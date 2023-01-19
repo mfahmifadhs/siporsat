@@ -2802,7 +2802,7 @@ class SuperUserController extends Controller
             FormUsulan::where('id_form_usulan', $id)->delete();
             return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
         } else {
-            if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5) {
+            if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5 || Auth::user()->pegawai->jabatan_id == 4) {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -2824,7 +2824,7 @@ class SuperUserController extends Controller
                     ->orderBy('status_proses_id', 'ASC')
                     ->get();
             }
-
+	    
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
         }
     }

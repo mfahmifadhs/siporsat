@@ -764,9 +764,10 @@ class UserController extends Controller
             ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
-            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('status_pengajuan_id', 'ASC')
+	    ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+	     ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
         return view('v_user.apk_oldat.index', compact('googleChartData', 'usulan'));
