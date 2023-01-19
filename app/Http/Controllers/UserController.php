@@ -2022,7 +2022,7 @@ class UserController extends Controller
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = UsulanAtk::where('jenis_form', $aksi)->count();
+            $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kelompokAtk    = KelompokAtk::get();
             $stok           = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')

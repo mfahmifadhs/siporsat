@@ -1321,7 +1321,7 @@ class SuperUserController extends Controller
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
         } else {
-            $totalUsulan    = UsulanAtk::where('jenis_form', $aksi)->count();
+            $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kelompokAtk    = KelompokAtk::get();
             $stok           = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
