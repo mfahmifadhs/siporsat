@@ -268,7 +268,7 @@
                                                             <div class="col-sm-2">{{ $dataPengadaan->jenis_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->merk_tipe_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->tahun_kendaraan }}</div>
-                                                            <div class="col-sm-1">{{ $dataPengajuan->jumlah_pengajuan }}</div>
+                                                            <div class="col-sm-1">{{ $dataPengadaan->jumlah_pengajuan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
