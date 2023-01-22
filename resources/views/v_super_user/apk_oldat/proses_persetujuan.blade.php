@@ -43,7 +43,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" value="{{ $usulan->no_surat_usulan }}" readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ $usulan->no_surat_usulan }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -61,21 +61,17 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" value="{{ $usulan->tanggal_usulan }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
+                    @if($usulan->jenis_form == 'pengadaan')
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Bulan Pengadaan</label>
+                        <label class="col-sm-2 col-form-label">Rencana Pengguna</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('MMMM Y') }}" readonly>
+                            <textarea class="form-control" readonly>{{ $usulan->rencana_pengguna }}</textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Barang</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }} Barang" readonly>
-                        </div>
-                    </div>
+                    @endif
                     <div class="form-group row mt-4">
                         <div class="col-md-12">
                             <label class="text-muted">Informasi Barang</label>

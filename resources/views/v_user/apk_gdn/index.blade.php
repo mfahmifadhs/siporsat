@@ -96,8 +96,13 @@
                                 <tr class="text-center">
                                     <td class="pt-4">{{ $no++ }}</td>
                                     <td class="text-left">
-                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
-                                        No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }}</p>
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }} <br>
+                                        No. Surat :
+                                        @if ($dataUsulan->status_pengajuan_id == 1)
+                                            {{ strtoupper($dataUsulan->no_surat_usulan) }}
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                     <td class="pt-2">
                                         <h6 class="mt-3">
@@ -119,6 +124,10 @@
                                             <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            <span class="badge badge-sm badge-pill badge-warning">Konfirmasi Pekerjaan <br> telah Diterima</span>
+                                            @elseif ($dataUsulan->status_proses_id == 4)
+                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Konfirmasi BAST <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">Selesai</span>
                                             @endif
@@ -129,6 +138,11 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail

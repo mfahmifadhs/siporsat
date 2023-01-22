@@ -174,11 +174,18 @@ class UserController extends Controller
                     return redirect('unit-kerja/surat/usulan-atk/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '2') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'status_proses_id'    => 4
+                        'status_proses_id'    => 3
                     ]);
                     Google2FA::logout();
 
                     return redirect('unit-kerja/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Memproses Usulan');
+                } elseif ($usulan->status_proses_id == '3') {
+                    UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'status_proses_id'    => 4
+                    ]);
+                    Google2FA::logout();
+
+                    return redirect('unit-kerja/atk/dashboard')->with('success', 'Berhasil Memproses Usulan');
                 } elseif ($usulan->status_proses_id == '4') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'status_proses_id'    => 5
@@ -196,28 +203,13 @@ class UserController extends Controller
                     ]);
                     Google2FA::logout();
                     return redirect('unit-kerja/surat/usulan-oldat/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 1) {
+                } elseif ($usulan->status_proses_id == 3) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_usulan_kabag' => $request->one_time_password,
-                        'status_pengajuan_id' => 1,
-                        'status_proses_id'    => 2
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_proses_id'  => 4
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-oldat/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 2) {
-                    FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_bast_ppk' => $request->one_time_password,
-                        'status_proses_id'    => 4
-                    ]);
-                    Google2FA::logout();
-                    return redirect('unit-kerja/oldat/surat/surat-bast/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 4) {
-                    FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_bast_kabag'    => $request->one_time_password,
-                        'status_proses_id'  => 5
-                    ]);
-                    Google2FA::logout();
-                    return redirect('unit-kerja/oldat/surat/surat-bast/' . Auth::user()->sess_form_id);
+                    return redirect('unit-kerja/oldat/dashboard')->with('success', 'Berhasil Mengkonfirmasi BAST');
                 }
             } elseif (Auth::user()->sess_modul == 'aadb') {
 
@@ -229,28 +221,13 @@ class UserController extends Controller
                     ]);
                     Google2FA::logout();
                     return redirect('unit-kerja/surat/usulan-aadb/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 1) {
+                } elseif ($usulan->status_proses_id == 3) {
                     UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_usulan_kabag' => $request->one_time_password,
-                        'status_pengajuan_id' => 1,
-                        'status_proses_id'    => 2
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_proses_id'  => 4
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-aadb/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 2) {
-                    UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_bast_ppk' => $request->one_time_password,
-                        'status_proses_id'    => 4
-                    ]);
-                    Google2FA::logout();
-                    return redirect('unit-kerja/surat/bast-aadb/' . Auth::user()->sess_form_id);
-                } elseif ($usulan->status_proses_id == 4) {
-                    UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_bast_kabag'    => $request->one_time_password,
-                        'status_proses_id'  => 5
-                    ]);
-                    Google2FA::logout();
-                    return redirect('unit-kerja/surat/bast-aadb/' . Auth::user()->sess_form_id);
+                    return redirect('unit-kerja/aadb/dashboard');
                 }
             } elseif (Auth::user()->sess_modul == 'gdn') {
                 $usulan = UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->first();
@@ -269,6 +246,14 @@ class UserController extends Controller
                     ]);
                     Google2FA::logout();
                     return redirect('unit-kerja/surat/usulan-gdn/' . Auth::user()->sess_form_id);
+                } elseif ($usulan->status_proses_id == 3) {
+                    UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_pengajuan_id' => 1,
+                        'status_proses_id'    => 4
+                    ]);
+                    Google2FA::logout();
+                    return redirect('unit-kerja/gdn/dashboard');
                 }
             } elseif (Auth::user()->sess_modul == 'ukt') {
                 $usulan = UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->first();
@@ -287,6 +272,14 @@ class UserController extends Controller
                     ]);
                     Google2FA::logout();
                     return redirect('unit-kerja/surat/usulan-ukt/' . Auth::user()->sess_form_id);
+                } elseif ($usulan->status_proses_id == 3) {
+                    UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_pengajuan_id' => 1,
+                        'status_proses_id'    => 4
+                    ]);
+                    Google2FA::logout();
+                    return redirect('unit-kerja/ukt/dashboard');
                 }
             }
         } else {
@@ -634,27 +627,29 @@ class UserController extends Controller
     {
         $usulan = UsulanUkt::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('no_surat_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
             ->where('ukt_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
             ->get();
-        $googleChartData = $this->ChartDataAtk();
 
-        return view('v_user.apk_ukt.index', compact('googleChartData', 'usulan'));
+        return view('v_user.apk_ukt.index', compact('usulan'));
     }
 
     public function SubmissionUkt(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses') {
-            // $total = 0;
+            $totalUsulan    = UsulanUkt::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'UKT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
-            $usulan->no_surat_usulan    = $request->no_surat_usulan;
             $usulan->tanggal_usulan     = Carbon::now();
+            $usulan->no_surat_usulan    = $noSurat;
             $usulan->save();
 
             $detail = $request->lokasi_pekerjaan;
@@ -672,14 +667,15 @@ class UserController extends Controller
             UsulanUkt::where('id_form_usulan', $idFormUsulan)->update(['total_pengajuan' => count($request->lokasi_pekerjaan)]);
             return redirect('unit-kerja/verif/usulan-ukt/' . $idFormUsulan);
         } elseif ($aksi == 'proses-pembatalan') {
+            UsulanUkt::where('id_form_usulan', $id)->update([
+                'no_surat_usulan' => null
+            ]);
             UsulanUktDetail::where('form_usulan_id', $id)->delete();
             UsulanUkt::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/ukt/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = UsulanUkt::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $bidKerusakan   = BidangKerusakan::get();
-            return view('v_user.apk_ukt.usulan', compact('idUsulan', 'aksi', 'bidKerusakan'));
+            return view('v_user.apk_ukt.usulan', compact('aksi', 'bidKerusakan'));
         }
     }
     // ===============================================
@@ -702,14 +698,17 @@ class UserController extends Controller
     public function SubmissionGdn(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses') {
-            // $total = 0;
+            $totalUsulan    = UsulanGdn::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'GDN/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
-            $usulan->no_surat_usulan    = $request->no_surat_usulan;
-            $usulan->tanggal_usulan     = $request->tanggal_usulan;
+            $usulan->no_surat_usulan    = $noSurat;
+            $usulan->tanggal_usulan     = Carbon::now();
             $usulan->save();
 
             $detail = $request->lokasi_bangunan;
@@ -732,10 +731,8 @@ class UserController extends Controller
             UsulanGdn::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = UsulanGdn::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $bidKerusakan   = BidangKerusakan::get();
-            return view('v_user.apk_gdn.usulan', compact('idUsulan', 'aksi', 'bidKerusakan'));
+            return view('v_user.apk_gdn.usulan', compact('aksi', 'bidKerusakan'));
         }
     }
 
@@ -764,6 +761,7 @@ class UserController extends Controller
             ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
             ->where('pegawai_id', Auth::user()->pegawai_id)
@@ -905,6 +903,10 @@ class UserController extends Controller
     public function SubmissionOldat(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses-usulan' && $id == 'pengadaan') {
+            $totalUsulan    = FormUsulan::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'ODT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan       = $idFormUsulan;
@@ -912,9 +914,9 @@ class UserController extends Controller
             $formUsulan->kode_form            = 'OLDAT_001';
             $formUsulan->jenis_form           = 'pengadaan';
             $formUsulan->total_pengajuan      = $request->input('total_pengajuan');
-            $formUsulan->tanggal_usulan       = $request->input('tanggal_usulan');
+            $formUsulan->tanggal_usulan       = Carbon::now();
             $formUsulan->rencana_pengguna     = $request->input('rencana_pengguna');
-            $formUsulan->no_surat_usulan      = $request->no_surat_usulan;
+            $formUsulan->no_surat_usulan      = $noSurat;
             $formUsulan->save();
 
             $barang = $request->kategori_barang_id;
@@ -934,6 +936,10 @@ class UserController extends Controller
 
             return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
         } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
+            $totalUsulan    = FormUsulan::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'ODT/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan      = $idFormUsulan;
@@ -941,9 +947,9 @@ class UserController extends Controller
             $formUsulan->kode_form           = 'OLDAT_001';
             $formUsulan->jenis_form          = 'perbaikan';
             $formUsulan->total_pengajuan     = $request->input('total_pengajuan');
-            $formUsulan->tanggal_usulan      = $request->input('tanggal_usulan');
+            $formUsulan->tanggal_usulan      = Carbon::now();
             $formUsulan->rencana_pengguna    = $request->input('rencana_pengguna');
-            $formUsulan->no_surat_usulan     = $request->no_surat_usulan;
+            $formUsulan->no_surat_usulan     = $noSurat;
             $formUsulan->save();
 
             $barang = $request->kode_barang;
@@ -962,17 +968,18 @@ class UserController extends Controller
         } elseif ($aksi == 'proses-pembatalan') {
             FormUsulanPerbaikan::where('form_usulan_id', $id)->delete();
             FormUsulan::where('id_form_usulan', $id)->delete();
+            FormUsulan::where('id_form_usulan', $id)->update([
+                'no_surat_usulan' => null
+            ]);
             return redirect('unit-kerja/oldat/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = FormUsulan::where('jenis_form', $aksi)->count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->first();
 
-            return view('v_user.apk_oldat.usulan', compact('aksi', 'idUsulan', 'kategoriBarang', 'pegawai'));
+            return view('v_user.apk_oldat.usulan', compact('aksi', 'kategoriBarang', 'pegawai'));
         }
     }
 
@@ -1379,13 +1386,17 @@ class UserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                ->orderBy('tanggal_usulan', 'DESC')
-                ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
+            $totalUsulan    = UsulanAadb::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'ADB/'.$request->jenis_form.'/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
@@ -1393,10 +1404,10 @@ class UserController extends Controller
             $usulan->kode_form           = 'AADB_001';
             $usulan->jenis_form          = $request->jenis_form;
             $usulan->total_pengajuan     = count($request->kendaraan_id);
-            $usulan->tanggal_usulan      = $request->tanggal_usulan;
+            $usulan->tanggal_usulan      = Carbon::now();
             $usulan->rencana_pengguna    = $request->rencana_pengguna;
             $usulan->otp_usulan_pengusul = $request->kode_otp_usulan;
-            $usulan->no_surat_usulan     = $request->no_surat_usulan;
+            $usulan->no_surat_usulan     = $noSurat;
             $usulan->save();
 
             if ($id == 'pengadaan') {
@@ -1473,14 +1484,12 @@ class UserController extends Controller
             UsulanVoucherBBM::where('form_usulan_id', $id)->delete();
             return redirect('unit-kerja/aadb/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = UsulanAadb::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $jenisKendaraan = JenisKendaraan::get();
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('kualifikasi', '!=', null)
                 ->get();
-            return view('v_user.apk_aadb.usulan', compact('idUsulan', 'aksi', 'jenisKendaraan', 'kendaraan'));
+            return view('v_user.apk_aadb.usulan', compact('aksi', 'jenisKendaraan', 'kendaraan'));
         }
     }
 
@@ -1682,9 +1691,9 @@ class UserController extends Controller
         $usulan = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
-            ->orderBy('tanggal_usulan', 'DESC')
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
         $atk  = UsulanAtkDetail::select('atk_id', 'merk_atk', 'tanggal_usulan', 'atk_tbl.satuan', 'jenis_form', DB::raw('sum(jumlah_pengajuan) as total_atk'))
@@ -1767,13 +1776,17 @@ class UserController extends Controller
 
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses-distribusi') {
+            $totalUsulan    = UsulanAtk::count();
+            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $noSurat        = 'ATK/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
             $idFormUsulan = Carbon::now()->format('dhis');
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $id;
             $usulan->total_pengajuan    = count($request->id_pengadaan);
-            $usulan->no_surat_usulan    = $request->no_surat_usulan;
+            $usulan->no_surat_usulan    = strtoupper($noSurat);
             $usulan->tanggal_usulan     = Carbon::now();
             $usulan->rencana_pengguna   = $request->rencana_pengguna;
             $usulan->save();
@@ -1892,7 +1905,6 @@ class UserController extends Controller
                     foreach ($atk as $i => $dataAtk) {
                         $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                         $pengadaanAtk = new UsulanAtkPengadaan();
-                        $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);
                         $pengadaanAtk->form_usulan_id = $id_usulan;
                         $pengadaanAtk->jenis_barang = 'ATK';
                         $pengadaanAtk->nama_barang = strtoupper($request->atk_barang[$i]);
@@ -1914,7 +1926,6 @@ class UserController extends Controller
                         if ($request->alkom_jumlah != 0) {
                             $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = 'ALKOM';
                             $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
@@ -1939,7 +1950,6 @@ class UserController extends Controller
                         if ($request->jumlah != 0) {
                             $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->id_form_usulan_pengadaan = (int) $jumlahUsulan . rand(0000,9999);;
                             $pengadaanAtk->form_usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = strtoupper($request->jenis_barang[$i]);
                             $pengadaanAtk->nama_barang = strtoupper($request->barang[$i]);
@@ -1953,12 +1963,16 @@ class UserController extends Controller
                     }
                 }
 
+                $totalUsulan    = UsulanAtk::count();
+                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $noSurat        = 'ATK/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+
                 $usulan = new UsulanAtk();
                 $usulan->id_form_usulan     = $id_usulan;
                 $usulan->pegawai_id         = Auth::user()->pegawai_id;
                 $usulan->jenis_form         = 'pengadaan';
                 $usulan->total_pengajuan    = $totalAtk + $totalAlkom;
-                $usulan->no_surat_usulan    = $request->no_surat_usulan;
+                $usulan->no_surat_usulan    = strtoupper($noSurat);
                 $usulan->tanggal_usulan     = Carbon::now();
                 $usulan->rencana_pengguna   = $request->rencana_pengguna;
                 $usulan->save();

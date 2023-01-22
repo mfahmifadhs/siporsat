@@ -67,7 +67,7 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('HH:mm DD MMMM Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
@@ -96,7 +96,7 @@
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">konfirmasi pekerjaan <br> telah diterima</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
@@ -109,6 +109,11 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses

@@ -97,14 +97,14 @@
                     <?php $no = 1; ?>
                     <tbody>
                         @if($bast->jenis_form == 'pengadaan')
-                        @foreach($bast->barang as $dataBarang)
+                        @foreach($bast->detailPengadaan as $dataBarang)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                            <td>{{ $dataBarang->kategori_barang_id }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
-                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                            <td>{{ $dataBarang->merk_barang }}</td>
+                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                         </tr>
                         @endforeach
                         @else
@@ -124,8 +124,10 @@
             </div>
             <div class="col-md-12">
                 <div class="row text-center">
-                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                    @if($bast->status_proses_id >= 4)
                     <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                    @endif
                     @if($bast->status_proses_id == 5)
                     <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                     @endif
@@ -134,7 +136,9 @@
             <div class="col-md-12">
                 <div class="row text-center">
                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-oldat/'.$bast->otp_bast_ppk) !!}</label>
+                    @if($bast->status_proses_id >= 4)
                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-oldat/'.$bast->otp_bast_pengusul) !!}</label>
+                    @endif
                     @if($bast->status_proses_id == 5)
                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-oldat/'.$bast->otp_bast_kabag) !!}</label>
                     @endif
@@ -143,7 +147,9 @@
             <div class="col-md-12">
                 <div class="row text-center">
                     <label class="col-sm-4">Marten Avero, Skm</label>
+                    @if($bast->status_proses_id >= 4)
                     <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                    @endif
                     @if($bast->status_proses_id == 5)
                     <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                     @endif

@@ -61,7 +61,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Penyerahan </label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control text-capitalize" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control text-capitalize" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -81,12 +81,6 @@
                         <div class="col-sm-10">
                             <input type="hidden" name="unit_kerja_id" value="{{ $dataPengajuan->id_unit_kerja }}">
                             <input type="text" class="form-control text-capitalize" value="{{ $dataPengajuan->unit_kerja }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal Perolehan </label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control text-capitalize" name="tanggal_pengguna" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                         </div>
                     </div>
                     @if($dataPengajuan->jenis_form == 'pengadaan')

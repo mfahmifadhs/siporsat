@@ -58,7 +58,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 1%;">No</th>
-                                    <th style="width: 9%;">Tanggal</th>
+                                    <th style="width: 10%;">Tanggal</th>
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
                                     <th style="width: 15%;">Usulan</th>
@@ -72,8 +72,11 @@
                                 @foreach($formUsulan as $usulan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $usulan->no_surat_usulan }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
+                                    <td class="text-uppercase">
+                                        {{ $usulan->no_surat_usulan }} <br>
+                                        {{ $usulan->jenis_form }}
+                                    </td>
                                     <td>{{ $usulan->nama_pegawai }} <br> {{ $usulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         @if ($usulan->jenis_form == 'pengadaan')

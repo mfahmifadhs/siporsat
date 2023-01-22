@@ -41,9 +41,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal Selesai</label>
+                        <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -225,9 +225,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Tanggal Selesai Proses</label>
+                        <label class="col-sm-3 col-form-label">Tanggal</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     @foreach($pengajuan->usulanServis as $dataServis)
@@ -270,6 +270,12 @@
                         <label class="col-sm-3 col-form-label">Jatuh Tempo Ganti Oli (KM)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" value="{{ $dataServis->jatuh_tempo_ganti_oli }}" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-3 col-form-label">Keterangan Servis</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" readonly>{{ $dataServis->keterangan_servis }}</textarea>
                         </div>
                     </div>
                     @endforeach
@@ -344,15 +350,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Tanggal Selesai Proses</label>
+                        <label class="col-sm-3 col-form-label">Tanggal</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="tanggal_bast" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Jumlah Pengajuan</label>
-                        <div class="col-sm-2">
-                            <input type="number" name="total_pengajuan" id="jumlahKendaraan" class="form-control" value="{{ $pengajuan->total_pengajuan }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -440,7 +440,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ Carbon\carbon::parse($pengajuan->tanggal_bast)->isoFormat('DD MMMM Y') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -462,7 +462,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Jumlah Kendaraan</label>
+                        <label class="col-sm-2 col-form-label">Jumlah Pengajuan</label>
                         <div class="col-sm-2">
                             <input type="number" class="form-control" value="{{ $pengajuan->total_pengajuan }}" readonly>
                         </div>
@@ -473,10 +473,12 @@
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th>Bulan Pengadaan</th>
+                                        <th class="text-center" style="width: 1%;">No</th>
+                                        <th style="width: 15%;">Bulan Pengadaan</th>
+                                        <th style="width: 15%;">Jenis AADB</th>
+                                        <th style="width: 20%;">No. Plat</th>
                                         <th>Kendaraan</th>
-                                        <th>Jumlah Pengajuan</th>
+                                        <th style="width: 15%;">Kualifikasi</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -485,8 +487,10 @@
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
                                         <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                        <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
-                                        <td>{{ $dataVoucher->jumlah_pengajuan }} Kendaraan</td>
+                                        <td>{{ $dataVoucher->jenis_aadb }}</td>
+                                        <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                        <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                                        <td>{{ $dataVoucher->kualifikasi }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -40,10 +40,11 @@
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
                     @csrf
+
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" value="{{ $usulan->no_surat_usulan }}" readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ $usulan->no_surat_usulan }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -110,16 +111,16 @@
                         </div>
                         @elseif ($usulan->jenis_form == 2)
                         <div class="col-sm-10">
-                            <table class="table table-bordered text-center">
+                            <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
                                         <th>No</th>
+                                        <th>No. Plat</th>
                                         <th>Kendaraan</th>
-                                        <th>Kilometer Terakhir</th>
-                                        <th>Tanggal Terakhir Servis</th>
-                                        <th>Tanggal Jatuh Tempo Servis</th>
-                                        <th>Tanggal Terakhir Ganti Oli</th>
-                                        <th>Jatuh Tempo Ganti Oli</th>
+                                        <th>Kilometer</th>
+                                        <th>Jadwal Servis</th>
+                                        <th>Jadwal Ganti Oli</th>
+                                        <th>Keterangan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -127,12 +128,22 @@
                                     @foreach($usulan->usulanServis as $dataServis)
                                     <tr>
                                         <td>{{ $no++ }}</td>
+                                        <td>{{ $dataServis->no_plat_kendaraan }}</td>
                                         <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
-                                        <td>{{ $dataServis->kilometer_terakhir }}</td>
-                                        <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                        <td>{{ $dataServis->jatuh_tempo_servis }}</td>
-                                        <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                        <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
+                                        <td>{{ $dataServis->kilometer_terakhir }} Km</td>
+                                        <td>
+                                            Terakhir Servis : <br>
+                                            {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                            Jatuh Tempo Servis : <br>
+                                            {{ (int) $dataServis->jatuh_tempo_servis }} Km
+                                        </td>
+                                        <td>
+                                            Terakhir Ganti Oli : <br>
+                                            {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                            Jatuh Tempo Servis : <br>
+                                            {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
+                                        </td>
+                                        <td>{{ $dataServis->keterangan_servis }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -144,17 +155,21 @@
                                 <thead class="bg-secondary">
                                     <tr>
                                         <th>No</th>
+                                        <th>No. Plat</th>
                                         <th>Kendaraan</th>
+                                        <th>Pengguna</th>
                                         <th>Masa Berlaku STNK</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                    @foreach($usulan->usulanSTNK as $dataServis)
+                                    @foreach($usulan->usulanSTNK as $dataSTNK)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
-                                        <td>{{ $dataServis->mb_stnk_lama }}</td>
+                                        <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                        <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                                        <td>{{ $dataSTNK->pengguna }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -165,11 +180,12 @@
                             <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th class="text-center pb-4" style="width: 1%;">No</th>
-                                        <th style="width: 15%;" class="pb-4">Bulan Pengadaan</th>
-                                        <th style="width: 15%;" class="pb-4">Jenis AADB</th>
-                                        <th style="width: 20%;" class="pb-4">No. Plat</th>
-                                        <th class=" pb-4">Kendaraan</th>
+                                        <th class="text-center" style="width: 1%;">No</th>
+                                        <th style="width: 15%;">Bulan Pengadaan</th>
+                                        <th style="width: 15%;">Jenis AADB</th>
+                                        <th style="width: 20%;">No. Plat</th>
+                                        <th>Kendaraan</th>
+                                        <th style="width: 15%;" >Kualifikasi</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -181,6 +197,7 @@
                                         <td>{{ $dataVoucher->jenis_aadb }}</td>
                                         <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
                                         <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                                        <td>{{ $dataVoucher->kualifikasi }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

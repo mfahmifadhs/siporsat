@@ -49,7 +49,7 @@
 
 
                                 <div class="col-md-12">
-                                    <input id="one_time_password" type="number" class="form-control text-center" name="one_time_password" minLength="6" maxLength="6" required autofocus>
+                                    <input id="one_time_password" type="number" class="form-control text-center" name="one_time_password" required autofocus>
                                 </div>
                             </div>
 

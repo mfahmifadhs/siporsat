@@ -38,10 +38,6 @@
                 <h6>{{ \Carbon\carbon::parse($tanggal)->isoFormat('DD MMMM Y') }}</h6>
             </div>
             <div class="col-md-5">
-                <label>Nomor Surat : </label>
-                <h6 class="text-uppercase">{{ $noSurat }}</h6>
-            </div>
-            <div class="col-md-5">
                 <label>Rencana Pengguna : </label>
                 <h6>{{ $rencana }}</h6>
             </div>

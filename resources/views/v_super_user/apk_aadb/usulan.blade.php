@@ -40,14 +40,7 @@
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses/pengadaan') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/pengadaan/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
@@ -153,15 +146,7 @@
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses/servis') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ rand(1000,9999) }}">
                     <input type="hidden" name="jenis_form" value="2">
-                    <input type="hidden" name="total_pengajuan" value="1">
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/pemeliharaan/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-9">
@@ -238,9 +223,9 @@
                     </div>
                     @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">&nbsp;</label>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT</button>
                         </div>
                     </div>
                     @endif
@@ -272,14 +257,7 @@
             <div class="card-body">
                 <form action="{{ url('super-user/aadb/usulan/proses/perpanjangan-stnk') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="3">
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/perpanjanganstnk/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-9">
@@ -329,9 +307,9 @@
 
                     @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">&nbsp;</label>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT</button>
                         </div>
                     </div>
                     @endif
@@ -364,14 +342,7 @@
             <form action="{{ url('super-user/aadb/usulan/proses/voucher-bbm') }}" method="POST">
                 <div class="card-body">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="4">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/voucherbbm/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
@@ -462,7 +433,7 @@
                 </div> -->
                     @if (Auth::user()->pegawai->jabatan_id != 7)
                     <div class="card-footer text-right">
-                        <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
+                        <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan voucher bbm ?')">
                             <i class="fa fa-paper-plane"></i> SUBMIT
                         </button>
                     </div>

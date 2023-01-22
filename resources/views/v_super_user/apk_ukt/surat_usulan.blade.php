@@ -151,9 +151,9 @@
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody>
+                                    <tbody class="text-uppercase">
                                         @foreach($usulan->detailUsulanUkt as $dataUkt)
-                                        <tr class="text-uppercase">
+                                        <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
                                             <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>

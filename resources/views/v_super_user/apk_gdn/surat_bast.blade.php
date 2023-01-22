@@ -171,7 +171,9 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                    @endif
                                     @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                                     @endif
@@ -180,7 +182,9 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_ppk) !!}</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_pengusul) !!}</label>
+                                    @endif
                                     @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_kabag) !!}</label>
                                     @endif
@@ -189,7 +193,9 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    @endif
                                     @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
                                     @endif

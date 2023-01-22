@@ -13,7 +13,7 @@
                             Selamat Datang, {{ ucfirst(strtolower(Auth::user()->pegawai->nama_pegawai)) }}
                         </h5>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-primary font-weight-bold">
                             <div class="card-header text-center">
                                 <i class="fas fa-laptop"></i> Oldah Data & Meubelair
@@ -36,9 +36,18 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/oldat/pengajuan/status/4') }}">
                                 <div class="card-header">
-                                    <label>Konfirmasi BAST</label>
+                                    <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
                                         {{ $usulanOldat->where('status_proses_id', 4)->count() }}
                                         usulan
@@ -54,6 +63,15 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/oldat/dashboard') }}" class="bg-primary text-center">
                                 <div class="card-footer">
                                     Dashboard <i class="fas fa-arrow-circle-right"></i>
@@ -61,7 +79,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-primary font-weight-bold">
                             <div class="card-header">
                                 <i class="fas fa-car"></i> Alat Angkutan Darat Bermotor
@@ -84,9 +102,18 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/aadb/usulan/status/4') }}">
                                 <div class="card-header">
-                                    <label>Konfirmasi BAST</label>
+                                    <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
                                         {{ $usulanAadb->where('status_proses_id', 4)->count() }}
                                         usulan
@@ -102,6 +129,15 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/aadb/dashboard') }}" class="bg-primary text-center">
                                 <div class="card-footer">
                                     Dashboard <i class="fas fa-arrow-circle-right"></i>
@@ -109,7 +145,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-primary font-weight-bold">
                             <div class="card-header">
                                 <i class="fas fa-pencil-ruler"></i> Alat Tulis Kantor (ATK)
@@ -132,9 +168,18 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/atk/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/atk/usulan/status/4') }}">
                                 <div class="card-header">
-                                    <label>Konfirmasi BAST</label>
+                                    <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
                                         {{ $usulanAtk->where('status_proses_id', 4)->count() }}
                                         usulan
@@ -150,6 +195,15 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/atk/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/atk/dashboard') }}" class="bg-primary text-center">
                                 <div class="card-footer">
                                     Dashboard <i class="fas fa-arrow-circle-right"></i>
@@ -157,7 +211,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-primary font-weight-bold">
                             <div class="card-header">
                                 <i class="fas fa-building"></i> Gedung dan Bangunan
@@ -180,9 +234,18 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/gdn/usulan/status/4') }}">
                                 <div class="card-header">
-                                    <label>Konfirmasi BAST</label>
+                                    <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
                                         {{ $usulanGdn->where('status_proses_id', 4)->count() }}
                                         usulan
@@ -198,6 +261,15 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/gdn/dashboard') }}" class="bg-primary text-center">
                                 <div class="card-footer">
                                     Dashboard <i class="fas fa-arrow-circle-right"></i>
@@ -205,7 +277,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-primary font-weight-bold">
                             <div class="card-header">
                                 <i class="fas fa-suitcase"></i> Urusan Kerumah Tanggaan
@@ -228,9 +300,18 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
                             <a href="{{ url('super-user/ukt/usulan/status/4') }}">
                                 <div class="card-header">
-                                    <label>Konfirmasi BAST</label>
+                                    <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
                                         {{ $usulanUkt->where('status_proses_id', 4)->count() }}
                                         usulan
@@ -242,6 +323,15 @@
                                     <label>Selesai</label>
                                     <div class="card-tools">
                                         {{ $usulanUkt->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_pengajuan_id', 2)->count() }}
                                         usulan
                                     </div>
                                 </div>

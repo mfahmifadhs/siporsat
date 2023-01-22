@@ -128,6 +128,13 @@
                                     <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
                                 </div>
                                 @endif
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-12 text-justify mt-4">
+                                        Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
+                                        dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
+                                        berfungsi normal sebagaimana mestinya.
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 table-responsiv mb-5">
                                 @if ($modul == 'oldat')
@@ -150,14 +157,14 @@
                                     <?php $no = 1; ?>
                                     <tbody>
                                         @if($bast->jenis_form == 'pengadaan')
-                                        @foreach($bast->barang as $dataBarang)
+                                        @foreach($bast->detailPengadaan as $dataBarang)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                            <td>{{ $dataBarang->kategori_barang_id }}</td>
                                             <td>{{ $dataBarang->kategori_barang }}</td>
-                                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                                            <td>{{ $dataBarang->spesifikasi_barang }}</td>
-                                            <td>Rp {{ number_format($dataBarang->nilai_perolehan, 0, ',', '.') }}</td>
+                                            <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                                         </tr>
                                         @endforeach
                                         @else
@@ -301,12 +308,12 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No. Plat</th>
                                             <th>Kendaraan</th>
-                                            <th>Kilometer Terakhir</th>
-                                            <th>Tanggal Servis Terakhir</th>
-                                            <th>Jatuh Tempo Servis</th>
-                                            <th>Tanggal Ganti Oli Terakhir</th>
-                                            <th>Jatuh Tempo Ganti Oli</th>
+                                            <th>Kilometer</th>
+                                            <th>Jadwal Servis</th>
+                                            <th>Jadwal Ganti Oli</th>
+                                            <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -314,23 +321,34 @@
                                         @foreach($bast->usulanServis as $dataServis)
                                         <tr>
                                             <td>{{ $no++ }}</td>
+                                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
                                             <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
-                                            <td>{{ $dataServis->kilometer_terakhir }}</td>
-                                            <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_servis }}</td>
-                                            <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
+                                            <td>{{ $dataServis->kilometer_terakhir }} Km</td>
+                                            <td>
+                                                Terakhir Servis : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
+                                            </td>
+                                            <td>
+                                                Terakhir Ganti Oli : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
+                                            </td>
+                                            <td>{{ $dataServis->keterangan_servis }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 @elseif($bast->jenis_form == '3')
-                                <table class="table table-bordered m-0 text-capitalize">
+                                <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kendaraan</th>
                                             <th>No. Plat</th>
+                                            <th>Kendaraan</th>
+                                            <th>Pengguna</th>
                                             <th>Masa Berlaku STNK</th>
                                         </tr>
                                     </thead>
@@ -339,8 +357,9 @@
                                         @foreach($bast->usulanSTNK as $dataSTNK)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
                                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->pengguna }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach
@@ -375,25 +394,37 @@
                                 @endif
                                 @endif
                             </div>
-                            <div class="col-md-12 text-capitalize">
+                            <div class="col-md-12">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
+                                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 text-capitalize">
+                            <div class="col-md-12">
                                 <div class="row text-center">
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-'.$modul.'/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-'.$modul.'/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-'.$modul.'/'.$bast->otp_bast_pengusul) !!}</label>
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_ppk) !!}</label>
+                                    @if($bast->status_proses_id >= 4)
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_pengusul) !!}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_kabag) !!}</label>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 text-capitalize">
+                            <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                    @endif
                                 </div>
                             </div>
                         </div>

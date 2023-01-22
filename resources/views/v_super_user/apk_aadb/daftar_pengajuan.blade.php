@@ -65,8 +65,8 @@
                             <thead>
                                 <tr>
                                     <th style="width: 1%;">No</th>
-                                    <th style="width: 9%;">Tanggal</th>
-                                    <th style="width: 5%;">No. Surat</th>
+                                    <th style="width: 10%;">Tanggal</th>
+                                    <th style="width: 10%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
                                     <th style="width: 15%;">Usulan</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
@@ -79,25 +79,28 @@
                                 @foreach($pengajuan as $dataPengajuan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $dataPengajuan->no_surat_usulan }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($dataPengajuan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
+                                    <td>
+                                        {{ $dataPengajuan->no_surat_usulan }} <br>
+                                        {{ $dataPengajuan->jenis_form_usulan }}
+                                    </td>
                                     <td>{{ $dataPengajuan->nama_pegawai }} <br> {{ $dataPengajuan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         @if ($dataPengajuan->jenis_form == 1)
                                         @foreach ($dataPengajuan->usulanKendaraan as $detailAadb)
-                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
                                         @endforeach
                                         @elseif ($dataPengajuan->jenis_form == 2)
                                         @foreach ($dataPengajuan->usulanServis as $detailAadb)
-                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
                                         @endforeach
                                         @elseif ($dataPengajuan->jenis_form == 3)
                                         @foreach ($dataPengajuan->usulanSTNK as $detailAadb)
-                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
                                         @endforeach
                                         @else
                                         @foreach ($dataPengajuan->usulanVoucher as $detailAadb)
-                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
                                         @endforeach
                                         @endif
                                     </td>
@@ -246,17 +249,17 @@
                                                             <div class="col-sm-2">Keterangan</div>
                                                             @elseif ($dataPengajuan->jenis_form == 3)
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Kendaraan</div>
+                                                            <div class="col-sm-2">No. Plat</div>
+                                                            <div class="col-sm-4">Kendaraan</div>
+                                                            <div class="col-sm-3">Pengguna</div>
                                                             <div class="col-sm-2">Masa Berlaku STNK Lama</div>
-                                                            <div class="col-sm-2">Masa Berlaku STNK Baru</div>
-                                                            <div class="col-sm-2">Biaya Perpanjangan</div>
-                                                            <div class="col-sm-2">Baadbi Pembayaran</div>
                                                             @elseif ($dataPengajuan->jenis_form == 4)
                                                             <div class="col-sm-1 text-center">No</div>
                                                             <div class="col-sm-2">Bulan Pengadaan</div>
-                                                            <div class="col-sm-3">Jenis AADB</div>
-                                                            <div class="col-sm-3">No. Plat</div>
+                                                            <div class="col-sm-2">Jenis AADB</div>
+                                                            <div class="col-sm-2">No. Plat</div>
                                                             <div class="col-sm-3">Kendaraan</div>
+                                                            <div class="col-sm-2">Kualifikasi</div>
                                                             @endif
                                                         </div>
                                                         <hr class="bg-secondary">
@@ -283,16 +286,16 @@
                                                             <div class="col-sm-2">{{ $dataServis->kilometer_terakhir }} Km</div>
                                                             <div class="col-sm-2">
                                                                 Terakhir Servis : <br>
-                                                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }}
+                                                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
                                                                 Jatuh Tempo Servis : <br>
-                                                                {{ $dataServis->jatuh_tempo_servis }} Km
+                                                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
 
                                                             </div>
                                                             <div class="col-sm-2">
                                                                 Terakhir Ganti Oli : <br>
-                                                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }}
+                                                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
                                                                 Jatuh Tempo Servis : <br>
-                                                                {{ $dataServis->jatuh_tempo_ganti_oli }} Km
+                                                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
                                                             </div>
                                                             <div class="col-sm-2">{{ $dataServis->keterangan_servis }}</div>
                                                         </div>
@@ -302,10 +305,9 @@
                                                         @foreach($dataPengajuan->usulanStnk as $i =>$dataStnk)
                                                         <div class="form-group row">
                                                             <div class="col-sm-1 text-center">{{ $i+1 }}</div>
-                                                            <div class="col-sm-3">
-                                                                {{ $dataStnk->no_plat_kendaraan }} <br>
-                                                                {{ $dataStnk->merk_tipe_kendaraan.' '.$dataStnk->tahun_kendaraan }}
-                                                            </div>
+                                                            <div class="col-sm-2">{{ $dataStnk->no_plat_kendaraan }}</div>
+                                                            <div class="col-sm-4">{{ $dataStnk->merk_tipe_kendaraan.' '.$dataStnk->tahun_kendaraan }}</div>
+                                                            <div class="col-sm-3">{{ $dataStnk->pengguna }}</div>
                                                             <div class="col-sm-2">
                                                                 @if ($dataStnk->mb_stnk_lama != null)
                                                                 {{ \Carbon\carbon::parse($dataStnk->mb_stnk_lama)->isoFormat('DD MMMM Y') }}
@@ -313,24 +315,6 @@
                                                                 -
                                                                 @endif
                                                             </div>
-                                                            <div class="col-sm-2">
-                                                                @if ($dataStnk->mb_stnk_baru != null)
-                                                                {{ \Carbon\carbon::parse($dataStnk->mb_stnk_baru)->isoFormat('DD MMMM Y') }}
-                                                                @else
-                                                                -
-                                                                @endif
-                                                            </div>
-                                                            @if ($dataStnk->biaya_perpanjangan != null)
-                                                            <div class="col-sm-2">Rp {{ number_format($dataStnk->biaya_perpanjangan, 0, ',', '.') }}</div>
-                                                            <div class="col-sm-2">
-                                                                @if($dataStnk->baadbi_pembayaran != null)
-                                                                &emsp;Baadbi Pembayaran : <br><a href="{{ asset('gambar/kendaraan/stnk/'. $dataStnk->baadbi_pembayaran) }}" class="font-weight-bold" download>Download</a>
-                                                                @endif
-                                                            </div>
-                                                            @else
-                                                            <div class="col-sm-2">-</div>
-                                                            <div class="col-sm-2">-</div>
-                                                            @endif
                                                         </div>
                                                         <hr>
                                                         @endforeach
@@ -339,9 +323,10 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-1 text-center">{{ $i+1 }}</div>
                                                             <div class="col-sm-2">{{ \Carbon\carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</div>
-                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->jenis_aadb }}</div>
-                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->no_plat_kendaraan }}</div>
-                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->merk_tipe_kendaraan }}</div>
+                                                            <div class="col-sm-2 text-capitalize">{{ $dataVoucher->jenis_aadb }}</div>
+                                                            <div class="col-sm-2 text-capitalize">{{ $dataVoucher->no_plat_kendaraan }}</div>
+                                                            <div class="col-sm-3 text-capitalize">{{ $dataVoucher->merk_tipe_kendaraan }} Kendaraan</div>
+                                                            <div class="col-sm-2 text-capitalize">Kendaraan {{ $dataVoucher->kualifikasi }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

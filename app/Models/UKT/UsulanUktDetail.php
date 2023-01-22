@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UsulanUktDetail extends Model
 {
     use HasFactory;
+
     protected $table        = "ukt_tbl_form_usulan_detail";
     protected $primaryKey   = "id_form_usulan";
     public $timestamps      = false;

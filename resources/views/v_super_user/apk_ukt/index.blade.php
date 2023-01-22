@@ -94,7 +94,7 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td class="pt-4 text-center">{{ $no++ }}</td>
-                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }}</td>
                                     <td class="pt-4">{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td class="pt-3">{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-center">

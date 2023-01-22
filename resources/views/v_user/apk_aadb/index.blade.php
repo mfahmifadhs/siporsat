@@ -203,9 +203,14 @@
                                 <tr class="text-center">
                                     <td class="text-center pt-3" style="width: 5vh;">{{ $no++ }}</td>
                                     <td class="text-left">
-                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }} <br>
-                                        No. Surat.{{ strtoupper($dataUsulan->no_surat_usulan) }} <br>
-                                        {{ $dataUsulan->jenis_form_usulan }}
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }} <br>
+                                        {{ $dataUsulan->jenis_form_usulan }} <br>
+                                        No. Surat :
+                                        @if ($dataUsulan->status_pengajuan_id == 1)
+                                        {{ strtoupper($dataUsulan->no_surat_usulan) }}
+                                        @else
+                                        -
+                                        @endif
                                     </td>
                                     <td class="pt-2">
                                         <h6 class="mt-3">
@@ -227,8 +232,10 @@
                                             <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            <span class="badge badge-sm badge-pill badge-warning">Konfirmasi Pekerjaan <br> telah Diterima</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
-                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Konfirmasi BAST<br> Kabag RT</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Konfirmasi BAST <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">Selesai</span>
                                             @endif
@@ -239,6 +246,11 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
@@ -331,11 +343,10 @@
                                                             <div class="col-sm-2">Keterangan</div>
                                                             @elseif ($dataUsulan->jenis_form == 3)
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Kendaraan</div>
+                                                            <div class="col-sm-2">No. Plat</div>
+                                                            <div class="col-sm-4">Kendaraan</div>
+                                                            <div class="col-sm-3">Pengguna</div>
                                                             <div class="col-sm-2">Masa Berlaku STNK Lama</div>
-                                                            <div class="col-sm-2">Masa Berlaku STNK Baru</div>
-                                                            <div class="col-sm-2">Biaya Perpanjangan</div>
-                                                            <div class="col-sm-2">Bukti Pembayaran</div>
                                                             @elseif ($dataUsulan->jenis_form == 4)
                                                             <div class="col-sm-1 text-center">No</div>
                                                             <div class="col-sm-2">Bulan Pengadaan</div>
@@ -354,7 +365,7 @@
                                                             <div class="col-sm-2">{{ $dataPengadaan->jenis_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->merk_tipe_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->tahun_kendaraan }}</div>
-                                                            <div class="col-sm-1">{{ $dataUsulan->total_pengajuan }}</div>
+                                                            <div class="col-sm-1">{{ $dataPengadaan->jumlah_pengajuan }} Kendaraan</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
@@ -371,14 +382,14 @@
                                                                 Terakhir Servis : <br>
                                                                 {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }}
                                                                 Jatuh Tempo Servis : <br>
-                                                                {{ $dataServis->jatuh_tempo_servis }} Km
+                                                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
 
                                                             </div>
                                                             <div class="col-sm-2">
                                                                 Terakhir Ganti Oli : <br>
                                                                 {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }}
                                                                 Jatuh Tempo Servis : <br>
-                                                                {{ $dataServis->jatuh_tempo_ganti_oli }} Km
+                                                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
                                                             </div>
                                                             <div class="col-sm-2">{{ $dataServis->keterangan_servis }}</div>
                                                         </div>
@@ -388,10 +399,9 @@
                                                         @foreach($dataUsulan->usulanStnk as $i =>$dataStnk)
                                                         <div class="form-group row">
                                                             <div class="col-sm-1 text-center">{{ $i+1 }}</div>
-                                                            <div class="col-sm-3">
-                                                                {{ $dataStnk->no_plat_kendaraan }} <br>
-                                                                {{ $dataStnk->merk_tipe_kendaraan.' '.$dataStnk->tahun_kendaraan }}
-                                                            </div>
+                                                            <div class="col-sm-2">{{ $dataStnk->no_plat_kendaraan }}</div>
+                                                            <div class="col-sm-4">{{ $dataStnk->merk_tipe_kendaraan.' '.$dataStnk->tahun_kendaraan }}</div>
+                                                            <div class="col-sm-3">{{ $dataStnk->pengguna }}</div>
                                                             <div class="col-sm-2">
                                                                 @if ($dataStnk->mb_stnk_lama != null)
                                                                 {{ \Carbon\carbon::parse($dataStnk->mb_stnk_lama)->isoFormat('DD MMMM Y') }}
@@ -399,24 +409,6 @@
                                                                 -
                                                                 @endif
                                                             </div>
-                                                            <div class="col-sm-2">
-                                                                @if ($dataStnk->mb_stnk_baru != null)
-                                                                {{ \Carbon\carbon::parse($dataStnk->mb_stnk_baru)->isoFormat('DD MMMM Y') }}
-                                                                @else
-                                                                -
-                                                                @endif
-                                                            </div>
-                                                            @if ($dataStnk->biaya_perpanjangan != null)
-                                                            <div class="col-sm-2">Rp {{ number_format($dataStnk->biaya_perpanjangan, 0, ',', '.') }}</div>
-                                                            <div class="col-sm-2">
-                                                                @if($dataStnk->bukti_pembayaran != null)
-                                                                &emsp;Bukti Pembayaran : <br><a href="{{ asset('gambar/kendaraan/stnk/'. $dataStnk->bukti_pembayaran) }}" class="font-weight-bold" download>Download</a>
-                                                                @endif
-                                                            </div>
-                                                            @else
-                                                            <div class="col-sm-2">-</div>
-                                                            <div class="col-sm-2">-</div>
-                                                            @endif
                                                         </div>
                                                         <hr>
                                                         @endforeach

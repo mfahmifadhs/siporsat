@@ -76,7 +76,7 @@
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
                                     <td class="text-uppercase">{{ $dataUsulan->jenis_form }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
@@ -102,9 +102,9 @@
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">barang sudah <br> dapat diambil pengusul</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
-                                            <span class="badge badge-sm badge-pill badge-warning">sedang diproses <br> petugas gudang</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST<br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">selesai</span>
                                             @endif
@@ -123,9 +123,9 @@
                                             <a class="dropdown-item btn" href="{{ url('super-user/ppk/atk/usulan/'.$dataUsulan->jenis_form.'/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
-                                            @elseif ($dataUsulan->status_proses_id == 5 && $dataUsulan->jenis_form == 'distribusi')
-                                            <a class="dropdown-item btn" href="{{ url('super-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-arrow-alt-circle-right"></i> BAST
+                                            @elseif (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 4)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">

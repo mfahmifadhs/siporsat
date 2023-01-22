@@ -46,20 +46,13 @@
             <div class="card-body">
                 <form class="form-pengajuan" action="{{ url('super-user/oldat/pengajuan/proses-usulan/'. $id ) }}" method="POST">
                     <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <span id="kode_otp"></span>
                     @csrf
                     <div class="form-group row">
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/oldat/'.$id.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan </label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control text-capitalize" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control text-capitalize" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -117,15 +110,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Merk Barang (*)</label>
+                            <label class="col-sm-2 col-form-label">Merk Barang*</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="merk_barang[]" placeholder="Merk">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jumlah</label>
+                            <label class="col-sm-2 col-form-label">Jumlah*</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" name="jumlah_barang[]">
+                                <input type="number" class="form-control" name="jumlah_barang[]" value="1">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -135,13 +128,13 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Estimasi Harga (*)</label>
+                            <label class="col-sm-2 col-form-label">Estimasi Harga*</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control price" name="estimasi_biaya[]" placeholder="Estimasi Harga / Barang" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Spesifikasi (*)</label>
+                            <label class="col-sm-2 col-form-label">Spesifikasi</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" name="spesifikasi_barang[]" placeholder="Contoh: Lenovo, RAM 8 GB" rows="3"></textarea>
                             </div>
@@ -322,7 +315,7 @@
                                 <div class="col-sm-2">
                                     <span id="nup_barang` + j + `"><input type="text" class="form-control" readonly></span>
                                 </div>
-                                <label class="col-sm-1 col-form-label">Tahun Perolehan</label>
+                                <label class="col-sm-1 col-form-label">Tahun</label>
                                 <div class="col-sm-2">
                                     <span id="tahun_perolehan` + j + `"><input class="form-control" readonly></span>
                                 </div>

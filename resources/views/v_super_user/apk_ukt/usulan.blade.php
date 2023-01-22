@@ -39,14 +39,7 @@
             <div class="card-body">
                 <form action="{{ url('super-user/ukt/usulan/proses/pengajuan') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="{{ $aksi }}">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/UKT/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">

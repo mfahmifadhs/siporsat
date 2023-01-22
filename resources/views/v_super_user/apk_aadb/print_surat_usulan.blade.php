@@ -79,7 +79,7 @@
                             <th>Jenis Kendaraan</th>
                             <th>Merk/Tipe</th>
                             <th>Kualifikasi</th>
-                            <th>Jumlah Pengajuan</th>
+                            <th>Jumlah</th>
                             <th>Tahun</th>
                         </tr>
                     </thead>
@@ -103,12 +103,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>No. Plat</th>
                             <th>Kendaraan</th>
-                            <th>Kilometer Terakhir</th>
-                            <th>Tanggal Servis Terakhir</th>
-                            <th>Jatuh Tempo Servis</th>
-                            <th>Tanggal Ganti Oli Terakhir</th>
-                            <th>Jatuh Tempo Ganti Oli</th>
+                            <th>Kilometer</th>
+                            <th>Jadwal Servis</th>
+                            <th>Jadwal Ganti Oli</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
@@ -117,12 +116,21 @@
                         @foreach($dataUsulan->usulanServis as $dataServis)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
                             <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
-                            <td>{{ $dataServis->kilometer_terakhir }}</td>
-                            <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                            <td>{{ $dataServis->jatuh_tempo_servis }}</td>
-                            <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                            <td>{{ $dataServis->jatuh_tempo_ganti_oli }}</td>
+                            <td>{{ $dataServis->kilometer_terakhir }} Km</td>
+                            <td>
+                                Terakhir Servis : <br>
+                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                Jatuh Tempo Servis : <br>
+                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
+                            </td>
+                            <td>
+                                Terakhir Ganti Oli : <br>
+                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                Jatuh Tempo Servis : <br>
+                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
+                            </td>
                             <td>{{ $dataServis->keterangan_servis }}</td>
                         </tr>
                         @endforeach
@@ -133,8 +141,9 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kendaraan</th>
                             <th>No. Plat</th>
+                            <th>Kendaraan</th>
+                            <th>Pengguna</th>
                             <th>Masa Berlaku STNK</th>
                         </tr>
                     </thead>
@@ -143,8 +152,9 @@
                         @foreach($dataUsulan->usulanSTNK as $dataSTNK)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
                             <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataSTNK->pengguna }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                         </tr>
                         @endforeach
@@ -159,6 +169,7 @@
                             <th>Jenis AADB</th>
                             <th>No. Plat</th>
                             <th>Kendaraan</th>
+                            <th>Kualifikasi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -171,6 +182,7 @@
                             <td>{{ $dataVoucher->jenis_aadb }}</td>
                             <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
                             <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataVoucher->kualifikasi }}</td>
                         </tr>
                         @endif
                         @endforeach

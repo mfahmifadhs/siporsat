@@ -40,18 +40,11 @@
             <div class="card-body">
                 <form action="{{ url('unit-kerja/aadb/usulan/proses/pengadaan') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/pengadaan/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -151,19 +144,11 @@
             <div class="card-body">
                 <form action="{{ url('unit-kerja/aadb/usulan/proses/servis') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ rand(1000,9999) }}">
                     <input type="hidden" name="jenis_form" value="2">
-                    <input type="hidden" name="total_pengajuan" value="1">
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/pemeliharaan/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <label class="col-form-label text-danger" style="font-size:13px;">
@@ -241,7 +226,9 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">&nbsp;</label>
                         <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -272,18 +259,11 @@
             <div class="card-body">
                 <form action="{{ url('unit-kerja/aadb/usulan/proses/perpanjangan-stnk') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="3">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/perpanjanganstnk/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Tanggal Usulan</label>
-                        <div class="col-sm-9">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                        <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <label class="col-form-label text-danger" style="font-size:13px;">
@@ -303,7 +283,7 @@
                         </div>
                         <hr style="border: 0.1px solid grey;" class="m-0">
                         <div class="form-group row mt-3">
-                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
                             <div class="col-sm-4">
                                 <select class="form-control text-capitalize kualifikasi" data-idtarget="1" required>
                                     <option value="">-- Pilih Kualifikasi --</option>
@@ -314,8 +294,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-10">
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan1" data-idtarget="1" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
@@ -325,20 +305,21 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Masa Berlaku STNK*</label>
-                            <span id="mb-stnk1" class="col-sm-9"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
+                            <label class="col-sm-2 col-form-label">Masa Berlaku STNK*</label>
+                            <span id="mb-stnk1" class="col-sm-10"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">&nbsp;</label>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">Submit</button>
+                    <div class="form-group row pt-5 text-right">
+                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <div class="col-sm-10">
+                            <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah data sudah benar ?')">
+                                <i class="fas fa-paper-plane"></i> SUBMIT
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
     </div>
 </section>
 
@@ -364,18 +345,11 @@
             <form action="{{ url('unit-kerja/aadb/usulan/proses/voucher-bbm') }}" method="POST">
                 <div class="card-body">
                     @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="4">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/aadb/voucherbbm/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -662,7 +636,7 @@
                         </div>
                         <hr style="border: 0.1px solid grey;" class="m-0">
                         <div class="form-group row mt-3">
-                            <label class="col-sm-3 col-form-label">Kualifikasi*</label>
+                            <label class="col-sm-2 col-form-label">Kualifikasi*</label>
                             <div class="col-sm-4">
                                 <select class="form-control text-capitalize kualifikasi" data-idtarget="` + j + `" required>
                                     <option value="">-- Pilih Kualifikasi --</option>
@@ -673,8 +647,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Pilih Kendaraan*</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-2 col-form-label">Pilih Kendaraan*</label>
+                            <div class="col-sm-10">
                                 <select name="kendaraan_id[]" class="form-control text-capitalize kendaraan" id="kendaraan` + j + `" data-idtarget="` + j + `" required>
                                     <option value="">-- Pilih Kualifikasi Dahulu --</option>
                                 </select>
@@ -684,8 +658,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Masa Berlaku STNK</label>
-                            <span id="mb_stnk" class="col-sm-9">
+                            <label class="col-sm-2 col-form-label">Masa Berlaku STNK</label>
+                            <span id="mb_stnk" class="col-sm-10">
                                 <span id="mb-stnk` + j + `"><input type="text" class="form-control" placeholder="Masa Berlaku STNK" readonly></span>
                             </span>
                         </div>
@@ -788,7 +762,7 @@
                             $("#mb-stnk" + target).empty()
                             $.each(res, function(index, row) {
                                 $("#mb-stnk" + target).append(
-                                    '<input type="date" name="mb_stnk[]" class="form-control" value="' + row.mb_stnk_plat_kendaraan + '" readonly>'
+                                    '<input type="text" name="mb_stnk[]" class="form-control" value="' + row.mb_stnk_plat_kendaraan + '" readonly>'
                                 )
                             })
                         }

@@ -129,7 +129,12 @@
                                 <div class="form-group row mb-3 text-center">
                                     <div class="col-md-12 text-uppercase">
                                         usulan pengajuan <br>
-                                        nomor surat : {{ $usulan->no_surat_usulan }}
+                                        nomor surat :
+                                        @if ($usulan->status_pengajuan_id == 1)
+                                        {{ $usulan->no_surat_usulan }}
+                                        @else
+                                        -
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
@@ -309,7 +314,7 @@
                                             <th>Jenis Kendaraan</th>
                                             <th>Merk/Tipe</th>
                                             <th>Kualifikasi</th>
-                                            <th>Jumlah Pengajuan</th>
+                                            <th>Jumlah</th>
                                             <th>Tahun</th>
                                         </tr>
                                     </thead>
@@ -333,12 +338,11 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No. Plat</th>
                                             <th>Kendaraan</th>
-                                            <th>Kilometer Terakhir</th>
-                                            <th>Servis Terakhir</th>
-                                            <th>Jatuh Tempo Servis</th>
-                                            <th>Ganti Oli Terakhir</th>
-                                            <th>Jatuh Tempo Ganti Oli</th>
+                                            <th>Kilometer</th>
+                                            <th>Jadwal Servis</th>
+                                            <th>Jadwal Ganti Oli</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
@@ -347,18 +351,21 @@
                                         @foreach($usulan->usulanServis as $dataServis)
                                         <tr>
                                             <td>{{ $no++ }}</td>
+                                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataServis->kilometer_terakhir }} Km</td>
                                             <td>
-                                                {{ $dataServis->no_plat_kendaraan }} <br>
-                                                {{ $dataServis->merk_tipe_kendaraan }}
-                                                @if ($dataServis->pengguna != null)
-                                                <br>{{ $dataServis->pengguna }}
-                                                @endif
+                                                Terakhir Servis : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
                                             </td>
-                                            <td>{{ $dataServis->kilometer_terakhir }} KM</td>
-                                            <td>{{ $dataServis->tgl_servis_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_servis }} KM</td>
-                                            <td>{{ $dataServis->tgl_ganti_oli_terakhir }}</td>
-                                            <td>{{ $dataServis->jatuh_tempo_ganti_oli }} KM</td>
+                                            <td>
+                                                Terakhir Ganti Oli : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
+                                            </td>
                                             <td>{{ $dataServis->keterangan_servis }}</td>
                                         </tr>
                                         @endforeach
@@ -369,7 +376,9 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No. Plat</th>
                                             <th>Kendaraan</th>
+                                            <th>Pengguna</th>
                                             <th>Masa Berlaku STNK</th>
                                         </tr>
                                     </thead>
@@ -378,13 +387,9 @@
                                         @foreach($usulan->usulanSTNK as $dataSTNK)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>
-                                                {{ $dataSTNK->no_plat_kendaraan }} <br>
-                                                {{ $dataSTNK->merk_tipe_kendaraan }}
-                                                @if ($dataSTNK->pengguna != null)
-                                                <br>{{ $dataSTNK->pengguna }}
-                                                @endif
-                                            </td>
+                                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->pengguna }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach

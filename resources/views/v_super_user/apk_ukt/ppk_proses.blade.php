@@ -43,15 +43,15 @@
                     <input type="hidden" name="pegawai_id" value="{{ $dataPengajuan->id_pegawai }}">
                     <span id="kode_otp"></span>
                     @csrf
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$totalUsulan.'/'.Carbon\carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal Penyelesaian </label>
+                        <label class="col-sm-2 col-form-label">Tanggal </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-capitalize" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>

@@ -64,7 +64,7 @@
                 <a href="{{ url('super-user/atk/dashboard/pengadaan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
-                @if($bast->status_proses_id == 4)
+                @if($bast->status_proses_id == 5)
                 <a href="{{ url('super-user/atk/surat/print-surat-bast/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
@@ -179,22 +179,34 @@
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_ppk) !!}</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
-                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_pengusul) !!}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
+                                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-atk/'.$bast->otp_bast_kabag) !!}</label>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
+                                    @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    @endif
+                                    @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -38,12 +38,7 @@
             <div class="card-body">
                     @csrf
                     <input type="hidden" name="jenis_form" value="distribusi">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
+                    <input type="hidden"name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
@@ -201,12 +196,7 @@
                     @csrf
                     <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Nomor Surat</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                        </div>
-                    </div>
+                    <input type="hidden" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
@@ -305,7 +295,7 @@
                 <div class="modal-body">
                     <div class="form-group row">
                         <input type="hidden" name="proses" value="upload">
-                        <label class="col-sm-5 col-form-label">Rencana Pengguna*</label>
+                        <label class="col-sm-5 col-form-label">Rencana Pemakaian*</label>
                         <div class="col-sm-12">
                             <input type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengguna" required>
                         </div>

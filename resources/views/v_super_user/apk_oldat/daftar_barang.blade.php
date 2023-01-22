@@ -152,7 +152,7 @@
                 element.nup_barang,
                 element.kode_barang + `.` + element.nup_barang,
                 element.kategori_barang,
-                element.barang,
+                element.barang?.toString() || '',
                 `Rp ` + String(element.nilai_perolehan).replace(/(.)(?=(\d{3})+$)/g, '$1,'),
                 element.tahun_perolehan,
                 element.kondisi_barang,

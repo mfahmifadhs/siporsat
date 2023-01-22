@@ -49,6 +49,10 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-3">Tanggal Usulan</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
                     <div class="col-md-3">Pengusul</div>
                     <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</div>
                 </div>
@@ -59,10 +63,6 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Unit Kerja</div>
                     <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal Usulan</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-3">Rencana Pengguna</div>
@@ -82,7 +82,7 @@
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody  class="small">
+                    <tbody class="small">
                         @if ($form->jenis_form == 'pengadaan')
                         @foreach($dataUsulan->pengadaanAtk as $dataAtk)
                         <tr>
