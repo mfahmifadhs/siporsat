@@ -336,7 +336,6 @@ class UserController extends Controller
                 ->first();
 
             return view('v_user/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-
         } elseif ($aksi == 'usulan-gdn') {
             $modul = 'gdn';
             $form  = UsulanGdn::where('id_form_usulan', $id)->first();
@@ -641,7 +640,7 @@ class UserController extends Controller
         if ($aksi == 'proses') {
             $totalUsulan    = UsulanUkt::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'UKT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'UKT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
@@ -656,7 +655,7 @@ class UserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan    = UsulanUktDetail::count() + 1;
                 $detail      = new UsulanUktDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000,9999);
+                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000, 9999);
                 $detail->form_usulan_id         = $idFormUsulan;
                 $detail->lokasi_pekerjaan       = $detailUsulan;
                 $detail->spesifikasi_pekerjaan  = $request->spesifikasi_pekerjaan[$i];
@@ -700,7 +699,7 @@ class UserController extends Controller
         if ($aksi == 'proses') {
             $totalUsulan    = UsulanGdn::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'GDN/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'GDN/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
@@ -715,7 +714,7 @@ class UserController extends Controller
             foreach ($detail as $i => $detailUsulan) {
                 $idUsulan    = UsulanGdnDetail::count() + 1;
                 $detail      = new UsulanGdnDetail();
-                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000,9999);
+                $detail->id_form_usulan_detail  = (int) $idUsulan . rand(0000, 9999);
                 $detail->form_usulan_id   = $idFormUsulan;
                 $detail->bid_kerusakan_id = $request->bid_kerusakan_id[$i];
                 $detail->lokasi_bangunan  = $detailUsulan;
@@ -762,13 +761,9 @@ class UserController extends Controller
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
             ->orderBy('status_pengajuan_id', 'ASC')
-<<<<<<< HEAD
             ->orderBy('status_proses_id', 'ASC')
-=======
-	    ->orderBy('status_proses_id', 'ASC')
->>>>>>> c941b132f729be8292c65d84d5eddf20e84795b5
             ->orderBy('tanggal_usulan', 'DESC')
-	     ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
         return view('v_user.apk_oldat.index', compact('googleChartData', 'usulan'));
@@ -909,7 +904,7 @@ class UserController extends Controller
         if ($aksi == 'proses-usulan' && $id == 'pengadaan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ODT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
@@ -927,7 +922,7 @@ class UserController extends Controller
             foreach ($barang as $i => $kategoriBarang) {
                 $idUsulan       = FormUsulanPengadaan::count() + 1;
                 $detailUsulan   = new FormUsulanPengadaan();
-                $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000,9999);
+                $detailUsulan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000, 9999);
                 $detailUsulan->form_usulan_id         = $idFormUsulan;
                 $detailUsulan->kategori_barang_id     = $kategoriBarang;
                 $detailUsulan->merk_barang            = $request->merk_barang[$i];
@@ -942,7 +937,7 @@ class UserController extends Controller
         } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ODT/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
@@ -960,7 +955,7 @@ class UserController extends Controller
             foreach ($barang as $i => $kodeBarang) {
                 $idUsulan  = FormUsulanPerbaikan::count() + 1;
                 $detailUsulan   = new FormUsulanPerbaikan();
-                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan . rand(0000,9999);
+                $detailUsulan->id_form_usulan_perbaikan  = (int) $idUsulan . rand(0000, 9999);
                 $detailUsulan->form_usulan_id            = $idFormUsulan;
                 $detailUsulan->barang_id                 = $kodeBarang;
                 $detailUsulan->keterangan_perbaikan      = $request->keterangan_kerusakan[$i];
@@ -991,8 +986,20 @@ class UserController extends Controller
     {
         $char = '"';
         $dataBarang = Barang::select(
-            'id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan','kondisi_barang','pengguna_barang', 'unit_kerja',
-            'pengguna_barang', DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan"))
+            'id_barang',
+            'kode_barang',
+            'kategori_barang',
+            'nup_barang',
+            'jumlah_barang',
+            'satuan_barang',
+            'nilai_perolehan',
+            'kondisi_barang',
+            'pengguna_barang',
+            'unit_kerja',
+            'pengguna_barang',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
+        )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
@@ -1017,8 +1024,21 @@ class UserController extends Controller
     public function SearchChartDataOldat(Request $request)
     {
         $char = '"';
-        $dataBarang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang','nilai_perolehan','tahun_perolehan','kondisi_barang',
-            'pengguna_barang','unit_kerja', DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"), DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan"))
+        $dataBarang = Barang::select(
+            'id_barang',
+            'kode_barang',
+            'kategori_barang',
+            'nup_barang',
+            'jumlah_barang',
+            'satuan_barang',
+            'nilai_perolehan',
+            'tahun_perolehan',
+            'kondisi_barang',
+            'pengguna_barang',
+            'unit_kerja',
+            DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
+            DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
+        )
             ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
             ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
@@ -1399,7 +1419,7 @@ class UserController extends Controller
         } elseif ($aksi == 'proses') {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ADB/'.$request->jenis_form.'/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ADB/' . $request->jenis_form . '/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
@@ -1419,7 +1439,7 @@ class UserController extends Controller
                 foreach ($aadb as $i => $jenis_kendaraan) {
                     $idUsulan    = UsulanKendaraan::count() + 1;
                     $usulanPengadaan = new UsulanKendaraan();
-                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000,9999);
+                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . rand(0000, 9999);
                     $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                     $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                     $usulanPengadaan->jenis_kendaraan_id        = $jenis_kendaraan;
@@ -1429,13 +1449,12 @@ class UserController extends Controller
                     $usulanPengadaan->tahun_kendaraan           = $request->tahun_kendaraan[$i];
                     $usulanPengadaan->save();
                 }
-
             } elseif ($id == 'servis') {
                 $kendaraan      = $request->kendaraan_id;
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . rand(0000,9999);
+                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . rand(0000, 9999);
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -1451,7 +1470,7 @@ class UserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . rand(0000,9999);
+                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . rand(0000, 9999);
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
@@ -1464,7 +1483,7 @@ class UserController extends Controller
                     if ($request->status_pengajuan[$i] == 'true') {
                         $idUsulan    = UsulanVoucherBBM::count() + 1;
                         $usulanVoucherBBM   = new UsulanVoucherBBM();
-                        $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000,9999);
+                        $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000, 9999);
                         $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
                         $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
                         $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
@@ -1709,7 +1728,7 @@ class UserController extends Controller
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        $stok = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+        $stok = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->where('status_proses_id', 5)
             ->get();
@@ -1727,19 +1746,23 @@ class UserController extends Controller
             return view('v_user.apk_atk.stok', compact('googleChartData'));
         } elseif ($aksi == 'riwayat') {
             $spek = Crypt::decrypt($id);
-            $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            $permintaan = UsulanAtkPermintaan::select('atk_tbl_form_usulan.*','atk_tbl_form_usulan_pengadaan.*','atk_tbl_form_usulan_permintaan.jumlah',
-                'atk_tbl_form_usulan_permintaan.jumlah_disetujui')
-                ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
-                ->join('atk_tbl_form_usulan','id_form_usulan','atk_tbl_form_usulan_permintaan.form_usulan_id')
-                ->join('tbl_pegawai','id_pegawai','pegawai_id')
+            $permintaan = UsulanAtkPermintaan::select(
+                'atk_tbl_form_usulan.*',
+                'atk_tbl_form_usulan_pengadaan.*',
+                'atk_tbl_form_usulan_permintaan.jumlah',
+                'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
+            )
+                ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->where('spesifikasi', $spek)
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
@@ -1747,8 +1770,7 @@ class UserController extends Controller
                 ->get();
 
             $atk    = $pengadaan->first();
-            return view ('v_user.apk_atk.riwayat', compact('atk','pengadaan','permintaan'));
-
+            return view('v_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         }
     }
 
@@ -1782,7 +1804,7 @@ class UserController extends Controller
         } elseif ($aksi == 'proses-distribusi') {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ATK/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = Carbon::now()->format('dhis');
             $usulan = new UsulanAtk();
@@ -1801,7 +1823,7 @@ class UserController extends Controller
                 if ($request->jumlah_permintaan[$i] != 0) {
                     $id     = UsulanAtkPermintaan::count() + 1;
                     $detail = new UsulanAtkPermintaan();
-                    $detail->id_permintaan  = (int) $id . rand(0000,9999);
+                    $detail->id_permintaan  = (int) $id . rand(0000, 9999);
                     $detail->form_usulan_id = $idFormUsulan;
                     $detail->pengadaan_id   = $id_pengadaan;
                     $detail->jumlah         = $request->jumlah_permintaan[$i];
@@ -1817,31 +1839,31 @@ class UserController extends Controller
                 }
             }
 
-                // if ($dataAtk == 'lain-lain') {
-                //     // Input barang lain
-                //     $total  = Atk::where('kategori_atk_id', $request->kategori_atk_id[$i])->count();
-                //     $atk_id = $request->kategori_atk_id[$i] . str_pad($total + 1, 5, 0, STR_PAD_LEFT);
-                //     $detail->atk_id   = $atk_id;
-                //     $detail->atk_lain = strtoupper($request->barang_lain[$i]);
-                //     $cekAtk = Atk::where('merk_atk', 'like', '%' . $request->barang_lain[$i] . '%')->count();
-                //     if ($cekAtk == 0) {
-                //         $atkLain = new Atk();
-                //         $atkLain->id_atk          = $atk_id;
-                //         $atkLain->kategori_atk_id = $request->kategori_atk_id[$i];
-                //         $atkLain->merk_atk        = strtoupper($request->barang_lain[$i]);
-                //         $atkLain->total_atk       = 0;
-                //         $atkLain->satuan          = strtoupper($request->satuan[$i]);
-                //         $atkLain->save();
-                //     }
-                // } else {
-                    // Input barang yang sudah ada
-                //     $detail->atk_id = $request->atk_id[$i];
-                // }
+            // if ($dataAtk == 'lain-lain') {
+            //     // Input barang lain
+            //     $total  = Atk::where('kategori_atk_id', $request->kategori_atk_id[$i])->count();
+            //     $atk_id = $request->kategori_atk_id[$i] . str_pad($total + 1, 5, 0, STR_PAD_LEFT);
+            //     $detail->atk_id   = $atk_id;
+            //     $detail->atk_lain = strtoupper($request->barang_lain[$i]);
+            //     $cekAtk = Atk::where('merk_atk', 'like', '%' . $request->barang_lain[$i] . '%')->count();
+            //     if ($cekAtk == 0) {
+            //         $atkLain = new Atk();
+            //         $atkLain->id_atk          = $atk_id;
+            //         $atkLain->kategori_atk_id = $request->kategori_atk_id[$i];
+            //         $atkLain->merk_atk        = strtoupper($request->barang_lain[$i]);
+            //         $atkLain->total_atk       = 0;
+            //         $atkLain->satuan          = strtoupper($request->satuan[$i]);
+            //         $atkLain->save();
+            //     }
+            // } else {
+            // Input barang yang sudah ada
+            //     $detail->atk_id = $request->atk_id[$i];
+            // }
 
-                // $detail->jumlah_pengajuan      = $request->jumlah[$i];
-                // $detail->satuan_detail         = strtoupper($request->satuan[$i]);
-                // $detail->keterangan            = $request->keterangan[$i];
-                // $detail->save();
+            // $detail->jumlah_pengajuan      = $request->jumlah[$i];
+            // $detail->satuan_detail         = strtoupper($request->satuan[$i]);
+            // $detail->keterangan            = $request->keterangan[$i];
+            // $detail->save();
 
             return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
         } elseif ($aksi == 'preview-pengadaan') {
@@ -1969,7 +1991,7 @@ class UserController extends Controller
 
                 $totalUsulan    = UsulanAtk::count();
                 $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-                $noSurat        = 'ATK/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+                $noSurat        = 'ATK/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
                 $usulan = new UsulanAtk();
                 $usulan->id_form_usulan     = $id_usulan;
@@ -2010,7 +2032,6 @@ class UserController extends Controller
 
                 return redirect('unit-kerja/surat/usulan-atk/' . $id_usulan);
             }
-
         } elseif ($aksi == 'proses-diterima') {
 
             $detailId = $request->detail_form_id;
@@ -2220,16 +2241,22 @@ class UserController extends Controller
         //     ->where('status_proses_id', 5)
         //     ->get();
 
-        $dataAtk = UsulanAtkPengadaan::select('jenis_barang', 'nama_barang','spesifikasi', 'satuan',
-            DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'), DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
-            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-            ->groupBy('jenis_barang', 'nama_barang','spesifikasi','satuan')
+        $dataAtk = UsulanAtkPengadaan::select(
+            'jenis_barang',
+            'nama_barang',
+            'spesifikasi',
+            'satuan',
+            DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+            DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+        )
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+            ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi', 'satuan')
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->where('status_proses_id', 5)
             ->get();
 
         $totalAtk = UsulanAtkPengadaan::select('nama_barang', DB::raw('sum(jumlah_disetujui) as stok'))
-            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
             ->groupBy('nama_barang')
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->where('status_proses_id', 5)

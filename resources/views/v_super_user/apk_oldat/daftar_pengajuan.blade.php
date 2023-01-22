@@ -81,11 +81,11 @@
                                     <td class="text-uppercase">
                                         @if ($usulan->jenis_form == 'pengadaan')
                                         @foreach ($usulan->detailPengadaan as $detailOldat)
-                                            {!! nl2br(e(Str::limit($detailOldat->kategori_barang, 50))) !!}
+                                        {!! nl2br(e(Str::limit($detailOldat->kategori_barang, 50))) !!}
                                         @endforeach
                                         @else
                                         @foreach ($usulan->detailPerbaikan as $detailOldat)
-                                            {!! nl2br(e(Str::limit($detailOldat->merk_tipe_barang, 50))) !!}
+                                        {!! nl2br(e(Str::limit($detailOldat->merk_tipe_barang, 50))) !!}
                                         @endforeach
                                         @endif
                                     </td>
@@ -123,6 +123,12 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($usulan->status_proses_id == 3 && $usulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $usulan->id_form_usulan) }}"
+                                                onclick="return confirm('Apakah barang telah diterima?')">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $usulan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/oldat/pengajuan/persetujuan/'. $usulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
@@ -228,7 +234,7 @@
                                                             <div class="col-sm-1 text-center">No</div>
                                                             <div class="col-sm-2">Nama Barang</div>
                                                             <div class="col-sm-2">Merk/Tipe</div>
-							    <div class="col-sm-3">Spesifikasi</div>
+                                                            <div class="col-sm-3">Spesifikasi</div>
                                                             <div class="col-sm-2">Jumlah</div>
                                                             <div class="col-sm-2">Estimasi Biaya</div>
                                                         </div>
@@ -239,7 +245,7 @@
                                                             <div class="col-sm-2">{{ $dataOldat->kategori_barang }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->merk_barang }}</div>
                                                             <div class="col-sm-3">{{ $dataOldat->spesifikasi_barang }}</div>
-							    <div class="col-sm-2">{{ $dataOldat->jumlah_barang.' '.$dataOldat->satuan_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->jumlah_barang.' '.$dataOldat->satuan_barang }}</div>
                                                             <div class="col-sm-2">Rp {{ number_format($dataOldat->estimasi_biaya, 0, ',', '.') }}</div>
                                                         </div>
                                                         <hr>

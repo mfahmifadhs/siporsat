@@ -64,6 +64,11 @@
                 <a href="{{ url('super-user/atk/dashboard/pengadaan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
+                @if (Auth::user()->pegawai->jabatan_id == 2 && $bast->status_proses_id == 4)
+                <a href="{{ url('super-user/verif/usulan-atk/'. $bast->id_form_usulan) }}" class="btn btn-success" title="Konfirmasi BAST" onclick="return confirm('Konfirmasi BAST')">
+                    <i class="fas fa-file-signature"></i>
+                </a>
+                @endif
                 @if($bast->status_proses_id == 5)
                 <a href="{{ url('super-user/atk/surat/print-surat-bast/'. $bast->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>

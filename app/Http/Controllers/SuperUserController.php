@@ -237,6 +237,14 @@ class SuperUserController extends Controller
                     Google2FA::logout();
 
                     return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Memproses Usulan');
+                } elseif ($usulan->status_proses_id == '3') {
+                    UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_proses_id'  => 4
+                    ]);
+                    Google2FA::logout();
+
+                    return redirect('super-user/atk/surat/surat-bast/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '4') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'status_proses_id'    => 5
@@ -266,6 +274,14 @@ class SuperUserController extends Controller
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
                         'status_proses_id'    => 3
+                    ]);
+
+                    Google2FA::logout();
+                    return redirect('super-user/oldat/surat/surat-bast/' . Auth::user()->sess_form_id);
+                } elseif ($usulan->status_proses_id == 3) {
+                    FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul'   => $request->one_time_password,
+                        'status_proses_id'    => 4
                     ]);
 
                     Google2FA::logout();
@@ -300,6 +316,13 @@ class SuperUserController extends Controller
                     UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
                         'status_proses_id'    => 3
+                    ]);
+                    Google2FA::logout();
+                    return redirect('super-user/aadb/surat/surat-bast/' . Auth::user()->sess_form_id);
+                } elseif ($usulan->status_proses_id == 3) {
+                    UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul' => $request->one_time_password,
+                        'status_proses_id'    => 4
                     ]);
                     Google2FA::logout();
                     return redirect('super-user/aadb/surat/surat-bast/' . Auth::user()->sess_form_id);
@@ -2928,7 +2951,7 @@ class SuperUserController extends Controller
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->get();
             }
-	    
+
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
         }
     }

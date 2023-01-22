@@ -138,6 +138,12 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            @if ($dataPengajuan->status_proses_id == 3 && $dataPengajuan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-aadb/'. $dataPengajuan->id_form_usulan) }}"
+                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $dataPengajuan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/aadb/usulan/persetujuan/'. $dataPengajuan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
