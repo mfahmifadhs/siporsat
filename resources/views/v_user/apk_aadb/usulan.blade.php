@@ -450,7 +450,7 @@
                 </div>
                 <div class="card-footer text-right">
                     @if (count($kendaraan) != 0)
-                    <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan servis kendaraan ?')">
+                    <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Buat pengajuan voucher bbm?')">
                         <i class="fa fa-paper-plane"></i> SUBMIT
                     </button>
                     @endif

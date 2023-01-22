@@ -72,50 +72,54 @@
             </div>
             <div class="col-12 table-responsive mb-5">
                 <table class="table table-bordered m-0">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode Barang</th>
-                            <th>Nama Barang</th>
-                            <th>Merk/Tipe Barang</th>
-                            @if($usulan->jenis_form == 'pengadaan')
-                            <th>Estimasi Biaya</th>
-                            @else
-                            <th>Tahun Perolehan</th>
-                            <th>Keterangan Kerusakan</th>
-                            @endif
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody>
-                        @if($usulan->jenis_form == 'pengadaan')
-                        @foreach($usulan->detailPengadaan as $dataBarang)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
-                            <td>{{ $dataBarang->kategori_barang }}</td>
-                            <td>{{ $dataBarang->merk__tipebarang }}</td>
-                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
-                        </tr>
-                        @endforeach
-                        @else
-                        @foreach($usulan->detailPerbaikan as $dataBarang)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
-                            <td>{{ $dataBarang->kategori_barang }}</td>
-                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->tahun_perolehan }}</td>
-                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
-                        </tr>
-                        @endforeach
-                        @endif
-                    </tbody>
-                </table>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode Barang</th>
+                                        <th>Nama Barang</th>
+                                        <th>Merk/Tipe Barang</th>
+                                        @if($usulan->jenis_form == 'pengadaan')
+                                        <th>Spesifikasi</th>
+                                        <th>Jumlah</th>
+                                        <th>Estimasi Biaya</th>
+                                        @else
+                                        <th>Tahun Perolehan</th>
+                                        <th>Keterangan Kerusakan</th>
+                                        @endif
+                                    </tr>
+                                </thead>
+                                <?php $no = 1; ?>
+                                <tbody>
+                                    @if($usulan->jenis_form == 'pengadaan')
+                                    @foreach($usulan->detailPengadaan as $dataBarang)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarang->kategori_barang_id }}</td>
+                                        <td>{{ $dataBarang->kategori_barang }}</td>
+                                        <td>{{ $dataBarang->merk_barang }}</td>
+                                        <td>{!! nl2br(e($dataBarang->spesifikasi_barang)) !!}</td>
+                                        <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                                        <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
+                                    </tr>
+                                    @endforeach
+                                    @else
+                                    @foreach($usulan->detailPerbaikan as $dataBarang)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                        <td>{{ $dataBarang->kategori_barang }}</td>
+                                        <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                        <td>{{ $dataBarang->tahun_perolehan }}</td>
+                                        <td>{{ $dataBarang->keterangan_perbaikan }}</td>
+                                    </tr>
+                                    @endforeach
+                                    @endif
+                                </tbody>
+                            </table> 
             </div>
             <div class="col-md-12">
-                <div class="row text-center">
-                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
+                <div class="row text-center">                    
+		    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
                     @if ($usulan->otp_usulan_kabag != null)
                     <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                     @endif

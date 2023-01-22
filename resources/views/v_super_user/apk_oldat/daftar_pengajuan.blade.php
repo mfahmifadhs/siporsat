@@ -226,19 +226,21 @@
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Nama Barang</div>
-                                                            <div class="col-sm-3">Merk/Tipe</div>
+                                                            <div class="col-sm-2">Nama Barang</div>
+                                                            <div class="col-sm-2">Merk/Tipe</div>
+							    <div class="col-sm-3">Spesifikasi</div>
                                                             <div class="col-sm-2">Jumlah</div>
-                                                            <div class="col-sm-3">Estimasi Biaya</div>
+                                                            <div class="col-sm-2">Estimasi Biaya</div>
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @foreach($usulan->detailPengadaan as $i => $dataOldat)
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->kategori_barang }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->merk_barang }}</div>
-                                                            <div class="col-sm-2">{{ $dataOldat->jumlah_barang.' '.$dataOldat->satuan_barang }}</div>
-                                                            <div class="col-sm-3">Rp {{ number_format($dataOldat->estimasi_biaya, 0, ',', '.') }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->kategori_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->merk_barang }}</div>
+                                                            <div class="col-sm-3">{{ $dataOldat->spesifikasi_barang }}</div>
+							    <div class="col-sm-2">{{ $dataOldat->jumlah_barang.' '.$dataOldat->satuan_barang }}</div>
+                                                            <div class="col-sm-2">Rp {{ number_format($dataOldat->estimasi_biaya, 0, ',', '.') }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

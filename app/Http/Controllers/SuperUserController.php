@@ -1386,7 +1386,7 @@ class SuperUserController extends Controller
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('super-user/atk/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
         } else {
-            $totalUsulan    = UsulanAtk::where('jenis_form', $aksi)->count();
+            $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kelompokAtk    = KelompokAtk::get();
             $stok           = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
@@ -2907,7 +2907,7 @@ class SuperUserController extends Controller
             FormUsulan::where('id_form_usulan', $id)->delete();
             return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
         } else {
-            if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5) {
+            if (Auth::user()->pegawai->jabatan_id == 2 || Auth::user()->pegawai->jabatan_id == 5 || Auth::user()->pegawai->jabatan_id == 4) {
                 $formUsulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -2928,7 +2928,7 @@ class SuperUserController extends Controller
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->get();
             }
-
+	    
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
         }
     }

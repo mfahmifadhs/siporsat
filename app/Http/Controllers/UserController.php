@@ -762,9 +762,13 @@ class UserController extends Controller
             ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
             ->orderBy('status_pengajuan_id', 'ASC')
+<<<<<<< HEAD
             ->orderBy('status_proses_id', 'ASC')
+=======
+	    ->orderBy('status_proses_id', 'ASC')
+>>>>>>> c941b132f729be8292c65d84d5eddf20e84795b5
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+	     ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
         return view('v_user.apk_oldat.index', compact('googleChartData', 'usulan'));
@@ -2035,7 +2039,7 @@ class UserController extends Controller
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } else {
-            $totalUsulan    = UsulanAtk::where('jenis_form', $aksi)->count();
+            $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $kelompokAtk    = KelompokAtk::get();
             $stok           = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')

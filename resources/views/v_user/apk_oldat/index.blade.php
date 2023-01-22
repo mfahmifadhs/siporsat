@@ -150,7 +150,7 @@
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-xl">
                                         <div class="modal-content">
                                             <div class="modal-body text-capitalize">
                                                 <div class="form-group row">
@@ -238,9 +238,10 @@
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1">No</div>
                                                             <div class="col-sm-2">Nama Barang</div>
-                                                            <div class="col-sm-3">Merk / Tipe</div>
+                                                            <div class="col-sm-2">Merk / Tipe</div>
                                                             <div class="col-sm-3">Spesifikasi</div>
-                                                            <div class="col-sm-3">Estimasi Biaya</div>
+ 							    <div class="col-sm-2">Jumlah</div>
+                                                            <div class="col-sm-2">Estimasi Biaya</div>
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @foreach($dataUsulan->detailPengadaan as $i => $dataPengadaan)
@@ -248,9 +249,10 @@
                                                         <div class="form-group row text-uppercase">
                                                             <div class="col-md-1">{{ $i }}</div>
                                                             <div class="col-md-2">{{ $dataPengadaan->kategori_barang }}</div>
-                                                            <div class="col-md-3">{{ $dataPengadaan->merk_barang }}</div>
-                                                            <div class="col-md-3">{{ $dataPengadaan->jumlah_barang.' '.$dataPengadaan->satuan_barang }}</div>
-                                                            <div class="col-md-3">Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }}</div>
+                                                            <div class="col-md-2">{{ $dataPengadaan->merk_barang }}</div>
+							    <div class="col-md-3">{!! nl2br(e($dataPengadaan->spesifikasi_barang)) !!}</div>
+                                                            <div class="col-md-2">{{ $dataPengadaan->jumlah_barang.' '.$dataPengadaan->satuan_barang }}</div>
+                                                            <div class="col-md-2">Rp {{ number_format($dataPengadaan->estimasi_biaya, 0, ',', '.') }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach
