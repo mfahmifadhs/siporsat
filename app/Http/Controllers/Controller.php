@@ -44,6 +44,11 @@ class Controller extends BaseController
         } elseif ($modul== 'bast-oldat') {
             return redirect('usulan/'. $modul.'/'.$id)->with('success', 'Dokumen Telah Terverifikasi!');
 
+        } elseif ($modul== 'bast-gdn') {
+            return redirect('usulan/'. $modul.'/'.$id)->with('success', 'Dokumen Telah Terverifikasi!');
+
+        } elseif ($modul== 'bast-ukt') {
+            return redirect('usulan/'. $modul.'/'.$id)->with('success', 'Dokumen Telah Terverifikasi!');
         }
     }
 
@@ -61,6 +66,7 @@ class Controller extends BaseController
                 ->where('otp_usulan_pengusul', $id)
                 ->orWhere('otp_usulan_kabag', $id)
                 ->first();
+
 
             if ($usulan != null) {
                 return view('surat_usulan', compact('modul', 'usulan', 'pimpinan'));
@@ -223,6 +229,26 @@ class Controller extends BaseController
                 ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
 
             $bast = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('otp_bast_ppk', $id)
+                ->orWhere('otp_bast_pengusul', $id)
+                ->orWhere('otp_bast_kabag', $id)
+                ->first();
+
+            if ($bast != null) {
+                return view('surat_bast', compact('modul', 'bast', 'pimpinan'));
+            } else {
+                return redirect('/');
+            }
+
+        } elseif ($modul == 'bast-ukt') {
+            $modul = 'ukt';
+            $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('jabatan_id', '2')->where('unit_kerja_id', 465930)->first();
+
+            $bast = UsulanUkt::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')

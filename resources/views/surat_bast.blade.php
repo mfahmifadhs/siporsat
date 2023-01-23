@@ -85,9 +85,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 form-group text-capitalize" style="font-size: 8px;">
+                                    <div class="form-group row mb-3 text-center">
+                                        <div class="col-md-12 text-uppercase">
+                                            Berita Acara Serah Terima <br>
+                                            nomor surat : {{ $bast->no_surat_bast }}
+                                        </div>
+                                    </div>
                                     <div class="form-group row mb-0">
-                                        <div class="col-md-2 col-3">Nomor Surat</div>
-                                        <div class="col-md-10 col-9 text-uppercase">: {{ $bast->no_surat_usulan }}</div>
+                                        <div class="col-md-2 col-3">Tanggal Usulan</div>
+                                        <div class="col-md-10 col-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                     </div>
                                     <div class="form-group row mb-0">
                                         <div class="col-md-2 col-3">Pengusul</div>
@@ -100,10 +106,6 @@
                                     <div class="form-group row mb-0">
                                         <div class="col-md-2 col-3">Unit Kerja</div>
                                         <div class="col-md-10 col-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
-                                    </div>
-                                    <div class="form-group row mb-0">
-                                        <div class="col-md-2 col-3">Tanggal Usulan</div>
-                                        <div class="col-md-10 col-9">: {{ \Carbon\Carbon::parse($bast->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                     </div>
                                     <div class="form-group row mb-0">
                                         <div class="col-md-2 col-3">Total Pengajuan</div>
@@ -223,7 +225,7 @@
                                         </thead>
                                         <?php $no = 1; ?>
                                         <tbody style="font-size: 8px;">
-                                            @foreach($usulan->detailUsulanUkt as $dataUkt)
+                                            @foreach($bast->detailUsulanUkt as $dataUkt)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
@@ -334,22 +336,34 @@
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 7px;">
                                     <div class="row text-center">
                                         <label class="col-sm-4 col-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                                        @if($bast->status_proses_id >= 4)
                                         <label class="col-sm-4 col-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                                        @endif
+                                        @if($bast->status_proses_id == 5)
                                         <label class="col-sm-4 col-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 7px;">
                                     <div class="row text-center">
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
-                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/bast/'.$bast->otp_bast_pengusul) !!}</label>
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_ppk) !!}</label>
+                                        @if($bast->status_proses_id >= 4)
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_pengusul) !!}</label>
+                                        @endif
+                                        @if($bast->status_proses_id == 5)
+                                        <label class="col-sm-4 col-4">{!! QrCode::size(30)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_kabag) !!}</label>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-12 text-capitalize" style="font-size: 7px;">
                                     <div class="row text-center">
                                         <label class="col-sm-4 col-4">Marten Avero, Skm</label>
+                                        @if($bast->status_proses_id >= 4)
                                         <label class="col-sm-4 col-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                        @endif
+                                        @if($bast->status_proses_id == 5)
                                         <label class="col-sm-4 col-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

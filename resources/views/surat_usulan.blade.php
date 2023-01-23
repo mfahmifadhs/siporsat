@@ -85,9 +85,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 form-group text-capitalize" style="font-size: 8px;">
-                                    <div class="form-group row mb-0">
-                                        <div class="col-md-2 col-3">Nomor Surat</div>
-                                        <div class="col-md-10 col-9 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                    <div class="form-group row mb-3 text-center">
+                                        <div class="col-md-12 text-uppercase">
+                                            usulan pengajuan <br>
+                                            nomor surat : {{ $usulan->no_surat_usulan }}
+                                        </div>
                                     </div>
                                     <div class="form-group row mb-0">
                                         <div class="col-md-2 col-3">Pengusul</div>

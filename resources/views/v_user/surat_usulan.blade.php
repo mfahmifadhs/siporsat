@@ -441,10 +441,10 @@
                             <div class="col-md-12 mt-4 text-capitalize">
                                 <div class="row text-center">
                                     @if ($usulan->otp_usulan_pengusul != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000//surat/usulan-'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000/surat/usulan-'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
                                     @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000//surat/usulan-'.$modul.'/'.$usulan->otp_usulan_kabag) !!}</label>
+                                    <label class="col-sm-6">{!! QrCode::size(100)->generate('http://127.0.0.1:8000/surat/usulan-'.$modul.'/'.$usulan->otp_usulan_kabag) !!}</label>
                                     @endif
                                 </div>
                             </div>
