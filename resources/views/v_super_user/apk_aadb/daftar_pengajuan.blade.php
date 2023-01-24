@@ -88,19 +88,19 @@
                                     <td class="text-uppercase">
                                         @if ($dataPengajuan->jenis_form == 1)
                                         @foreach ($dataPengajuan->usulanKendaraan as $detailAadb)
-                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                         @endforeach
                                         @elseif ($dataPengajuan->jenis_form == 2)
                                         @foreach ($dataPengajuan->usulanServis as $detailAadb)
-                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                         @endforeach
                                         @elseif ($dataPengajuan->jenis_form == 3)
                                         @foreach ($dataPengajuan->usulanSTNK as $detailAadb)
-                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                         @endforeach
                                         @else
                                         @foreach ($dataPengajuan->usulanVoucher as $detailAadb)
-                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!} <br>
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                         @endforeach
                                         @endif
                                     </td>

@@ -129,22 +129,29 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            @if ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}"
-                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
-                                                <i class="fas fa-file-signature"></i> Konfirmasi
-                                            </a>
-                                            @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul != null)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
-                                            @else
+                                            @if ($dataUsulan->otp_usulan_pengusul == null)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/ukt/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
                                                 <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @endif
+
+                                            @if ($dataUsulan->status_proses_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/ukt/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/ukt/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}"
+                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif
                                         </div>

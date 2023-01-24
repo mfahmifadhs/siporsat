@@ -672,6 +672,28 @@ class UserController extends Controller
             UsulanUktDetail::where('form_usulan_id', $id)->delete();
             UsulanUkt::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/ukt/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'edit') {
+            $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
+            if ($usulan->status_pengajuan_id == null ) {
+                if ($request->status == 'proses') {
+
+                    $item = $request->id_form_usulan_detail;
+                    foreach ($item as $i => $idDetail) {
+                        UsulanUktDetail::where('id_form_usulan_detail', $idDetail)->update([
+                            'lokasi_pekerjaan'      => $request->lokasi_pekerjaan[$i],
+                            'spesifikasi_pekerjaan' => $request->spesifikasi_pekerjaan[$i],
+                            'keterangan'            => $request->keterangan[$i],
+                        ]);
+                    }
+
+                    return redirect('unit-kerja/ukt/dashboard')->with('success', 'Berhasil Mengubah Usulan');
+                } else {
+                    $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
+                    return view('v_user.apk_ukt.edit', compact('usulan'));
+                }
+            } else {
+                return redirect('unit-kerja/ukt/dashboard')->with('failed', 'Anda sudah tidak dapat mengubah usulan ini !');
+            }
         } else {
             $bidKerusakan   = BidangKerusakan::get();
             return view('v_user.apk_ukt.usulan', compact('aksi', 'bidKerusakan'));
@@ -726,9 +748,38 @@ class UserController extends Controller
             UsulanGdn::where('id_form_usulan', $idFormUsulan)->update(['total_pengajuan' => count($request->lokasi_bangunan)]);
             return redirect('unit-kerja/verif/usulan-gdn/' . $idFormUsulan);
         } elseif ($aksi == 'proses-pembatalan') {
+            UsulanGdn::where('id_form_usulan', $id)->update([
+                'no_surat_usulan' => null
+            ]);
+
             UsulanGdnDetail::where('form_usulan_id', $id)->delete();
             UsulanGdn::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+        } elseif ($aksi == 'edit') {
+
+            $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
+            if ($usulan->status_pengajuan_id == null ) {
+                if ($request->status == 'proses') {
+
+                    $item = $request->id_form_usulan_detail;
+                    foreach ($item as $i => $idDetail) {
+                        UsulanGdnDetail::where('id_form_usulan_detail', $idDetail)->update([
+                            'bid_kerusakan_id'  => $request->bid_kerusakan_id[$i],
+                            'lokasi_bangunan'   => $request->lokasi_bangunan[$i],
+                            'lokasi_spesifik'   => $request->lokasi_spesifik[$i],
+                            'keterangan'        => $request->keterangan[$i]
+                        ]);
+                    }
+
+                    return redirect('unit-kerja/gdn/dashboard')->with('success', 'Berhasil Mengubah Usulan');
+                } else {
+                    $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
+                    return view('v_user.apk_gdn.edit', compact('usulan'));
+                }
+            } else {
+                return redirect('unit-kerja/gdn/dashboard')->with('failed', 'Anda sudah tidak dapat mengubah usulan ini !');
+            }
+
         } else {
             $bidKerusakan   = BidangKerusakan::get();
             return view('v_user.apk_gdn.usulan', compact('aksi', 'bidKerusakan'));

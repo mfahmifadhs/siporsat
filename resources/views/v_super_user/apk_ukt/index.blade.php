@@ -93,8 +93,8 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td class="pt-4 text-center">{{ $no++ }}</td>
-                                    <td class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }}</td>
+                                    <td style="width: 5%;" class="pt-4 text-center">{{ $no++ }}</td>
+                                    <td style="width: 16%;" class="pt-4">{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }}</td>
                                     <td class="pt-4">{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td class="pt-3">{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-center">
@@ -131,6 +131,9 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
+                                                <i class="fas fa-info-circle"></i> Detail
+                                            </a>
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
@@ -143,10 +146,19 @@
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
-                                            @endif
-                                            <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                                <i class="fas fa-info-circle"></i> Detail
+                                            @elseif ($dataUsulan->status_proses_id == 1 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-edit"></i> Edit
                                             </a>
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                                <i class="fas fa-times-circle"></i> Batal
+                                            </a>
+                                            @elseif ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}"
+                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
+                                                <i class="fas fa-file-signature"></i> Konfirmasi
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->otp_usulan_pengusul == null && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi

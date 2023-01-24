@@ -779,11 +779,33 @@ class SuperUserController extends Controller
             ]);
             UsulanUktDetail::where('form_usulan_id', $id)->delete();
             UsulanUkt::where('id_form_usulan', $id)->delete();
-            return redirect('super-user/gdn/dashboard')->with('failed', 'Berhasil membatalkan usulan');
+            return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('failed', 'Berhasil membatalkan usulan');
         } elseif ($aksi == 'hapus') {
             UsulanUkt::where('id_form_usulan', $id)->delete();
             return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
 
+        } elseif ($aksi == 'edit') {
+            $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
+            if ($usulan->status_pengajuan_id == null ) {
+                if ($request->status == 'proses') {
+
+                    $item = $request->id_form_usulan_detail;
+                    foreach ($item as $i => $idDetail) {
+                        UsulanUktDetail::where('id_form_usulan_detail', $idDetail)->update([
+                            'lokasi_pekerjaan'      => $request->lokasi_pekerjaan[$i],
+                            'spesifikasi_pekerjaan' => $request->spesifikasi_pekerjaan[$i],
+                            'keterangan'            => $request->keterangan[$i],
+                        ]);
+                    }
+
+                    return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Mengubah Usulan');
+                } else {
+                    $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
+                    return view('v_super_user.apk_ukt.edit', compact('usulan'));
+                }
+            } else {
+                return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('failed', 'Anda sudah tidak dapat mengubah usulan ini !');
+            }
         } else {
             return view('v_super_user.apk_ukt.usulan', compact('aksi'));
         }
@@ -973,6 +995,31 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'hapus') {
             UsulanGdn::where('id_form_usulan', $id)->delete();
             return redirect('super-user/gdn/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
+        } elseif ($aksi == 'edit') {
+
+            $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
+            if ($usulan->status_pengajuan_id == null ) {
+                if ($request->status == 'proses') {
+
+                    $item = $request->id_form_usulan_detail;
+                    foreach ($item as $i => $idDetail) {
+                        UsulanGdnDetail::where('id_form_usulan_detail', $idDetail)->update([
+                            'bid_kerusakan_id'  => $request->bid_kerusakan_id[$i],
+                            'lokasi_bangunan'   => $request->lokasi_bangunan[$i],
+                            'lokasi_spesifik'   => $request->lokasi_spesifik[$i],
+                            'keterangan'        => $request->keterangan[$i]
+                        ]);
+                    }
+
+                    return redirect('super-user/gdn/dashboard')->with('success', 'Berhasil Mengubah Usulan');
+                } else {
+                    $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
+                    return view('v_super_user.apk_gdn.edit', compact('usulan'));
+                }
+            } else {
+                return redirect('super-user/gdn/dashboard')->with('failed', 'Anda sudah tidak dapat mengubah usulan ini !');
+            }
+
         } else {
             $kelompokAtk    = KelompokAtk::get();
             return view('v_super_user.apk_gdn.usulan', compact('aksi', 'kelompokAtk'));
