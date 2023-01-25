@@ -339,12 +339,12 @@
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>No. Plat</th>
-                                            <th>Kendaraan</th>
+                                            <th class="text-center" style="width:5%;">No</th>
+                                            <th style="width:10%;">No. Plat</th>
+                                            <th style="width:20%;">Kendaraan</th>
                                             <th>Kilometer</th>
-                                            <th>Jadwal Servis</th>
-                                            <th>Jadwal Ganti Oli</th>
+                                            <th style="width:15%;">Jadwal Servis</th>
+                                            <th style="width:15%;">Jadwal Ganti Oli</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
@@ -352,10 +352,10 @@
                                     <tbody>
                                         @foreach($usulan->usulanServis as $dataServis)
                                         <tr>
-                                            <td>{{ $no++ }}</td>
+                                            <td class="text-center">{{ $no++ }}</td>
                                             <td>{{ $dataServis->no_plat_kendaraan }}</td>
                                             <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
-                                            <td>{{ $dataServis->kilometer_terakhir }} Km</td>
+                                            <td>{{ (int) $dataServis->kilometer_terakhir }} Km</td>
                                             <td>
                                                 Terakhir Servis : <br>
                                                 {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>

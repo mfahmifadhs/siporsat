@@ -209,7 +209,7 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
+                            <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>
                             <td>{{ $dataUkt->keterangan }}</td>
                         </tr>
                         @endforeach
@@ -217,7 +217,7 @@
                 </table>
                 @elseif ($modul == 'usulan-aadb')
                 @if($usulan->jenis_form == '1')
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -245,23 +245,23 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '2')
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>No. Plat</th>
-                            <th>Kendaraan</th>
+                    	 <tr>
+                            <th class="text-center" style="width:5%;">No</th>
+                            <th style="width:10%;">No. Plat</th>
+                            <th style="width:20%;">Kendaraan</th>
                             <th>Kilometer</th>
-                            <th>Jadwal Servis</th>
-                            <th>Jadwal Ganti Oli</th>
+                            <th style="width:15%;">Jadwal Servis</th>
+                            <th style="width:15%;">Jadwal Ganti Oli</th>
                             <th>Keterangan</th>
-                        </tr>
+                    	</tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody>
                         @foreach($usulan->usulanServis as $dataServis)
                         <tr>
-                            <td>{{ $no++ }}</td>
+                            <td class="text-center">{{ $no++ }}</td>
                             <td>{{ $dataServis->no_plat_kendaraan }}</td>
                             <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
                             <td>{{ $dataServis->kilometer_terakhir }} Km</td>
@@ -283,7 +283,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '3')
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -307,7 +307,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '4')
-                <table class="table table-bordered m-0">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -337,7 +337,7 @@
                 @endif
                 @endif
             </div>
-            <div class="col-md-12 text-capitalize">
+	    <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)

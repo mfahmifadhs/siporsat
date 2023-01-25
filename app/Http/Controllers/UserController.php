@@ -1047,7 +1047,6 @@ class UserController extends Controller
             'kondisi_barang',
             'pengguna_barang',
             'unit_kerja',
-            'pengguna_barang',
             DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
             DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
         )
@@ -1057,6 +1056,8 @@ class UserController extends Controller
             ->orderBy('tahun_perolehan', 'DESC')
             ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->get();
+	
+	
 
 
         $dataKategoriBarang = KategoriBarang::get();
