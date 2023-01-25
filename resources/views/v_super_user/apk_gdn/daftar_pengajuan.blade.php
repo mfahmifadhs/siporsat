@@ -73,7 +73,7 @@
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
-                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_spesifik, 50))) !!}
+                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_bangunan, 50))) !!}
                                         @endforeach
                                     </td>
                                     <td class="text-center">
