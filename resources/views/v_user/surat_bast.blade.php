@@ -423,7 +423,7 @@
                                     <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
                                     @endif
                                     @if($bast->status_proses_id == 5)
-                                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                    <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
                                     @endif
                                 </div>
                             </div>

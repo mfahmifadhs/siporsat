@@ -454,7 +454,7 @@
                                     <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
                                     @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )
-                                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
                                     @endif
                                 </div>
                             </div>
