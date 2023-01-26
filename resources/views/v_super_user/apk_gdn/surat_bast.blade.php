@@ -112,7 +112,7 @@
                             <div class="col-md-12 form-group">
                                 <div class="form-group row mb-3 text-center">
                                     <div class="col-md-12 text-uppercase">
-                                        usulan pengajuan <br>
+                                        berita acara serah terima <br>
                                         nomor surat : {{ $bast->no_surat_bast }}
                                     </div>
                                 </div>

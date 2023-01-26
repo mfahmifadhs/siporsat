@@ -76,7 +76,7 @@
             <div class="col-md-12 form-group">
                 <div class="form-group row mb-3 text-center">
                     <div class="col-md-12 text-uppercase">
-                        usulan pengajuan <br>
+                        berita acara serah terima <br>
                         nomor surat : {{ $bast->no_surat_bast }}
                     </div>
                 </div>
@@ -128,8 +128,8 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mt-5">
-                <div class="col-md-12 text-capitalize">
+            <div class="col-md-12 mt-5 text-capitalize">
+                <div class="col-md-12">
                     <div class="row text-center">
                         <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
                         <label class="col-sm-4">Yang Menerima, <br> Pengusul </label>
@@ -138,7 +138,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-12 text-capitalize">
+                <div class="col-md-12">
                     <div class="row text-center">
                         <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_ppk) !!}</label>
                         <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-gdn/'.$bast->otp_bast_pengusul) !!}</label>
@@ -147,7 +147,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-12 text-capitalize">
+                <div class="col-md-12">
                     <div class="row text-center">
                         <label class="col-sm-4">Marten Avero, Skm</label>
                         <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>

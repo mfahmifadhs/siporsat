@@ -14,6 +14,40 @@
     <link rel="stylesheet" href="{{ asset('dist_admin/css/adminlte.min.css') }}">
 </head>
 
+<style>
+    @media print {
+        .pagebreak {
+            page-break-before: always;
+        }
+    }
+
+    .divTable {
+        border-top: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        font-size: 21px;
+    }
+
+    .divThead {
+        border-bottom: 1px solid;
+        font-weight: bold;
+    }
+
+    .divTbody {
+        border-bottom: 1px solid;
+        text-transform: capitalize;
+    }
+
+    .divTheadtd {
+        border-right: 1px solid;
+    }
+
+    .divTbodytd {
+        border-right: 1px solid;
+        padding: 10px;
+    }
+</style>
+
 <body>
     <div class="text-capitalize">
         <div class="row">
@@ -67,51 +101,48 @@
                     <div class="col-md-9">: {{ $usulan->total_pengajuan }} pekerjaan</div>
                 </div>
             </div>
-            <div class="col-12 table-responsive mt-4 mb-5">
-                <table class="table table-bordered m-0 small">
-                    <thead>
-                        <tr>
-                            <th style="width: 1%;">No</th>
-                            <th style="width: 20%;">Pekerjaan</th>
-                            <th>Spesifikasi Pekerjaan</th>
-                            <th style="width: 15%;">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody>
-                        @foreach($usulan->detailUsulanUkt as $dataUkt)
-                        <tr class="text-uppercase">
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                            <td>{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</td>
-                            <td>{!! nl2br(e($dataUkt->keterangan)) !!}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-12">
-                <div class="row text-center">
-                    <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
-                    @if ($usulan->otp_usulan_kabag != null)
-                    <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
-                    @endif
+            <div class="col-md-12 mt-4">
+                <div class="divTable">
+                    <div class="row divThead">
+                        <div class="col-md-1 divTheadtd text-center">No</div>
+                        <div class="col-md-3 divTheadtd">Pekerjaan</div>
+                        <div class="col-md-5 divTheadtd">Spesifikasi Pekerjaan</div>
+                        <div class="col-md-3">Keterangan</div>
+                    </div>
+                    @foreach($usulan->detailUsulanUkt as $i => $dataUkt)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
+                        <div class="col-md-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
-            <div class="col-md-12 mt-4">
-                <div class="row text-center">
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-gdn/'.$usulan->otp_usulan_pengusul) !!}</label>
-                    @if ($usulan->otp_usulan_kabag != null)
-                    <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-gdn/'.$usulan->otp_usulan_kabag) !!}</label>
-                    @endif
+            <div class="col-md-12 mt-5 text-capitalize">
+                <div class="col-md-12">
+                    <div class="row text-center">
+                        <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
+                        @if ($usulan->otp_usulan_kabag != null)
+                        <label class="col-sm-6">Disetujui Oleh, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12 mt-4">
-                <div class="row text-center">
-                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
-                    @if ($usulan->otp_usulan_kabag != null )
-                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
-                    @endif
+                <div class="col-md-12 mt-4">
+                    <div class="row text-center">
+                        <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-ukt/'.$usulan->otp_usulan_pengusul) !!}</label>
+                        @if ($usulan->otp_usulan_kabag != null)
+                        <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-ukt/'.$usulan->otp_usulan_kabag) !!}</label>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-md-12 mt-4">
+                    <div class="row text-center">
+                        <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
+                        @if ($usulan->otp_usulan_kabag != null )
+                        <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
