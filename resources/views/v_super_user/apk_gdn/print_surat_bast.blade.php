@@ -132,7 +132,7 @@
                 <div class="col-md-12">
                     <div class="row text-center">
                         <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen (PPK)</label>
-                        <label class="col-sm-4">Yang Menerima, <br> Pengusul </label>
+                        <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }} </label>
                         @if($bast->status_proses_id == 5)
                         <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
                         @endif

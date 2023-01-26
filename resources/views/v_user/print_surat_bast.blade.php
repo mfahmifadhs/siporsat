@@ -14,6 +14,39 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist_admin/css/adminlte.min.css') }}">
 </head>
+<style>
+    @media print {
+        .pagebreak {
+            page-break-after: always;
+        }
+    }
+
+    .divTable {
+        border-top: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        font-size: 21px;
+    }
+
+    .divThead {
+        border-bottom: 1px solid;
+        font-weight: bold;
+    }
+
+    .divTbody {
+        border-bottom: 1px solid;
+        text-transform: capitalize;
+    }
+
+    .divTheadtd {
+        border-right: 1px solid;
+    }
+
+    .divTbodytd {
+        border-right: 1px solid;
+        padding: 10px;
+    }
+</style>
 
 <body>
     <div class="">
@@ -39,7 +72,7 @@
                 <hr style="border-width: medium;border-color: black;">
             </div>
         </div>
-        <div class="row text-capitalize">
+        <div class="row text-capitalize" style="font-size: 22px;">
             <div class="col-md-12 form-group">
                 <div class="form-group row mb-3 text-center">
                     <div class="col-md-12 text-uppercase">
@@ -73,15 +106,15 @@
                     <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
                 </div>
                 @endif
-                <div class="form-group row mb-0">
+                <!-- <div class="form-group row mb-0">
                     <div class="col-md-12 text-justify mt-4">
                         Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                         dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
                         berfungsi normal sebagaimana mestinya.
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="col-12 table-responsiv" style="margin-bottom: 10vh;">
+            <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'oldat')
                 <table class="table table-bordered m-0">
                     <thead>
@@ -158,51 +191,41 @@
                     </tbody>
                 </table>
                 @elseif ($modul == 'gdn')
-                <table class="table table-bordered m-0">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Lokasi Perbaikan</th>
-                            <th>Lokasi Spesifik</th>
-                            <th>Bidang Kerusakan</th>
-                            <th>Keterangan</th>
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody>
-                        @foreach($bast->detailUsulanGdn as $dataGdn)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
-                            <td>{!! nl2br(e($dataGdn->lokasi_spesifik)) !!}</td>
-                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
-                            <td>{!! nl2br(e($dataGdn->keterangan)) !!}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="divTable">
+                    <div class="row divThead">
+                        <div class="col-md-1 divTheadtd text-center">No</div>
+                        <div class="col-md-3 divTheadtd">Bidang Kerusakan</div>
+                        <div class="col-md-2 divTheadtd">Lokasi Perbaikan</div>
+                        <div class="col-md-4 divTheadtd">Lokasi Spesifik</div>
+                        <div class="col-md-2">Keterangan</div>
+                    </div>
+                    @foreach($bast->detailUsulanGdn as $i => $dataGdn)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
+                        <div class="col-md-2 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
+                        <div class="col-md-4 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
+                        <div class="col-md-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
+                    </div>
+                    @endforeach
+                </div>
                 @elseif ($modul == 'ukt')
-                <table class="table table-bordered m-0">
-                    <thead>
-                        <tr>
-                            <th style="width: 1%;">No</th>
-                            <th style="width: 20%;">Pekerjaan</th>
-                            <th>Spesifikasi Pekerjaan</th>
-                            <th style="width: 15%;">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody class="text-uppercase">
-                        @foreach($bast->detailUsulanUkt as $dataUkt)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
-                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
-                            <td>{{ $dataUkt->keterangan }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="divTable">
+                    <div class="row divThead">
+                        <div class="col-md-1 divTheadtd text-center">No</div>
+                        <div class="col-md-3 divTheadtd">Pekerjaan</div>
+                        <div class="col-md-5 divTheadtd">Spesifikasi Pekerjaan</div>
+                        <div class="col-md-3">Keterangan</div>
+                    </div>
+                    @foreach($bast->detailUsulanUkt as $i => $dataUkt)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
+                        <div class="col-md-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
+                    </div>
+                    @endforeach
+                </div>
                 @elseif ($modul == 'aadb')
                 @if($bast->jenis_form == '1')
                 <table class="table table-bordered m-0">
@@ -339,37 +362,39 @@
                 @endif
                 @endif
             </div>
-            <div class="col-md-12">
-                <div class="row text-center">
-                    <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
-                    @if($bast->status_proses_id >= 4)
-                    <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
-                    @endif
-                    @if($bast->status_proses_id == 5)
-                    <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
-                    @endif
+            <div class="col-md-12 mt-5 text-capitalize">
+                <div class="col-md-12">
+                    <div class="row text-center">
+                        <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
+                        @if($bast->status_proses_id >= 4)
+                        <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
+                        @endif
+                        @if($bast->status_proses_id == 5)
+                        <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="row text-center">
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_ppk) !!}</label>
-                    @if($bast->status_proses_id >= 4)
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_pengusul) !!}</label>
-                    @endif
-                    @if($bast->status_proses_id == 5)
-                    <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_kabag) !!}</label>
-                    @endif
+                <div class="col-md-12">
+                    <div class="row text-center">
+                        <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_ppk) !!}</label>
+                        @if($bast->status_proses_id >= 4)
+                        <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_pengusul) !!}</label>
+                        @endif
+                        @if($bast->status_proses_id == 5)
+                        <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_kabag) !!}</label>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="row text-center">
-                    <label class="col-sm-4">Marten Avero, Skm</label>
-                    @if($bast->status_proses_id >= 4)
-                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
-                    @endif
-                    @if($bast->status_proses_id == 5)
-                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
-                    @endif
+                <div class="col-md-12">
+                    <div class="row text-center">
+                        <label class="col-sm-4">Marten Avero, Skm</label>
+                        @if($bast->status_proses_id >= 4)
+                        <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                        @endif
+                        @if($bast->status_proses_id == 5)
+                        <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

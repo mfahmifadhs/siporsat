@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal Usulan</div>
+                    <div class="col-md-3">Tanggal</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 <div class="form-group row mb-0">
