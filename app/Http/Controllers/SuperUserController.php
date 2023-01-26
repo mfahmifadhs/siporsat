@@ -408,7 +408,7 @@ class SuperUserController extends Controller
                 } elseif ($usulan->status_proses_id == 4) {
                     $usulan      = UsulanUkt::where('no_surat_bast', '!=', NULL)->count();
                     $totalUsulan = str_pad($usulan + 1, 4, 0, STR_PAD_LEFT);
-                    $bast        = 'KR.02.04/2/'.$totalUsulan.'/'.Carbon::now()->isoFormat('Y');
+                    $bast        = 'KR.02.04/2/' . $totalUsulan . '/' . Carbon::now()->isoFormat('Y');
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_kabag'    => $request->one_time_password,
                         'no_surat_bast'     => $bast,
@@ -727,7 +727,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses') {
             $totalUsulan    = UsulanUkt::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'UKT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'UKT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
@@ -783,10 +783,9 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'hapus') {
             UsulanUkt::where('id_form_usulan', $id)->delete();
             return redirect('super-user/ukt/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
-
         } elseif ($aksi == 'edit') {
             $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
-            if ($usulan->status_pengajuan_id == null ) {
+            if ($usulan->status_pengajuan_id == null) {
                 if ($request->status == 'proses') {
 
                     $item = $request->id_form_usulan_detail;
@@ -940,7 +939,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses') {
             $totalUsulan    = UsulanGdn::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'GDN/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'GDN/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
@@ -998,7 +997,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'edit') {
 
             $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
-            if ($usulan->status_pengajuan_id == null ) {
+            if ($usulan->status_pengajuan_id == null) {
                 if ($request->status == 'proses') {
 
                     $item = $request->id_form_usulan_detail;
@@ -1019,7 +1018,6 @@ class SuperUserController extends Controller
             } else {
                 return redirect('super-user/gdn/dashboard')->with('failed', 'Anda sudah tidak dapat mengubah usulan ini !');
             }
-
         } else {
             $kelompokAtk    = KelompokAtk::get();
             return view('v_super_user.apk_gdn.usulan', compact('aksi', 'kelompokAtk'));
@@ -1099,7 +1097,18 @@ class SuperUserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            $atk    = $pengadaan->first();
+            // $dataAtk    = $pengadaan->first();
+            $atk = UsulanAtkPengadaan::select('jenis_barang','nama_barang','spesifikasi','satuan',
+                DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi', 'satuan')
+                ->where('status_proses_id', 5)
+                ->where('nama_barang', $request->nama_barang)
+                ->where('spesifikasi', $spek)
+                ->first();
+
             return view('v_super_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         } elseif ($aksi == 'riwayat-semua') {
             $spek = Crypt::decrypt($id);
@@ -1111,14 +1120,8 @@ class SuperUserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            $permintaan = UsulanAtkPermintaan::select(
-                'atk_tbl_form_usulan.*',
-                'atk_tbl_form_usulan_pengadaan.*',
-                'tbl_pegawai.*',
-                'tbl_unit_kerja.*',
-                'atk_tbl_form_usulan_permintaan.jumlah',
-                'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
-            )
+            $permintaan = UsulanAtkPermintaan::select('atk_tbl_form_usulan.*','atk_tbl_form_usulan_pengadaan.*','tbl_pegawai.*',
+                'tbl_unit_kerja.*','atk_tbl_form_usulan_permintaan.jumlah','atk_tbl_form_usulan_permintaan.jumlah_disetujui')
                 ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1130,13 +1133,8 @@ class SuperUserController extends Controller
 
             $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->select(
-                    'jenis_barang',
-                    'nama_barang',
-                    'spesifikasi',
-                    DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
-                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
-                )
+                ->select('jenis_barang','nama_barang','spesifikasi',DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
                 ->where('status_proses_id', 5)
                 ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
                 ->first();
@@ -1184,7 +1182,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-distribusi') {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ATK/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = Carbon::now()->format('dhis');
             $usulan = new UsulanAtk();
@@ -1342,7 +1340,7 @@ class SuperUserController extends Controller
 
                 $totalUsulan    = UsulanAtk::count();
                 $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-                $noSurat        = 'ATK/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+                $noSurat        = 'ATK/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
                 $usulan = new UsulanAtk();
                 $usulan->id_form_usulan     = $idFormUsulan;
@@ -1466,6 +1464,7 @@ class SuperUserController extends Controller
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->where('pegawai_id', Auth::user()->pegawai_id)
+                ->orderBy('jenis_barang','DESC')
                 ->get();
 
             return view('v_super_user.apk_atk.usulan', compact('idUsulan', 'aksi', 'kelompokAtk', 'stok'));
@@ -1577,11 +1576,11 @@ class SuperUserController extends Controller
 
             return view('v_super_user/apk_atk/print_surat_bast', compact('form', 'pimpinan', 'bast', 'id'));
         } elseif ($aksi == 'download-pengadaan') {
-            $usulan = UsulanAtk::join('tbl_pegawai','id_pegawai','pegawai_id')
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->where('id_form_usulan', $id)
                 ->first();
-            return Excel::download(new AtkExport($id), 'PENGADAAN_ATK_'.$usulan->unit_kerja.'.xlsx');
+            return Excel::download(new AtkExport($id), 'PENGADAAN_ATK_' . $usulan->unit_kerja . '.xlsx');
         }
     }
 
@@ -1975,7 +1974,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses') {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ADB/'.$request->jenis_form.'/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ADB/' . $request->jenis_form . '/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
@@ -2122,7 +2121,6 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'hapus') {
             UsulanAadb::where('id_form_usulan', $id)->delete();
             return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
-
         } else {
             $jenisKendaraan = JenisKendaraan::get();
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
@@ -2886,7 +2884,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-usulan' && $id == 'pengadaan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/1/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ODT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
@@ -2920,7 +2918,7 @@ class SuperUserController extends Controller
         } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/2/'.$idUsulan.'/'.Carbon::now()->format('M').'/'.Carbon::now()->format('Y');
+            $noSurat        = 'ODT/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
