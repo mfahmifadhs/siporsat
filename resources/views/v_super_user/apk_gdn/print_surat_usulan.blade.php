@@ -121,7 +121,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-12 mt-5">
+            <div class="col-md-12 mt-5 text-capitalize">
                 <div class="col-md-12">
                     <div class="row text-center">
                         <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
