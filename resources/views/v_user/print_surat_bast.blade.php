@@ -362,8 +362,8 @@
                 @endif
                 @endif
             </div>
-            <div class="col-md-12 mt-5 text-capitalize">
-                <div class="col-md-12">
+            <div class="col-md-12 mt-5">
+                <div class="col-md-12 text-capitalize">
                     <div class="row text-center">
                         <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
                         @if($bast->status_proses_id >= 4)
@@ -389,7 +389,7 @@
                     <div class="row text-center">
                         <label class="col-sm-4">Marten Avero, Skm</label>
                         @if($bast->status_proses_id >= 4)
-                        <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                        <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
                         @endif
                         @if($bast->status_proses_id == 5)
                         <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>

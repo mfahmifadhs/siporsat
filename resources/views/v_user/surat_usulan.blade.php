@@ -438,7 +438,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4 text-capitalize">
+                            <div class="col-md-12 mt-4">
                                 <div class="row text-center">
                                     @if ($usulan->otp_usulan_pengusul != null)
                                     <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/usulan-'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
@@ -448,10 +448,10 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-4 text-capitalize">
+                            <div class="col-md-12 mt-4">
                                 <div class="row text-center">
                                     @if ($usulan->otp_usulan_pengusul != null)
-                                    <label class="col-sm-6">{{ ucfirst(strtolower($usulan->nama_pegawai)) }}</label>
+                                    <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
                                     @endif
                                     @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )
                                     <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>

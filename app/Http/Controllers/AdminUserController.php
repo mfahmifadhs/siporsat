@@ -11,6 +11,7 @@ use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
 use App\Models\AADB\KondisiKendaraan;
 use App\Models\AADB\RiwayatKendaraan;
+use App\Models\AADB\UsulanAadb;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
@@ -29,7 +30,10 @@ use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkLampiran;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkPermintaan;
+use App\Models\gdn\UsulanGdn;
+use App\Models\OLDAT\FormUsulan;
 use App\Models\RDN\RumahDinas;
+use App\Models\Ukt\UsulanUkt;
 use App\Models\UnitKerja;
 use App\Models\User;
 use Carbon\Carbon;
@@ -42,13 +46,19 @@ class AdminUserController extends Controller
 {
     public function index()
     {
+        $oldat  = FormUsulan::get();
+        $aadb   = UsulanAadb::get();
+        $atk    = UsulanAtk::get();
+        $gdn    = UsulanGdn::get();
+        $ukt    = UsulanUkt::get();
+
         $atk = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
             ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
             ->get();
-        return view('v_admin_user.index', compact('atk'));
+        return view('v_admin_user.index', compact('atk','oldat','aadb','atk','gdn','ukt'));
     }
 
     public function Profile(Request $request, $aksi, $id)

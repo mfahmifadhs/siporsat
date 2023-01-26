@@ -1056,8 +1056,8 @@ class UserController extends Controller
             ->orderBy('tahun_perolehan', 'DESC')
             ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->get();
-	
-	
+
+
 
 
         $dataKategoriBarang = KategoriBarang::get();

@@ -420,7 +420,7 @@
                                 <div class="row text-center">
                                     <label class="col-sm-4">Marten Avero, Skm</label>
                                     @if($bast->status_proses_id >= 4)
-                                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                                    <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
                                     @endif
                                     @if($bast->status_proses_id == 5)
                                     <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
