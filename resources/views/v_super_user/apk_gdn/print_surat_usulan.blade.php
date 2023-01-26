@@ -17,7 +17,7 @@
 <style>
     @media print {
         .pagebreak {
-            page-break-before: always;
+            page-break-after: always;
         }
     }
 
@@ -146,7 +146,6 @@
                         @endif
                     </div>
                 </div>
-                <div class="pagebreak"></div>
             </div>
         </div>
     </div>
