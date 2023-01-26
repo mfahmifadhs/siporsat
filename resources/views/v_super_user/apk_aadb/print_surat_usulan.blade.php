@@ -190,7 +190,7 @@
                 </table>
                 @endif
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</label>
                     @if ($dataUsulan->otp_usulan_kabag != null)
@@ -208,9 +208,9 @@
             </div>
             <div class="col-md-12 mt-4">
                 <div class="row text-center">
-                    <label class="col-sm-6">{{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</label>
+                    <label class="col-sm-6">{{ $dataUsulan->nama_pegawai }}</label>
                     @if ($dataUsulan->otp_usulan_kabag != null)
-                    <label class="col-sm-6">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                    <label class="col-sm-6">{{ $pimpinan->nama_pegawai }}</label>
                     @endif
                 </div>
             </div>

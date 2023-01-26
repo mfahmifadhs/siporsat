@@ -39,8 +39,8 @@
                 <hr style="border-width: medium;border-color: black;">
             </div>
         </div>
-        <div class="row text-capitalize">
-            <div class="col-md-12 form-group">
+        <div class="row">
+            <div class="col-md-12 form-group text-capitalize">
                 <div class="form-group row mb-3 text-center">
                     <div class="col-md-12 text-uppercase">
                         berita acara serah terima <br>
@@ -70,7 +70,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsiv" style="margin-bottom: 10vh;">
+            <div class="col-12 table-responsive text-capitalize" style="margin-bottom: 10vh;">
                 <table class="table table-bordered m-0">
                     <thead>
                         <tr>
@@ -120,7 +120,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 text-capitalize">
                 <div class="row text-center">
                     <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
                     @if($bast->status_proses_id >= 4)
@@ -146,10 +146,10 @@
                 <div class="row text-center">
                     <label class="col-sm-4">Marten Avero, Skm</label>
                     @if($bast->status_proses_id >= 4)
-                    <label class="col-sm-4">{{ ucfirst(strtolower($bast->nama_pegawai)) }}</label>
+                    <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
                     @endif
                     @if($bast->status_proses_id == 5)
-                    <label class="col-sm-4">{{ ucfirst(strtolower($pimpinan->nama_pegawai)) }}</label>
+                    <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
                     @endif
                 </div>
             </div>
