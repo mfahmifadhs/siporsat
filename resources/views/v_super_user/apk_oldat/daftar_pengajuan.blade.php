@@ -210,11 +210,10 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($usulan->status_proses_id == 4 && $usulan->status_pengajuan_id == 1 && $usulan->jenis_form == 'perbaikan' )
-
+                                                @if ($usulan->status_proses_id > 3 && $usulan->status_pengajuan_id == 1)
                                                 <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat BAST </label></div>
-                                                    <div class="col-md-8">:
+                                                    <div class="col-md-2"><label>Surat BAST </label></div>
+                                                    <div class="col-md-10">:
                                                         <a href="{{ url('super-user/oldat/surat/surat-bast/'. $usulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>

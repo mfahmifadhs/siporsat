@@ -207,7 +207,11 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row text-center">
+                                    @if($bast->jenis_form == 'pengadaan')
+                                    <label class="col-sm-4">Anggriany Aprilia Sampe, ST, MAP</label>
+                                    @else
                                     <label class="col-sm-4">Marten Avero, Skm</label>
+                                    @endif
                                     @if($bast->status_proses_id >= 4)
                                     <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
                                     @endif
