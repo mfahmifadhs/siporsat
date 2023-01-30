@@ -299,6 +299,12 @@
                                                     <div class="col-md-4"><label>Tanggal Usulan </label></div>
                                                     <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
                                                 </div>
+                                                @if($dataUsulan->rencana_pengguna)
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-md-4"><label>Rencana Pengguna </label></div>
+                                                    <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
+                                                </div>
+                                                @endif
                                                 @if ($dataUsulan->otp_usulan_pengusul != null)
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
