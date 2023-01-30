@@ -70,8 +70,8 @@
                 </div>
                 @if($dataUsulan->rencana_pengguna)
                 <div class="form-group row mb-0">
-                    <div class="col-md-4"><label>Rencana Pengguna </label></div>
-                    <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
+                    <div class="col-md-2">Rencana Pengguna</div>
+                    <div class="col-md-9">: {{ $dataUsulan->rencana_pengguna }}</div>
                 </div>
                 @endif
             </div>
