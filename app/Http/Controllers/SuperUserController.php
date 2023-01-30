@@ -834,16 +834,34 @@ class SuperUserController extends Controller
 
     public function Gdn(Request $request)
     {
-        $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('tanggal_usulan', 'DESC')
-            ->orderBy('status_pengajuan_id', 'ASC')
-            ->orderBy('status_proses_id', 'ASC')
-            ->where('status_proses_id', '!=', 5)
-            ->where('status_proses_id', '!=', null)
+        $usulanUker  = UsulanGdn::select('id_unit_kerja', 'unit_kerja', DB::raw('count(id_form_usulan) as total_usulan'))
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_kerja')
             ->get();
 
-        return view('v_super_user.apk_gdn.index', compact('usulan'));
+        $usulanTotal = UsulanGdn::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+
+        $usulanChart = UsulanGdn::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan'))
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('month')
+            ->get();
+
+        foreach ($usulanChart as $key => $value) {
+            $result[] = ['Bulan', 'Total Usulan'];
+            $result[++$key] = [Carbon::parse($value->month)->isoFormat('MMMM Y'), $value->total_usulan];
+        }
+
+        $chartGdn = json_encode($result);
+        return view('v_super_user.apk_gdn.index', compact('usulanUker', 'usulanTotal', 'chartGdn'));
     }
 
     public function LetterGdn(Request $request, $aksi, $id)
@@ -928,6 +946,8 @@ class SuperUserController extends Controller
                     ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_pengajuan_id', 2)
                     ->get();
@@ -937,8 +957,11 @@ class SuperUserController extends Controller
                     ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
+                    ->orWhere('unit_kerja_id', $id)
                     ->get();
             }
 

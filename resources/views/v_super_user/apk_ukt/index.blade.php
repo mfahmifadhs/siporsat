@@ -121,9 +121,7 @@
                             <tbody>
                                 @foreach ($usulanUker as $i => $row)
                                 <tr>
-                                    <td class="text-center">
-                                        <a href="pages/examples/invoice.html">{{ $i+1 }}</a>
-                                    </td>
+                                    <td class="text-center">{{ $i+1 }}</td>
                                     <td>{{ $row->unit_kerja }}</td>
                                     <td class="text-center">
                                         <h5>{{ $row->total_usulan }}</h5>
