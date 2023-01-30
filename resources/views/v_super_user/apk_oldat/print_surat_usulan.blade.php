@@ -70,8 +70,8 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsive mb-5">
-                <table class="table table-bordered m-0">
+            <div class="col-12 table-responsive mt-4 mb-5">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
