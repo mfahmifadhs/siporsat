@@ -628,8 +628,10 @@ class SuperUserController extends Controller
             ->get();
 
 
-        $usulanChart = UsulanUkt::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
-            DB::raw('count(id_form_usulan) as total_usulan'))
+        $usulanChart = UsulanUkt::select(
+            DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('month')
@@ -848,8 +850,10 @@ class SuperUserController extends Controller
             ->get();
 
 
-        $usulanChart = UsulanGdn::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
-            DB::raw('count(id_form_usulan) as total_usulan'))
+        $usulanChart = UsulanGdn::select(
+            DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('month')
@@ -1072,26 +1076,41 @@ class SuperUserController extends Controller
 
     public function Atk(Request $request)
     {
-        $googleChartData = $this->ChartDataAtk();
-        $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
-            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+        $dataChartAtk = $this->ChartDataAtk();
+        $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_kerja')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_kerja')
+            ->get();
+
+        $usulanTotal = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        $usDistribusi = UsulanAtk::where('jenis_form', 'distribusi')
-            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-            ->orderBy('tanggal_usulan', 'DESC')
+        $usulanChart = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"))
+            ->groupBy('month')
             ->get();
 
-        return view('v_super_user.apk_atk.index', compact('googleChartData', 'usPengadaan', 'usDistribusi'));
+        $chartData = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+
+        foreach ($usulanChart as $key => $value) {
+            $result[] = ['Bulan', 'Total Usulan Pengadaan', 'Total Usulan Distribusi'];
+            $result[++$key] = [
+                Carbon::parse($value->month)->isoFormat('MMMM Y'),
+                $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', 'distribusi')->count(),
+            ];
+        }
+
+        $usulanChartAtk = json_encode($result);
+
+        return view('v_super_user.apk_atk.index', compact('usulanUker','usulanTotal','usulanChartAtk','dataChartAtk'));
     }
 
     public function OfficeStationery(Request $request, $aksi, $id)
@@ -1211,8 +1230,22 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_pengajuan_id', 2)
+                    ->get();
+            } elseif ($id == 'uker') {
+                $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('jenis_form', $request->jenis_form)
+                    ->where('unit_kerja_id', $request->id_unit_kerja)
                     ->get();
             } else {
                 $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1220,6 +1253,8 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
                     ->get();
