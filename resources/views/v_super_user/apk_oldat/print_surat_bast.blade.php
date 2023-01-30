@@ -63,13 +63,13 @@
                     <div class="col-md-2">Unit Kerja</div>
                     <div class="col-md-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                 </div>
-                <div class="form-group row mb-0">
+                <!-- <div class="form-group row mb-0">
                     <div class="col-md-12 text-justify mt-4">
                         Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                         dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
                         berfungsi normal sebagaimana mestinya.
                     </div>
-                </div>
+                </div> -->
                 @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">
                     <div class="col-md-2">Rencana Pengguna</div>
@@ -77,8 +77,8 @@
                 </div>
                 @endif
             </div>
-            <div class="col-12 table-responsive" style="margin-bottom: 10vh;">
-                <table class="table table-bordered m-0">
+            <div class="col-12 table-responsive mt-4" style="margin-bottom: 10vh;">
+                <table class="table table-bordered m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>

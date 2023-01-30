@@ -130,13 +130,13 @@
                                     <div class="col-md-10">: {{ $bast->rencana_pengguna }}</div>
                                 </div>
                                 @endif
-                                <div class="form-group row mb-0">
+                                <!-- <div class="form-group row mb-0">
                                     <div class="col-md-12 text-justify mt-4">
                                         Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                                         dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
                                         berfungsi normal sebagaimana mestinya.
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-12 table-responsiv mb-5">
                                 <table class="table table-bordered m-0">
