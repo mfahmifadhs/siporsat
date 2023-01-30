@@ -1077,10 +1077,11 @@ class SuperUserController extends Controller
     public function Atk(Request $request)
     {
         $dataChartAtk = $this->ChartDataAtk();
-        $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_kerja')
+        $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->groupBy('id_unit_kerja', 'unit_kerja')
+            ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->where('unit_utama_id', '02401')
             ->get();
 
         $usulanTotal = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')

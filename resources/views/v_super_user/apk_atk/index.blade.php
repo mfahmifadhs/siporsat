@@ -142,7 +142,7 @@
                                                             @csrf
                                                             <input type="hidden" name="jenis_form" value="pengadaan">
                                                             <input type="hidden" name="id_unit_kerja" value="{{ $row->id_unit_kerja }}">
-                                                            <button type="submit" class="btn btn-primary btn-md">
+                                                            <button type="submit" class="btn btn-dark btn-sm font-weight-bold">
                                                                 {{ $totalUsulan }}
                                                             </button>
                                                         </form>
@@ -157,7 +157,7 @@
                                                             @csrf
                                                             <input type="hidden" name="jenis_form" value="distribusi">
                                                             <input type="hidden" name="id_unit_kerja" value="{{ $row->id_unit_kerja }}">
-                                                            <button type="submit" class="btn btn-info btn-md">
+                                                            <button type="submit" class="btn btn-dark btn-sm font-weight-bold">
                                                                 {{ $totalUsulan }}
                                                             </button>
                                                         </form>
@@ -249,14 +249,10 @@
 
         $("#table-unitkerja").DataTable({
             "responsive": true,
-            "lengthChange": true,
+            "lengthChange": false,
             "autoWidth": true,
             "info": false,
-            "paging": true,
-            "lengthMenu": [
-                [11, 25, 50, -1],
-                [11, 25, 50, "Semua"]
-            ],
+            "paging": false,
             "columnDefs": [{
                     "width": "5%",
                     "targets": 0
