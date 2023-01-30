@@ -56,6 +56,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Rencana Pengguna*</label>
+                        <div class="col-sm-10">
+                            <textarea type="date" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Kendaraan" required></textarea>
+                        </div>
+                    </div>
                     <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jumlah Pengajuan (*)</label>
                         <div class="col-sm-10">

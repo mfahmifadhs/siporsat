@@ -56,6 +56,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Rencana Pengguna*</label>
+                        <div class="col-sm-10">
+                            <textarea type="date" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Kendaraan" required></textarea>
+                        </div>
+                    </div>
                     <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Jumlah Pengajuan (*)</label>
                         <div class="col-sm-10">
@@ -195,7 +201,7 @@
                             <div class="col-sm-3">
                                 <input type="number" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
                                 <span class="text-danger" style="font-size:12px;">Kosongkan apabila kilometer mati / tidak diketahui</span>
-			    </div>
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Tanggal Terakhir Servis*</label>
@@ -706,9 +712,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label> <div class="col-sm-3"> 
-			    <input type="number" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir"> 
-			    <span class="text-danger" style="font-size:12px;">Kosongkan apabila kilometer mati / tidak diketahui</span> 
+                            <label class="col-sm-3 col-form-label">Kilometer Kendaraan</label> <div class="col-sm-3">
+			    <input type="number" class="form-control" name="kilometer_terakhir[]" placeholder="Kilometer Kendaraan Terakhir">
+			    <span class="text-danger" style="font-size:12px;">Kosongkan apabila kilometer mati / tidak diketahui</span>
 			</div>
                         </div>
                         <div class="form-group row">
