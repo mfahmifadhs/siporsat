@@ -124,6 +124,12 @@
                                     <div class="col-md-2">Total Pengajuan</div>
                                     <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} kendaraan</div>
                                 </div>
+                                @if($dataUsulan->renacana_pengguna == 1)
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-4"><label>Rencana Pengguna </label></div>
+                                    <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
+                                </div>
+                                @endif
                             </div>
                             <div class="col-12 table-responsive mt-4 mb-5">
                                 @if($dataUsulan->jenis_form == '1')
