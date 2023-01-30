@@ -614,16 +614,34 @@ class SuperUserController extends Controller
 
     public function Ukt(Request $request)
     {
-        $usulan = UsulanUkt::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->orderBy('tanggal_usulan', 'DESC')
-            ->orderBy('status_pengajuan_id', 'ASC')
-            ->orderBy('status_proses_id', 'ASC')
-            ->where('status_proses_id', '!=', 5)
-            ->where('status_proses_id', '!=', null)
+        $usulanUker  = UsulanUkt::select('id_unit_kerja', 'unit_kerja', DB::raw('count(id_form_usulan) as total_usulan'))
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_kerja')
             ->get();
 
-        return view('v_super_user.apk_ukt.index', compact('usulan'));
+        $usulanTotal = UsulanUkt::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+
+        $usulanChart = UsulanUkt::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan'))
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('month')
+            ->get();
+
+        foreach ($usulanChart as $key => $value) {
+            $result[] = ['Bulan', 'Total Usulan'];
+            $result[++$key] = [Carbon::parse($value->month)->isoFormat('MMMM Y'), $value->total_usulan];
+        }
+
+        $chartUkt = json_encode($result);
+        return view('v_super_user.apk_ukt.index', compact('usulanUker', 'usulanTotal', 'chartUkt'));
     }
 
     public function LetterUkt(Request $request, $aksi, $id)
@@ -703,10 +721,11 @@ class SuperUserController extends Controller
                     ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                     ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                    ->orderBy('status_proses_id', 'ASC')
-                    ->orderBy('no_surat_usulan', 'DESC')
                     ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
+                    ->orWhere('unit_kerja_id', $id)
                     ->get();
             }
 
@@ -1098,8 +1117,14 @@ class SuperUserController extends Controller
                 ->get();
 
             // $dataAtk    = $pengadaan->first();
-            $atk = UsulanAtkPengadaan::select('jenis_barang','nama_barang','spesifikasi','satuan',
-                DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+            $atk = UsulanAtkPengadaan::select(
+                'jenis_barang',
+                'nama_barang',
+                'spesifikasi',
+                'satuan',
+                DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+            )
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -1120,8 +1145,14 @@ class SuperUserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            $permintaan = UsulanAtkPermintaan::select('atk_tbl_form_usulan.*','atk_tbl_form_usulan_pengadaan.*','tbl_pegawai.*',
-                'tbl_unit_kerja.*','atk_tbl_form_usulan_permintaan.jumlah','atk_tbl_form_usulan_permintaan.jumlah_disetujui')
+            $permintaan = UsulanAtkPermintaan::select(
+                'atk_tbl_form_usulan.*',
+                'atk_tbl_form_usulan_pengadaan.*',
+                'tbl_pegawai.*',
+                'tbl_unit_kerja.*',
+                'atk_tbl_form_usulan_permintaan.jumlah',
+                'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
+            )
                 ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1133,8 +1164,13 @@ class SuperUserController extends Controller
 
             $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
                 ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->select('jenis_barang','nama_barang','spesifikasi',DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
-                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
+                ->select(
+                    'jenis_barang',
+                    'nama_barang',
+                    'spesifikasi',
+                    DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+                )
                 ->where('status_proses_id', 5)
                 ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
                 ->first();
@@ -1464,7 +1500,7 @@ class SuperUserController extends Controller
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
                 ->where('pegawai_id', Auth::user()->pegawai_id)
-                ->orderBy('jenis_barang','DESC')
+                ->orderBy('jenis_barang', 'DESC')
                 ->get();
 
             return view('v_super_user.apk_atk.usulan', compact('idUsulan', 'aksi', 'kelompokAtk', 'stok'));

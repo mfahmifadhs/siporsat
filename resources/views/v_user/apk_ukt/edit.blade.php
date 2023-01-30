@@ -64,13 +64,13 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10">{!! nl2br(e($detail->spesifikasi_pekerjaan)) !!}</textarea>
+                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10">{!! $detail->spesifikasi_pekerjaan !!}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" name="keterangan[]" rows="3">{!! nl2br(e($detail->keterangan)) !!}</textarea>
+                                <textarea class="form-control" name="keterangan[]" rows="3">{!! $detail->keterangan !!}</textarea>
                             </div>
                         </div>
                         @endforeach

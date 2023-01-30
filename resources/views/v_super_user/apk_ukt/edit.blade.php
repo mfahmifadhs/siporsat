@@ -64,7 +64,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Spesifikasi Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10">{!! nl2br(e($detail->spesifikasi_pekerjaan)) !!}</textarea>
+                                <textarea name="spesifikasi_pekerjaan[]" class="form-control" rows="10">{!! $detail->spesifikasi_pekerjaan !!}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
