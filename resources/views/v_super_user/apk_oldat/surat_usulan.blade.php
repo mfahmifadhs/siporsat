@@ -162,7 +162,7 @@
                                         <td>{{ $dataBarang->kategori_barang_id }}</td>
                                         <td>{{ $dataBarang->kategori_barang }}</td>
                                         <td>{{ $dataBarang->merk_barang }}</td>
-					<td>{{!! nl2br(e($dataBarang->spesifikasi_barang)) !!}</td>
+					                    <td>{!! nl2br(e($dataBarang->spesifikasi_barang)) !!}</td>
                                         <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
                                         <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
                                     </tr>
