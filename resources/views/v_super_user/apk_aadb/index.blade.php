@@ -32,34 +32,6 @@
                 </div>
                 @endif
             </div>
-            <div class="col-md-12 form-group">
-                <div class="row small">
-                    <div class="col-md-3 form-group">
-                        <a href="{{ url('super-user/aadb/usulan/pengadaan/kendaraan') }}" class="btn-block btn btn-primary">
-                            <i class="fas fa-car fa-2x"></i>
-                            <h6 class="font-weight-bold mt-1"><small>Usulan <br> Pengadaan</small></h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <a href="{{ url('super-user/aadb/usulan/servis/kendaraan') }}" class="btn-block btn btn-primary">
-                            <i class="fas fa-tools fa-2x"></i>
-                            <h6 class="font-weight-bold mt-1"><small>Usulan <br> Servis</small></h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <a href="{{ url('super-user/aadb/usulan/perpanjangan-stnk/kendaraan') }}" class="btn-block btn btn-primary">
-                            <i class="fas fa-id-card-alt fa-2x"></i>
-                            <h6 class="font-weight-bold mt-1"><small>Usulan <br> Perpanjangan STNK</small></h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <a href="{{ url('super-user/aadb/usulan/voucher-bbm/kendaraan') }}" class="btn-block btn btn-primary">
-                            <i class="fas fa-gas-pump fa-2x"></i>
-                            <h6 class="font-weight-bold mt-1"><small>Usulan <br> Voucher BBM</small></h6>
-                        </a>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-5 form-group">
                 <div class="card card-outline card-primary" style="height:100%;">
                     <div class="card-header">

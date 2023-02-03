@@ -180,6 +180,16 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Nama Barang</label>
+                            <div class="col-sm-4">
+                                <span id="nama_barang1"><input type="text" class="form-control" readonly></span>
+                            </div>
+                            <label class="col-sm-1 col-form-label">Merk/Tipe</label>
+                            <div class="col-sm-5">
+                                <span id="merktipe1"><input type="text" class="form-control" readonly></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Keterangan Kerusakan*</label>
                             <div class="col-sm-10">
                                 <textarea name="keterangan_kerusakan[]" class="form-control" rows="2" required></textarea>
@@ -222,7 +232,7 @@
                         `<div class="input-barang-pengadaan">
                             <hr style="border: 0.5px solid grey;">
                             <div class="form-group row">
-                                <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang `+j+`</label>
+                                <label class="col-sm-8 text-muted float-left mt-2">Informasi Barang ` + j + `</label>
                             </div>
                             <hr style="border: 0.5px solid grey;">
                             <div class="form-group row">
@@ -317,6 +327,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Nama Barang</label>
+                                <div class="col-sm-4">
+                                    <span id="nama_barang`+j+`"><input type="text" class="form-control" readonly></span>
+                                </div>
+                                <label class="col-sm-1 col-form-label">Merk/Tipe</label>
+                                <div class="col-sm-5">
+                                    <span id="merktipe`+j+`"><input type="text" class="form-control" readonly></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Keterangan Kerusakan*</label>
                                 <div class="col-sm-10">
                                     <textarea name="keterangan_kerusakan[` + i + `]" class="form-control" rows="2" required></textarea>
@@ -372,6 +392,8 @@
                     success: function(res) {
                         $("#kode_barang" + target).empty();
                         $("#nup_barang" + target).empty();
+                        $("#nama_barang" + target).empty();
+                        $("#merktipe" + target).empty();
                         $("#jumlah_barang" + target).empty();
                         $("#satuan_barang" + target).empty();
                         $("#tahun_perolehan" + target).empty();
@@ -381,6 +403,12 @@
                             );
                             $("#nup_barang" + target).append(
                                 '<input type="number" class="form-control" value="' + row.nup_barang + '" readonly>'
+                            );
+                            $("#nama_barang" + target).append(
+                                '<input type="text" class="form-control" value="' + row.kategori_barang + '" readonly>'
+                            );
+                            $("#merktipe" + target).append(
+                                '<input type="text" class="form-control" value="' + row.merk_tipe_barang + '" readonly>'
                             );
                             $("#jumlah_barang" + target).append(
                                 '<input type="number" class="form-control" value="' + row.jumlah_barang + '" readonly>'

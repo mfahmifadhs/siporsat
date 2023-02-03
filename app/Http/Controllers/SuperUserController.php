@@ -231,7 +231,8 @@ class SuperUserController extends Controller
                         ]);
                     } else {
                         UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                            'status_proses_id'    => 3
+                            'status_proses_id'    => 3,
+                            'otp_bast_ppk' => $request->one_time_password,
                         ]);
                     }
                     Google2FA::logout();
@@ -247,7 +248,8 @@ class SuperUserController extends Controller
                     return redirect('super-user/atk/surat/surat-bast/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '4') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'status_proses_id'    => 5
+                        'status_proses_id'    => 5,
+                        'otp_bast_kabag' => $request->one_time_password,
                     ]);
                     Google2FA::logout();
 
@@ -3261,14 +3263,16 @@ class SuperUserController extends Controller
             $search = $request->search;
 
             if ($search == '') {
-                $result  = Barang::select('id_barang', DB::raw('CONCAT(unit_kerja," - ",kode_barang," - ",merk_tipe_barang) AS merk_tipe_barang'))
-                    ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                $result  = Barang::select('id_barang', DB::raw('CONCAT(kategori_barang," - ",kode_barang,".",nup_barang) AS merk_tipe_barang'))
                     ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+                    ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                     ->where('kategori_barang_id', $request->kategori)
+                    ->where('status_barang', '!=', '2')
                     ->pluck('id_barang', 'merk_tipe_barang');
             }
         } elseif ($id == 'detail') {
             $result   = Barang::join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
+                ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                 ->where('id_barang', 'like', '%' . $request->idBarang . '%')
                 ->get();
         }
@@ -3872,8 +3876,7 @@ class SuperUserController extends Controller
                 return redirect('super-user/verif/usulan-atk/' . $id);
             } else {
                 UsulanAtk::where('id_form_usulan', $id)->update([
-                    'tanggal_bast'     => Carbon::now(),
-                    'no_surat_bast'    => $request->no_surat_bast
+                    'no_surat_bast'     => $request->no_surat_bast
                 ]);
                 return redirect('super-user/verif/usulan-atk/' . $id);
             }

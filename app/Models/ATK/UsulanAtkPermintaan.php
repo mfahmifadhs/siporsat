@@ -18,6 +18,6 @@ class UsulanAtkPermintaan extends Model
         'pengadaan_id',
         'jumlah',
         'jumlah_disetujui',
-        'tanggal'
+        'tanggal_penyerahan'
     ];
 }

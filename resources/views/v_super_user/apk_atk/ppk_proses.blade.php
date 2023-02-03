@@ -47,12 +47,6 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal BAST </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control text-capitalize" value="{{ \Carbon\carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Nama Pengusul </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" value="{{ $usulan->nama_pegawai }}" readonly>
@@ -136,13 +130,11 @@
                             </table>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button type="submit" id="btnSubmit" class="btn btn-primary" onclick="return confirm('Apakah data sudah benar ?')">SUBMIT</button>
-                        </div>
-                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-md font-weight-bold float-right" onclick="return confirm('Apakah barang sudah tersedia ?')">
+                        <i class="fas fa-paper-plane"></i> SUBMIT
+                    </button>
                 </div>
             </form>
         </div>

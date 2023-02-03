@@ -1145,8 +1145,9 @@ class UserController extends Controller
             $search = $request->search;
 
             if ($search == '') {
-                $result  = Barang::select('id_barang', DB::raw('CONCAT(unit_kerja," - ",kode_barang,".",nup_barang," - ",merk_tipe_barang) AS merk_tipe_barang'))
+                $result  = Barang::select('id_barang', DB::raw('CONCAT(kategori_barang," - ",kode_barang,".",nup_barang) AS merk_tipe_barang'))
                     ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
+                    ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                     ->where('kategori_barang_id', $request->kategori)
                     ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                     ->where('status_barang', '!=', '2')
@@ -1154,6 +1155,7 @@ class UserController extends Controller
             }
         } elseif ($id == 'detail') {
             $result   = Barang::join('oldat_tbl_kondisi_barang', 'id_kondisi_barang', 'kondisi_barang_id')
+                ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                 ->where('id_barang', 'like', '%' . $request->idBarang . '%')
                 ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->get();

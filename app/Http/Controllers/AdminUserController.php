@@ -517,6 +517,36 @@ class AdminUserController extends Controller
 
         } elseif ($aksi == 'proses-input' && $id == 'distribusi') {
             return redirect('admin-user/verif/usulan-atk/' . $request->form_id);
+        } elseif ($aksi == 'daftar') {
+            $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
+            return view('v_admin_user.apk_atk.daftar_pengajuan', compact('usulan'));
+        } elseif ($aksi == 'penyerahan') {
+            if ($request->tanggal_bast) {
+                $usulan = UsulanAtk::where('id_form_usulan', $id)->update([ 'tanggal_bast' => $request->tanggal_bast ]);
+                $permintaan = $request->id_permintaan;
+                foreach ($permintaan as $i => $id_permintaan) {
+                    UsulanAtkPermintaan::where('id_permintaan', $id_permintaan)->update([
+                        ''
+                    ]);
+                }
+            } else {
+                $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->where('id_form_usulan', $id)
+                    ->first();
+
+                return view('v_admin_user.apk_atk.penyerahan', compact('usulan'));
+            }
         }
     }
 
