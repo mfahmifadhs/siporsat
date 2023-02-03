@@ -1145,9 +1145,8 @@ class UserController extends Controller
             $search = $request->search;
 
             if ($search == '') {
-                $result  = Barang::select('id_barang', DB::raw('CONCAT(kategori_barang," - ",kode_barang,".",nup_barang) AS merk_tipe_barang'))
+                $result  = Barang::select('id_barang', DB::raw('CONCAT(unit_kerja," - ",kode_barang,".",nup_barang," - ",merk_tipe_barang) AS merk_tipe_barang'))
                     ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja', 'oldat_tbl_barang.unit_kerja_id')
-                    ->join('oldat_tbl_kategori_barang', 'id_kategori_barang', 'kategori_barang_id')
                     ->where('kategori_barang_id', $request->kategori)
                     ->where('oldat_tbl_barang.unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                     ->where('status_barang', '!=', '2')
@@ -2005,7 +2004,7 @@ class UserController extends Controller
                         if ($request->alkom_jumlah != 0) {
                             $jumlahUsulan = UsulanAtkPengadaan::count() + 1;
                             $pengadaanAtk = new UsulanAtkPengadaan();
-                            $pengadaanAtk->form_usulan_id = $id_usulan;
+                            $pengadaanAtk->form_	usulan_id = $id_usulan;
                             $pengadaanAtk->jenis_barang = 'ALKOM';
                             $pengadaanAtk->nama_barang = strtoupper($request->alkom_barang[$i]);
                             $pengadaanAtk->spesifikasi = strtoupper($request->alkom_spesifikasi[$i]);
