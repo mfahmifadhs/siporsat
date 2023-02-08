@@ -29,12 +29,13 @@
             </div>
 
             <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-3 col-12">
+		<div class="row">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Menunggu Persetujuan</span> <br>
+                                <small class="text-danger fa-xs">Menunggu Persetujuan Kabag RT</small>
                             </div>
                         </div>
                     </div>
@@ -42,7 +43,17 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Sedang Diproses</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Sedang Diproses</span> <br>
+                                <small class="text-danger fa-xs">Usulan Sedang Diproses Oleh PPK</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
+                                <span class="font-weight-bold mb-0 fa-sm">Konfirmasi BAST Pengusul</span>
+                                <small class="text-danger fa-xs">Konfirmasi Pekerjaan Diterima</small>
                             </div>
                         </div>
                     </div>
@@ -50,7 +61,8 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Selesai Diproses</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Konfirmasi BAST Kabag RT</span> <br>
+                                <small class="text-danger fa-xs">Kabag RT Konfirmasi BAST</small>
                             </div>
                         </div>
                     </div>
@@ -58,22 +70,24 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Selesai BAST</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Selesai BAST</span> <br>
+                                <small class="text-danger fa-xs">BAST telah di tanda tangani</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_pengajuan_id', 2)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Ditolak</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Ditolak</span> <br>
+                                <small class="text-danger fa-xs">Usulan Ditolak</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h3>
@@ -83,10 +97,11 @@
                             <thead>
                                 <tr class="text-center">
                                     <th style="width: 1%;">No</th>
-                                    <th class="text-left" style="width: 44%;">Tanggal / No. Surat</th>
-                                    <th style="width: 25%;">Status Pengajuan</th>
-                                    <th style="width: 25%;">Status Proses</th>
-                                    <th>Aksi</th>
+                                    <th class="text-left" style="width: 20%;">Tanggal / No. Surat</th>
+                                    <th class="text-left">Usulan</th>
+                                    <th style="width: 15%;">Status Pengajuan</th>
+                                    <th style="width: 15%;">Status Proses</th>
+                                    <th style="width: 0%;">Aksi</th>
                                 </tr>
                             </thead>
                             <?php $no = 1;
@@ -104,14 +119,28 @@
                                         -
                                         @endif
                                     </td>
+				    <td class="text-left">
+                                        @foreach($dataUsulan->detailUsulanGdn as $detailGdn)
+                                        <div class="form-group row">
+                                            <div class="col-md-3">Lokasi &emsp;&emsp;&nbsp; :</div>
+                                            <div class="col-md-9 text-capitalize">{{ ucfirst(strtolower($detailGdn->lokasi_bangunan)) }}</div>
+                                            <div class="col-md-3">Spesifikasi &ensp; :</div>
+                                            <div class="col-md-9 text-capitalize">{!! nl2br(e(ucfirst(strtolower($detailGdn->lokasi_spesifik)))) !!}</div>
+                                            <div class="col-md-3">Keterangan &nbsp; : </div>
+                                            <div class="col-md-9 text-capitalize">{!! nl2br(e(ucfirst(strtolower($detailGdn->keterangan)))) !!}</div>
+                                        </div>
+                                        @if (count($dataUsulan->detailUsulanGdn) > 1)
+                                        <hr> @endif
+                                        @endforeach
+                                    </td>
                                     <td class="pt-2">
                                         <h6 class="mt-3">
                                             @if($dataUsulan->status_pengajuan_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-success">
+                                            <span class="badge badge-sm badge-pill badge-success p-2">
                                                 Disetujui
                                             </span>
                                             @elseif($dataUsulan->status_pengajuan_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                            <span class="badge badge-sm badge-pill badge-danger p-2">Ditolak</span>
                                             @if ($dataUsulan->keterangan != null)
                                             <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
                                             @endif
@@ -121,15 +150,15 @@
                                     <td class="pt-2">
                                         <h6 class="mt-3">
                                             @if($dataUsulan->status_proses_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
+                                            <span class="badge badge-sm badge-pill badge-warning p-2">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-warning">Sedang Diproses <br> oleh PPK</span>
+                                            <span class="badge badge-sm badge-pill badge-warning p-2">Sedang Diproses <br> oleh PPK</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">Konfirmasi Pekerjaan <br> telah Diterima</span>
+                                            <span class="badge badge-sm badge-pill badge-warning p-2">Konfirmasi Pekerjaan <br> telah Diterima</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
-                                            <span class="badge badge-sm badge-pill badge-warning">Menunggu Konfirmasi BAST <br> Kabag RT</span>
+                                            <span class="badge badge-sm badge-pill badge-warning p-2">Menunggu Konfirmasi BAST <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
-                                            <span class="badge badge-sm badge-pill badge-success">Selesai</span>
+                                            <span class="badge badge-sm badge-pill badge-success p-2">Selesai</span>
                                             @endif
                                         </h6>
                                     </td>
@@ -274,7 +303,7 @@
     $(function() {
         $("#table-usulan").DataTable({
             "responsive": true,
-            "lengthChange": false,
+            "lengthChange": true,
             "autoWidth": false,
             "info": false,
             "paging": true,
