@@ -1037,9 +1037,9 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
-                ->orderBy('no_surat_usulan', 'DESC')
-                ->orderBy('status_pengajuan_id', 'ASC');
+                ->orderBy('tanggal_usulan', 'DESC');
 
             if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id'])) {
                 if ($request->unit_kerja_id) {
