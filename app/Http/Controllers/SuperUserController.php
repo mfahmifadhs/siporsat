@@ -3171,6 +3171,7 @@ class SuperUserController extends Controller
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker', 'formUsulan'));
         } elseif ($aksi == 'periode') {
+            $uker   = UnitKerja::get();
             $formUsulan  = FormUsulan::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m')"), $id)
                 ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -3182,7 +3183,7 @@ class SuperUserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            return view('v_super_user.apk_oldat.daftar_pengajuan', compact('formUsulan'));
+            return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker','formUsulan'));
         } elseif ($aksi == 'usulan') {
             $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
             $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')

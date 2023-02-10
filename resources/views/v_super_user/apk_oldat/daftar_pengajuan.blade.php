@@ -248,6 +248,10 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
+						 <div class="form-group row mb-0">
+                                                    <div class="col-md-2"><label>Nomor Surat </label></div>
+                                                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                                </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Nama Pengusul </label></div>
                                                     <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
@@ -325,19 +329,21 @@
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Nama Barang</div>
+                                                            <div class="col-sm-2">Nama Barang</div>
+							    <div class="col-sm-2">Kode Barang</div>
                                                             <div class="col-sm-3">Merk/Tipe</div>
                                                             <div class="col-sm-2">Pengguna</div>
-                                                            <div class="col-sm-3">Keterangan</div>
+                                                            <div class="col-sm-2">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @foreach($usulan->detailPerbaikan as $i => $dataOldat)
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->kategori_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->kategori_barang }}</div>
+							    <div class="col-sm-2">{{ $dataOldat->kode_barang.'.'.$dataOldat->nup_barang }}</div>
                                                             <div class="col-sm-3">{{ $dataOldat->merk_tipe_barang.' '.Carbon\carbon::parse($dataOldat->tahun_perolehan)->isoFormat('Y') }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->pengguna_barang }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->keterangan_perbaikan }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->keterangan_perbaikan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

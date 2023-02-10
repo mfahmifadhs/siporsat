@@ -231,6 +231,10 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
+						 <div class="form-group row mb-0">
+                                                    <div class="col-md-2"><label>Nomor Surat </label></div>
+                                                    <div class="col-md-10">: {{ $dataUsulan->no_surat_usulan }}</div>
+                                                </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Nama Pengusul </label></div>
                                                     <div class="col-md-10">: {{ $dataUsulan->nama_pegawai }}</div>

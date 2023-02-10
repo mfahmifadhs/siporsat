@@ -358,6 +358,7 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
         Route::get('surat/{aksi}/{id}', [UserController::class, 'LetterAtk']);
         Route::get('/select2-dashboard/{aksi}/{id}', [UserController::class, 'Select2AtkDashboard']);
 
+        Route::post('barang/{aksi}/{id}', [UserController::class, 'OfficeStationery']);
         Route::post('surat/{aksi}/{id}', [UserController::class, 'LetterAtk']);
         Route::post('usulan/{aksi}/{id}', [UserController::class, 'SubmissionAtk']);
         Route::post('/select2/{aksi}/{id}', [UserController::class, 'Select2Atk']);
