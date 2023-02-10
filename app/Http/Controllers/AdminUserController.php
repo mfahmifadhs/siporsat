@@ -30,7 +30,7 @@ use App\Models\ATK\RiwayatAtk;
 use App\Models\GDN\UsulanGdn;
 use App\Models\OLDAT\FormUsulan;
 use App\Models\RDN\RumahDinas;
-use App\Models\Ukt\UsulanUkt;
+use App\Models\UKT\UsulanUkt;
 use App\Models\UnitKerja;
 use App\Models\User;
 use Carbon\Carbon;
