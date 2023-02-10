@@ -89,7 +89,7 @@
 
             <div class="col-md-12">
                 <div class="card card-primary card-outline">
-                    <div class="card-header bg-primary">
+                    <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan Pengajuan</h3>
                     </div>
                     <div class="card-body">
