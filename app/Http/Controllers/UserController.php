@@ -16,14 +16,7 @@ use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanVoucherBBM;
-use App\Models\ATK\Atk;
-use App\Models\ATK\JenisAtk;
-use App\Models\ATK\KategoriAtk;
-use App\Models\ATK\KelompokAtk;
-use App\Models\ATK\StokAtk;
-use App\Models\ATK\SubKelompokAtk;
 use App\Models\ATK\UsulanAtk;
-use App\Models\ATK\UsulanAtkDetail;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\GDN\BidangKerusakan;
@@ -1773,21 +1766,12 @@ class UserController extends Controller
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        $atk  = UsulanAtkDetail::select('atk_id', 'merk_atk', 'tanggal_usulan', 'atk_tbl.satuan', 'jenis_form', DB::raw('sum(jumlah_pengajuan) as total_atk'))
-            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-            ->join('atk_tbl', 'id_atk', 'atk_id')
-            ->join('atk_tbl_kelompok_sub_kategori', 'id_kategori_atk', 'kategori_atk_id')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
-            ->groupBy('atk_id', 'merk_atk', 'tanggal_usulan', 'atk_tbl.satuan', 'jenis_form')
-            ->orderBy('tanggal_usulan', 'DESC')
-            ->get();
-
         $stok = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
             ->where('pegawai_id', Auth::user()->pegawai_id)
             ->where('status_proses_id', 5)
             ->get();
 
-        return view('v_user.apk_atk.index', compact('googleChartData', 'usulan', 'atk', 'stok'));
+        return view('v_user.apk_atk.index', compact('usulan', 'stok'));
     }
 
     public function OfficeStationery(Request $request, $aksi, $id)
@@ -1859,17 +1843,7 @@ class UserController extends Controller
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
-
             $idFormUsulan = Carbon::now()->format('dhis');
-            $usulan = new UsulanAtk();
-            $usulan->id_form_usulan     = $idFormUsulan;
-            $usulan->pegawai_id         = Auth::user()->pegawai_id;
-            $usulan->jenis_form         = $id;
-            $usulan->total_pengajuan    = count($request->id_pengadaan);
-            $usulan->no_surat_usulan    = strtoupper($noSurat);
-            $usulan->tanggal_usulan     = Carbon::now();
-            $usulan->rencana_pengguna   = $request->rencana_pengguna;
-            $usulan->save();
 
             // Daftar barang
             $daftar = $request->id_pengadaan;
@@ -1881,7 +1855,6 @@ class UserController extends Controller
                     $detail->form_usulan_id = $idFormUsulan;
                     $detail->pengadaan_id   = $id_pengadaan;
                     $detail->jumlah         = $request->jumlah_permintaan[$i];
-                    $detail->tanggal        = Carbon::now();
                     $detail->save();
 
                     $pengadaan  = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)->first();
@@ -1891,7 +1864,21 @@ class UserController extends Controller
                             'jumlah_pemakaian' => $pemakaian
                         ]);
                 }
+
+                if ($request->jumlah_permintaan[$i] != 0) {
+                    $totalPengajuan[] = $request->jumlah_permintaan;
+                }
             }
+
+            $usulan = new UsulanAtk();
+            $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->pegawai_id         = Auth::user()->pegawai_id;
+            $usulan->jenis_form         = 'distribusi';
+            $usulan->total_pengajuan    = count($totalPengajuan);
+            $usulan->no_surat_usulan    = strtoupper($noSurat);
+            $usulan->tanggal_usulan     = Carbon::now();
+            $usulan->rencana_pengguna   = $request->rencana_pengguna;
+            $usulan->save();
 
             // if ($dataAtk == 'lain-lain') {
             //     // Input barang lain
@@ -2116,161 +2103,13 @@ class UserController extends Controller
         } else {
             $totalUsulan    = UsulanAtk::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $kelompokAtk    = KelompokAtk::get();
             $stok           = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
                 ->where('pegawai_id', Auth::user()->pegawai_id)
                 ->where('status_proses_id', 5)
                 ->get();
 
-            return view('v_user.apk_atk.usulan', compact('idUsulan', 'aksi', 'kelompokAtk', 'stok'));
+            return view('v_user.apk_atk.usulan', compact('idUsulan', 'aksi', 'stok'));
         }
-    }
-
-    public function Select2Atk(Request $request, $aksi, $id)
-    {
-
-        $search = $request->search;
-        if ($aksi == 1) {
-            if ($search == '') {
-                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
-                    ->orderby('id_subkelompok_atk', 'asc')
-                    ->get();
-            } else {
-                $atk  = SubKelompokAtk::select('id_subkelompok_atk', 'subkelompok_atk')
-                    ->orderby('id_subkelompok_atk', 'asc')
-                    ->where('id_subkelompok_atk', 'like', '%' . $search . '%')
-                    ->orWhere('subkelompok_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 2) {
-            if ($search == '') {
-                $atk  = JenisAtk::select('id_jenis_atk as id', 'subkelompok_atk_id', 'jenis_atk as nama')
-                    ->orderby('id_jenis_atk', 'asc')
-                    ->where('subkelompok_atk_id', $id)
-                    ->get();
-            } else {
-                $atk  = JenisAtk::select('id_jenis_atk', 'subkelompok_atk_id', 'jenis_atk')
-                    ->orderby('id_jenis_atk', 'asc')
-                    ->where('subkelompok_atk_id', $id)
-                    ->where('id_jenis_atk', 'like', '%' . $search . '%')
-                    ->orWhere('jenis_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 3) {
-            if ($search == '') {
-                $atk  = KategoriAtk::select('id_kategori_atk as id', 'jenis_atk_id', 'kategori_atk as nama')
-                    ->orderby('id_kategori_atk', 'asc')
-                    ->where('jenis_atk_id', $id)
-                    ->get();
-            } else {
-                $atk  = KategoriAtk::select('id_kategori_atk', 'jenis_atk_id', 'kategori_atk')
-                    ->orderby('id_kategori_atk', 'asc')
-                    ->where('jenis_atk_id', $id)
-                    ->where('id_kategori_atk', 'like', '%' . $search . '%')
-                    ->orWhere('kategori_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 4) {
-            if ($search == '') {
-                $atk  = Atk::select('id_atk as id', 'kategori_atk_id', 'merk_atk as nama')
-                    ->orderby('id_atk', 'asc')
-                    ->where('kategori_atk_id', $id)
-                    ->get();
-            } else {
-                $atk  = Atk::select('id_atk', 'kategori_atk_id', 'merk_atk')
-                    ->orderby('id_atk', 'asc')
-                    ->where('kategori_atk_id', $id)
-                    ->where('id_atk', 'like', '%' . $search . '%')
-                    ->orWhere('merk_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 5) {
-            $atk  = Atk::select('id_atk as id', 'total_atk as stok', 'satuan')
-                ->orderby('id_atk', 'asc')
-                ->groupBy('id', 'stok', 'satuan')
-                ->where('id_atk', $id)
-                ->get();
-        }
-
-        $response = array();
-        foreach ($atk as $data) {
-            $response[] = array(
-                "id"     =>  $data->id,
-                "text"   =>  $data->id . ' - ' . $data->nama,
-                "stok"   =>  $data->stok,
-                "satuan" =>  $data->satuan
-            );
-        }
-
-        return response()->json($response);
-    }
-
-    public function Select2AtkDashboard(Request $request, $aksi, $id)
-    {
-        $search = $request->search;
-        if ($aksi == 1) {
-            if ($search == '') {
-                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
-                    ->orderby('id_subkelompok_atk', 'asc')
-                    ->get();
-            } else {
-                $atk  = SubKelompokAtk::select('id_subkelompok_atk as id', 'subkelompok_atk as nama')
-                    ->orderby('id_subkelompok_atk', 'asc')
-                    ->orWhere('subkelompok_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 2) {
-            if ($search == '') {
-                $atk  = JenisAtk::select('id_jenis_atk as id', 'subkelompok_atk_id', 'jenis_atk as nama')
-                    ->orderby('id_jenis_atk', 'asc')
-                    ->get();
-            } else {
-                $atk  = JenisAtk::select('id_jenis_atk as id', 'subkelompok_atk_id', 'jenis_atk as nama')
-                    ->orderby('id_jenis_atk', 'asc')
-                    ->where('id_jenis_atk', 'like', '%' . $search . '%')
-                    ->orWhere('jenis_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 3) {
-            if ($search == '') {
-                $atk  = KategoriAtk::select('id_kategori_atk as id', 'jenis_atk_id', 'kategori_atk as nama')
-                    ->orderby('id_kategori_atk', 'asc')
-                    ->get();
-            } else {
-                $atk  = KategoriAtk::select('id_kategori_atk as id', 'jenis_atk_id', 'kategori_atk as nama')
-                    ->orderby('id_kategori_atk', 'asc')
-                    ->where('id_kategori_atk', 'like', '%' . $search . '%')
-                    ->orWhere('kategori_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 4) {
-            if ($search == '') {
-                $atk  = Atk::select('id_atk as id', 'kategori_atk_id', 'merk_atk as nama')
-                    ->orderby('id_atk', 'asc')
-                    ->get();
-            } else {
-                $atk  = Atk::select('id_atk as id', 'kategori_atk_id', 'merk_atk as nama')
-                    ->orderby('id_atk', 'asc')
-                    ->orWhere('merk_atk', 'like', '%' . $search . '%')
-                    ->get();
-            }
-        } elseif ($aksi == 5) {
-            $atk  = StokAtk::select('id_stok as id', 'atk_id', 'stok_atk as stok', 'satuan')
-                ->orderby('id_stok', 'asc')
-                ->get();
-        }
-
-        $response = array();
-        foreach ($atk as $data) {
-            $response[] = array(
-                "id"     =>  $data->id,
-                "text"   =>  $data->id . ' - ' . $data->nama,
-                "stok"   =>  $data->stok,
-                "satuan" =>  $data->satuan
-            );
-        }
-
-        return response()->json($response);
     }
 
     public function ChartDataAtk()

@@ -42,11 +42,72 @@
                 </div>
             </div>
             <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline">
+                <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
                         <b class="font-weight-bold text-primary card-title" style="font-size:medium;">
                             <i class="fas fa-table"></i> TABEL USULAN URUSAN KERUMAHTANGGAAN
                         </b>
+                        <div class="card-tools">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                                <span class="btn btn-primary btn-md">
+                                    <i class="fas fa-filter"></i> Filter
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                        <div class="card-header">
+                            <form method="POST" action="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}">
+                                @csrf
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label>Pilih Tanggal</label>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small>Tanggal Awal</small>
+                                                <input type="date" class="form-control border-dark" name="start_date">
+                                            </div>
+                                            <div class="col-md-2 text-center" style="margin-top: 30px;"> ➖ </div>
+                                            <div class="col-md-5">
+                                                <small>Tanggal Akhir</small>
+                                                <input type="date" class="form-control border-dark" name="end_date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Unit Kerja</label> <br>
+                                        <small>Pilih Unit Kerja</small>
+                                        <select name="unit_kerja_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Unit Kerja --</option>
+                                            @foreach ($uker as $dataUker)
+                                            <option value="{{ $dataUker->id_unit_kerja }}">{{ $dataUker->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Status Proses</label> <br>
+                                        <small>Pilih Status Proses Pengajuan</small>
+                                        <select name="status_proses_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Status Proses --</option>
+                                            <option value="1">1 - Menunggu Persetujuan Kabag RT</option>
+                                            <option value="2">2 - Sedang Diproses oleh PPK</option>
+                                            <option value="3">3 - Menunggu Konfirmasi BAST Pengusul</option>
+                                            <option value="4">4 - Menunggu Konfirmasi BAST Kabag RT</option>
+                                            <option value="5">5 - Selesai BAST</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <label class="mt-4">&nbsp;</label> <br>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Cari
+                                        </button>
+                                        <a href="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}" class="btn btn-danger">
+                                            <i class="fas fa-undo"></i> Refresh
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <table id="table-usulan" class="table table-bordered">
@@ -72,7 +133,7 @@
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         @foreach ($dataUsulan->detailUsulanUkt as $detailUkt)
-                                            {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50))) !!}
+                                        {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50))) !!}
                                         @endforeach
                                     </td>
                                     <td class="text-center">
@@ -120,8 +181,7 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @elseif ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}"
-                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-ukt/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah pekerjaan telah diterima?')">
                                                 <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif

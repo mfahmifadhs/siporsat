@@ -59,7 +59,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal Usulan</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" value="{{ $usulan->tanggal_usulan }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('HH:mm / DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">

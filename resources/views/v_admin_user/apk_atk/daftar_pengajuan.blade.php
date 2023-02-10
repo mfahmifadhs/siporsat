@@ -52,6 +52,7 @@
                                     <th style="width: 15%;">Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
+                                    <th class="text-center" style="width: 10%;">Belum Diserahkan</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
                                 </tr>
                             </thead>
@@ -59,7 +60,7 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $no++ }} </td>
                                     <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
                                     <td class="text-uppercase">{{ $dataUsulan->jenis_form }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
@@ -85,8 +86,10 @@
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
-                                            @elseif ($dataUsulan->status_proses_id == 3)
+                                            @elseif ($dataUsulan->status_proses_id == 3 && !$dataUsulan->tanggal_bast)
                                             <span class="badge badge-sm badge-pill badge-warning">Menyerahkan <br> Barang</span>
+                                            @elseif ($dataUsulan->status_proses_id == 3 && $dataUsulan->tanggal_bast)
+                                            <span class="badge badge-sm badge-pill badge-warning">Konfirmasi Pengusul <br> Barang Diterima</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST<br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
@@ -95,13 +98,24 @@
                                         </h6>
                                     </td>
                                     <td class="text-center">
+                                        @if (!$dataUsulan->tanggal_bast)
+                                            {{ $dataUsulan->permintaanAtk->where('status_penyerahan', null)->count() }} barang
+                                        @else
+                                            {{ $dataUsulan->permintaanAtk->where('status_penyerahan','false')->count() }} barang
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            @if ($dataUsulan->tanggal_bast == null && Auth::user()->akses->first()->is_atk == 1)
+                                            @if (!$dataUsulan->tanggal_bast && $dataUsulan->tanggal_bast == null && Auth::user()->akses->first()->is_atk == 1)
                                             <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/penyerahan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-people-carry"></i> Menyerahkan
+                                            </a>
+                                            @elseif ($dataUsulan->tanggal_bast && $dataUsulan->permintaanAtk->where('status_penyerahan','false')->count() != 0)
+                                            <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-edit"></i> Ubah
                                             </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
@@ -178,11 +192,11 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi' )
+                                                @if ($dataUsulan->status_proses_id >= 3 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi' )
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('admin-user/atk/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('admin-user/surat/bast-atk/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>

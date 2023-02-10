@@ -116,6 +116,8 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     Route::get('jabatan', [AdminUserController::class, 'JsonJabatan']);
     Route::get('profil/{aksi}/{id}', [AdminUserController::class, 'Profile']);
     Route::get('verif/{aksi}/{id}', [AdminUserController::class, 'Verification']);
+    Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'Letter']);
+    Route::get('cetak-surat/{modul}/{id}', [AdminUserController::class, 'PrintLetter']);
 
     Route::post('profil/{aksi}/{id}', [AdminUserController::class, 'Profile']);
     Route::post('select2/{aksi}', [AdminUserController::class, 'Select2']);
@@ -137,11 +139,14 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     });
 
     Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
+        Route::get('dashboard', [AdminUserController::class, 'Atk']);
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterAtk']);
+        Route::get('gudang/{aksi}/{id}', [AdminUserController::class, 'WarehouseAtk']);
         Route::get('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
 
+        Route::post('gudang/{aksi}/{id}', [AdminUserController::class, 'WarehouseAtk']);
         Route::post('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
         Route::post('/select2/{aksi}/{id}', [AdminUserController::class, 'Select2Atk']);
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
@@ -164,6 +169,8 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
     Route::get('laporan-siporsat', [SuperUserController::class, 'ReportMain']);
     Route::get('sendOTP', [SuperUserController::class, 'SendOTPWhatsApp']);
     Route::get('verif/{aksi}/{id}', [SuperUserController::class, 'Verification']);
+    Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
+    Route::get('cetak-surat/{modul}/{id}', [SuperUserController::class, 'PrintLetter']);
 
     Route::post('profil/{aksi}/{id}', [SuperUserController::class, 'Profile']);
     Route::post('verif/{aksi}/{id}', [SuperUserController::class, 'Verification'])->middleware('2fa');

@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Atk extends Model
+class RiwayatAtk extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table        = "atk_tbl_master";
-    protected $primaryKey   = "id_atk";
+    protected $table        = "atk_tbl_riwayat";
+    protected $primaryKey   = "id_riwayat";
     public $timestamps      = false;
 
     protected $fillable = [
-        'id_atk',
-        'kode_ref',
-        'kategori_id',
-        'deskripsi_barang',
-        'satuan_barang',
-        'keterangan_barang'
+        'id_riwayat',
+        'unit_kerja_id',
+        'atk_id',
+        'jumlah',
+        'status_riwayat',
+        'tanggal_riwayat'
     ];
 }

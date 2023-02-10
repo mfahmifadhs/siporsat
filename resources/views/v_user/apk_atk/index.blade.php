@@ -30,11 +30,12 @@
 
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Menunggu Persetujuan</span> <br>
+                                <small class="text-danger fa-xs">Menunggu Persetujuan Kabag RT</small>
                             </div>
                         </div>
                     </div>
@@ -42,7 +43,17 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Sedang Diproses</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Sedang Diproses</span> <br>
+                                <small class="text-danger fa-xs">Usulan Sedang Diproses Oleh PPK</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-12">
+                        <div class="card bg-default border border-primary">
+                            <div class="card-body">
+                                <h5>{{ $usulan->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
+                                <span class="font-weight-bold mb-0 fa-sm">Konfirmasi BAST Pengusul</span>
+                                <small class="text-danger fa-xs">Konfirmasi Pekerjaan Diterima</small>
                             </div>
                         </div>
                     </div>
@@ -50,7 +61,8 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Selesai Diproses</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Konfirmasi BAST Kabag RT</span> <br>
+                                <small class="text-danger fa-xs">Kabag RT Konfirmasi BAST</small>
                             </div>
                         </div>
                     </div>
@@ -58,15 +70,17 @@
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Selesai BAST</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Selesai BAST</span> <br>
+                                <small class="text-danger fa-xs">BAST telah di tanda tangani</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-2 col-12">
                         <div class="card bg-default border border-primary">
                             <div class="card-body">
                                 <h5>{{ $usulan->where('status_pengajuan_id', 2)->count() }} <small>usulan</small> </h5>
-                                <h6 class="font-weight-bold">Ditolak</h6>
+                                <span class="font-weight-bold mb-0 fa-sm">Ditolak</span> <br>
+                                <small class="text-danger fa-xs">Usulan Ditolak</small>
                             </div>
                         </div>
                     </div>
@@ -159,8 +173,7 @@
                                         </a>
                                         <div class="dropdown-menu">
                                             @if ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}"
-                                                onclick="return confirm('Apakah barang telah diterima?')">
+                                            <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-atk/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah barang telah diterima?')">
                                                 <i class="fas fa-check-circle"></i> Barang Diterima
                                             </a>
                                             @endif

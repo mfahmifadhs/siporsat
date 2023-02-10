@@ -158,9 +158,21 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                    <a href="{{ url('admin-user/atk/usulan/daftar/distribusi') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Daftar Usulan</p>
+                                        <p>Daftar Usulan Distribusi</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('admin-user/atk/usulan/daftar/pengadaan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
+                                        <p>Daftar Usulan Pengadaan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
+                                        <p>Gudang ATK</p>
                                     </a>
                                 </li>
                                 <!-- <li class="nav-item">
