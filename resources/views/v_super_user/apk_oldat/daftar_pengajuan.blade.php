@@ -47,11 +47,81 @@
             </div>
 
             <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline">
+                <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
                         <b class="font-weight-bold text-primary card-title" style="font-size:medium;">
                             <i class="fas fa-table"></i> TABEL USULAN OLDAT & MEUBELAIR
                         </b>
+                        <div class="card-tools">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                                <span class="btn btn-primary btn-md">
+                                    <i class="fas fa-filter"></i> Filter
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                        <div class="card-header">
+                            <form method="POST" action="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">
+                                @csrf
+                                <div class="form-group row">
+                                    <div class="col-sm-3">
+                                        <label>Pilih Tanggal</label>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small>Tanggal Awal</small>
+                                                <input type="date" class="form-control border-dark" name="start_date">
+                                            </div>
+                                            <div class="col-md-2 text-center" style="margin-top: 30px;"> ➖ </div>
+                                            <div class="col-md-5">
+                                                <small>Tanggal Akhir</small>
+                                                <input type="date" class="form-control border-dark" name="end_date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Unit Kerja</label> <br>
+                                        <small>Pilih Unit Kerja</small>
+                                        <select name="unit_kerja_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Unit Kerja --</option>
+                                            @foreach ($uker as $dataUker)
+                                            <option value="{{ $dataUker->id_unit_kerja }}">{{ $dataUker->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Status Proses</label> <br>
+                                        <small>Pilih Status Proses Pengajuan</small>
+                                        <select name="status_proses_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Status Proses --</option>
+                                            <option value="1">1 - Menunggu Persetujuan Kabag RT</option>
+                                            <option value="2">2 - Sedang Diproses oleh PPK</option>
+                                            <option value="3">3 - Menunggu Konfirmasi BAST Pengusul</option>
+                                            <option value="4">4 - Menunggu Konfirmasi BAST Kabag RT</option>
+                                            <option value="5">5 - Selesai BAST</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Jenis Usulan</label> <br>
+                                        <small>Pilih Jenis Usulan Oldat & Meubelair</small>
+                                        <select name="jenis_form" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Jenis Usulan --</option>
+                                            <option value="pengadaan">Pengadaan Baru/Sewa</option>
+                                            <option value="perbaikan">Perbaikan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <label class="mt-4">&nbsp;</label> <br>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Cari
+                                        </button>
+                                        <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-danger">
+                                            <i class="fas fa-undo"></i> Refresh
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <table id="table-pengajuan" class="table table-bordered text-capitalize">
@@ -178,6 +248,10 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
+						 <div class="form-group row mb-0">
+                                                    <div class="col-md-2"><label>Nomor Surat </label></div>
+                                                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                                                </div>
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Nama Pengusul </label></div>
                                                     <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
@@ -255,19 +329,21 @@
                                                         <hr class="bg-secondary">
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Nama Barang</div>
+                                                            <div class="col-sm-2">Nama Barang</div>
+							    <div class="col-sm-2">Kode Barang</div>
                                                             <div class="col-sm-3">Merk/Tipe</div>
                                                             <div class="col-sm-2">Pengguna</div>
-                                                            <div class="col-sm-3">Keterangan</div>
+                                                            <div class="col-sm-2">Keterangan</div>
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @foreach($usulan->detailPerbaikan as $i => $dataOldat)
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->kategori_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->kategori_barang }}</div>
+							    <div class="col-sm-2">{{ $dataOldat->kode_barang.'.'.$dataOldat->nup_barang }}</div>
                                                             <div class="col-sm-3">{{ $dataOldat->merk_tipe_barang.' '.Carbon\carbon::parse($dataOldat->tahun_perolehan)->isoFormat('Y') }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->pengguna_barang }}</div>
-                                                            <div class="col-sm-3">{{ $dataOldat->keterangan_perbaikan }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->keterangan_perbaikan }}</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

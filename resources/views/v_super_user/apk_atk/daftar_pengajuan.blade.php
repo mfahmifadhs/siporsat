@@ -50,11 +50,81 @@
                 </div>
             </div>
             <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline">
+                <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
                         <b class="font-weight-bold text-primary card-title" style="font-size:medium;">
                             <i class="fas fa-table"></i> TABEL USULAN ATK
                         </b>
+                        <div class="card-tools">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                                <span class="btn btn-primary btn-md">
+                                    <i class="fas fa-filter"></i> Filter
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                        <div class="card-header">
+                            <form method="POST" action="{{ url('super-user/atk/usulan/daftar/seluruh-usulan') }}">
+                                @csrf
+                                <div class="form-group row">
+                                    <div class="col-sm-3">
+                                        <label>Pilih Tanggal</label>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small>Tanggal Awal</small>
+                                                <input type="date" class="form-control border-dark" name="start_date">
+                                            </div>
+                                            <div class="col-md-2 text-center" style="margin-top: 30px;"> ➖ </div>
+                                            <div class="col-md-5">
+                                                <small>Tanggal Akhir</small>
+                                                <input type="date" class="form-control border-dark" name="end_date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Unit Kerja</label> <br>
+                                        <small>Pilih Unit Kerja</small>
+                                        <select name="unit_kerja_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Unit Kerja --</option>
+                                            @foreach ($uker as $dataUker)
+                                            <option value="{{ $dataUker->id_unit_kerja }}">{{ $dataUker->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Status Proses</label> <br>
+                                        <small>Pilih Status Proses Pengajuan</small>
+                                        <select name="status_proses_id" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Status Proses --</option>
+                                            <option value="1">1 - Menunggu Persetujuan Kabag RT</option>
+                                            <option value="2">2 - Sedang Diproses oleh PPK</option>
+                                            <option value="3">3 - Menunggu Konfirmasi BAST Pengusul</option>
+                                            <option value="4">4 - Menunggu Konfirmasi BAST Kabag RT</option>
+                                            <option value="5">5 - Selesai BAST</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Jenis Usulan</label> <br>
+                                        <small>Pilih Jenis Usulan ATK</small>
+                                        <select name="jenis_form" class="form-control text-capitalize border-dark">
+                                            <option value="">-- Pilih Jenis Usulan --</option>
+                                            <option value="pengadaan">Pengadaan</option>
+                                            <option value="distribusi">Distribusi</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <label class="mt-4">&nbsp;</label> <br>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Cari
+                                        </button>
+                                        <a href="{{ url('super-user/atk/usulan/daftar/seluruh-usulan') }}" class="btn btn-danger">
+                                            <i class="fas fa-undo"></i> Refresh
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <table id="table-usulan" class="table table-bordered">
