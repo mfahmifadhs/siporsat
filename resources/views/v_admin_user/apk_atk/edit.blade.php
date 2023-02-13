@@ -108,9 +108,8 @@
                                         <td class="text-center">
                                             @if ($dataPermintaan->status_penyerahan == 'true')
                                             ☑️
-                                            <input type="hidden" value="true" name="konfirmasi_penyerahan[{{$i}}]">
                                             @else
-                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
                                             <input type="hidden" value="false" name="konfirmasi_penyerahan[{{$i}}]">
                                             <input type="checkbox" class="confirm-check" name="konfirmasi_penyerahan[{{$i}}]" id="checkbox_id{{$i}}" value="true"> <br>
                                             @endif

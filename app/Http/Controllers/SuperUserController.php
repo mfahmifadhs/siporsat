@@ -1643,7 +1643,6 @@ class SuperUserController extends Controller
                     $detail->form_usulan_id = $idFormUsulan;
                     $detail->pengadaan_id   = $id_pengadaan;
                     $detail->jumlah         = $request->jumlah_permintaan[$i];
-                    $detail->tanggal        = Carbon::now();
                     $detail->save();
 
                     $pengadaan  = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)->first();

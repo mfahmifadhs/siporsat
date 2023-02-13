@@ -174,6 +174,7 @@ class UserController extends Controller
                     return redirect('unit-kerja/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Memproses Usulan');
                 } elseif ($usulan->status_proses_id == '3') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
+                        'otp_bast_pengusul'   => $request->one_time_password,
                         'status_proses_id'    => 4
                     ]);
                     Google2FA::logout();

@@ -2,312 +2,385 @@
 
 @section('content')
 
-<section class="content">
+<!-- Main content -->
+<section class="content-header">
     <div class="container-fluid">
-        <!-- Anggaran -->
         <div class="row">
-            <div class="col-sm-12 py-3">
-                <h4 class="m-0">Anggaran</h4>
-            </div>
-            <div class="col-lg-4 col-12">
-                <div class="small-box bg-primary">
-                    <div class="inner">
-                        <p>Total Anggaran Awal</p>
-                        <h3><sup style="font-size: 20px">Rp</sup> 0</h3>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="font-weight-bold mb-4 text-capitalize">
+                            Selamat Datang, {{ ucfirst(strtolower(Auth::user()->pegawai->nama_pegawai)) }}
+                        </h5>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-12">
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <p>Total Anggaran Digunakan</p>
-                        <h3><sup style="font-size: 20px">Rp</sup> 0</h3>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-12">
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <p>Total Anggaran Tersedia</p>
-                        <h3><sup style="font-size: 20px">Rp</sup> 0</h3>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Usulan -->
-        <div class="row">
-            <div class="col-sm-12 py-3">
-                <h4 class="m-0">Usulan</h4>
-            </div>
-            <div class="col-sm-12 col-12">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table m-0 table-bordered text-center">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Modul</th>
-                                        <th>Menunggu <br> Persetujuan</th>
-                                        <th>Sedang Diproses <br> PPK</th>
-                                        <th>Menunggu Konfirmasi <br> BAST Pengusul</th>
-                                        <th>Menunggu Konfirmasi <br> BAST Kabag RT</th>
-                                        <th>Selesai <br> BAST</th>
-                                        <th>Usulan <br> Ditolak</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- (OLDAT) Olah Data BMN & Meubelair -->
-                                    <tr>
-                                        <td class="text-left">Olah Data BMN & Meubelair</td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <!-- (AADB) Alat Angkutan Darat Bermotor -->
-                                    <tr>
-                                        <td class="text-left">Alat Angkutan Darat Bermotor (AADB)</td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <!-- (ATK) Alat Tulis Kantor -->
-                                    <tr>
-                                        <td class="text-left">Alat Tulis Kantor (ATK)</td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $oldat->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <!-- (GDN) Gedung dan Bangunan -->
-                                    <tr>
-                                        <td class="text-left">Gedung dan Bangunan</td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $gdn->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <!-- (UKT) Urusan Kerumahtanggaan -->
-                                    <tr>
-                                        <td class="text-left">Urusan Kerumahtanggaan</td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <a href="" class="text-white" style="font-size: 14px;">
-                                                    {{ $ukt->where('status_proses_id', 1)->count() }} usulan
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <!-- Oldat -->
+                    @if(Auth::user()->akses->first()->is_oldat == 1)
+                    <div class="col-md-4 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header text-center">
+                                <i class="fas fa-laptop"></i> Oldah Data & Meubelair
+                            </div>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Kabag RT</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/pengajuan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanOldat->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/oldat/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
                         </div>
                     </div>
+                    @endif
+
+                    <!-- AADB -->
+                    @if(Auth::user()->akses->first()->is_aadb == 1)
+                    <div class="col-md-4 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header">
+                                <i class="fas fa-car"></i> Alat Angkutan Darat Bermotor
+                            </div>
+                            <a href="{{ url('super-user/aadb/usulan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Kabag RT</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAadb->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/aadb/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- ATK -->
+                    @if(Auth::user()->akses->first()->is_atk == 1)
+                    <div class="col-md-4 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header">
+                                <i class="fas fa-pencil-ruler"></i> Alat Tulis Kantor (ATK)
+                            </div>
+                            <a href="{{ url('super-user/atk/usulan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/usulan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/usulan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Kabag RT</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/usulan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanAtk->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/atk/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- GDN -->
+                    @if(Auth::user()->akses->first()->is_gdn == 1)
+                    <div class="col-md-4 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header">
+                                <i class="fas fa-building"></i> Gedung dan Bangunan
+                            </div>
+                            <a href="{{ url('super-user/gdn/usulan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Kabag RT</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanGdn->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/gdn/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- UKT -->
+                    @if(Auth::user()->akses->first()->is_ukt == 1)
+                    <div class="col-md-4 col-12">
+                        <div class="card card-primary font-weight-bold">
+                            <div class="card-header">
+                                <i class="fas fa-suitcase"></i> Urusan Kerumah Tanggaan
+                            </div>
+                            <a href="{{ url('super-user/ukt/usulan/status/1') }}">
+                                <div class="card-header">
+                                    <label>Menunggu Persetujuan</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 1)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/2') }}">
+                                <div class="card-header">
+                                    <label>Sedang Diproses</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/3') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Pengusul</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 3)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/4') }}">
+                                <div class="card-header">
+                                    <label>Konfirmasi BAST Kabag RT</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 4)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/5') }}">
+                                <div class="card-header">
+                                    <label>Selesai</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_proses_id', 5)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/usulan/status/ditolak') }}">
+                                <div class="card-header">
+                                    <label>Ditolak</label>
+                                    <div class="card-tools">
+                                        {{ $usulanUkt->where('status_pengajuan_id', 2)->count() }}
+                                        usulan
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ url('super-user/ukt/dashboard') }}" class="bg-primary text-center">
+                                <div class="card-footer">
+                                    Dashboard <i class="fas fa-arrow-circle-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+@section('js')
+<script>
+    $(function() {
+        $("#table").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "searching": false,
+            "info": false,
+            "paging": false,
+            "autoWidth": false,
+        }).buttons().container().appendTo('#table_wrapper .col-md-6:eq(0)');
+    });
+</script>
+@endsection
 
 @endsection

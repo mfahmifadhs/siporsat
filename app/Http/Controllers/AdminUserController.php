@@ -10,7 +10,7 @@ use App\Imports\AADB\KendaraanImport;
 use App\Models\AADB\JenisKendaraan;
 use App\Models\AADB\Kendaraan;
 use App\Models\AADB\KondisiKendaraan;
-use App\Models\AADB\RiwayatKendaraan;
+use App\Models\AADB\JenisUsulan;
 use App\Models\AADB\UsulanAadb;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
@@ -41,21 +41,64 @@ use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function Index()
     {
-        $oldat  = FormUsulan::get();
-        $aadb   = UsulanAadb::get();
-        $atk    = UsulanAtk::get();
-        $gdn    = UsulanGdn::get();
-        $ukt    = UsulanUkt::get();
+        $usulanOldat  = FormUsulan::get();
+        $usulanAadb   = UsulanAadb::get();
+        $usulanAtk    = UsulanAtk::get();
+        $usulanGdn    = UsulanGdn::get();
+        $usulanUkt    = UsulanUkt::get();
 
-        $atk = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->join('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-            ->get();
-        return view('v_admin_user.index', compact('atk','oldat','aadb','atk','gdn','ukt'));
+        // Report Oldat
+        $oldatUsulan    = FormUsulan::get();
+        $oldatJenisForm = ['pengadaan', 'perbaikan'];
+        if ($oldatJenisForm == []) {
+            foreach ($oldatJenisForm as $data) {
+                $dataArray['usulan']  = $data;
+                $dataArray['ditolak'] = $oldatUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data)->count();
+                $dataArray['proses']  = $oldatUsulan->where('status_proses_id', 2)->where('jenis_form', $data)->count();
+                $dataArray['selesai'] = $oldatUsulan->where('status_proses_id', 5)->where('jenis_form', $data)->count();
+                $reportOldat[]        = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportOldat[] = null;
+        }
+
+        // Report AADB
+        $aadbUsulan     = UsulanAadb::get();
+        $aadbJenisForm  = JenisUsulan::get();
+
+        if ($aadbJenisForm == []) {
+            foreach ($aadbJenisForm as $data) {
+                $dataArray['usulan']  = $data->jenis_form_usulan;
+                $dataArray['ditolak'] = $aadbUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $dataArray['proses']  = $aadbUsulan->where('status_proses_id', 2)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $dataArray['selesai'] = $aadbUsulan->where('status_proses_id', 5)->where('jenis_form', $data->id_jenis_form_usulan)->count();
+                $reportAadb[]         = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportAadb[] = null;
+        }
+
+        // Report ATK
+        $atkUsulan    = UsulanAtk::get();
+        $atkJenisForm = UsulanAtk::select('jenis_form')->groupBy('jenis_form')->get();
+        if ($atkJenisForm == []) {
+            foreach ($atkJenisForm as $data) {
+                $dataArray['usulan']  = $data->jenis_form;
+                $dataArray['ditolak'] = $atkUsulan->where('status_pengajuan_id', 2)->where('jenis_form', $data->jenis_form)->count();
+                $dataArray['proses']  = $atkUsulan->where('status_proses_id', 2)->where('jenis_form', $data->jenis_form)->count();
+                $dataArray['selesai'] = $atkUsulan->where('status_proses_id', 5)->where('jenis_form', $data->jenis_form)->count();
+                $reportAtk[]          = $dataArray;
+                unset($dataArray);
+            }
+        } else {
+            $reportAtk[] = null;
+        }
+
+        return view('v_admin_user.index', compact('usulanUkt', 'usulanOldat', 'usulanAadb', 'usulanAtk', 'usulanGdn', 'reportOldat', 'reportAadb', 'reportAtk'));
     }
 
     public function Profile(Request $request, $aksi, $id)
