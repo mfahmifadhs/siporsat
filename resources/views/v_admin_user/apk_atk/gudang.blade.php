@@ -176,7 +176,7 @@
                     "targets": 0
                 },
                 {
-                    "width": "0%",
+                    "width": "15%",
                     "targets": 1
                 },
                 {
