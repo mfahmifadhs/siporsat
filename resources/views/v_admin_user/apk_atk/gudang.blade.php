@@ -83,109 +83,39 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-12">
-                <div class="card">
-                    <div class="card-header bg-primary">
-                        <b class="font-weight-bold card-title" style="font-size:medium;">
-                            <i class="fas fa-table"></i> &nbsp; REKAPITULASI BARANG MASUK & KELUAR
-                        </b>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool text-white" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <table id="table-unitkerja" class="table table-striped m-0">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">No</th>
-                                                    <th>Unit Kerja</th>
-                                                    <th class="text-center">Jumlah Permintaan Barang Keluar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($riwayatUker as $i => $row)
-                                                <tr>
-                                                    <td class="text-center">{{ $i+1 }}</td>
-                                                    <td>{{ $row->unit_kerja }}</td>
-                                                    <td class="text-center">
-                                                        @php
-                                                        $totalUsulan = $riwayatTotal->where('unit_kerja_id', $row->id_unit_kerja)->where('status_riwayat','keluar')->count()
-                                                        @endphp
-                                                        @if ($totalUsulan)
-                                                        <form action="{{ url('super-user/atk/usulan/status/uker') }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="jenis_form" value="distribusi">
-                                                            <input type="hidden" name="id_unit_kerja" value="{{ $row->id_unit_kerja }}">
-                                                            <button type="submit" class="btn btn-dark btn-sm font-weight-bold">
-                                                                {{ $totalUsulan }}
-                                                            </button>
-                                                        </form>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-primary">
                         <b class="font-weight-bold">
-                            <i class="fas fa-table"></i> &nbsp; TABEL DAFTAR REFERENSI ATK
+                            <i class="fas fa-table"></i> &nbsp; TABEL DAFTAR STOK BARANG PADA GUDANG ATK
                         </b>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-12">
                             <div class="card-body border border-default">
-                                <table id="table-atk" class="table table-striped table-bordered">
+                                <table id="table-atk" class="table">
                                     <thead>
                                         <tr>
                                             <th class="text-center">No</th>
-                                            <th>Jenis</th>
-                                            <th>Barang</th>
-                                            <th>Spesifikasi</th>
-                                            <th class="text-center">Pengadaan</th>
-                                            <th class="text-center">Distribusi</th>
-                                            <th class="text-center">Stok</th>
-                                            <th class="text-center">Riwayat</th>
+                                            <th>Kode Referensi</th>
+                                            <th>Kode Barang</th>
+                                            <th>Deskripsi</th>
+                                            <th class="text-center">Satuan</th>
+                                            <th class="text-center">Total Pembelian</th>
+                                            <th class="text-center">Total Permintaan</th>
+                                            <th class="text-center">Sisa Stok</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php $no = 1; $dataChartAtk = json_decode($dataChartAtk) @endphp
-                                        @foreach ($dataChartAtk->atk as $dataAtk)
+                                        @foreach ($barang as $i => $dataAtk)
                                         <tr>
-                                            <td class="text-center">{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }}</td>
-                                            <td>{{ $dataAtk->nama_barang }}</td>
-                                            <td>{{ $dataAtk->spesifikasi }}</td>
-                                            <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</td>
-                                            <td class="text-center">{{ (int) $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
-                                            <td class="text-center">{{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_pemakaian.' '.$dataAtk->satuan }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ url('super-user/atk/barang/riwayat-semua/'. Crypt::encrypt($dataAtk->spesifikasi)) }}" class="btn btn-primary">
-                                                    <i class="fas fa-list"></i>
-                                                </a>
-                                            </td>
+                                            <td class="text-center">{{ $i + 1 }}</td>
+                                            <td>{{ $dataAtk['kode_ref'] }}</td>
+                                            <td>{{ $dataAtk['kategori_id'] }}</td>
+                                            <td>{{ $dataAtk['deskripsi'] }}</td>
+                                            <td class="text-center">{{ $dataAtk['satuan'] }}</td>
+                                            <td class="text-center">{{ (int) $dataAtk['barang_masuk'] }}</td>
+                                            <td class="text-center">{{ (int) $dataAtk['barang_keluar'] }}</td>
+                                            <td class="text-center">{{ (int) $dataAtk['jumlah'] }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -194,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div
         </div>
     </div>
 </section>
@@ -238,20 +168,36 @@
             "info": false,
             "paging": true,
             "lengthMenu": [
-                [11, 25, 50, -1],
-                [11, 25, 50, "Semua"]
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
             ],
             "columnDefs": [{
-                    "width": "5%",
+                    "width": "0%",
                     "targets": 0
                 },
                 {
-                    "width": "25%",
+                    "width": "0%",
+                    "targets": 1
+                },
+                {
+                    "width": "15%",
                     "targets": 2
                 },
                 {
-                    "width": "25%",
-                    "targets": 3
+                    "width": "10%",
+                    "targets": 4
+                },
+                {
+                    "width": "13%",
+                    "targets": 5
+                },
+                {
+                    "width": "13%",
+                    "targets": 6
+                },
+                {
+                    "width": "10%",
+                    "targets": 7
                 },
             ]
 

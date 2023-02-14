@@ -176,31 +176,23 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($barang as $i => $atk)
-                                            @php
-                                            $barangMasuk  = $atk->where('atk_id', $atk->atk_id)->where('status_riwayat', 'masuk')->first();
-                                            $barangKeluar = $atk->where('atk_id', $atk->atk_id)->where('status_riwayat', 'keluar')->first();
-
-                                            if($barangMasuk == []) { $dataBarangMasuk = 0; } else { $dataBarangMasuk = $barangMasuk->jumlah; }
-                                            if($barangKeluar == []) { $dataBarangKeluar = 0; } else { $dataBarangKeluar = $barangKeluar->jumlah; }
-                                            $stok = $dataBarangMasuk - $dataBarangKeluar
-                                            @endphp
                                             <tr>
                                                 <td class="text-center border-dark py-3">{{ $i + 1 }}</td>
                                                 <td class="border-dark">
-                                                    <input class="form-control form-control-sm" type="hidden" value="{{ $atk->atk_id }}" name="atk_id[]">
-                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk->kode_ref }}</span>
+                                                    <input class="form-control form-control-sm" type="hidden" value="{{ $atk['id_atk'] }}" name="atk_id[]">
+                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['kode_ref'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
-                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk->deskripsi_barang }}</span>
+                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['deskripsi'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
-                                                    <input class="form-control form-control-sm text-center" type="text" value="{{ $stok }}" readonly>
+                                                    <input class="form-control form-control-sm text-center" type="text" value="{{ $atk['jumlah'] }}" readonly>
                                                 </td>
                                                 <td class="border-dark">
                                                     <input class="form-control form-control-sm text-center" type="number" name="volume_transaksi[]" value="0" oninput="this.value = Math.abs(this.value)" required>
                                                 </td>
                                                 <td class="border-dark">
-                                                    <span class="form-control form-control-sm text-center font-weight-bold" readonly>{{ $atk->satuan_barang }}</span>
+                                                    <span class="form-control form-control-sm text-center font-weight-bold" readonly>{{ $atk['satuan'] }}</span>
                                                 </td>
                                             </tr>
                                             @endforeach

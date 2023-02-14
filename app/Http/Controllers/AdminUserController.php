@@ -602,7 +602,7 @@ class AdminUserController extends Controller
 
         $usulanChartAtk = json_encode($result);
 
-        return view('v_admin_user.apk_atk.index', compact('usulanUker','usulanTotal','usulanChartAtk','dataChartAtk'));
+        return view('v_admin_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'usulanChartAtk', 'dataChartAtk'));
     }
 
 
@@ -683,33 +683,44 @@ class AdminUserController extends Controller
             }
         } elseif ($aksi == 'riwayat-semua') {
             $spek = Crypt::decrypt($id);
-            $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-                    ->join('tbl_pegawai','id_pegawai','pegawai_id')
-                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                    ->where('spesifikasi', $spek)
-                    ->where('status_proses_id', 5)
-                    ->orderBy('tanggal_usulan', 'DESC')
-                    ->get();
+            $pengadaan = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->where('spesifikasi', $spek)
+                ->where('status_proses_id', 5)
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
 
-            $permintaan = UsulanAtkPermintaan::select('atk_tbl_form_usulan.*','atk_tbl_form_usulan_pengadaan.*','tbl_pegawai.*','tbl_unit_kerja.*',
-                    'atk_tbl_form_usulan_permintaan.jumlah','atk_tbl_form_usulan_permintaan.jumlah_disetujui')
-                    ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
-                    ->join('atk_tbl_form_usulan','id_form_usulan','atk_tbl_form_usulan_permintaan.form_usulan_id')
-                    ->join('tbl_pegawai','id_pegawai','pegawai_id')
-                    ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                    ->where('spesifikasi', $spek)
-                    ->where('status_proses_id', 5)
-                    ->orderBy('tanggal_usulan', 'DESC')
-                    ->get();
+            $permintaan = UsulanAtkPermintaan::select(
+                'atk_tbl_form_usulan.*',
+                'atk_tbl_form_usulan_pengadaan.*',
+                'tbl_pegawai.*',
+                'tbl_unit_kerja.*',
+                'atk_tbl_form_usulan_permintaan.jumlah',
+                'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
+            )
+                ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->where('spesifikasi', $spek)
+                ->where('status_proses_id', 5)
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
 
             $atk = UsulanAtkPengadaan::where('spesifikasi', $spek)
-                    ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-                    ->select('jenis_barang','nama_barang','spesifikasi', DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
-                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
-                    ->where('status_proses_id', 5)
-                    ->groupBy('jenis_barang','nama_barang','spesifikasi')
-                    ->first();
-            return view ('v_admin_user.apk_atk.riwayat', compact('atk','pengadaan','permintaan'));
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+                ->select(
+                    'jenis_barang',
+                    'nama_barang',
+                    'spesifikasi',
+                    DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+                    DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+                )
+                ->where('status_proses_id', 5)
+                ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
+                ->first();
+            return view('v_admin_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         }
     }
 
@@ -951,7 +962,7 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'penyerahan') {
             if ($request->tanggal_bast) {
-                $usulan = UsulanAtk::where('id_form_usulan', $id)->update([ 'tanggal_bast' => $request->tanggal_bast ]);
+                $usulan = UsulanAtk::where('id_form_usulan', $id)->update(['tanggal_bast' => $request->tanggal_bast]);
                 $permintaan = $request->id_permintaan;
                 foreach ($permintaan as $i => $id_permintaan) {
                     if ($request->konfirmasi_penyerahan[$i] == 'true') {
@@ -966,7 +977,7 @@ class AdminUserController extends Controller
                     ]);
                 }
 
-                return redirect('admin-user/surat/bast-atk/'. $id)->with('success', 'Berhasil Menyerahkan ATK');
+                return redirect('admin-user/surat/bast-atk/' . $id)->with('success', 'Berhasil Menyerahkan ATK');
             } else {
                 $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -1064,19 +1075,25 @@ class AdminUserController extends Controller
 
     public function ChartDataAtk()
     {
-        $dataAtk = UsulanAtkPengadaan::select('jenis_barang', 'nama_barang','spesifikasi', 'satuan',
-            DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'), DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian'))
-            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id')
-            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-            ->groupBy('jenis_barang', 'nama_barang','spesifikasi','satuan')
+        $dataAtk = UsulanAtkPengadaan::select(
+            'jenis_barang',
+            'nama_barang',
+            'spesifikasi',
+            'satuan',
+            DB::raw('sum(jumlah_disetujui) as jumlah_disetujui'),
+            DB::raw('sum(jumlah_pemakaian) as jumlah_pemakaian')
+        )
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi', 'satuan')
             ->where('status_proses_id', 5)
             ->get();
 
         $totalAtk = UsulanAtkPengadaan::select('nama_barang', DB::raw('sum(jumlah_disetujui) as stok'))
-            ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id')
-            ->join('tbl_pegawai','id_pegawai','pegawai_id')
-            ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
+            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('nama_barang')
             ->where('status_proses_id', 5)
             ->get();
@@ -1126,34 +1143,77 @@ class AdminUserController extends Controller
                 ];
             }
             $usulanChartAtk = json_encode($result);
-            return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk', 'dataChartAtk'));
 
+            $atk = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
+                ->join('atk_tbl_master', 'id_atk', 'atk_id')
+                ->groupBy('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
+                ->get();
+
+            foreach ($atk as $i => $dataAtk) {
+                $barang_masuk   = RiwayatAtk::select(DB::raw('SUM(jumlah) as total_barang_masuk'))
+                    ->where('status_riwayat', 'masuk')
+                    ->where('atk_id', $dataAtk->atk_id)
+                    ->first();
+                $barang_keluar  = RiwayatAtk::select(DB::raw('SUM(jumlah) as total_barang_keluar'))
+                    ->where('status_riwayat', 'keluar')
+                    ->where('atk_id', $dataAtk->atk_id)
+                    ->first();
+                $data['id_atk']        = $dataAtk->atk_id;
+                $data['kategori_id']   = $dataAtk->kategori_id;
+                $data['kode_ref']      = $dataAtk->kode_ref;
+                $data['deskripsi']     = $dataAtk->deskripsi_barang;
+                $data['satuan']        = $dataAtk->satuan_barang;
+                $data['keterangan']    = $dataAtk->keterangan;
+                $data['barang_masuk']  = $barang_masuk->total_barang_masuk;
+                $data['barang_keluar'] = $barang_keluar->total_barang_keluar;
+                $data['jumlah']        = $barang_masuk->total_barang_masuk - $barang_keluar->total_barang_keluar;
+                $barang[] = $data;
+                unset($data);
+            }
+
+            return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk', 'barang'));
         } elseif ($aksi == 'referensi') {
             $kategori  = KategoriAtk::get();
             $referensi = Atk::leftjoin('atk_tbl_kategori', 'id_kategori_atk', 'kategori_id')->get();
             return view('v_admin_user.apk_atk.daftar_referensi', compact('kategori', 'referensi'));
-
         } elseif ($aksi == 'daftar-transaksi') {
             $transaksi = TransaksiAtk::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->where('kategori_transaksi', $id)
                 ->get();
-            return view('v_admin_user.apk_atk.daftar_transaksi', compact('transaksi','id'));
-
+            return view('v_admin_user.apk_atk.daftar_transaksi', compact('transaksi', 'id'));
         } elseif ($aksi == 'tambah') {
             if ($id == 'Pembelian') {
                 $uker   = '';
                 $barang = Atk::get();
             } else {
                 $uker   = UnitKerja::get();
-                $barang = RiwayatAtk::select('kode_ref','deskripsi_barang','keterangan_barang','atk_id','jumlah','satuan_barang')
-                    ->join('atk_tbl_master','id_atk','atk_id')
-                    ->where('status_riwayat', 'masuk')
-                    ->groupBy('kode_ref','deskripsi_barang','keterangan_barang','atk_id','jumlah','satuan_barang')
+
+                $atk = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
+                    ->join('atk_tbl_master', 'id_atk', 'atk_id')
+                    ->groupBy('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
                     ->get();
+
+                foreach ($atk as $i => $dataAtk) {
+                    $barang_masuk   = RiwayatAtk::select(DB::raw('SUM(jumlah) as total_barang_masuk'))
+                        ->where('status_riwayat', 'masuk')
+                        ->where('atk_id', $dataAtk->atk_id)
+                        ->first();
+                    $barang_keluar  = RiwayatAtk::select(DB::raw('SUM(jumlah) as total_barang_keluar'))
+                        ->where('status_riwayat', 'keluar')
+                        ->where('atk_id', $dataAtk->atk_id)
+                        ->first();
+                    $data['id_atk']      = $dataAtk->atk_id;
+                    $data['kode_ref']    = $dataAtk->kode_ref;
+                    $data['deskripsi']   = $dataAtk->deskripsi_barang;
+                    $data['satuan']      = $dataAtk->satuan_barang;
+                    $data['keterangan']  = $dataAtk->keterangan;
+                    $data['jumlah']      = $barang_masuk->total_barang_masuk - $barang_keluar->total_barang_keluar;
+                    $barang[] = $data;
+                    unset($data);
+                }
             }
 
-            return view('v_admin_user.apk_atk.tambah_transaksi', compact('uker', 'barang','id'));
-
+            return view('v_admin_user.apk_atk.tambah_transaksi', compact('uker', 'barang', 'id'));
         } elseif ($aksi == 'proses') {
             if ($id == 'pembelian') {
                 $idTransaksi = Carbon::now()->format('dhis');
@@ -1227,10 +1287,10 @@ class AdminUserController extends Controller
                 }
             }
 
-            return redirect('admin-user/atk/gudang/detail-transaksi/'. $idTransaksi)->with('success', 'Berhasil Mencatat Transaksi');
+            return redirect('admin-user/atk/gudang/detail-transaksi/' . $idTransaksi)->with('success', 'Berhasil Mencatat Transaksi');
         } elseif ($aksi == 'detail-transaksi') {
             $transaksi = TransaksiAtk::where('id_transaksi', $id)
-                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->first();
             return view('v_admin_user.apk_atk.detail_transaksi', compact('transaksi'));
         } elseif ($aksi == 'update-atk') {
@@ -1248,8 +1308,7 @@ class AdminUserController extends Controller
                 'satuan_kategori'     => $request->satuan_kategori,
                 'keterangan_kategori' => $request->keterangan_kategori
             ]);
-            return redirect('admin-user/atk/gudang/referensi/daftar')->with('success', 'Berhasil Memperbarui Informasi '.$request->deskripsi_kategori);
-
+            return redirect('admin-user/atk/gudang/referensi/daftar')->with('success', 'Berhasil Memperbarui Informasi ' . $request->deskripsi_kategori);
         } elseif ($aksi == 'insert' && $id == 'atk') {
             $atk = new Atk();
             $atk->kode_ref          = $request->kode_ref;
@@ -1258,8 +1317,7 @@ class AdminUserController extends Controller
             $atk->satuan_barang     = $request->satuan_barang;
             $atk->keterangan_barang = $request->keterangan_barang;
             $atk->save();
-            return redirect('admin-user/atk/gudang/referensi/daftar')->with('success', 'Berhasil Menambah Referensi ATK Baru '.$request->deskripsi_barang);
-
+            return redirect('admin-user/atk/gudang/referensi/daftar')->with('success', 'Berhasil Menambah Referensi ATK Baru ' . $request->deskripsi_barang);
         } elseif ($aksi == 'insert' && $id == 'kategori') {
             $kategori = KategoriAtk::where('id_kategori_atk', $request->id_kategori_atk)->first();
             if ($kategori) {
@@ -1272,7 +1330,6 @@ class AdminUserController extends Controller
             $atk->keterangan_kategori   = $request->keterangan_kategori;
             $atk->save();
             return redirect('admin-user/atk/gudang/referensi/daftar')->with('success', 'Berhasil Menambah Kategori ATK Baru');
-
         }
     }
 

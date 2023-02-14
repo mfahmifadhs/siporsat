@@ -134,7 +134,7 @@
                                         <td>{{ $dataPermintaan->satuan }}</td>
                                         <td class="text-center">
                                             <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
-                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima" required> <br>
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
                                             <label for="checkbox_id{{$i}}">Diterima</label>
                                         </td>
                                         <td>
