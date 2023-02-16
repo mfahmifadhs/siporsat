@@ -54,6 +54,8 @@
                                     <div class="col-md-8">: {{ ucfirst(strtolower($transaksi->unit_kerja)) }}</div>
                                     <label class="col-md-4">Jumlah {{ $transaksi->kategori_transaksi }}</label>
                                     <div class="col-md-8">: {{ $transaksi->total_barang }} Barang</div>
+                                    <label class="col-md-4">Keterangan</label>
+                                    <div class="col-md-8">: {{ $transaksi->keterangan_transaksi }}</div>
                                 </div>
                             </div>
                             @if ($transaksi->kategori_transaksi == 'Pembelian')
