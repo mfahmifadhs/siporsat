@@ -5,6 +5,7 @@ namespace App\Models\atk;
 use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkLampiran;
+use App\Models\ATK\BastAtk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,15 +42,21 @@ class UsulanAtk extends Model
     public function permintaanAtk() {
         return $this->hasMany(UsulanAtkPermintaan::class, 'form_usulan_id')
             ->join('atk_tbl_form_usulan_pengadaan','id_form_usulan_pengadaan','pengadaan_id')
-            ->select('id_permintaan', 'jenis_barang','nama_barang','satuan','spesifikasi','status_penyerahan',
+            ->select('atk_tbl_form_usulan_permintaan.*','atk_tbl_form_usulan_pengadaan.*',
                      'atk_tbl_form_usulan_permintaan.jumlah as jumlah',
                      'atk_tbl_form_usulan_permintaan.jumlah_disetujui as jumlah_disetujui',
                      'atk_tbl_form_usulan_permintaan.status as status',
-                     'atk_tbl_form_usulan_permintaan.keterangan as keterangan');
+                     'atk_tbl_form_usulan_permintaan.keterangan as keterangan',
+                     'atk_tbl_form_usulan_permintaan.form_usulan_id')
+            ->orderBy('nama_barang', 'ASC');
     }
 
     public function lampiranAtk() {
         return $this->hasMany(UsulanAtkLampiran::class, 'form_usulan_id')
             ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id');
+    }
+
+    public function bastAtk() {
+        return $this->hasMany(BastAtk::class, 'usulan_id');
     }
 }

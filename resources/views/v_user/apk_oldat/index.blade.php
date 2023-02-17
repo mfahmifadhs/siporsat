@@ -217,7 +217,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('unit-kerja/surat/bast-oldat/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('unit-kerja/surat/detail-bast-oldat/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>

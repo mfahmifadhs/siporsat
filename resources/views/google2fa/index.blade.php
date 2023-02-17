@@ -38,6 +38,7 @@
                             {{ csrf_field() }}
                             <input type="hidden" name="modul" value="{{ Auth::user()->sess_modul }}">
                             <input type="hidden" name="form_id" value="{{ Auth::user()->sess_form_id }}">
+                            <input type="hidden" name="bast_id" value="{{ Auth::user()->sess_bast_id }}">
                             <div class="form-group">
                                 <p>Mohon untuk memasukan kode <strong>OTP</strong> yang diterima pada aplikasi <b>Google Authenticator</b>. <br>
                                     Pastikan, anda memasukan kode OTP terkini, karena kode OTP akan berubah setiap 30 detik.</p>

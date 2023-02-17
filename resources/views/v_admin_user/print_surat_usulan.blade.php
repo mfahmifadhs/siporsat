@@ -17,52 +17,26 @@
             .pagebreak {
                 page-break-after: always;
             }
-        }
 
-        .divTable {
-            border-top: 1px solid;
-            border-left: 1px solid;
-            border-right: 1px solid;
-            font-size: 21px;
-        }
+            .table-data {
+                border: 1px solid;
+                font-size: 20px;
+            }
 
-        .divThead {
-            border-bottom: 1px solid;
-            font-weight: bold;
-        }
+            .table-data th,
+            .table-data td {
+                border: 1px solid;
+            }
 
-        .divTbody {
-            border-bottom: 1px solid;
-            text-transform: capitalize;
-        }
-
-        .divTheadtd {
-            border-right: 1px solid;
-        }
-
-        .divTbodytd {
-            border-right: 1px solid;
-            padding: 10px;
-        }
-
-        .table-data {
-            border: 1px solid;
-            font-size: 20px;
-        }
-
-        .table-data th,
-        .table-data td {
-            border: 1px solid;
-        }
-
-        .table-data thead th,
-        .table-data thead td {
-            border: 1px solid;
+            .table-data thead th,
+            .table-data thead td {
+                border: 1px solid;
+            }
         }
     </style>
 </head>
 
-<body style="font-family: Arial;">
+<body>
     <div class="">
         <div class="row">
             <div class="col-md-2">
@@ -72,8 +46,8 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
+                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
+                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
                     <p style="font-size: 18px;"><i>
                             Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
                             Telepon : (021) 5201590</i>
@@ -85,57 +59,45 @@
                     <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
                 </h2>
             </div>
-            <div class="col-md-12" style="margin-top: -15px;">
+            <div class="col-md-12">
                 <hr style="border-width: medium;border-color: black;">
                 <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
             </div>
         </div>
-        <div class="row" style="font-size: 20px;">
-            <div class="col-md-9">
-                <div class="form-group row">
-                    <div class="col-md-2">Nomor</div>
-                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
-                    <div class="col-md-2">Hal</div>
-                    <div class="col-md-10 text-capitalize">:
-                        @if ($modul == 'usulan-oldat')
-                        {{ $usulan->jenis_form }} barang
-                        @elseif ($modul == 'usulan-aadb')
-                        {{ ucfirst(strtolower($usulan->jenis_form_usulan)) }} kendaraan
-                        @elseif ($modul == 'usulan-atk')
-                        {{ $usulan->jenis_form }} ATK
-                        @elseif ($modul == 'usulan-gdn')
-                        pemeliharaan gedung dan bangunan
-                        @elseif ($modul == 'usulan-ukt')
-                        permintaan kerumahtanggaan
-                        @endif
+        <div class="row" style="font-size: 22px;">
+            <div class="col-md-12 form-group text-capitalize">
+                <div class="form-group row mb-3 text-center">
+                    <div class="col-md-12 text-uppercase">
+                        usulan pengajuan <br>
+                        nomor surat : {{ $usulan->no_surat_usulan }}
                     </div>
-                    <div class="col-md-2 mt-4">Pengusul</div>
-                    <div class="col-md-10 text-capitalize mt-4">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }} </div>
-                    <div class="col-md-2">Jabatan</div>
-                    <div class="col-md-10">: {{ $usulan->keterangan_pegawai }} </div>
-                    <div class="col-md-2">Unit Kerja</div>
-                    <div class="col-md-10 text-capitalize">: {{ ucfirst(strtolower($usulan->unit_kerja)) }} </div>
-                    <div class="col-md-2">Jumlah</div>
-                    <div class="col-md-10 text-capitalize">:
-                        {{ $usulan->total_pengajuan }}
-                        @if ($modul == 'usulan-oldat' || $modul == 'usulan-atk')
-                        barang
-                        @elseif ($modul == 'usulan-aadb')
-                        kendaraan
-                        @elseif ($modul == 'usulan-gdn' || $modul == 'usulan-ukt')
-                        pekerjaan
-                        @endif
-                    </div>
-                    @if($usulan->rencana_pengguna != null)
-                    <div class="col-md-2">Keterangan</div>
-                    <div class="col-md-10 text-capitalize">:
-                        {{ $usulan->rencana_pengguna }}
-                    </div>
-                    @endif
                 </div>
-            </div>
-            <div class="col-md-3 text-right">
-                <div class="col-md-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Tanggal</div>
+                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Pengusul</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Jabatan</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Unit Kerja</div>
+                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Total Pengajuan</div>
+                    <div class="col-md-9">: {{ $usulan->total_pengajuan }}</div>
+                </div>
+                @if($usulan->rencana_pengguna != null)
+                <div class="form-group row mb-0">
+                    <div class="col-md-3">Rencana Pengguna</div>
+                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
+                </div>
+                @endif
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'usulan-oldat')
@@ -236,18 +198,18 @@
                 @elseif ($modul == 'usulan-gdn')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Bidang Kerusakan</div>
-                        <div class="col-md-3 divTheadtd p-2">Lokasi Perbaikan</div>
-                        <div class="col-md-3 divTheadtd p-2">Lokasi Spesifik</div>
-                        <div class="col-md-2 p-2">Keterangan</div>
+                        <div class="col-md-1 divTheadtd text-center">No</div>
+                        <div class="col-md-3 divTheadtd">Bidang Kerusakan</div>
+                        <div class="col-md-2 divTheadtd">Lokasi Perbaikan</div>
+                        <div class="col-md-4 divTheadtd">Lokasi Spesifik</div>
+                        <div class="col-md-2">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanGdn as $i => $dataGdn)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
                         <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
-                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
+                        <div class="col-md-2 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
+                        <div class="col-md-4 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
                         <div class="col-md-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
                     </div>
                     @endforeach
@@ -255,10 +217,10 @@
                 @elseif ($modul == 'usulan-ukt')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Pekerjaan</div>
-                        <div class="col-md-5 divTheadtd p-2">Spesifikasi Pekerjaan</div>
-                        <div class="col-md-3 p-2">Keterangan</div>
+                        <div class="col-md-1 divTheadtd text-center">No</div>
+                        <div class="col-md-3 divTheadtd">Pekerjaan</div>
+                        <div class="col-md-5 divTheadtd">Spesifikasi Pekerjaan</div>
+                        <div class="col-md-3">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanUkt as $i => $dataUkt)
                     <div class="row divTbody">

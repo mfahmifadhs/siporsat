@@ -27,6 +27,7 @@ class User extends Authenticatable
         'google2fa_secret',
         'sess_modul',
         'sess_form_id',
+        'sess_bast_id',
         'status_google2fa'
     ];
 

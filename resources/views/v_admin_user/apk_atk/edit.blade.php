@@ -43,15 +43,11 @@
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Nomor BAST</label>
-                            <input type="text" class="form-control text-uppercase" name="no_surat_usulan" value="{{ $usulan->no_surat_bast }}" readonly>
+                            <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$idBast.'/'.Carbon\carbon::now()->isoFormat('Y') }}" readonly>
                         </div>
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Tanggal BAST</label>
-                            @if ($usulan->tanggal_bast)
-                            <input type="text" class="form-control" value="{{ \Carbon\carbon::parse($usulan->tanggal_bast)->isoFormat('DD MMMM Y') }}" readonly>
-                            @else
                             <input type="date" class="form-control" name="tanggal_bast" required>
-                            @endif
                         </div>
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Pengusul</label>
@@ -73,48 +69,52 @@
                     <div class="form-group row mt-4">
                         <label class="col-sm-12 col-form-label text-muted mb-2">Informasi Barang</label>
                         <div class="col-sm-12">
-                            <table class="table table-bordered text-center">
+                            <table class="table table-bordered">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th style="width: 0%;" class="pb-4">No</th>
-                                        <th style="width: 15%;" class="pb-4">Jenis Barang</th>
-                                        <th style="width: 30%;" class="pb-4">Nama Barang</th>
-                                        <th style="width: 30%;" class="pb-4">Merk/Tipe</th>
-                                        <th style="width: 0%;" class="pb-4">Jumlah</th>
-                                        <th style="width: 0%;" class="pb-4">Satuan</th>
-                                        <th style="width: 0%;" class="pb-4">Status</th>
-                                        <th style="width: 20%;" class="pb-4">Keterangan</th>
-                                        <th>
+                                        <th style="width: 0%;"  class="text-center">No</th>
+                                        <th style="width: 10%;" class="text-center">Jenis Barang</th>
+                                        <th>Deskripsi</th>
+                                        <th style="width: 10%;" class="text-center">Permintaan</th>
+                                        <th style="width: 13%;" class="text-center">Belum Diserahkan</th>
+                                        <th style="width: 0%;"  class="text-center">Satuan</th>
+                                        <th style="width: 15%;" class="text-center">Diserahkan</th>
+                                        <th style="width: 0%;"  class="text-center">Satuan</th>
+                                        <!-- <th>
                                             Diserahkan <br>
                                             <input type="checkbox" id="selectAll">
-                                        </th>
+                                        </th> -->
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
                                 <tbody>
-                                    @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
+                                    @foreach($usulan->permintaanAtk->where('status','diterima') as $i => $dataPermintaan)
+                                    @php
+                                        $permintaan       = $dataPermintaan->jumlah_disetujui;
+                                        $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
+                                    @endphp
+                                    @if ($belum_diserahkan != 0)
                                     <tr>
-                                        <td> {{ $i + 1 }}</td>
-                                        <td>
+                                        <td class="text-center"> {{ $no++ }}</td>
+                                        <td class="text-center">
                                             <input type="hidden" name="modul" value="distribusi">
+                                            <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
                                             {{ $dataPermintaan->jenis_barang }}
                                         </td>
-                                        <td>{{ $dataPermintaan->nama_barang }}</td>
-                                        <td>{{ $dataPermintaan->spesifikasi }}</td>
-                                        <td>{{ $dataPermintaan->jumlah_disetujui }}</td>
-                                        <td>{{ $dataPermintaan->satuan }}</td>
-                                        <td>{{ $dataPermintaan->status }}</td>
-                                        <td>{{ $dataPermintaan->keterangan }}</td>
-                                        <td class="text-center">
-                                            @if ($dataPermintaan->status_penyerahan == 'true')
-                                            ☑️
-                                            @else
-                                            <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
+                                        <td>{{ $dataPermintaan->nama_barang.' '.$dataPermintaan->spesifikasi }}</td>
+                                        <td class="text-center">{{ $permintaan }}</td>
+                                        <td class="text-center">{{ $belum_diserahkan }}</td>
+                                        <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                        </td>
+                                        <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                        <!-- <td class="text-center">
                                             <input type="hidden" value="false" name="konfirmasi_penyerahan[{{$i}}]">
                                             <input type="checkbox" class="confirm-check" name="konfirmasi_penyerahan[{{$i}}]" id="checkbox_id{{$i}}" value="true"> <br>
-                                            @endif
-                                        </td>
+                                        </td> -->
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>

@@ -47,6 +47,15 @@
         padding: 10px;
     }
 </style>
+@php
+if($modul == 'oldat' && $bast->jenis_form == 'pengadaan') {
+$namaPpk = 'Anggriany Aprilia Sampe, ST, MAP';
+$jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Modal';
+} else {
+$namaPpk = 'Marten Avero, Skm';
+$jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
+}
+@endphp
 
 <body>
     <div class="">
@@ -59,8 +68,11 @@
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
                     <h5 style="font-size: 30px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
-                    <p style="font-size: 20px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                    <h5 style="font-size: 30px;text-transform:uppercase;"><b>sekretariat jenderal</b></h5>
+                    <p style="font-size: 18px;"><i>
+                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            Telepon : (021) 5201590</i>
+                    </p>
                 </h2>
             </div>
             <div class="col-md-2">
@@ -68,8 +80,9 @@
                     <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
                 </h2>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12" style="margin-top: -15px;">
                 <hr style="border-width: medium;border-color: black;">
+                <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
             </div>
         </div>
         <div class="row text-capitalize" style="font-size: 22px;">
@@ -77,10 +90,52 @@
                 <div class="form-group row mb-3 text-center">
                     <div class="col-md-12 text-uppercase">
                         berita acara serah terima <br>
-                        nomor surat : {{ $bast->no_surat_bast }}
+                        nomor surat : {{ $modul == 'atk' ? $bast->nomor_bast : $bast->no_surat_bast }}
                     </div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-12">
+                        Pada Hari Ini, Tanggal {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }} bertempat Di
+                        Kantor Pusat Kementerian Kesehatan Republik Indonesia, kami yang bertanda tangan dibawah Ini:
+                    </div>
+                </div>
+                <div class="form-group row mb-0 py-3">
+                    <div class="col-md-2"><span class="ml-5">Nama</span></div>
+                    <div class="col-md-10">: {{ $namaPpk }}</div>
+                    <div class="col-md-2"><span class="ml-5">Jabatan</span></div>
+                    <div class="col-md-10">: {{ $jabatanPpk }}
+                    </div>
+                    <div class="col-md-2"><span class="ml-5">Unit Kerja</span></div>
+                    <div class="col-md-10">: Biro Umum</div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-12">
+                        Dalam Berita Acara ini bertindak untuk dan atas nama Biro Umum Sekretariat Jenderal, {{ $jabatanPpk }}
+                        selaku yang menyerahkan, yang selanjutnya disebut <b>PIHAK PERTAMA</b>.
+                    </div>
+                </div>
+                <div class="form-group row mb-0 py-3">
+                    <div class="col-md-2"><span class="ml-5">Nama</span></div>
+                    <div class="col-md-10">: {{ $bast->nama_pegawai }}</div>
+                    <div class="col-md-2"><span class="ml-5">Jabatan</span></div>
+                    <div class="col-md-10">: {{ $bast->keterangan_pegawai }}
+                    </div>
+                    <div class="col-md-2"><span class="ml-5">Unit Kerja</span></div>
+                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
+                </div>
+                <div class="form-group row mb-0 text-justify">
+                    <div class="col-md-12">
+                        Dalam Berita Acara ini bertindak untuk dan atas nama {{ ucfirst(strtolower($bast->unit_kerja)) }}
+                        Selaku Penerima, yang selanjutnya disebut <b>PIHAK KEDUA</b>.
+                    </div>
+                </div>
+                <div class="form-group row mb-0 text-justify">
+                    <div class="col-md-12 mt-4">
+                        Bahwa <b>PIHAK PERTAMA</b> telah menyerahkan barang/pekerjaan dari/kepada <b>PIHAK KEDUA</b>
+                        dengan rincian sebagai berikut:
+                    </div>
+                </div>
+                <!-- <div class="form-group row mb-0">
                     <div class="col-md-2">Tanggal</div>
                     <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                 </div>
@@ -105,7 +160,7 @@
                     <div class="col-md-2">Rencana Pengguna</div>
                     <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
                 </div>
-                @endif
+                @endif -->
                 <!-- <div class="form-group row mb-0">
                     <div class="col-md-12 text-justify mt-4">
                         Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
@@ -160,36 +215,25 @@
                     </tbody>
                 </table>
                 @elseif ($modul == 'atk')
-                <table class="table table-bordered m-0">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Barang</th>
-                            <th>Merk/Tipe</th>
-                            <th>Permintaan</th>
-                            <th>Disetujui</th>
-                            <th>Keterangan</th>
-                        </tr>
-                    </thead>
-                    <?php $no = 1; ?>
-                    <tbody>
-                        @foreach($bast->permintaanAtk as $dataAtk)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
-                            <td>{{ $dataAtk->spesifikasi }}</td>
-                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
-                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
-                            <td>
-                                {{ $dataAtk->status }}
-                                @if ($dataAtk->keterangan != null)
-                                ({{ $dataAtk->keterangan }})
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="divTable">
+                    <div class="row divThead">
+                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-md-3 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-4 divTheadtd p-2">Deskripsi</div>
+                        <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
+                        <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
+                    </div>
+                    @foreach($bast->detailBast as $i => $detailAtk)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
+                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
+                    </div>
+                    @endforeach
+                </div>
+                @if ( $bast->detailAtk->count() > 6 ) <div class="pagebreak"></div> @endif
                 @elseif ($modul == 'gdn')
                 <div class="divTable">
                     <div class="row divThead">
@@ -232,41 +276,23 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            @if($jenisAadb->jenis_aadb == 'bmn')
-                            <th>Kode Barang</th>
-                            @endif
                             <th>Jenis AADB</th>
-                            <th>Nama Kendaraan</th>
-                            <th>Merk/Tipe</th>
-                            @if($jenisAadb->jenis_aadb == 'sewa')
-                            <th>Mulai Sewa</th>
-                            <th>Penyedia</th>
-                            @endif
+                            <th>Jenis Kendaraan</th>
+                            <th>Merk / Tipe</th>
+                            <th>Tahun Kendaraan</th>
+                            <th>Jumlah</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody class="text-capitalize">
-                        @foreach($bast->kendaraan as $dataKendaraan)
+                        @foreach($bast->usulanKendaraan as $dataPengadaan)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            @if($dataKendaraan->jenis_aadb == 'bmn')
-                            <td>{{ $dataKendaraan->kode_barang }}</td>
-                            @endif
-                            <td>{{ $dataKendaraan->jenis_aadb }}</td>
-                            <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
-                            <td>
-                                @if($jenisAadb->jenis_aadb == 'bmn')
-                                <span class="text-uppercase">{{ $dataKendaraan->no_plat_kendaraan }}</span> <br>
-                                @endif
-                                {{ $dataKendaraan->merk_tipe_kendaraan.' '.$dataKendaraan->tahun_kendaraan }}
-                            </td>
-                            @if($dataKendaraan->jenis_aadb == 'sewa')
-                            @foreach($dataKendaraan->kendaraanSewa as $dataSewa)
-                            <td>{{ $dataSewa->mulai_sewa }}</td>
-                            <td>{{ $dataSewa->penyedia }}</td>
-                            @endforeach
-                            @endif
-
+                            <td>{{ $dataPengadaan->jenis_aadb }}</td>
+                            <td>{{ $dataPengadaan->jenis_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->tahun_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->jumlah_pengajuan }} kendaraan</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -365,35 +391,35 @@
             <div class="col-md-12 mt-5">
                 <div class="col-md-12 text-capitalize">
                     <div class="row text-center">
-                        <label class="col-sm-4">Yang Menyerahkan, <br> Pejabat Pembuat Komitmen</label>
-                        @if($bast->status_proses_id >= 4)
-                        <label class="col-sm-4">Yang Menerima, <br> {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</label>
-                        @endif
-                        @if($bast->status_proses_id == 5)
-                        <label class="col-sm-4">Mengetahui, <br> {{ ucfirst(strtolower($pimpinan->keterangan_pegawai)) }}</label>
-                        @endif
+                        <label class="col-sm-4">Yang Menyerahkan, <br> {{ $jabatanPpk }} </label>
+                        <label class="col-sm-4">Yang Menerima, <br> {{ $bast->keterangan_pegawai }}</label>
+                        <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->keterangan_pegawai }}</label>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="row text-center">
+                    <div class="row text-center mt-4 ml">
+                        @if ($bast->otp_bast_ppk != null)
                         <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_ppk) !!}</label>
-                        @if($bast->status_proses_id >= 4)
-                        <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_pengusul) !!}</label>
+                        @else
+                        <label style="padding:40px 0;"></label>
                         @endif
-                        @if($bast->status_proses_id == 5)
+                        @if ($bast->otp_bast_pengusul != null)
+                        <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_pengusul) !!}</label>
+                        @else
+                        <label style="padding:40px 0;"></label>
+                        @endif
+                        @if ($bast->otp_bast_kabag != null)
                         <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_kabag) !!}</label>
+                        @else
+                        <label style="padding:40px 0;"></label>
                         @endif
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="row text-center">
-                        <label class="col-sm-4">Marten Avero, Skm</label>
-                        @if($bast->status_proses_id >= 4)
+                        <label class="col-sm-4">{{ $namaPpk }}</label>
                         <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>
-                        @endif
-                        @if($bast->status_proses_id == 5)
                         <label class="col-sm-4">{{ $pimpinan->nama_pegawai }}</label>
-                        @endif
                     </div>
                 </div>
             </div>

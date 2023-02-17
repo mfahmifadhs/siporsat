@@ -13,7 +13,25 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('dist_admin/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist_admin/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist_admin/css/adminlte.css') }}">
+    <style>
+        @media print {
+            .table-data {
+                border: 1px solid;
+                font-size: large;
+            }
+
+            .table-data th,
+            .table-data td {
+                border: 1px solid;
+            }
+
+            .table-data thead th,
+            .table-data thead td {
+                border: 1px solid;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -65,12 +83,18 @@
                     <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
+                    <div class="col-md-3">Total Pengajuan</div>
+                    <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} barang</div>
+                </div>
+                @if($dataUsulan->rencana_pengguna != null)
+                <div class="form-group row mb-0">
                     <div class="col-md-3">Rencana Pengguna</div>
                     <div class="col-md-9">: {{ $dataUsulan->rencana_pengguna }}</div>
                 </div>
+                @endif
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
-                <table class="table table-bordered m-0">
+                <table class="table m-0 table-data">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -82,7 +106,7 @@
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody class="small">
+                    <tbody>
                         @if ($form->jenis_form == 'pengadaan')
                         @foreach($dataUsulan->pengadaanAtk as $dataAtk)
                         <tr>

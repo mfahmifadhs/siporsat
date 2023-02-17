@@ -39,11 +39,23 @@
                     <input type="hidden" name="pegawai_id" value="{{ $usulan->id_pegawai }}">
                     <span id="kode_otp"></span>
                     @csrf
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <div class="col-md-12"><label class="text-muted">Informasi Pengusul</label></div>
                         <label class="col-sm-2 col-form-label">Nomor Surat</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control text-uppercase" name="no_surat_bast" value="{{ 'KR.02.04/2/'.$idBast.'/'.Carbon\carbon::now()->isoFormat('Y') }}" readonly>
+                        </div>
+                    </div> -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Nomor Surat Usulan </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control text-uppercase" value="{{ $usulan->no_surat_usulan }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Tanggal Usulan </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ \Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -69,15 +81,17 @@
                         <div class="col-md-12"><label class="text-muted">Informasi Barang</label></div>
                     </div>
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label">Informasi Barang</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
                                         <th style="width: 2%;">No</th>
                                         <th style="width: 20%;">Nama Barang</th>
                                         <th style="width: 25%;">Merk/Tipe</th>
-                                        <th style="width: 14%;">Jumlah</th>
+                                        <th style="width: 15%;">Jumlah Pengajuan</th>
+                                        @if ($usulan->jenis_form == 'distribusi')
+                                        <th style="width: 15%;">Jumlah Disetujui</th>
+                                        @endif
                                         <th>Satuan</th>
                                         <th>Status</th>
                                         <th style="width: 20%;">Keterangan</th>
@@ -92,7 +106,7 @@
                                         <td>
                                             <input type="hidden" name="modul" value="pengadaan">
                                             <input type="hidden" name="id_pengadaan[]" value="{{ $dataPengadaan->id_form_usulan_pengadaan }}">
-                                            {{ $dataPengadaan->jenis_barang }} <br> {{ $dataPengadaan->nama_barang }}
+                                            {{ $dataPengadaan->nama_barang }}
                                         </td>
                                         <td>{{ $dataPengadaan->spesifikasi }}</td>
                                         <td>
@@ -114,9 +128,10 @@
                                     <tr>
                                         <td> {{ $i + 1 }}</td>
                                         <td>
-                                            {{ $dataPermintaan->jenis_barang }} <br> {{ $dataPermintaan->nama_barang }}
+                                            {{ $dataPermintaan->nama_barang }}
                                         </td>
                                         <td class="pt-3">{{ $dataPermintaan->spesifikasi }}</td>
+                                        <td class="pt-3">{{ $dataPermintaan->jumlah }}</td>
                                         <td class="pt-3">{{ $dataPermintaan->jumlah_disetujui }}</td>
                                         <td class="pt-3">{{ $dataPermintaan->satuan }}</td>
                                         <td class="text-center text-uppercase pt-3">

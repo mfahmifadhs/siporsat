@@ -255,7 +255,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Surat Usulan </label></div>
                                                     <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/ukt/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/ukt/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
                                                     </div>
@@ -265,7 +265,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Surat BAST </label></div>
                                                     <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/ukt/surat/surat-bast/'. $dataUsulan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/surat/detail-bast-ukt/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>

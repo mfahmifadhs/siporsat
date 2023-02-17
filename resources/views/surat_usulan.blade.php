@@ -71,7 +71,10 @@
                                     <h2 class="page-header">
                                         <h5 style="font-size: 10px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
                                         <h5 style="font-size: 10px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
-                                        <p style="font-size: 7px;"><i>Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Blok A, 2nd Floor, Jakarta 12950<br>Telp.: (62-21) 5201587, 5201591 Fax. (62-21) 5201591</i></p>
+                                        <p style="font-size: 7px;"><i>
+                                                Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                                                Telepon : (021) 5201590</i>
+                                        </p>
                                     </h2>
                                 </div>
                                 <div class="col-md-2 col-2">

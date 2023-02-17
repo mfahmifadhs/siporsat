@@ -129,6 +129,10 @@
                                     <div class="col-md-2">Unit Kerja</div>
                                     <div class="col-md-9">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
                                 </div>
+                                <div class="form-group row mb-0">
+                                    <div class="col-md-2">Total Pengajuan</div>
+                                    <div class="col-md-9">: {{ $dataUsulan->total_pengajuan }} barang</div>
+                                </div>
                                 @if($dataUsulan->rencana_pengguna != null)
                                 <div class="form-group row mb-0">
                                     <div class="col-md-2">Rencana Pengguna</div>

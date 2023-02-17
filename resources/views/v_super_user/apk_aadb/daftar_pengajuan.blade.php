@@ -292,7 +292,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataPengajuan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataPengajuan->id_form_usulan) }}" rel="noopener" target="_blank">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
                                                         </a>
                                                     </div>
@@ -302,7 +302,7 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat BAST </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/aadb/surat/surat-bast/'. $dataPengajuan->id_form_usulan) }}">
+                                                        <a href="{{ url('super-user/surat/detail-bast-aadb/'. $dataPengajuan->id_form_usulan) }}" rel="noopener" target="_blank">
                                                             <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
@@ -355,7 +355,7 @@
                                                             <div class="col-sm-2">{{ $dataPengadaan->jenis_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->merk_tipe_kendaraan }}</div>
                                                             <div class="col-sm-2">{{ $dataPengadaan->tahun_kendaraan }}</div>
-                                                            <div class="col-sm-1">{{ $dataPengadaan->jumlah_pengajuan }}</div>
+                                                            <div class="col-sm-1">{{ $dataPengadaan->jumlah_pengajuan }} kendaraan</div>
                                                         </div>
                                                         <hr>
                                                         @endforeach

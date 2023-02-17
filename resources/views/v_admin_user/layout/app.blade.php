@@ -152,21 +152,21 @@
                             </a>
                             <ul class="nav nav-treeview ">
                                 <li class="nav-item">
+                                    <a href="{{ url('admin-user/surat/bast-atk/daftar') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Berita Acara</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ url('admin-user/atk/dashboard') }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/usulan/daftar/distribusi') }}" class="nav-link">
+                                    <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Daftar Usulan Distribusi</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/usulan/daftar/pengadaan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Daftar Usulan Pengadaan</p>
+                                        <p>Daftar Usulan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

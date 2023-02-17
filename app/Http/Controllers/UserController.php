@@ -16,6 +16,7 @@ use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanVoucherBBM;
+use App\Models\ATK\BastAtk;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkPermintaan;
@@ -173,13 +174,15 @@ class UserController extends Controller
 
                     return redirect('unit-kerja/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil Memproses Usulan');
                 } elseif ($usulan->status_proses_id == '3') {
-                    UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
-                        'otp_bast_pengusul'   => $request->one_time_password,
-                        'status_proses_id'    => 4
-                    ]);
-                    Google2FA::logout();
+                    $bast = BastAtk::where('id_bast', Auth::user()->sess_bast_id)->first();
+                    if (!$bast->otp_bast_pengusul) {
+                        BastAtk::where('id_bast', Auth::user()->sess_bast_id)->update([
+                            'otp_bast_pengusul' => $request->one_time_password
+                        ]);
+                    }
 
-                    return redirect('unit-kerja/atk/dashboard')->with('success', 'Berhasil Memproses Usulan');
+                    Google2FA::logout();
+                    return redirect('unit-kerja/surat/detail-bast-atk/' . Auth::user()->sess_bast_id)->with('success', 'Berhasil Melakukan Verifikasi');
                 } elseif ($usulan->status_proses_id == '4') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'status_proses_id'    => 5
@@ -309,11 +312,22 @@ class UserController extends Controller
                 ]);
                 return view('google2fa.index');
             }
+
+            // Verif berita acara
+            if ($aksi == 'bast-atk') {
+                User::where('id', Auth::user()->id)->update([
+                    'sess_modul'   => 'atk',
+                    'sess_form_id' => $id,
+                    'sess_bast_id' => $request->id_bast
+                ]);
+                return view('google2fa.index');
+            }
         }
     }
 
     public function Letter(Request $request, $aksi, $id)
     {
+        // Surat usulan
         if ($aksi == 'usulan-ukt') {
             $modul = 'ukt';
             $form  = UsulanUkt::where('id_form_usulan', $id)->first();
@@ -388,7 +402,9 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
             return view('v_user/surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-        } elseif ($aksi == 'bast-atk') {
+        }
+        // Berita acara
+        if ($aksi == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
@@ -467,10 +483,73 @@ class UserController extends Controller
 
             return view('v_user.surat_bast', compact('modul', 'bast', 'pimpinan'));
         }
+        // Detail Berita Acara Serah Terima
+        if ($aksi == 'detail-bast-oldat') {
+            $modul = 'oldat';
+
+            $bast = FormUsulan::where('id_form_usulan', $id)
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_user.detail_bast', compact('modul', 'bast'));
+
+        } elseif ($aksi == 'detail-bast-aadb') {
+            $modul = 'aadb';
+
+            $form      = UsulanAadb::where('id_form_usulan', $id)->pluck('id_form_usulan');
+            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $form)->first();
+
+            $bast = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_user/detail_bast', compact('bast', 'modul', 'jenisAadb'));
+
+        } elseif ($aksi == 'detail-bast-atk') {
+            $modul = 'atk';
+            $bast   = BastAtk::join('atk_tbl_form_usulan','id_form_usulan','usulan_id')
+                      ->join('tbl_pegawai','id_pegawai','pegawai_id')
+                      ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                      ->select('atk_tbl_bast.*','atk_tbl_form_usulan.*','tbl_pegawai.*','tbl_unit_kerja.*','atk_tbl_bast.tanggal_bast',
+                               'atk_tbl_bast.otp_bast_ppk','atk_tbl_bast.otp_bast_pengusul','atk_tbl_bast.otp_bast_kabag')
+                      ->where('id_bast', $id)->first();
+            return view('v_user.detail_bast', compact('modul', 'bast'));
+        } elseif ($aksi == 'detail-bast-gdn') {
+            $modul = 'gdn';
+            $form  = UsulanUkt::where('id_form_usulan', $id)->first();
+
+            $bast = UsulanGdn::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_user.detail_bast', compact('modul', 'bast'));
+
+        } elseif ($aksi == 'detail-bast-ukt') {
+            $modul = 'ukt';
+            $bast = UsulanUkt::where('id_form_usulan', $id)
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+
+            return view('v_user.detail_bast', compact('modul', 'bast'));
+        }
     }
 
     public function PrintLetter(Request $request, $modul, $id)
     {
+        // Surat Usulan
         if ($modul == 'usulan-ukt') {
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
@@ -537,19 +616,30 @@ class UserController extends Controller
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
             return view('v_user/print_surat_usulan', compact('modul', 'usulan', 'pimpinan'));
-        } elseif ($modul == 'bast-atk') {
+        }
+        // Berita Acara
+        if ($modul == 'bast-atk') {
             $modul = 'atk';
             $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('jabatan_id', '2')
                 ->where('unit_kerja_id', 465930)
                 ->first();
 
-            $bast = UsulanAtk::where('id_form_usulan', $id)
-                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            $bast = BastAtk::where('id_bast', $id)
+            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->select(
+                    'atk_tbl_bast.*',
+                    'atk_tbl_form_usulan.*',
+                    'tbl_pegawai.*',
+                    'tbl_unit_kerja.*',
+                    'atk_tbl_bast.tanggal_bast',
+                    'atk_tbl_bast.otp_bast_ppk',
+                    'atk_tbl_bast.otp_bast_pengusul',
+                    'atk_tbl_bast.otp_bast_kabag'
+                )
                 ->first();
 
             return view('v_user/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul'));
@@ -1439,7 +1529,7 @@ class UserController extends Controller
                 ->where('status_proses_id', $id)
                 ->get();
 
-            return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
+            return view('v_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'detail') {
 
             $pengajuan  = UsulanAadb::with('usulanKendaraan')
@@ -1451,7 +1541,7 @@ class UserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->get();
 
-            return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
+            return view('v_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'daftar') {
             $pengajuan = UsulanAadb::with('usulanKendaraan')
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
@@ -1463,7 +1553,7 @@ class UserController extends Controller
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->get();
 
-            return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
+            return view('v_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
             $totalUsulan    = UsulanAadb::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -1854,17 +1944,18 @@ class UserController extends Controller
                 if ($request->jumlah_permintaan[$i] != 0) {
                     $id     = UsulanAtkPermintaan::count() + 1;
                     $detail = new UsulanAtkPermintaan();
-                    $detail->id_permintaan  = (int) $id . rand(0000, 9999);
-                    $detail->form_usulan_id = $idFormUsulan;
-                    $detail->pengadaan_id   = $id_pengadaan;
-                    $detail->jumlah         = $request->jumlah_permintaan[$i];
+                    $detail->id_permintaan     = (int) $id . rand(0000, 9999);
+                    $detail->form_usulan_id    = $idFormUsulan;
+                    $detail->pengadaan_id      = $id_pengadaan;
+                    $detail->jumlah            = $request->jumlah_permintaan[$i];
+                    $detail->jumlah_penyerahan = 0;
                     $detail->save();
 
                     $pengadaan  = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)->first();
                     $pemakaian  = (int) $pengadaan->jumlah_pemakaian + (int) $request->jumlah_permintaan[$i];
                     UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)
                         ->update([
-                            'jumlah_pemakaian' => $pemakaian
+                            'jumlah_pemakaian'  => $pemakaian
                         ]);
                 }
 
@@ -2074,7 +2165,7 @@ class UserController extends Controller
                     }
                 }
 
-                return redirect('unit-kerja/surat/usulan-atk/' . $id_usulan);
+                return redirect('unit-kerja/surat/usulan-atk/' . $id_usulan)->with('success', 'Berhasil Mengubah Data Usulan Pengadaan');
             }
         } elseif ($aksi == 'proses-diterima') {
 

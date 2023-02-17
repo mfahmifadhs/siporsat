@@ -37,9 +37,9 @@
             <div class="card-header">
                 <h3 class="card-title">Persetujuan Usulan ATK </h3>
             </div>
-            <div class="card-body">
-                <form action="{{ url('super-user/atk/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
-                    @csrf
+            <form action="{{ url('super-user/atk/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
+                @csrf
+                <div class="card-body">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
                         <div class="col-sm-10">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label">Informasi Barang</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
@@ -105,33 +105,9 @@
                                         </td>
                                         <td>{{ $dataPengadaan->spesifikasi }}</td>
                                         <td>
-                                            <input type="number" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPengadaan->jumlah }}">
+                                            <input type="number" class="text-center form-control form-control-sm" name="jumlah_pengajuan[]" value="{{ $dataPengadaan->jumlah }}">
                                         </td>
                                         <td>{{ $dataPengadaan->satuan }}</td>
-                                        <td class="text-center">
-                                            <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
-                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima" required> <br>
-                                            <label for="checkbox_id{{$i}}">Diterima</label>
-                                        </td>
-                                        <td>
-                                            <input name="keterangan[]" class="form-control" style="font-size: 13px;">
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @else
-                                    @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
-                                    <tr>
-                                        <td> {{ $i + 1 }}</td>
-                                        <td>
-                                            <input type="hidden" name="modul" value="distribusi">
-                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
-                                            {{ $dataPermintaan->jenis_barang }} <br> {{ $dataPermintaan->nama_barang }}
-                                        </td>
-                                        <td>{{ $dataPermintaan->spesifikasi }}</td>
-                                        <td>
-                                            <input type="text" class="text-center form-control" name="jumlah_pengajuan[]" value="{{ $dataPermintaan->jumlah }}">
-                                        </td>
-                                        <td>{{ $dataPermintaan->satuan }}</td>
                                         <td class="text-center">
                                             <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
                                             <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
@@ -142,47 +118,68 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @else
+                                    @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
+                                    <tr>
+                                        <td class="pt-4"> {{ $i + 1 }}</td>
+                                        <td class="pt-4">
+                                            <input type="hidden" name="modul" value="distribusi">
+                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            {{ $dataPermintaan->nama_barang }}
+                                        </td>
+                                        <td class="pt-4">{{ $dataPermintaan->spesifikasi }}</td>
+                                        <td class="pt-3">
+                                            <input type="number" class="text-center form-control form-control-sm" name="jumlah_pengajuan[]" value="{{ $dataPermintaan->jumlah }}" max="{{ $dataPermintaan->jumlah }}">
+                                        </td>
+                                        <td class="pt-4">{{ $dataPermintaan->satuan }}</td>
+                                        <td class="text-center pt-3">
+                                            <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
+                                            <label for="checkbox_id{{$i}}">Diterima</label>
+                                        </td>
+                                        <td>
+                                            <textarea name="keterangan[]" class="form-control form-control-sm" style="font-size: 13px;"></textarea>
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                     @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-success" id="btnSubmit" onclick="return confirm('Pengajuan Diterima ?')">
-                                <i class="fas fa-check-circle"></i> Terima
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-success" id="btnSubmit" onclick="return confirm('Pengajuan Diterima ?')">
+                        <i class="fas fa-check-circle"></i> Terima
+                    </button>
+                    @if (Auth::user()->id == 5)
+                    <a class="btn btn-danger" data-toggle="modal" data-target="#tolakUsulan">
+                        <i class="fas fa-times-circle"></i> Tolak
+                    </a>
+                    @endif
+                </div>
+            </form>
+            <!-- Modal -->
+            <div class="modal fade" id="tolakUsulan" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
-                            @if (Auth::user()->id == 5)
-                            <a class="btn btn-danger" data-toggle="modal" data-target="#tolakUsulan">
-                                <i class="fas fa-times-circle"></i> Tolak
-                            </a>
-                            @endif
                         </div>
-                    </div>
-                </form>
-                <!-- Modal -->
-                <div class="modal fade" id="tolakUsulan" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                        <form action="{{ url('super-user/atk/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <label class="col-form-label">Keterangan Penolakan</label>
+                                <textarea name="keterangan" class="form-control" id="" cols="30" rows="10"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Pengajuan Ditolak ?')">
+                                    <i class="fas fa-times-circle"></i> Tolak
                                 </button>
                             </div>
-                            <form action="{{ url('super-user/atk/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
-                                @csrf
-                                <div class="modal-body">
-                                    <label class="col-form-label">Keterangan Penolakan</label>
-                                    <textarea name="keterangan" class="form-control" id="" cols="30" rows="10"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Pengajuan Ditolak ?')">
-                                        <i class="fas fa-times-circle"></i> Tolak
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

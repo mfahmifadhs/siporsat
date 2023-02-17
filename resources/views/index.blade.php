@@ -148,8 +148,9 @@
             <div class="row spad">
                 <div class="col-md-8 col-lg-12 footer-widget text-center">
                     <img src="{{ asset('dist_admin/img/biro-umum.png') }}" width="350" height="120" alt="">
-                    <p>
-                        Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Kota Jakarta Selatan, <br> Daerah Khusus Ibu Kota Jakarta
+                    <p><i>
+                        Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                        Telepon : (021) 5201590</i>
                     </p>
                     <span>
                         Sistem Informasi Pengelolaan Operasional Perkantoran Terpusat Kemenkes RI
