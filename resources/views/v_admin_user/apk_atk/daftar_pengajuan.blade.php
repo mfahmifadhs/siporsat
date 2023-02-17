@@ -196,15 +196,9 @@
                                         </a>
                                         <div class="dropdown-menu">
                                             @if ($dataUsulan->jenis_form == 'distribusi' && $dataUsulan->status_proses_id == 3)
-                                            @if ($dataUsulan->tanggal_bast == null)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/penyerahan/'. $dataUsulan->id_form_usulan) }}">
+					    <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-people-carry"></i> Menyerahkan
                                             </a>
-                                            @elseif ($dataUsulan->permintaanAtk->where('status_penyerahan','false')->count() != 0)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-people-carry"></i> Menyerahkan
-                                            </a>
-                                            @endif
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#usulan-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
@@ -431,6 +425,21 @@
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Belum Diserahkan</label></div>
                                                             <div class="col-md-7">:
+								@php
+                                                $atkNull = $dataUsulan->permintaanAtk
+                                                ->where('status_penyerahan', null)
+                                                ->where('status','diterima')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $atkFalse = $dataUsulan->permintaanAtk
+                                                ->where('status_penyerahan', 'false')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
+                                                $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
+                                                $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
+                                                $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                @endphp
                                                                 {{ $belum_diserahkan }} barang
                                                             </div>
                                                         </div>

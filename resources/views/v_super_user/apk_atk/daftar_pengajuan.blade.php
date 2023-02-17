@@ -548,7 +548,22 @@
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Belum Diserahkan</label></div>
                                                             <div class="col-md-7">:
-                                                                {{ $belum_diserahkan }} barang
+                                                                @php
+                                                $atkNull = $dataUsulan->permintaanAtk
+                                                ->where('status_penyerahan', null)
+                                                ->where('status','diterima')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $atkFalse = $dataUsulan->permintaanAtk
+                                                ->where('status_penyerahan', 'false')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
+                                                $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
+                                                $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
+                                                $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                @endphp
+								{{ $belum_diserahkan }} barang
                                                             </div>
                                                         </div>
                                                     </div>
