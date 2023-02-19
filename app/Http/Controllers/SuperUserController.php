@@ -1190,6 +1190,7 @@ class SuperUserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->tanggal_usulan     = Carbon::now();
@@ -1445,6 +1446,7 @@ class SuperUserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->user_id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->no_surat_usulan    = strtoupper($noSurat);
@@ -1663,7 +1665,6 @@ class SuperUserController extends Controller
                 ->where('status_proses_id', 5)
                 ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi')
                 ->first();
-
             return view('v_super_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         }
     }
@@ -1754,9 +1755,10 @@ class SuperUserController extends Controller
                 if ($request->jumlah_permintaan[$i] != 0) {
                     // Insert jumlah permintaan
                     $detail = new UsulanAtkPermintaan();
-                    $detail->form_usulan_id = $idFormUsulan;
-                    $detail->pengadaan_id   = $id_pengadaan;
-                    $detail->jumlah         = $request->jumlah_permintaan[$i];
+                    $detail->form_usulan_id    = $idFormUsulan;
+                    $detail->pengadaan_id      = $id_pengadaan;
+                    $detail->jumlah            = $request->jumlah_permintaan[$i];
+                    $detail->jumlah_penyerahan = 0;
                     $detail->save();
                     // Update stok atk
                     $pengadaan  = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $id_pengadaan)->first();
@@ -1771,6 +1773,7 @@ class SuperUserController extends Controller
             // Insert usulan atk
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $id;
             $usulan->total_pengajuan    = $total_pengajuan;
@@ -1907,6 +1910,7 @@ class SuperUserController extends Controller
 
                 $usulan = new UsulanAtk();
                 $usulan->id_form_usulan     = $idFormUsulan;
+                $usulan->user_id            = Auth::user()->id;
                 $usulan->pegawai_id         = Auth::user()->pegawai_id;
                 $usulan->jenis_form         = 'pengadaan';
                 $usulan->total_pengajuan    = $totalAtk + $totalAlkom;
@@ -2040,7 +2044,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('status_proses_id', 5)
-                ->where('pegawai_id', Auth::user()->pegawai_id)
+                ->where('user_id', Auth::user()->id)
                 ->orderBy('jenis_barang', 'DESC')
                 ->get();
 
@@ -2174,7 +2178,7 @@ class SuperUserController extends Controller
             ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi', 'satuan')
             ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->where('status_proses_id', 5)
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            // ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
         $totalAtk = UsulanAtkPengadaan::select('nama_barang', DB::raw('sum(jumlah_disetujui) as stok'))
@@ -2183,7 +2187,7 @@ class SuperUserController extends Controller
             ->groupBy('nama_barang')
             ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
             ->where('status_proses_id', 5)
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            // ->where('pegawai_id', Auth::user()->pegawai_id)
             ->get();
 
         foreach ($totalAtk as $data) {
@@ -2429,6 +2433,7 @@ class SuperUserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
+            $usulan->user_id             = Auth::user()->id;
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
             $usulan->kode_form           = 'AADB_001';
             $usulan->jenis_form          = $request->jenis_form;
@@ -3341,7 +3346,8 @@ class SuperUserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan       = $idFormUsulan;
-            $formUsulan->pegawai_id           = $request->input('pegawai_id');
+            $formUsulan->user_id              = Auth::user()->id;
+            $formUsulan->pegawai_id           = Auth::user()->pegawai_id;
             $formUsulan->kode_form            = 'OLDAT_001';
             $formUsulan->jenis_form           = 'pengadaan';
             $formUsulan->total_pengajuan      = array_sum($request->jumlah_barang);

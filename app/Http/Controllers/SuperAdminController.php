@@ -1473,19 +1473,19 @@ class SuperAdminController extends Controller
             $pegawai->jabatan_id         = $request->input('id_jabatan');
             $pegawai->tim_kerja_id       = $request->input('id_tim_kerja');
             $pegawai->unit_kerja_id      = $request->input('id_unit_kerja');
-            $pegawai->keterangan_pegawai = strtoupper($request->input('keterangan_pegawai'));
+            $pegawai->keterangan_pegawai = $request->input('keterangan_pegawai');
             $pegawai->save();
 
             return redirect('super-admin/pegawai/data/semua')->with('success', 'Berhasil menambah data pegawai');
         } elseif ($aksi == 'proses-ubah') {
             $pegawai = Pegawai::where('id_pegawai', $id)->update([
-                'nip_pegawai'           => $request->nip_pegawai,
+                'nip_pegawai'           => $request->nip,
                 'nama_pegawai'          => ucwords($request->nama_pegawai),
                 'nohp_pegawai'          => $request->nohp_pegawai,
                 'jabatan_id'            => $request->id_jabatan,
                 'tim_kerja_id'          => $request->id_tim_kerja,
                 'unit_kerja_id'         => $request->id_unit_kerja,
-                'keterangan_pegawai'    => strtoupper($request->input('keterangan_pegawai'))
+                'keterangan_pegawai'    => $request->input('keterangan_pegawai')
             ]);
             return redirect('super-admin/pegawai/data/semua')->with('success', 'Berhasil mengubah data pegawai');
         } elseif ($aksi == 'upload') {

@@ -107,8 +107,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Unit Kerja :</label>
-                                                <select name="id_unit_kerja" class="form-control" required>
-                                                    <option value="">-- Pilih Unit Kerja --</option>
+                                                <select name="id_unit_kerja" class="form-control select" style="width: 100%;" required>
+                                                    <option value="">{{ $row->unit_kerja }}</option>
                                                     @foreach($unitKerja as $dataUnitKerja)
                                                     <option value="{{ $dataUnitKerja->id_unit_kerja }}" <?php if ($row->unit_kerja_id == $dataUnitKerja->id_unit_kerja) echo "selected"; ?>>
                                                         {{ $dataUnitKerja->unit_kerja }}
@@ -118,8 +118,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Pegawai : </label>
-                                                <select name="id_pegawai" class="form-control text-capitalize" required>
-                                                    <option value="">-- Pilih Pegawai --</option>
+                                                <select name="id_pegawai" class="form-control text-capitalize select" style="width: 100%;" required>
+                                                    <option value="">{{ $row->pegawai }}</option>
                                                     @foreach($pegawai as $dataPegawai)
                                                     <option value="{{ $dataPegawai->id_pegawai }}" <?php if ($row->pegawai_id == $dataPegawai->id_pegawai) echo "selected"; ?>>
                                                         {{ $dataPegawai->nama_pegawai }}
@@ -272,6 +272,7 @@
 <script>
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
+        $(".select").select2();
         $("#table-pengguna").DataTable({
             "responsive": true,
             "lengthChange": true,

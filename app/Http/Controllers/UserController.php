@@ -483,6 +483,7 @@ class UserController extends Controller
 
             return view('v_user.surat_bast', compact('modul', 'bast', 'pimpinan'));
         }
+
         // Detail Berita Acara Serah Terima
         if ($aksi == 'detail-bast-oldat') {
             $modul = 'oldat';
@@ -494,6 +495,7 @@ class UserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
                 ->first();
+
             return view('v_user.detail_bast', compact('modul', 'bast'));
 
         } elseif ($aksi == 'detail-bast-aadb') {
@@ -626,7 +628,7 @@ class UserController extends Controller
                 ->first();
 
             $bast = BastAtk::where('id_bast', $id)
-            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
@@ -713,7 +715,7 @@ class UserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('ukt_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
+            ->where('ukt_tbl_form_usulan.user_id', Auth::user()->id)
             ->get();
 
         return view('v_user.apk_ukt.index', compact('usulan'));
@@ -729,6 +731,7 @@ class UserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->tanggal_usulan     = Carbon::now();
@@ -794,7 +797,7 @@ class UserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('gdn_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
+            ->where('gdn_tbl_form_usulan.user_id', Auth::user()->id)
             ->get();
 
         return view('v_user.apk_gdn.index', compact('usulan'));
@@ -810,6 +813,7 @@ class UserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = $request->jenis_form;
             $usulan->no_surat_usulan    = $noSurat;
@@ -898,7 +902,7 @@ class UserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('user_id', Auth::user()->id)
             ->get();
 
         return view('v_user.apk_oldat.index', compact('googleChartData', 'usulan'));
@@ -1044,7 +1048,8 @@ class UserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan       = $idFormUsulan;
-            $formUsulan->pegawai_id           = $request->input('pegawai_id');
+            $formUsulan->user_id              = Auth::user()->id;
+            $formUsulan->pegawai_id           = Auth::user()->pegawai_id;
             $formUsulan->kode_form            = 'OLDAT_001';
             $formUsulan->jenis_form           = 'pengadaan';
             $formUsulan->total_pengajuan      = $request->input('total_pengajuan');
@@ -1077,7 +1082,8 @@ class UserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
             $formUsulan->id_form_usulan      = $idFormUsulan;
-            $formUsulan->pegawai_id          = $request->input('pegawai_id');
+            $formUsulan->user_id             = Auth::user()->id;
+            $formUsulan->pegawai_id          = Auth::user()->pegawai_id;
             $formUsulan->kode_form           = 'OLDAT_001';
             $formUsulan->jenis_form          = 'perbaikan';
             $formUsulan->total_pengajuan     = $request->input('total_pengajuan');
@@ -1316,7 +1322,7 @@ class UserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('user_id', Auth::user()->id)
             ->get();
 
         $jadwalServis = JadwalServis::join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
@@ -1562,6 +1568,7 @@ class UserController extends Controller
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
             $usulan->id_form_usulan      = $idFormUsulan;
+            $usulan->user_id             = Auth::user()->id;
             $usulan->pegawai_id          = Auth::user()->pegawai_id;
             $usulan->kode_form           = 'AADB_001';
             $usulan->jenis_form          = $request->jenis_form;
@@ -1851,14 +1858,14 @@ class UserController extends Controller
         $googleChartData = $this->ChartDataAtk();
         $usulan = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->where('atk_tbl_form_usulan.pegawai_id', Auth::user()->pegawai_id)
+            ->where('atk_tbl_form_usulan.user_id', Auth::user()->id)
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
         $stok = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('user_id', Auth::user()->id)
             ->where('status_proses_id', 5)
             ->get();
 
@@ -1966,6 +1973,7 @@ class UserController extends Controller
 
             $usulan = new UsulanAtk();
             $usulan->id_form_usulan     = $idFormUsulan;
+            $usulan->user_id            = Auth::user()->id;
             $usulan->pegawai_id         = Auth::user()->pegawai_id;
             $usulan->jenis_form         = 'distribusi';
             $usulan->total_pengajuan    = count($totalPengajuan);
@@ -2130,6 +2138,7 @@ class UserController extends Controller
 
                 $usulan = new UsulanAtk();
                 $usulan->id_form_usulan     = $id_usulan;
+                $usulan->user_id            = Auth::user()->id;
                 $usulan->pegawai_id         = Auth::user()->pegawai_id;
                 $usulan->jenis_form         = 'pengadaan';
                 $usulan->total_pengajuan    = $totalAtk + $totalAlkom;

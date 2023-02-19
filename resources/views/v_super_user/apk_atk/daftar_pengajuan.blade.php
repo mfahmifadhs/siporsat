@@ -208,7 +208,6 @@
                                             <!-- Total BAST yang belum di ttd Pengusul -->
                                             @if ($dataUsulan->bastAtk->where('otp_bast_ppk', '!=', null)->where('otp_bast_pengusul', null)
                                             ->where('otp_bast_kabag', null)->count() != 0)
-                                            <hr>
                                             <span class="badge badge-sm badge-pill badge-warning mt-1">
                                                 {{ $dataUsulan->bastAtk->where('otp_bast_ppk', '!=', null)->where('otp_bast_pengusul', null)
                                                     ->where('otp_bast_pengusul', null)->count() }}

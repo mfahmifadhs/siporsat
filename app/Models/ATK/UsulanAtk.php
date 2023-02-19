@@ -21,6 +21,7 @@ class UsulanAtk extends Model
 
     protected $fillable = [
         'id_form_usulan',
+        'user_id',
         'pegawai_id',
         'jenis_form',
         'total_pengajuan',

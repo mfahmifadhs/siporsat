@@ -19,6 +19,7 @@ class FormUsulan extends Model
 
     protected $fillable = [
         'id_form_usulan',
+        'user_id',
         'pegawai_id',
         'kode_form',
         'jenis_form',
