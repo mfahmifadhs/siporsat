@@ -271,7 +271,7 @@
                 </div>
                 @elseif ($modul == 'usulan-aadb')
                 @if($usulan->jenis_form == '1')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -299,7 +299,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '2')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small">
                     <thead>
                         <tr>
                             <th class="text-center" style="width:5%;">No</th>
@@ -337,7 +337,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '3')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -361,7 +361,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '4')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small">
                     <thead>
                         <tr>
                             <th>No</th>
