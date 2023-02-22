@@ -361,7 +361,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '4')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-bordered m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -373,10 +373,10 @@
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody class="text-capitalize">
+                    <tbody>
                         @foreach($usulan->usulanVoucher as $dataVoucher)
                         @if($dataVoucher->status_pengajuan == 'true')
-                        <tr class="text-uppercase">
+                        <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                             <td>{{ ucfirst(strtolower($dataVoucher->jenis_aadb)) }}</td>
