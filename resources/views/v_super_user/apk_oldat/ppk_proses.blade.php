@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Pengajuan</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}">Daftar Pengajuan</a></li>
                     <li class="breadcrumb-item active">Buat Berita Acara</li>
                 </ol>
             </div>
@@ -37,7 +37,7 @@
                 <h3 class="card-title text-capitalize">Proses {{ $form }} </h3>
             </div>
             @foreach($pengajuan as $dataPengajuan)
-            <form class="form-pengajuan" action="{{ url('super-user/ppk/oldat/pengajuan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
+            <form class="form-pengajuan" action="{{ url('super-user/ppk/oldat/usulan/proses-'. $form .'/'. $dataPengajuan->id_form_usulan) }}" method="POST" enctype="multipart/form-data">
                 <div class="card-body">
                     <input type="hidden" name="id_form_usulan" value="{{ $id }}">
                     <input type="hidden" name="pegawai_id" value="{{ $dataPengajuan->id_pegawai }}">

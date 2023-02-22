@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/dashboard') }}"> Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-usulan') }}"> Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}"> Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Buat Usulan</li>
                 </ol>
             </div>
@@ -44,7 +44,7 @@
                 @endif
             </div>
             <div class="card-body">
-                <form class="form-pengajuan" action="{{ url('super-user/oldat/pengajuan/proses-usulan/'. $id ) }}" method="POST">
+                <form class="form-pengajuan" action="{{ url('super-user/oldat/usulan/proses-usulan/'. $id ) }}" method="POST">
                     <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
                     <span id="kode_otp"></span>
                     @csrf

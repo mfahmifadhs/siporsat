@@ -35,11 +35,11 @@
 
             <div class="col-md-12 float-right form-group">
                 <div class="float-right">
-                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/pengajuan/usulan/pengadaan') }}">
+                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/usulan/pengadaan/baru') }}">
                         <i class="fa fa-laptop fa-2x py-1"></i> <br>
                         Usulan Pengadaan
                     </a>
-                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/pengajuan/usulan/perbaikan') }}">
+                    <a class="btn btn-primary btn-sm" href="{{ url('super-user/oldat/usulan/perbaikan/baru') }}">
                         <i class="fa fa-tools fa-2x py-1"></i> <br>
                         Usulan Perbaikan
                     </a>
@@ -62,7 +62,7 @@
                     </div>
                     <div id="collapseTwo" class="collapse" data-parent="#accordion">
                         <div class="card-header">
-                            <form method="POST" action="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">
+                            <form method="POST" action="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}">
                                 @csrf
                                 <div class="form-group row">
                                     <div class="col-sm-3">
@@ -115,7 +115,7 @@
                                         <button class="btn btn-primary">
                                             <i class="fas fa-search"></i> Cari
                                         </button>
-                                        <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-danger">
+                                        <a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}" class="btn btn-danger">
                                             <i class="fas fa-undo"></i> Refresh
                                         </a>
                                     </div>
@@ -194,17 +194,16 @@
                                         </a>
                                         <div class="dropdown-menu">
                                             @if ($usulan->status_proses_id == 3 && $usulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $usulan->id_form_usulan) }}"
-                                                onclick="return confirm('Apakah barang telah diterima?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $usulan->id_form_usulan) }}" onclick="return confirm('Apakah barang telah diterima?')">
                                                 <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $usulan->status_proses_id == 1)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/pengajuan/persetujuan/'. $usulan->id_form_usulan) }}">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/usulan/persetujuan/'. $usulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
                                             @elseif (Auth::user()->pegawai->jabatan_id == 5 && $usulan->status_proses_id == 2 )
-                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/oldat/pengajuan/'.$usulan->jenis_form.'/'. $usulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/ppk/oldat/usulan/'.$usulan->jenis_form.'/'. $usulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
                                                 <i class="fas fa-check-circle"></i> Selesai Proses
                                             </a>
                                             @elseif (Auth::user()->pegawai->jabatan_id == 2 && $usulan->status_proses_id == 4)
@@ -219,13 +218,19 @@
                                             <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-oldat/'. $usulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
-                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/pengajuan/proses-pembatalan/'. $usulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/usulan/proses-pembatalan/'. $usulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @endif
                                             @if (Auth::user()->pegawai->jabatan_id == 2 && $usulan->status_pengajuan_id == NULL)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/pengajuan/hapus/'. $usulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/oldat/usulan/hapus/'. $usulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
                                                 <i class="fas fa-trash-alt"></i> Hapus
+                                            </a>
+                                            @endif
+
+                                            @if ($usulan->status_proses_id > 3 && $usulan->status_pengajuan_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/surat/detail-bast-oldat/'. $usulan->id_form_usulan) }}">
+                                                <i class="fas fa-info-circle"></i> Berita Acara
                                             </a>
                                             @endif
 
@@ -248,7 +253,7 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
-						 <div class="form-group row mb-0">
+                                                <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Nomor Surat </label></div>
                                                     <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
                                                 </div>
@@ -278,18 +283,8 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Surat Usulan </label></div>
                                                     <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/oldat/surat/surat-usulan/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank">
+                                                        <a href="{{ url('super-user/surat/usulan-oldat/'. $usulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($usulan->status_proses_id > 3 && $usulan->status_pengajuan_id == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Surat BAST </label></div>
-                                                    <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/surat/detail-bast-oldat/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank">
-                                                            <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
                                                 </div>
@@ -330,7 +325,7 @@
                                                         <div class="form-group row font-weight-bold">
                                                             <div class="col-sm-1 text-center">No</div>
                                                             <div class="col-sm-2">Nama Barang</div>
-							    <div class="col-sm-2">Kode Barang</div>
+                                                            <div class="col-sm-2">Kode Barang</div>
                                                             <div class="col-sm-3">Merk/Tipe</div>
                                                             <div class="col-sm-2">Pengguna</div>
                                                             <div class="col-sm-2">Keterangan</div>
@@ -340,7 +335,7 @@
                                                         <div class="form-group row text-uppercase small">
                                                             <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->kategori_barang }}</div>
-							    <div class="col-sm-2">{{ $dataOldat->kode_barang.'.'.$dataOldat->nup_barang }}</div>
+                                                            <div class="col-sm-2">{{ $dataOldat->kode_barang.'.'.$dataOldat->nup_barang }}</div>
                                                             <div class="col-sm-3">{{ $dataOldat->merk_tipe_barang.' '.Carbon\carbon::parse($dataOldat->tahun_perolehan)->isoFormat('Y') }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->pengguna_barang }}</div>
                                                             <div class="col-sm-2">{{ $dataOldat->keterangan_perbaikan }}</div>

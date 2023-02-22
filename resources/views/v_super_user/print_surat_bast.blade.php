@@ -46,6 +46,21 @@
         border-right: 1px solid;
         padding: 10px;
     }
+
+    .table-data {
+        border: 1px solid;
+        font-size: 20px;
+    }
+
+    .table-data th,
+    .table-data td {
+        border: 1px solid;
+    }
+
+    .table-data thead th,
+    .table-data thead td {
+        border: 1px solid;
+    }
 </style>
 @php
 if($modul == 'oldat' && $bast->jenis_form == 'pengadaan') {
@@ -171,7 +186,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
             </div>
             <div class="col-12 table-responsive mb-5">
                 @if ($modul == 'oldat')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th class="py-2">No</th>
@@ -180,10 +195,10 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                             <th class="py-2">Merk/Tipe Barang</th>
                             @if($bast->jenis_form == 'pengadaan')
                             <th class="py-2">Spesifikasi</th>
-                            <th class="py-2">Tahun Perolehan </th>
+                            <th class="py-2">Tahun </th>
                             @else
                             <th class="py-2">Tahun Perolehan</th>
-                            <th class="py-2">Keterangan Kerusakan</th>
+                            <th class="py-2">Keterangan</th>
                             @endif
                         </tr>
                     </thead>
@@ -207,7 +222,13 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                             <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>{{ $dataBarang->tahun_perolehan }}</td>
+                            <td>
+                                @if (\Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') != -1)
+                                    {{ \Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') }}
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                         </tr>
                         @endforeach
@@ -218,14 +239,16 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <div class="divTable">
                     <div class="row divThead">
                         <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-7 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-3 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-4 divTheadtd p-2">Deskripsi</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
                     </div>
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-7 divTbodytd">{{ $detailAtk->nama_barang.' '.$detailAtk->spesifikasi }}</div>
+                        <div class="col-md-3 divTbodytd">{{ $detailAtk->nama_barang }}</div>
+                        <div class="col-md-4 divTbodytd">{{ $detailAtk->spesifikasi }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>
@@ -270,7 +293,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 </div>
                 @elseif ($modul == 'aadb')
                 @if($bast->jenis_form == '1')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -296,7 +319,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '2')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th class="py-2">No</th>
@@ -334,7 +357,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '3')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th class="py-2">No</th>
@@ -358,7 +381,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '4')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th class="py-2">No</th>
@@ -383,6 +406,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                         @endforeach
                     </tbody>
                 </table>
+                @if ( $bast->usulanVoucher->count() > 6 ) <div class="pagebreak"></div> @endif
                 @endif
                 @endif
             </div>

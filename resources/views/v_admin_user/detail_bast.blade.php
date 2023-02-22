@@ -102,6 +102,7 @@
                                         <tr>
                                             <th class="text-center">No</th>
                                             <th>Nama Barang</th>
+                                            <th>Deskripsi</th>
                                             <th>Permintaan</th>
                                             <th>Penyerahan</th>
                                         </tr>
@@ -110,7 +111,8 @@
                                         @foreach($bast->detailBast as $i => $detailAtk)
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
-                                            <td>{{ $detailAtk->nama_barang.' '.$detailAtk->spesifikasi }}</td>
+                                            <td>{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</td>
+                                            <td>{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</td>
                                             <td>{{ $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</td>
                                             <td>{{ $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</td>
                                         </tr>

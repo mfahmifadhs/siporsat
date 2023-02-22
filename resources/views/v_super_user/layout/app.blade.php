@@ -152,7 +152,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="nav-link">
+                                    <a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holdings-usd"></i>
                                         <p>Daftar Usulan</p>
                                     </a>
@@ -211,7 +211,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-pengajuan') }}" class="nav-link">
+                                    <a href="{{ url('super-user/aadb/usulan/daftar/seluruh-usulan') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
                                         <p>Daftar Usulan</p>
                                     </a>

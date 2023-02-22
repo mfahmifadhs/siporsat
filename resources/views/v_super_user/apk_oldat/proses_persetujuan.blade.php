@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Proses Persetujuan</li>
                 </ol>
             </div>
@@ -38,7 +38,7 @@
                 <h3 class="card-title">Proses Persetujuan </h3>
             </div>
             <div class="card-body">
-                <form action="{{ url('super-user/oldat/pengajuan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
+                <form action="{{ url('super-user/oldat/usulan/proses-diterima/'. $usulan->id_form_usulan) }}" method="POST">
                     @csrf
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">No. Surat Usulan</label>
@@ -156,7 +156,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form action="{{ url('super-user/oldat/pengajuan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
+                            <form action="{{ url('super-user/oldat/usulan/proses-ditolak/'. $usulan->id_form_usulan) }}" method="POST">
                                 @csrf
                                 <div class="modal-body">
                                     <label class="col-form-label">Keterangan Penolakan</label>

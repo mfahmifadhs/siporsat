@@ -218,14 +218,16 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <div class="divTable">
                     <div class="row divThead">
                         <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-7 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-3 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-4 divTheadtd p-2">Deskripsi</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
                     </div>
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-7 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
+                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>

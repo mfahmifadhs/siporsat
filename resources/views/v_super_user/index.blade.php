@@ -18,7 +18,7 @@
                             <div class="card-header text-center">
                                 <i class="fas fa-laptop"></i> Oldah Data & Meubelair
                             </div>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/1') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/1') }}">
                                 <div class="card-header">
                                     <label>Menunggu Persetujuan</label>
                                     <div class="card-tools">
@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/2') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/2') }}">
                                 <div class="card-header">
                                     <label>Sedang Diproses</label>
                                     <div class="card-tools">
@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/3') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/3') }}">
                                 <div class="card-header">
                                     <label>Konfirmasi BAST Pengusul</label>
                                     <div class="card-tools">
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/4') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/4') }}">
                                 <div class="card-header">
                                     <label>Konfirmasi BAST Kabag RT</label>
                                     <div class="card-tools">
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/5') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/5') }}">
                                 <div class="card-header">
                                     <label>Selesai</label>
                                     <div class="card-tools">
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{{ url('super-user/oldat/pengajuan/status/ditolak') }}">
+                            <a href="{{ url('super-user/oldat/usulan/status/ditolak') }}">
                                 <div class="card-header">
                                     <label>Ditolak</label>
                                     <div class="card-tools">

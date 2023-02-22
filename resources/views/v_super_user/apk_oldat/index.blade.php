@@ -139,7 +139,7 @@
                                     <td>{{ \Carbon\Carbon::parse($rekap->bulan)->isoFormat('MMMM Y') }}</td>
                                     <td>{{ $rekap->total_usulan }} usulan</td>
                                     <td>
-                                        <a href="{{ url('super-user/oldat/pengajuan/periode/'. $rekap->bulan) }}" class="btn btn-primary btn-sm">
+                                        <a href="{{ url('super-user/oldat/usulan/periode/'. $rekap->bulan) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-list"></i> Detail
                                         </a>
                                     </td>

@@ -132,8 +132,8 @@
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
-                                        @foreach ($dataUsulan->detailUsulanUkt as $detailUkt)
-                                        {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50))) !!}
+                                        @foreach ($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
+                                        {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50) . PHP_EOL)) !!}
                                         @endforeach
                                     </td>
                                     <td class="text-center">
@@ -173,6 +173,12 @@
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
+
+                                            @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/surat/detail-bast-ukt/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-info-circle"></i> Berita Acara
+                                            </a>
+                                            @endif
                                             @if ($dataUsulan->status_proses_id == 1 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
                                             <a class="dropdown-item btn" href="{{ url('super-user/ukt/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-edit"></i> Edit
@@ -231,7 +237,7 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
-						 <div class="form-group row mb-0">
+                                                <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Nomor Surat </label></div>
                                                     <div class="col-md-10">: {{ $dataUsulan->no_surat_usulan }}</div>
                                                 </div>
@@ -255,18 +261,8 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Surat Usulan </label></div>
                                                     <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/ukt/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
+                                                        <a href="{{ url('super-user/surat/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Surat BAST </label></div>
-                                                    <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/surat/detail-bast-ukt/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
-                                                            <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
                                                 </div>

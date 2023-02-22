@@ -48,7 +48,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/pengajuan/daftar/semua-pengajuan') }}">Daftar Pengajuan Barang</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/oldat/usulan/daftar/semua-usulan') }}">Daftar Pengajuan Barang</a></li>
                     <li class="breadcrumb-item active">BAST {{ $bast->kode_otp_bast }}</li>
                 </ol>
             </div>
@@ -61,7 +61,7 @@
     <div class="container text-capitalize">
         <div class="row">
             <div class="col-md-12 form-group">
-                <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-primary print mr-2">
+                <a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print mr-2">
                     <i class="fas fa-home"></i>
                 </a>
                 @if (Auth::user()->pegawai->jabatan_id == 2 && $bast->status_proses_id == 4)

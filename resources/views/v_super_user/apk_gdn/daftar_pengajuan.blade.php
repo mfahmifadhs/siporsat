@@ -133,8 +133,8 @@
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
-                                        @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
-                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_bangunan, 50))) !!}
+                                        @foreach ($dataUsulan->detailUsulanGdn->take(1) as $detailGdn)
+                                        {!! nl2br(e(Str::limit($detailGdn->lokasi_bangunan, 50) . PHP_EOL)) !!}
                                         @endforeach
                                     </td>
                                     <td class="text-center">
@@ -175,6 +175,13 @@
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
 
+
+                                            @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/surat/detail-bast-gdn/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-info-circle"></i> Berita Acara
+                                            </a>
+                                            @endif
+
                                             @if ($dataUsulan->status_proses_id == 1 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
                                             <a class="dropdown-item btn" href="{{ url('super-user/gdn/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-edit"></i> Edit
@@ -183,8 +190,7 @@
                                                 <i class="fas fa-times-circle"></i> Batal
                                             </a>
                                             @elseif ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}"
-                                                onclick="return confirm('Apakah pekerjaan telah diterima?')">
+                                            <a class="dropdown-item btn" href="{{ url('super-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah pekerjaan telah diterima?')">
                                                 <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif
@@ -255,18 +261,8 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-2"><label>Surat Usulan </label></div>
                                                     <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/gdn/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
+                                                        <a href="{{ url('super-user/surat/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Surat BAST </label></div>
-                                                    <div class="col-md-10">:
-                                                        <a href="{{ url('super-user/surat/detail-bast-gdn/'. $dataUsulan->id_form_usulan) }}" rel="noopener" target="_blank">
-                                                            <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
                                                 </div>

@@ -10,7 +10,8 @@
             </div>
             <div class="col-sm-8">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active"><a href="{{ url('super-user/'.$modul.'/dashboard') }}">Dashboard {{ $modul }}</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/'.$modul.'/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('super-user/'.$modul.'/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Berita Acara Serah Terima</li>
                 </ol>
             </div>
@@ -21,7 +22,7 @@
 <section class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 form-group">
+            <div class="col-md-12">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
@@ -32,6 +33,11 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+            </div>
+            <div class="col-md-12 form-group">
+                <a href="{{ url('super-user/'.$modul.'/usulan/daftar/seluruh-usulan') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
@@ -138,10 +144,10 @@
                                             <th>Merk/Tipe Barang</th>
                                             @if($bast->jenis_form == 'pengadaan')
                                             <th>Spesifikasi</th>
-                                            <th>Tahun Perolehan </th>
+                                            <th>Tahun </th>
                                             @else
-                                            <th>Tahun Perolehan</th>
-                                            <th>Keterangan Kerusakan</th>
+                                            <th>Tahun</th>
+                                            <th>Keterangan</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -165,7 +171,13 @@
                                             <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                                             <td>{{ $dataBarang->kategori_barang }}</td>
                                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                                            <td>{{ $dataBarang->tahun_perolehan }}</td>
+                                            <td>
+                                                @if (\Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') != -1)
+                                                {{ \Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') }}
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
                                             <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                                         </tr>
                                         @endforeach
@@ -288,6 +300,7 @@
                                         <tr>
                                             <th class="text-center">No</th>
                                             <th>Nama Barang</th>
+                                            <th>Deskripsi</th>
                                             <th>Permintaan</th>
                                             <th>Penyerahan</th>
                                         </tr>
@@ -296,7 +309,8 @@
                                         @foreach($bast->detailBast as $i => $detailAtk)
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
-                                            <td>{{ $detailAtk->nama_barang.' '.$detailAtk->spesifikasi }}</td>
+                                            <td>{{ $detailAtk->nama_barang }}</td>
+                                            <td>{{ $detailAtk->spesifikasi }}</td>
                                             <td>{{ $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</td>
                                             <td>{{ $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</td>
                                         </tr>

@@ -182,10 +182,10 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('barang/{aksi}/{id}', [SuperUserController::class, 'Items']);
         Route::get('laporan/{aksi}/{id}', [SuperUserController::class, 'ReportOldat']);
         Route::get('rekap/{aksi}/{id}', [SuperUserController::class, 'Recap']);
-        Route::get('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
+        Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterOldat']);
 
-        Route::post('pengajuan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
+        Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionOldat']);
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'Letter']);
 
         Route::get('get-barang/{id}', [SuperUserController::class, 'JsonItems']);

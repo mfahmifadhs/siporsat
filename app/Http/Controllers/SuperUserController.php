@@ -208,7 +208,7 @@ class SuperUserController extends Controller
                     ]);
                     Google2FA::logout();
 
-                    return redirect('super-user/atk/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/usulan-atk/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '1') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_pimpinan' => $request->one_time_password,
@@ -217,7 +217,7 @@ class SuperUserController extends Controller
                     ]);
                     Google2FA::logout();
 
-                    return redirect('super-user/atk/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-atk/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == '2') {
                     if ($usulan->jenis_form == 'pengadaan') {
                         UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
@@ -282,7 +282,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/oldat/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-oldat/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -290,7 +290,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/oldat/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-oldat/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     FormUsulan::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
@@ -324,7 +324,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/aadb/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-aadb/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -332,7 +332,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/aadb/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-aadb/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     UsulanAadb::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
@@ -364,7 +364,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/gdn/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-gdn/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -372,7 +372,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/gdn/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-gdn/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
@@ -403,7 +403,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/ukt/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-ukt/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -411,7 +411,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/ukt/surat/surat-usulan/' . Auth::user()->sess_form_id);
+                    return redirect('super-user/surat/usulan-ukt/' . Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
@@ -2537,7 +2537,7 @@ class SuperUserController extends Controller
                 'status_proses_id'    => null,
                 'no_surat_usulan'     => '-'
             ]);
-            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('failed', 'Usulan Pengajuan Ditolak');
+            return redirect('super-user/aadb/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
             $usulan = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -2572,10 +2572,10 @@ class SuperUserController extends Controller
                 'no_surat_usulan' => null
             ]);
 
-            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
+            return redirect('super-user/aadb/usulan/daftar/seluruh-usulan')->with('failed', 'Berhasil membatalkan usulan');
         } elseif ($aksi == 'hapus') {
             UsulanAadb::where('id_form_usulan', $id)->delete();
-            return redirect('super-user/aadb/usulan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
+            return redirect('super-user/aadb/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
         } else {
             $jenisKendaraan = JenisKendaraan::get();
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
@@ -3330,14 +3330,6 @@ class SuperUserController extends Controller
                 ->get();
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker','formUsulan'));
-        } elseif ($aksi == 'usulan') {
-            $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
-            $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                ->where('id_pegawai', Auth::user()->pegawai_id)
-                ->first();
-
-            return view('v_super_user.apk_oldat.form_usulan', compact('id', 'kategoriBarang', 'pegawai'));
         } elseif ($aksi == 'proses-usulan' && $id == 'pengadaan') {
             $totalUsulan    = FormUsulan::count();
             $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
@@ -3414,7 +3406,7 @@ class SuperUserController extends Controller
                 'status_proses_id'    => null,
                 'no_surat_usulan'     => '-'
             ]);
-            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('failed', 'Usulan Pengajuan Ditolak');
+            return redirect('super-user/oldat/usulan/daftar/seluruh-usulan')->with('failed', 'Usulan Pengajuan Ditolak');
         } elseif ($aksi == 'persetujuan') {
 
             $usulan = FormUsulan::where('id_form_usulan', $id)
@@ -3430,11 +3422,11 @@ class SuperUserController extends Controller
             FormUsulan::where('id_form_usulan', $id)->update([
                 'no_surat_usulan' => null
             ]);
-            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('failed', 'Berhasil membatalkan usulan');
+            return redirect('super-user/oldat/usulan/daftar/seluruh-usulan')->with('failed', 'Berhasil membatalkan usulan');
         } elseif ($aksi == 'hapus') {
             FormUsulan::where('id_form_usulan', $id)->delete();
-            return redirect('super-user/oldat/pengajuan/daftar/seluruh-pengajuan')->with('success', 'Berhasil menghapus usulan');
-        } else {
+            return redirect('super-user/oldat/usulan/daftar/seluruh-usulan')->with('success', 'Berhasil menghapus usulan');
+        } elseif ($aksi == 'daftar') {
             $uker   = UnitKerja::get();
 
             $dataUsulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -3461,12 +3453,25 @@ class SuperUserController extends Controller
                     $searchUkt = $dataUsulan->where('jenis_form', $request->jenis_form);
                 }
 
-                $formUsulan = $searchUkt->get();
+                if ($request->unit_kerja_id == null && $request->start_date == null  && $request->status_proses_id == null  && $request->jenis_form == null ) {
+                    $formUsulan = $dataUsulan->get();
+                } else {
+                    $formUsulan = $searchUkt->get();
+                }
+
             } else {
                 $formUsulan = $dataUsulan->get();
             }
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker', 'formUsulan'));
+        } else {
+            $kategoriBarang = KategoriBarang::orderBy('kategori_barang', 'ASC')->get();
+            $pegawai    = Pegawai::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->where('id_pegawai', Auth::user()->pegawai_id)
+                ->first();
+
+            return view('v_super_user.apk_oldat.form_usulan', compact('id', 'kategoriBarang', 'pegawai'));
         }
     }
 

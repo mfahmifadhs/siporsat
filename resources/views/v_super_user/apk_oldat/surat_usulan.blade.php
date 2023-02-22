@@ -48,7 +48,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}">Daftar Usulan</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Daftar Pengajuan Barang</li>
                 </ol>
             </div>
@@ -60,7 +60,7 @@
 <section class="content text-capitalize">
     <div class="container">
         <div class="col-md-12 form-group">
-            <a href="{{ url('super-user/oldat/pengajuan/daftar/seluruh-pengajuan') }}" class="btn btn-primary print">
+            <a href="{{ url('super-user/oldat/usulan/daftar/seluruh-usulan') }}" class="btn btn-primary print">
                 <i class="fas fa-home"></i>
             </a>
             @if ($usulan->otp_usulan_kabag != null)

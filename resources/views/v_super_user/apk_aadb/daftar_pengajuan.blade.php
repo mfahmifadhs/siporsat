@@ -247,6 +247,13 @@
                                             </a>
                                             @endif
 
+
+                                            @if ($dataPengajuan->status_proses_id > 3 && $dataPengajuan->status_pengajuan_id == 1)
+                                            <a class="dropdown-item btn" href="{{ url('super-user/surat/detail-bast-aadb/'. $dataPengajuan->id_form_usulan) }}">
+                                                <i class="fas fa-info-circle"></i> Berita Acara
+                                            </a>
+                                            @endif
+
                                         </div>
                                     </td>
                                 </tr>
@@ -292,18 +299,8 @@
                                                 <div class="form-group row mb-0">
                                                     <div class="col-md-4"><label>Surat Usulan </label></div>
                                                     <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/aadb/surat/surat-usulan/'. $dataPengajuan->id_form_usulan) }}" rel="noopener" target="_blank">
+                                                        <a href="{{ url('super-user/surat/usulan-aadb/'. $dataPengajuan->id_form_usulan) }}">
                                                             <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($dataPengajuan->status_proses_id > 3 && $dataPengajuan->status_pengajuan_id == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat BAST </label></div>
-                                                    <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/surat/detail-bast-aadb/'. $dataPengajuan->id_form_usulan) }}" rel="noopener" target="_blank">
-                                                            <i class="fas fa-file"></i> Surat BAST
                                                         </a>
                                                     </div>
                                                 </div>
