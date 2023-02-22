@@ -48,8 +48,7 @@ class UsulanAtk extends Model
                      'atk_tbl_form_usulan_permintaan.jumlah_disetujui as jumlah_disetujui',
                      'atk_tbl_form_usulan_permintaan.status as status',
                      'atk_tbl_form_usulan_permintaan.keterangan as keterangan',
-                     'atk_tbl_form_usulan_permintaan.form_usulan_id')
-            ->orderBy('nama_barang', 'ASC');
+                     'atk_tbl_form_usulan_permintaan.form_usulan_id');
     }
 
     public function lampiranAtk() {
