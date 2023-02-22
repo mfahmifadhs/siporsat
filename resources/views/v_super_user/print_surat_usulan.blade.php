@@ -271,7 +271,7 @@
                 </div>
                 @elseif ($modul == 'usulan-aadb')
                 @if($usulan->jenis_form == '1')
-                <table class="table table-data m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -299,7 +299,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '2')
-                <table class="table table-data m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th class="text-center" style="width:5%;">No</th>
@@ -316,7 +316,7 @@
                         @foreach($usulan->usulanServis as $dataServis)
                         <tr>
                             <td class="text-center">{{ $no++ }}</td>
-                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
+                            <td class="text-uppercase">{{ $dataServis->no_plat_kendaraan }}</td>
                             <td>{{ ucfirst(strtolower($dataServis->merk_tipe_kendaraan)) }}</td>
                             <td>{{ $dataServis->kilometer_terakhir }} Km</td>
                             <td>
@@ -337,7 +337,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '3')
-                <table class="table table-data m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -352,7 +352,7 @@
                         @foreach($usulan->usulanSTNK as $dataSTNK)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                            <td class="text-uppercase">{{ $dataSTNK->no_plat_kendaraan }}</td>
                             <td>{{ ucfirst(strtolower($dataSTNK->merk_tipe_kendaraan)) }}</td>
                             <td>{{ ucfirst(strtolower($dataSTNK->pengguna)) }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
@@ -361,7 +361,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '4')
-                <table class="table table-data m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -373,14 +373,14 @@
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody class="text-capitalize">
+                    <tbody>
                         @foreach($usulan->usulanVoucher as $dataVoucher)
                         @if($dataVoucher->status_pengajuan == 'true')
-                        <tr class="text-uppercase">
+                        <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
                             <td>{{ ucfirst(strtolower($dataVoucher->jenis_aadb)) }}</td>
-                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                            <td class="text-uppercase">{{ $dataVoucher->no_plat_kendaraan }}</td>
                             <td>{{ ucfirst(strtolower($dataVoucher->merk_tipe_kendaraan)) }}</td>
                             <td>{{ ucfirst(strtolower($dataVoucher->kualifikasi)) }}</td>
                         </tr>
