@@ -167,14 +167,13 @@
                                         <div class="col-md-3">Keterangan</div>
                                         <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
                                         @endif
-                                        @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
                                         <div class="col-md-3">Aksi</div>
                                         <div class="col-md-9">:
                                             <a href="{{ url('super-user/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger btn-sm pdf">
                                                 <i class="fas fa-print"></i> Cetak
                                             </a>
                                         </div>
-                                        @elseif($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
+                                        @if($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
                                         @if($usulan->otp_usulan_kabag == null || $usulan->otp_usulan_pimpinan == null)
                                         <div class="col-md-3">Aksi</div>
                                         <div class="col-md-9">:
