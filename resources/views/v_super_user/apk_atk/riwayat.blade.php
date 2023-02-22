@@ -36,12 +36,12 @@
             <div class="col-md-12 form-group mt-3">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title font-weight-bold">Riwayat Permintaan {{ $atk->spesifikasi }}</h3>
+                        <h3 class="card-title font-weight-bold">Riwayat Permsintaan {{ $atk->spesifikasi }}</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
                             <label class="col-md-2">Jenis Barang</label>
-                            <div class="col-md-9">: {{ $atk->jenis_barang }}</div>
+                            <div class="col-md-9">: {{ $atk->jenis_barang }} - {{ $atk->id_form_usulan_pengadaan }}</div>
                             <label class="col-md-2">Nama Barang</label>
                             <div class="col-md-9">: {{ $atk->nama_barang }}</div>
                             <label class="col-md-2">Spesifikasi</label>
