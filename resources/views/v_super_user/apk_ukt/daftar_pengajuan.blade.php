@@ -132,8 +132,8 @@
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
-                                        @foreach ($dataUsulan->detailUsulanUkt as $detailUkt)
-                                        {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50))) !!}
+                                        @foreach ($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
+                                        {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50) . PHP_EOL)) !!}
                                         @endforeach
                                     </td>
                                     <td class="text-center">

@@ -59,11 +59,11 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Bulan Pengadaan</label>
-                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('MMMM Y') }}" readonly>
+                            <input type="text" class="form-control" value="{{ $usulan->rencana_pengguna }}" readonly>
                         </div>
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Jumlah Usulan</label>
-                            <input type="text" class="form-control" value="{{ $usulan->total_pengajuan }} Barang" readonly>
+                            <input type="text" class="form-control" value="{{ $usulan->permintaanAtk->where('status','diterima')->count() }} Barang" readonly>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
