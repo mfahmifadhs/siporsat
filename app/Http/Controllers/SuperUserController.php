@@ -1609,7 +1609,7 @@ class SuperUserController extends Controller
 
             // $dataAtk    = $pengadaan->first();
             $atk = UsulanAtkPengadaan::select(
-		'jenis_barang',
+		        'jenis_barang',
                 'nama_barang',
                 'spesifikasi',
                 'satuan',
@@ -1624,7 +1624,7 @@ class SuperUserController extends Controller
                 ->where('nama_barang', $request->nama_barang)
                 ->where('spesifikasi', $spek)
                 ->first();
-		//dd($atk);
+
             return view('v_super_user.apk_atk.riwayat', compact('atk', 'pengadaan', 'permintaan'));
         } elseif ($aksi == 'riwayat-semua') {
             $spek = Crypt::decrypt($id);
