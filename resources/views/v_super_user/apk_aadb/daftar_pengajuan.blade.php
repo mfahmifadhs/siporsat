@@ -171,8 +171,8 @@
                                         {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                         @endforeach
                                         @else
-                                        @foreach ($dataPengajuan->usulanVoucher as $detailAadb)
-                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
+                                        @foreach ($dataPengajuan->usulanVoucher->take(5) as $detailAadb)
+                                        {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50) . PHP_EOL)) !!}
                                         @endforeach
                                         @endif
                                     </td>
