@@ -119,7 +119,7 @@
                                         @endif
                                     </td>
                                     <td class="text-left">
-                                        @foreach($dataUsulan->detailUsulanUkt as $detailUkt)
+                                        @foreach($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
                                         <div class="form-group row">
                                             <div class="col-md-3">Pekerjaan &emsp;:</div>
                                             <div class="col-md-9 text-capitalize">{{ ucfirst(strtolower($detailUkt->lokasi_pekerjaan)) }}</div>
