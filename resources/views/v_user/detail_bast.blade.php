@@ -127,7 +127,7 @@
                         <div class="form-group row">
                             <div class="col-md-12 col-12">
                                 <label class="text-muted">Informasi Barang/Pekerjaan</label>
-                                <table class="table table-bordered">
+                                <table class="table table-bordered text-capitalize">
                                     <!-- Modul OLDAT -->
                                     @if ($modul == 'oldat')
                                     <thead class="bg-secondary">
@@ -190,9 +190,9 @@
                                         @foreach($bast->usulanKendaraan as $dataPengadaan)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataPengadaan->jenis_aadb }}</td>
-                                            <td>{{ $dataPengadaan->jenis_kendaraan }}</td>
-                                            <td>{{ $dataPengadaan->merk_tipe_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataPengadaan->jenis_aadb)) }}</td>
+                                            <td>{{ ucfirst(strtolower($dataPengadaan->jenis_kendaraan)) }}</td>
+                                            <td>{{ ucfirst(strtolower($dataPengadaan->merk_tipe_kendaraan)) }}</td>
                                             <td>{{ $dataPengadaan->tahun_kendaraan }}</td>
                                             <td>{{ $dataPengadaan->jumlah_pengajuan }} kendaraan</td>
                                         </tr>
@@ -215,8 +215,8 @@
                                         @foreach($bast->usulanServis as $dataServis)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                                            <td class="text-uppercase">{{ $dataServis->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataServis->merk_tipe_kendaraan)) }}</td>
                                             <td>{{ $dataServis->kilometer_terakhir }} Km</td>
                                             <td>
                                                 Terakhir Servis : <br>
@@ -249,9 +249,9 @@
                                         @foreach($bast->usulanSTNK as $dataSTNK)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
-                                            <td>{{ $dataSTNK->pengguna }}</td>
+                                            <td class="text-uppercase">{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataSTNK->merk_tipe_kendaraan)) }}</td>
+                                            <td>{{ ucfirst(strtolower($dataSTNK->pengguna)) }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach
@@ -273,10 +273,10 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                            <td>{{ $dataVoucher->jenis_aadb }}</td>
-                                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
-                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ ucfirst(strtolower($dataVoucher->jenis_aadb)) }}</td>
+                                            <td class="text-uppercase">{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataVoucher->merk_tipe_kendaraan)) }}</td>
+                                            <td>Kendaraan {{ ucfirst(strtolower($dataVoucher->kualifikasi)) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
