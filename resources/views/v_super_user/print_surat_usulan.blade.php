@@ -91,7 +91,7 @@
             </div>
         </div>
         <div class="row" style="font-size: 20px;">
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="form-group row">
                     <div class="col-md-2">Nomor</div>
                     <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
@@ -134,7 +134,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-md-2 text-right">
                 <div class="col-md-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
