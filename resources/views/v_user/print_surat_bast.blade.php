@@ -46,6 +46,21 @@
         border-right: 1px solid;
         padding: 10px;
     }
+
+    .table-data {
+        border: 1px solid;
+        font-size: 20px;
+    }
+
+    .table-data th,
+    .table-data td {
+        border: 1px solid;
+    }
+
+    .table-data thead th,
+    .table-data thead td {
+        border: 1px solid;
+    }
 </style>
 @php
 if($modul == 'oldat' && $bast->jenis_form == 'pengadaan') {
@@ -171,7 +186,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'oldat')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -272,7 +287,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 </div>
                 @elseif ($modul == 'aadb')
                 @if($bast->jenis_form == '1')
-                <table class="table table-bordered m-0 text-capitalize">
+                <table class="table table-data m-0 text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -298,7 +313,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '2')
-                <table class="table table-bordered m-0 text-capitalize">
+                <table class="table table-data m-0 text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -336,7 +351,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '3')
-                <table class="table table-bordered m-0 text-capitalize">
+                <table class="table table-data m-0 text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -360,7 +375,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '4')
-                <table class="table table-bordered m-0 text-capitalize">
+                <table class="table table-data m-0 text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
