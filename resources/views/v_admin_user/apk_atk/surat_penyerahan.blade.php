@@ -111,7 +111,7 @@
                     <div class="col-md-2">Unit Kerja</div>
                     <div class="col-md-10">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
                     <div class="col-md-2">Keterangan</div>
-                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->rencana_pengguna)) }}</div>
+                    <div class="col-md-10 text-capitalize">: {{ ucfirst(strtolower($usulan->rencana_pengguna)) }}</div>
                 </div>
                 <div class="form-group row mb-0 py-3">
                     <div class="col-12 table-responsive mt-4 mb-5">
