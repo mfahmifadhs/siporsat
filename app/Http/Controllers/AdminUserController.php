@@ -488,6 +488,17 @@ class AdminUserController extends Controller
                 ->first();
             return view('v_admin_user.print_surat_bast', compact('modul', 'bast', 'pimpinan'));
         }
+        // Cetak Surat Penyerahan ATK
+        if ($modul == 'penyerahan-atk') {
+            $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_admin_user.apk_atk.surat_penyerahan', compact('usulan'));
+        }
+
     }
 
     // ====================================================

@@ -66,7 +66,7 @@
                             <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('MMMM Y') }}" readonly>
                         </div>
                         <div class="col-md-6 col-12">
-                            <label class="col-form-label">Jumlah Usulan</label>
+                            <label class="col-form-label">Jumlah Belum Diserahkan</label>
                             <input type="text" class="form-control" value="{{ $usulan->permintaanAtk->where('status','diterima')->count() }} Barang" readonly>
                         </div>
                     </div>

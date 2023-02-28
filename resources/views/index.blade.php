@@ -7,6 +7,8 @@
     <meta name="description" content="Siporsat Kemenkes RI">
     <meta name="keywords" content="Siporsat Kemenkes RI">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Icon Title -->
+    <link rel="icon" type="image/png" href="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">

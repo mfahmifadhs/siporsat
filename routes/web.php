@@ -293,7 +293,6 @@ Route::group(['middleware' => ['level:user'], 'prefix' => 'unit-kerja', 'as' => 
     Route::get('surat/{aksi}/{id}', [UserController::class, 'Letter']);
     Route::get('cetak-surat/{modul}/{id}', [UserController::class, 'PrintLetter']);
 
-
     Route::post('profil/{aksi}/{id}', [UserController::class, 'Profile']);
     Route::post('verif/{aksi}/{id}', [UserController::class, 'Verification'])->middleware('2fa');
 
