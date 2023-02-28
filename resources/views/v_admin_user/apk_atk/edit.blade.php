@@ -24,7 +24,7 @@
 $permintaan = $dataPermintaan->jumlah_disetujui;
 $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
 @endphp
-@php $totalItem = $i; @endphp
+@php $itemTotal[] = $dataPermintaan->id_permintaan ; @endphp
 @endforeach
 
 
@@ -76,7 +76,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                         </div>
                         <div class="col-md-6 col-12">
                             <label class="col-form-label">Jumlah Belum Diserahkan</label>
-                            <input type="text" class="form-control" value="{{ $totalItem }} Barang" readonly>
+                            <input type="text" class="form-control" value="{{ count($totalItem) }} Barang" readonly>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
