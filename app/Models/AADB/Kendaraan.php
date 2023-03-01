@@ -4,10 +4,13 @@ namespace App\Models\AADB;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Kendaraan extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table        = "aadb_tbl_kendaraan";
     protected $primaryKey   = "id_kendaraan";
     public $timestamps      = false;
