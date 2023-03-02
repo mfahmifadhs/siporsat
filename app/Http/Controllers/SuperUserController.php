@@ -2819,7 +2819,7 @@ class SuperUserController extends Controller
                     ->get();
             } else {
                 $kendaraan  = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    // ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('tipe_kendaraan', 'like', '%' . $search . '%')
                     ->orWhere('tahun_kendaraan', 'like', '%' . $search . '%')
@@ -2831,7 +2831,7 @@ class SuperUserController extends Controller
             foreach ($kendaraan as $data) {
                 $response[] = array(
                     "id"    =>  $data->id_kendaraan,
-                    "text"  =>  $data->merk_tipe_kendaraan . ' tahun ' . $data->tahun_kendaraan
+                    "text"  =>  $data->unit_kerja.' - '.$data->merk_tipe_kendaraan . ' tahun ' . $data->tahun_kendaraan
                 );
             }
 
@@ -3096,28 +3096,30 @@ class SuperUserController extends Controller
             }
 
             if ($search == '') {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," - ",merk_tipe_kendaraan, " - ", pengguna) AS nama_kendaraan'))
-                    ->orderby('nama_kendaraan', 'asc')
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(unit_kerja," - ",no_plat_kendaraan," - ",merk_tipe_kendaraan) AS nama_kendaraan'))
+                    ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->orderby('merk_tipe_kendaraan', 'asc')
                     ->where('kualifikasi', '!=', '')
                     ->where('no_plat_kendaraan', '!=', '')
                     ->where('no_plat_kendaraan', '!=', '-')
-                    ->where('pengguna', '!=', '')
-                    ->where('pengguna', '!=', '-')
-                    ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                    // ->where('pengguna', '!=', '')
+                    // ->where('pengguna', '!=', '-')
+                    // // ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                     ->where('kualifikasi', $request->data)
                     ->whereNotIn('id_kendaraan', $aadb)
                     ->get();
             } else {
-                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(no_plat_kendaraan," - ",merk_tipe_kendaraan, " - ", pengguna) AS nama_kendaraan'))
-                    ->orderby('nama_kendaraan', 'asc')
+                $kendaraan  = Kendaraan::select('id_kendaraan', DB::raw('CONCAT(unit_kerja," - ",no_plat_kendaraan," - ",merk_tipe_kendaraan) AS nama_kendaraan'))
+                    ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->orderby('merk_tipe_kendaraan', 'asc')
+                    ->orWhere('kualifikasi', '!=', '')
                     ->where('no_plat_kendaraan', '!=', '')
                     ->where('no_plat_kendaraan', '!=', '-')
-                    ->where('pengguna', '!=', '')
-                    ->where('pengguna', '!=', '-')
-                    ->orWhere('kualifikasi', '!=', '')
+                    // ->where('pengguna', '!=', '')
+                    // ->where('pengguna', '!=', '-')
                     ->where('merk_tipe_kendaraan', 'like', '%' . $search . '%')
-                    ->orWhere('pengguna', 'like', '%' . $search . '%')
-                    ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
+                    // ->orWhere('pengguna', 'like', '%' . $search . '%')
+                    // ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                     ->where('kualifikasi', $request->data)
                     ->whereNotIn('id_kendaraan', $aadb)
                     ->get();
