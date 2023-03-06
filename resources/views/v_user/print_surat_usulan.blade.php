@@ -72,11 +72,19 @@
             </div>
             <div class="col-md-8 text-center">
                 <h2 class="page-header">
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
+                    <h5 style="font-size: 26px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
-                    <p style="font-size: 18px;"><i>
-                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                            Telepon : (021) 5201590</i>
+                    <p style="font-size: 16px;">
+			<i>
+			    @if ($usulan->id_unit_utama == '02407')
+				Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
+				Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
+				Laman www.bppsdmk.depkes.go.id
+                            @else
+				Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            	Telepon : (021) 5201590
+			    @endif
+			</i>
                     </p>
                 </h2>
             </div>
