@@ -37,14 +37,14 @@
         </div>
         <div class="card card-primary card-outline">
             <div class="card-header font-weight-bold">
-                @if($id == 'pengadaan')
+                @if($aksi == 'pengadaan')
                 <h3 class="card-title font-weight-bold">Usulan Pengajuan Pengadaan Oldat </h3>
                 @else
                 <h3 class="card-title font-weight-bold">Usulan Pengajuan Perbaikan Oldat </h3>
                 @endif
             </div>
             <div class="card-body">
-                <form class="form-pengajuan" action="{{ url('super-user/oldat/usulan/proses-usulan/'. $id ) }}" method="POST">
+                <form class="form-pengajuan" action="{{ url('super-user/oldat/usulan/proses-usulan/'. $aksi ) }}" method="POST">
                     <input type="hidden" name="pegawai_id" value="{{ $pegawai->id_pegawai }}">
                     <span id="kode_otp"></span>
                     @csrf
@@ -73,7 +73,7 @@
                             <input type="text" class="form-control text-capitalize" value="{{ $pegawai->unit_kerja }}" readonly>
                         </div>
                     </div>
-                    @if($id == 'pengadaan')
+                    @if($aksi == 'pengadaan')
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Rencana Pengguna (*)</label>
                         <div class="col-sm-10">
@@ -91,7 +91,7 @@
                             <a id="btnJumlah" class="btn btn-primary">PILIH</a>
                         </div>
                     </div>
-                    @if($id == 'pengadaan')
+                    @if($aksi == 'pengadaan')
                     <div id="input-barang-pengadaan">
                         <hr style="border: 0.5px solid grey;">
                         <div class="form-group row">
@@ -210,7 +210,7 @@
     // let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $(function() {
         let j = 1;
-        let id = "{{ $id }}"
+        let id = "{{ $aksi }}"
         $('.kategori').select2()
 
         // Jumlah Barang yang akan diperbaiki

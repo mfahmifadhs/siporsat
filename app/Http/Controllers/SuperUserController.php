@@ -3473,7 +3473,7 @@ class SuperUserController extends Controller
                 ->where('id_pegawai', Auth::user()->pegawai_id)
                 ->first();
 
-            return view('v_super_user.apk_oldat.form_usulan', compact('id', 'kategoriBarang', 'pegawai'));
+            return view('v_super_user.apk_oldat.form_usulan', compact('aksi', 'kategoriBarang', 'pegawai'));
         }
     }
 
