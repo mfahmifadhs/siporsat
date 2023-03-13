@@ -92,7 +92,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                         <th style="width: 0%;" class="text-center">Satuan</th>
                                         <th style="width: 15%;" class="text-center">Diserahkan</th>
                                         <th style="width: 0%;" class="text-center">Satuan</th>
-                                        <th style="width: 0%;" class="text-center">Status</th>
+                                        <th style="width: 0%;" class="text-center">Aksi</th>
                                         <!-- <th>
                                             Diserahkan <br>
                                             <input type="checkbox" id="selectAll">
