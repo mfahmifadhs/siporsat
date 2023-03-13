@@ -339,8 +339,10 @@
                                                             <div class="col-md-1">{{ $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
                                                             <div class="col-md-1">{{ $dataAtk->jumlah_penyerahan.' '.$dataAtk->satuan }}</div>
                                                             <div class="col-md-2 text-center font-weight-bold">
-                                                                @if ($dataAtk->jumlah_disetujui == $dataAtk->jumlah_penyerahan && $dataAtk->jumlah_penyerahan != 0)
+                                                                @if ($dataAtk->jumlah_disetujui == $dataAtk->jumlah_penyerahan && $dataAtk->jumlah_disetujui != 0)
                                                                 <span class="text-success">✅ Sudah Diserahkan Semua</span>
+                                                                @elseif ($dataAtk->jumlah_disetujui == 0)
+                                                                <span class="text-danger">❌ Tidak Disetujui</span>
                                                                 @elseif ($dataAtk->jumlah_penyerahan != 0)
                                                                 <span class="text-dark">
                                                                     {{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_penyerahan }}
