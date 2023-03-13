@@ -2032,10 +2032,11 @@ class UserController extends Controller
                     foreach ($fileAtk as $key => $value) {
                         foreach ($value as $dataAtk) {
                             $dataArray['id_form_usulan_pengadaan'] = null;
-                            $dataArray['nama_barang'] = $dataAtk[1];
-                            $dataArray['spesifikasi'] = $dataAtk[2];
-                            $dataArray['jumlah']      = $dataAtk[3];
+                            $dataArray['kode_psedia'] = $dataAtk[1];
+                            $dataArray['kode_barang'] = $dataAtk[2];
+                            $dataArray['nama_barang'] = $dataAtk[3];
                             $dataArray['satuan']      = $dataAtk[4];
+                            $dataArray['jumlah']      = $dataAtk[5];
                             $resultAtk[]              = $dataArray;
                             unset($dataArray);
                         }

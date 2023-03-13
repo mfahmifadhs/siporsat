@@ -1087,7 +1087,6 @@ class AdminUserController extends Controller
 
             return view('v_admin_user.apk_atk.edit', compact('idBast','usulan'));
         } elseif ($aksi == 'proses-edit') {
-            // dd($request->all());
             // Insert BAST
             $id_bast = (int) Carbon::now()->format('dhimy');
             $bast = new BastAtk();
@@ -1130,6 +1129,52 @@ class AdminUserController extends Controller
             }
 
             return redirect('admin-user/surat/detail-bast-atk/'. $id_bast)->with('success', 'Berhasil Menyerahkan ATK');
+        } elseif ($aksi == 'pembatalan') {
+            $totalUsulan = BastAtk::count();
+            $permintaan  = UsulanAtkPermintaan::where('id_permintaan', $id)
+                            ->select('atk_tbl_form_usulan_pengadaan.*', 'atk_tbl_form_usulan.*', 'atk_tbl_form_usulan_permintaan.*',
+                                     'atk_tbl_form_usulan_permintaan.jumlah_disetujui')
+                            ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                            ->first();
+
+            $usulan      = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                            ->where('id_form_usulan', $permintaan->form_usulan_id)
+                            ->first();
+
+            return view('v_admin_user.apk_atk.pembatalan', compact('usulan','permintaan'));
+        } elseif ($aksi == 'batal-permintaan') {
+            $permintaan = UsulanAtkPermintaan::where('id_permintaan', $id)
+                            ->select('atk_tbl_form_usulan_pengadaan.*', 'atk_tbl_form_usulan.*', 'atk_tbl_form_usulan_permintaan.*',
+                                     'atk_tbl_form_usulan_permintaan.jumlah_disetujui')
+                            ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                            ->first();
+            // Hapus Permintaan
+            UsulanAtkPermintaan::where('id_permintaan',$id)->update([
+                'status'            => $permintaan->jumlah_penyerahan == null || $permintaan->jumlah_penyerahan == 0 ? 'ditolak' : 'diterima',
+                'jumlah_disetujui'  => ($permintaan->jumlah_disetujui - $request->jumlah_batal),
+                'keterangan'        => $request->keterangan
+            ]);
+            // Update Jumlah Permintaan
+            UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $permintaan->pengadaan_id)->update([
+                'jumlah_pemakaian'  => ($permintaan->jumlah_pemakaian - $request->jumlah_batal)
+            ]);
+            // Update Status Permintaan
+            $updPermintaan  = UsulanAtkPermintaan::where('id_permintaan', $id)->first();
+            if ($updPermintaan->jumlah_disetujui == $updPermintaan->jumlah_penyerahan) {
+                $status_penyerahan = 'true';
+            } else {
+                $status_penyerahan = 'false';
+            }
+            // Update status penyerahan
+            UsulanAtkPermintaan::where('id_permintaan', $id)->update([
+                'status_penyerahan' => $status_penyerahan
+            ]);
+
+            return redirect('admin-user/atk/usulan/edit/'. $permintaan->form_usulan_id)->with('success', 'Berhasil Membatalkan Permintaan');
         }
     }
 

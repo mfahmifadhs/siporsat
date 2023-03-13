@@ -58,26 +58,31 @@
                             <table id="table-atk" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th style="width: 35%;">Nama Barang</th>
-                                        <th style="width: 40%;">Spesifikasi</th>
-                                        <th style="width: 15%;">Jumlah</th>
+                                        <th style="width: 0%;">No</th>
+                                        <th style="width: 20%;">Kode Psedia</th>
+                                        <th>Nama Barang</th>
+                                        <th style="width: 10%;">Jumlah</th>
                                         <th style="width: 10%;">Satuan</th>
                                     </tr>
                                 </thead>
                                 @php $no = 1; @endphp
                                 <tbody>
                                     @foreach($resultAtk as $dataAtk)
+                                    @if($dataAtk['jumlah'] != 0)
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
                                         <td>
                                             <input type="hidden" name="atk_id[]" class="form-control" value="{{ $dataAtk['id_form_usulan_pengadaan'] }}">
-                                            <input type="text" name="atk_barang[]" class="form-control" value="{{ $dataAtk['nama_barang'] }}">
+                                            <input type="text" name="atk_barang[]" class="form-control" value="{{ $dataAtk['kode_psedia'] }}" readonly>
                                         </td>
-                                        <td><input type="text" name="atk_spesifikasi[]" class="form-control" value="{{ $dataAtk['spesifikasi'] }}"></td>
-                                        <td><input type="text" name="atk_jumlah[]" class="form-control text-center" value="{{ $dataAtk['jumlah'] }}"></td>
-                                        <td><input type="text" name="atk_satuan[]" class="form-control text-center text-uppercase" value="{{ $dataAtk['satuan'] }}"></td>
+                                        <td>
+                                            <input type="hidden" name="atk_spesifikasi[]" class="form-control" value="{{ $dataAtk['kode_barang'] }}">
+                                            <input type="text" name="atk_jumlah[]" class="form-control" value="{{ $dataAtk['nama_barang'] }}" readonly>
+                                        </td>
+                                        <td><input type="text" name="atk_satuan[]" class="form-control text-center text-uppercase" value="{{ $dataAtk['jumlah'] }}"></td>
+                                        <td><input type="text" name="atk_satuan[]" class="form-control text-center text-uppercase" value="{{ $dataAtk['satuan'] }}" readonly></td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>

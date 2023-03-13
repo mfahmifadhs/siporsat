@@ -48,6 +48,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('admin-user/'.$modul.'/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/'.$modul.'/usulan/daftar/seluruh-usulan') }}">Daftar Usulan</a></li>
                     <li class="breadcrumb-item active">Surat Usulan</li>
                 </ol>
             </div>
@@ -71,25 +72,14 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <a href="{{ url('admin-user/'.$modul.'/dashboard') }}" class="btn btn-primary print mr-2">
-                    <i class="fas fa-home"></i>
+                <a href="{{ url('admin-user/'.$modul.'/usulan/daftar/seluruh-usulan') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
                 </a>
-                @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
-                <a href="{{ url('admin-user/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
+                <!-- @if($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
+                <a href="{{ url('unit-kerja/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger pdf">
                     <i class="fas fa-print"></i>
                 </a>
-                @endif
-
-                @if($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
-                @if($usulan->otp_usulan_kabag == null || $usulan->otp_usulan_pimpinan == null)
-                <form action="{{ url('admin-user/atk/usulan/preview-pengadaan/preview') }}" class="btn btn-primary">
-                    <input type="hidden" name="id_form_usulan" value="{{ $form->id_form_usulan }}">
-                    <button class="btn btn-navbar btn-xs" type="submit">
-                        <i class="fas fa-edit fa-1x" style="color: white;"></i>
-                    </button>
-                </form>
-                @endif
-                @endif
+                @endif -->
             </div>
 
             @if ($usulan->status_pengajuan_id == 2)
@@ -101,8 +91,13 @@
             @endif
             <div class="col-md-12 form-group ">
                 <div class="card">
+                    <div class="card-header bg-primary">
+                        <h5 class="text-center font-weight-bold pt-2">
+                            Detail Surat Usulan Pengajuan
+                        </h5>
+                    </div>
                     <div class="card-body">
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-2">
                                 <h2 class="page-header ml-4">
                                     <img src="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
@@ -122,48 +117,110 @@
                             </div>
                             <div class="col-md-12">
                                 <hr style="border-width: medium;border-color: black;">
+                                <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 form-group text-capitalize">
-                                <div class="form-group row mb-3 text-center">
-                                    <div class="col-md-12 text-uppercase">
-                                        usulan pengajuan <br>
-                                        nomor surat :
-                                        @if ($usulan->status_pengajuan_id == 1)
-                                        {{ $usulan->no_surat_usulan }}
-                                        @else
-                                        -
+                        </div> -->
+                        <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/preview') }}">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">Hal</div>
+                                        <div class="col-md-9 text-capitalize">:
+                                            @if ($modul == 'oldat')
+                                            {{ $usulan->jenis_form }} barang
+                                            @elseif ($modul == 'aadb')
+                                            {{ ucfirst(strtolower($usulan->jenis_form_usulan)) }} kendaraan
+                                            @elseif ($modul == 'atk')
+                                            {{ $usulan->jenis_form }} ATK
+                                            @elseif ($modul == 'gdn')
+                                            pemeliharaan gedung dan bangunan
+                                            @elseif ($modul == 'ukt')
+                                            permintaan kerumahtanggaan
+                                            @endif
+                                        </div>
+                                        <div class="col-md-3">Nomor Surat</div>
+                                        <div class="col-md-9 text-uppercase">:
+                                            @if ($usulan->status_pengajuan_id == 1)
+                                            {{ $usulan->no_surat_usulan }}
+                                            @else
+                                            -
+                                            @endif
+                                        </div>
+                                        <div class="col-md-3">Pengusul</div>
+                                        <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
+                                        <div class="col-md-3">Jabatan</div>
+                                        <div class="col-md-9">: {{ $usulan->keterangan_pegawai }}</div>
+                                        <div class="col-md-3">Unit Kerja</div>
+                                        <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
+                                        <div class="col-md-3">Jumlah</div>
+                                        <div class="col-md-9">:
+                                            {{ $usulan->total_pengajuan }}
+                                            @if ($modul == 'oldat' || $modul == 'atk')
+                                            barang
+                                            @elseif ($modul == 'aadb')
+                                            kendaraan
+                                            @elseif ($modul == 'gdn' || $modul == 'ukt')
+                                            pekerjaan
+                                            @endif
+                                        </div>
+                                        @if($usulan->rencana_pengguna != null)
+                                        <div class="col-md-3">Keterangan</div>
+                                        <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
+                                        @endif
+                                        <div class="col-md-3">Aksi</div>
+                                        <div class="col-md-9">:
+                                            <a href="{{ url('admin-user/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger btn-sm pdf">
+                                                <i class="fas fa-print"></i> Cetak
+                                            </a>
+                                        </div>
+                                        @if($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
+                                        @if($usulan->otp_usulan_kabag == null || $usulan->otp_usulan_pimpinan == null)
+                                        <div class="col-md-3">Aksi</div>
+                                        <div class="col-md-9">:
+                                            <input type="hidden" name="id_form_usulan" value="{{ $form->id_form_usulan }}">
+                                            <button class="btn btn-primary btn-sm" type="submit">
+                                                <i class="fas fa-edit"></i> Ubah
+                                            </button>
+                                        </div>
+                                        @endif
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Tanggal Usulan</div>
-                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                <div class="col-md-6 col-12 text-right">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                        <div class="col-md-12">
+                                            @if($usulan->status_pengajuan_id == 1)
+                                            <span class="badge badge-sm badge-success p-2">
+                                                Usulan Disetujui
+                                            </span>
+                                            @elseif($usulan->status_pengajuan_id == 2)
+                                            <span class="badge badge-sm badge-danger p-2">Usulan Ditolak</span>
+                                            @if ($usulan->keterangan != null)
+                                            <p class="small mt-2 text-danger p-2">{{ $usulan->keterangan }}</p>
+                                            @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h6 class="mt-2">
+                                                @if($usulan->status_proses_id == 1)
+                                                <span class="badge badge-sm badge-warning p-2">Menunggu Persetujuan Kabag RT</span>
+                                                @elseif ($usulan->status_proses_id == 2)
+                                                <span class="badge badge-sm badge-warning p-2">Sedang Diproses oleh PPK</span>
+                                                @elseif ($usulan->status_proses_id == 3)
+                                                <span class="badge badge-sm badge-warning p-2">Konfirmasi Pekerjaan telah Diterima</span>
+                                                @elseif ($usulan->status_proses_id == 4)
+                                                <span class="badge badge-sm badge-warning p-2">Menunggu Konfirmasi BAST Kabag RT</span>
+                                                @elseif ($usulan->status_proses_id == 5)
+                                                <span class="badge badge-sm badge-success p-2">Selesai</span>
+                                                @endif
+                                            </h6>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Pengusul</div>
-                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Jabatan</div>
-                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Unit Kerja</div>
-                                    <div class="col-md-10">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
-                                </div>
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Total Pengajuan</div>
-                                    <div class="col-md-9">: {{ $usulan->total_pengajuan }}</div>
-                                </div>
-                                @if($usulan->rencana_pengguna != null)
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-2">Rencana Pengguna</div>
-                                    <div class="col-md-10">: {{ $usulan->rencana_pengguna }}</div>
-                                </div>
-                                @endif
                             </div>
+                        </form>
+                        <div class="row">
                             <div class="col-12 mt-4 mb-5">
                                 @if ($modul == 'oldat')
                                 <table class="table table-bordered m-0">
@@ -308,7 +365,7 @@
                                 </table>
                                 @elseif ($modul == 'aadb')
                                 @if($usulan->jenis_form == '1')
-                                <table class="table table-bordered m-0">
+                                <table class="table table-bordered m-0 text-capitalize">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -325,10 +382,10 @@
                                         @foreach($usulan->usulanKendaraan as $dataKendaraan)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                                            <td>{{ ucfirst(strtolower($dataKendaraan->jenis_aadb)) }}</td>
                                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
-                                            <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
-                                            <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                                            <td>{{ ucfirst(strtolower($dataKendaraan->merk_tipe_kendaraan)) }}</td>
+                                            <td>Kendaraan {{ ucfirst(strtolower($dataKendaraan->kualifikasi)) }}</td>
                                             <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
                                             <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                                         </tr>
@@ -336,7 +393,7 @@
                                     </tbody>
                                 </table>
                                 @elseif($usulan->jenis_form == '2')
-                                <table class="table table-bordered m-0">
+                                <table class="table table-bordered m-0 text-capitalize">
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width:5%;">No</th>
@@ -353,8 +410,8 @@
                                         @foreach($usulan->usulanServis as $dataServis)
                                         <tr>
                                             <td class="text-center">{{ $no++ }}</td>
-                                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                                            <td class="text-uppercase">{{ $dataServis->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataServis->merk_tipe_kendaraan)) }}</td>
                                             <td>{{ (int) $dataServis->kilometer_terakhir }} Km</td>
                                             <td>
                                                 Terakhir Servis : <br>
@@ -374,7 +431,7 @@
                                     </tbody>
                                 </table>
                                 @elseif($usulan->jenis_form == '3')
-                                <table class="table table-bordered m-0">
+                                <table class="table table-bordered m-0 text-capitalize">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -389,16 +446,16 @@
                                         @foreach($usulan->usulanSTNK as $dataSTNK)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
-                                            <td>{{ $dataSTNK->pengguna }}</td>
+                                            <td class="text-uppercase">{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataSTNK->merk_tipe_kendaraan)) }}</td>
+                                            <td>{{ ucfirst(strtolower($dataSTNK->pengguna)) }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 @elseif($usulan->jenis_form == '4')
-                                <table class="table table-bordered m-0">
+                                <table class="table table-bordered m-0 text-capitalize">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -410,16 +467,16 @@
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody class="text-capitalize">
+                                    <tbody>
                                         @foreach($usulan->usulanVoucher as $dataVoucher)
                                         @if($dataVoucher->status_pengajuan == 'true')
-                                        <tr class="text-uppercase">
+                                        <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                                            <td>{{ $dataVoucher->jenis_aadb }}</td>
-                                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
-                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
-                                            <td>{{ $dataVoucher->kualifikasi }}</td>
+                                            <td>{{ ucfirst(strtolower($dataVoucher->jenis_aadb)) }}</td>
+                                            <td class="text-uppercase">{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                            <td>{{ ucfirst(strtolower($dataVoucher->merk_tipe_kendaraan)) }}</td>
+                                            <td>{{ ucfirst(strtolower($dataVoucher->kualifikasi)) }}</td>
                                         </tr>
                                         @endif
                                         @endforeach

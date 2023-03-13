@@ -64,44 +64,56 @@
                 <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
             </div>
         </div>
-        <div class="row" style="font-size: 22px;">
-            <div class="col-md-12 form-group text-capitalize">
-                <div class="form-group row mb-3 text-center">
-                    <div class="col-md-12 text-uppercase">
-                        usulan pengajuan <br>
-                        nomor surat : {{ $usulan->no_surat_usulan }}
+        <div class="row" style="font-size: 20px;">
+            <div class="col-md-9">
+                <div class="form-group row">
+                    <div class="col-md-2">Nomor</div>
+                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                    <div class="col-md-2">Hal</div>
+                    <div class="col-md-10 text-capitalize">:
+                        @if ($modul == 'usulan-oldat')
+                        {{ $usulan->jenis_form }} barang
+                        @elseif ($modul == 'usulan-aadb')
+                        {{ ucfirst(strtolower($usulan->jenis_form_usulan)) }} kendaraan
+                        @elseif ($modul == 'usulan-atk')
+                        {{ $usulan->jenis_form }} ATK
+                        @elseif ($modul == 'usulan-gdn')
+                        pemeliharaan gedung dan bangunan
+                        @elseif ($modul == 'usulan-ukt')
+                        permintaan kerumahtanggaan
+                        @endif
                     </div>
+                    <div class="col-md-2 mt-4">Pengusul</div>
+                    <div class="col-md-10 text-capitalize mt-4">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }} </div>
+                    <div class="col-md-2">Jabatan</div>
+                    <div class="col-md-10">: {{ $usulan->keterangan_pegawai }} </div>
+                    <div class="col-md-2">Unit Kerja</div>
+                    <div class="col-md-10 text-capitalize">: {{ ucfirst(strtolower($usulan->unit_kerja)) }} </div>
+                    <div class="col-md-2">Jumlah</div>
+                    <div class="col-md-10 text-capitalize">:
+                        {{ $usulan->total_pengajuan }}
+                        @if ($modul == 'usulan-oldat' || $modul == 'usulan-atk')
+                        barang
+                        @elseif ($modul == 'usulan-aadb')
+                        kendaraan
+                        @elseif ($modul == 'usulan-gdn' || $modul == 'usulan-ukt')
+                        pekerjaan
+                        @endif
+                    </div>
+                    @if($usulan->rencana_pengguna != null)
+                    <div class="col-md-2">Keterangan</div>
+                    <div class="col-md-10 text-capitalize">:
+                        {{ $usulan->rencana_pengguna }}
+                    </div>
+                    @endif
                 </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Pengusul</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Jabatan</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Unit Kerja</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($usulan->unit_kerja)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $usulan->total_pengajuan }}</div>
-                </div>
-                @if($usulan->rencana_pengguna != null)
-                <div class="form-group row mb-0">
-                    <div class="col-md-3">Rencana Pengguna</div>
-                    <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
-                </div>
-                @endif
+            </div>
+            <div class="col-md-3 text-right">
+                <div class="col-md-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'usulan-oldat')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -151,7 +163,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Barang</th>
+                            <th style="width: 15%;">Nama Barang</th>
                             <th>Merk/Tipe</th>
                             <th>Permintaan</th>
                             <th>Disetujui</th>
@@ -198,18 +210,18 @@
                 @elseif ($modul == 'usulan-gdn')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center">No</div>
-                        <div class="col-md-3 divTheadtd">Bidang Kerusakan</div>
-                        <div class="col-md-2 divTheadtd">Lokasi Perbaikan</div>
-                        <div class="col-md-4 divTheadtd">Lokasi Spesifik</div>
-                        <div class="col-md-2">Keterangan</div>
+                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-md-3 divTheadtd p-2">Bidang Kerusakan</div>
+                        <div class="col-md-3 divTheadtd p-2">Lokasi Perbaikan</div>
+                        <div class="col-md-3 divTheadtd p-2">Lokasi Spesifik</div>
+                        <div class="col-md-2 p-2">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanGdn as $i => $dataGdn)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
                         <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
-                        <div class="col-md-2 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
-                        <div class="col-md-4 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
+                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
                         <div class="col-md-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
                     </div>
                     @endforeach
@@ -217,10 +229,10 @@
                 @elseif ($modul == 'usulan-ukt')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center">No</div>
-                        <div class="col-md-3 divTheadtd">Pekerjaan</div>
-                        <div class="col-md-5 divTheadtd">Spesifikasi Pekerjaan</div>
-                        <div class="col-md-3">Keterangan</div>
+                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-md-3 divTheadtd p-2">Pekerjaan</div>
+                        <div class="col-md-5 divTheadtd p-2">Spesifikasi Pekerjaan</div>
+                        <div class="col-md-3 p-2">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanUkt as $i => $dataUkt)
                     <div class="row divTbody">
@@ -233,7 +245,7 @@
                 </div>
                 @elseif ($modul == 'usulan-aadb')
                 @if($usulan->jenis_form == '1')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -250,10 +262,10 @@
                         @foreach($usulan->usulanKendaraan as $dataKendaraan)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataKendaraan->jenis_aadb }}</td>
+                            <td>{{ ucfirst(strtolower($dataKendaraan->jenis_aadb)) }}</td>
                             <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
-                            <td>{{ $dataKendaraan->merk_tipe_kendaraan }}</td>
-                            <td>Kendaraan {{ $dataKendaraan->kualifikasi }}</td>
+                            <td>{{ ucfirst(strtolower($dataKendaraan->merk_tipe_kendaraan)) }}</td>
+                            <td>Kendaraan {{ ucfirst(strtolower($dataKendaraan->kualifikasi)) }}</td>
                             <td>{{ $dataKendaraan->jumlah_pengajuan }} UNIT</td>
                             <td>{{ $dataKendaraan->tahun_kendaraan }}</td>
                         </tr>
@@ -261,7 +273,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '2')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th class="text-center" style="width:5%;">No</th>
@@ -278,8 +290,8 @@
                         @foreach($usulan->usulanServis as $dataServis)
                         <tr>
                             <td class="text-center">{{ $no++ }}</td>
-                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
-                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                            <td class="text-uppercase">{{ $dataServis->no_plat_kendaraan }}</td>
+                            <td>{{ ucfirst(strtolower($dataServis->merk_tipe_kendaraan)) }}</td>
                             <td>{{ $dataServis->kilometer_terakhir }} Km</td>
                             <td>
                                 Terakhir Servis : <br>
@@ -299,7 +311,7 @@
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '3')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -314,16 +326,16 @@
                         @foreach($usulan->usulanSTNK as $dataSTNK)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
-                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
-                            <td>{{ $dataSTNK->pengguna }}</td>
+                            <td class="text-uppercase">{{ $dataSTNK->no_plat_kendaraan }}</td>
+                            <td>{{ ucfirst(strtolower($dataSTNK->merk_tipe_kendaraan)) }}</td>
+                            <td>{{ ucfirst(strtolower($dataSTNK->pengguna)) }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_lama)->isoFormat('DD MMMM Y') }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
                 @elseif($usulan->jenis_form == '4')
-                <table class="table table-bordered m-0 small">
+                <table class="table table-data m-0 small text-capitalize">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -335,16 +347,16 @@
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
-                    <tbody class="text-capitalize">
+                    <tbody>
                         @foreach($usulan->usulanVoucher as $dataVoucher)
                         @if($dataVoucher->status_pengajuan == 'true')
-                        <tr class="text-uppercase">
+                        <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
-                            <td>{{ $dataVoucher->jenis_aadb }}</td>
-                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
-                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
-                            <td>{{ $dataVoucher->kualifikasi }}</td>
+                            <td>{{ ucfirst(strtolower($dataVoucher->jenis_aadb)) }}</td>
+                            <td class="text-uppercase">{{ $dataVoucher->no_plat_kendaraan }}</td>
+                            <td>{{ ucfirst(strtolower($dataVoucher->merk_tipe_kendaraan)) }}</td>
+                            <td>{{ ucfirst(strtolower($dataVoucher->kualifikasi)) }}</td>
                         </tr>
                         @endif
                         @endforeach

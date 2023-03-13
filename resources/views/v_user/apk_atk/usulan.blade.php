@@ -34,11 +34,11 @@
             <div class="card-header">
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
-                <form action="{{ url('unit-kerja/atk/usulan/proses-distribusi/'. $aksi) }}" method="POST">
-            <div class="card-body">
+            <form action="{{ url('unit-kerja/atk/usulan/proses-distribusi/'. $aksi) }}" method="POST">
+                <div class="card-body">
                     @csrf
                     <input type="hidden" name="jenis_form" value="distribusi">
-                    <input type="hidden"name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                    <input type="hidden" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
@@ -163,15 +163,15 @@
                             </div>
                         </div>
                     </div> -->
-            </div>
-            <div class="card-footer">
-                @if ($stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') != 0)
-                <button type="submit" class="btn btn-primary btn-md font-weight-bold float-right" onclick="return confirm('Apakah data sudah benar ?')">
-                    <i class="fas fa-paper-plane"></i> SUBMIT
-                </button>
-                @endif
-            </div>
-                </form>
+                </div>
+                <div class="card-footer">
+                    @if ($stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') != 0)
+                    <button type="submit" class="btn btn-primary btn-md font-weight-bold float-right" onclick="return confirm('Apakah data sudah benar ?')">
+                        <i class="fas fa-paper-plane"></i> SUBMIT
+                    </button>
+                    @endif
+                </div>
+            </form>
         </div>
     </div>
 </section>
@@ -191,25 +191,45 @@
             <div class="card-header">
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
-            <div class="card-body">
-                <form action="{{ url('unit-kerja/atk/usulan/proses-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+            <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="card-body">
+                    <!-- <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
                     <input type="hidden" name="jenis_form" value="1">
-                    <input type="hidden" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                    <input type="hidden" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly> -->
+                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
+                    <input type="hidden" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
+                    <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                            <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                        <label class="col-sm-10">
+                            <div class="alert alert-info alert-dismissible">
+                                <h6><i class="icon fas fa-info"></i> Mohon untuk mengisi kebutuhan ATK sesuai referensi!</h6>
+                                <span class="ml-3">&nbsp; Referensi ATK :
+                                    <a href="{{ asset('format/daftar_atk.xls') }}" download> Download</a>
+                                </span>
+                            </div>
+                        </label>
+                        <label class="col-sm-2 col-form-label">Kebutuhan ATK (*)</label>
+                        <div class="col-sm-4">
+                            <input type="file" name="file_atk" class="form-control pt-1" required>
+                            <small>Format file (.xls)</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
                         <div class="col-sm-10">
-                            <input type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Barang" required>
+                            <textarea type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Barang" required></textarea>
                         </div>
                     </div>
-                    <hr style="border: 0.5px solid grey;">
+                    <!-- <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
                         <div class="col-md-12">
                             <div class="alert alert-info alert-dismissible">
@@ -270,9 +290,12 @@
                                 <i class="fas fa-paper-plane btn-md"></i> SUBMIT
                             </button>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </div> -->
+                </div>
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah file sudah benar ?')">Upload</button>
+                </div>
+            </form>
 
         </div>
     </div>
