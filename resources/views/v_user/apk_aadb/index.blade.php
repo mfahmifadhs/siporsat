@@ -651,6 +651,14 @@
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     // Jumlah Kendaraan
     $(function() {
+	var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/" +
+            (currentdate.getMonth() + 1) + "/" +
+            currentdate.getFullYear() + " \n Pukul: " +
+            currentdate.getHours() + ":" +
+            currentdate.getMinutes() + ":" +
+            currentdate.getSeconds()
+
         $('#jenis_aadb').select2();
         $('.dataTables_filter input[type="search"]').css({
             'width': '50px',
@@ -709,7 +717,17 @@
                 [5, 10, 25, -1],
                 [5, 10, 25, "Semua"]
             ],
-        })
+	    buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Kendaraan AADB',
+		    exportOptions: {
+                        columns: [0,1,2,3]
+		    },
+                    messageTop: datetime
+            }],
+        }).buttons().container().appendTo('#table-aadb_wrapper .col-md-6:eq(0)');
 
         let j = 0
 
