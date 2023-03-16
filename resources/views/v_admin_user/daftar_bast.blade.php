@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h4 class="m-0">Daftar Berita Acara Serah Terima</h4>
+                <h4 class="m-0">Alat Tulis Kantor (ATK)</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -35,8 +35,12 @@
                 @endif
             </div>
             <div class="col-md-12 form-group">
-                <div class="row">
-                    <div class="col-12 col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h4 class="card-title">Daftar Berita Acara Serah Terima ATK</h4>
+                    </div>
+                    <div class="card-body">
+
                         <table id="table-kategori" class="table table-bordered fa-1x">
                             <thead class="bg-primary font-weight-bold">
                                 <tr>

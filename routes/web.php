@@ -157,6 +157,16 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
     });
 
+    // urusan kerumah tanggaan
+    Route::group(['prefix' => 'ukt', 'as' => 'ukt'], function() {
+        Route::get('dashboard', [AdminUserController::class, 'Ukt']);
+        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionUkt']);
+        Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterUkt']);
+
+        Route::post('surat/{aksi}/{id}', [AdminUserController::class, 'LetterUkt']);
+        Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionUkt']);
+    });
+
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
         Route::get('dasboard', [AdminUserController::class, 'Rdn']);
         Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'OfficialResidence']);
