@@ -114,43 +114,52 @@
                         <table id="table-usulan" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 1%;">No</th>
-                                    <th style="width: 9%;">Tanggal</th>
-                                    <th style="width: 5%;">Usulan</th>
-                                    <th style="width: 5%;">No. Surat</th>
-                                    <th style="width: 15%;">Pengusul</th>
-                                    <th style="width: 15%;">Rencana Pemakaian</th>
-                                    <th class="text-center" style="width: 11%;">Status Pengajuan</th>
-                                    <th class="text-center" style="width: 10%;">Status Proses</th>
-                                    <th class="text-center" style="width: 1%;">Aksi</th>
+                                    <th style="width: 1%;" >No</th>
+                                    <th style="width: 15%;">
+                                        Tanggal
+                                    </th>
+                                    <th style="width: 15%;">
+                                        No. Surat
+                                    </th>
+                                    <th>Usulan</th>
+                                    <th style="width: 20%;">Rencana Pemakaian</th>
+                                    <th class="text-center" style="width: 15%;">Status Proses</th>
+                                    <th class="text-center" style="width: 0%;">Aksi</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td>{{ $no++ }} </td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
-                                    <td class="text-uppercase">{{ $dataUsulan->jenis_form }}</td>
-                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
-                                    <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
-                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
-                                    <td class="text-center">
-                                        <h6 class="mt-2">
-                                            @if($dataUsulan->status_pengajuan_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-success">
-                                                Disetujui
-                                            </span>
-                                            @elseif($dataUsulan->status_pengajuan_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
-                                            @if ($dataUsulan->keterangan != null)
-                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
-                                            @endif
-                                            @endif
-                                        </h6>
+                                    <td class="text-center">{{ $no++ }} </td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
                                     </td>
+                                    <td class="text-capitalize">
+                                        {{ $dataUsulan->jenis_form }} ATK <br>
+                                        {{ $dataUsulan->no_surat_usulan }}
+                                    </td>
+                                    <td class="text-capitalize">
+                                        {{ $dataUsulan->nama_pegawai }} <br>
+                                        {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
+                                    </td>
+                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
+                                            @if ($dataUsulan->status_pengajuan_id != null)
+                                                @if($dataUsulan->status_pengajuan_id == 1)
+                                                <span class="badge badge-sm badge-pill badge-success">
+                                                    Disetujui
+                                                </span>
+                                                @elseif($dataUsulan->status_pengajuan_id == 2)
+                                                <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
+                                                @if ($dataUsulan->keterangan != null)
+                                                <p class="small text-danger">{{ $dataUsulan->keterangan }}</p>
+                                                @endif
+                                                @endif
+                                                <hr>
+                                            @endif
+
                                             @if($dataUsulan->status_proses_id == 1)
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
