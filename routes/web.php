@@ -126,16 +126,20 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
         Route::get('dashboard', [AdminUserController::class, 'index']);
+        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionOldat']);
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'showItem']);
 
+        Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionOldat']);
         Route::post('barang/{aksi}/{id}', [AdminUserController::class, 'showItem']);
 
     });
 
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
         Route::get('dasboard', [AdminUserController::class, 'Aadb']);
+        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAadb']);
         Route::get('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
 
+        Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAadb']);
         Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
     });
 

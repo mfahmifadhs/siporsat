@@ -1656,6 +1656,7 @@ class UserController extends Controller
             $kendaraan      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->where('unit_kerja_id', Auth::user()->pegawai->unit_kerja_id)
                 ->where('kualifikasi', '!=', null)
+                ->where('status_kendaraan_id' ,'!=', 4)
                 ->get();
             return view('v_user.apk_aadb.usulan', compact('aksi', 'jenisKendaraan', 'kendaraan'));
         }

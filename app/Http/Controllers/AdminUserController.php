@@ -1506,12 +1506,56 @@ class AdminUserController extends Controller
         return view('v_admin_user.apk_aadb.index');
     }
 
+    public function SubmissionAadb(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $uker   = UnitKerja::get();
+
+            $dataUsulan = UsulanAadb::with('usulanKendaraan')
+                ->select('id_form_usulan','tanggal_usulan','no_surat_usulan','unit_kerja','jenis_form','nama_pegawai',
+                         'keterangan_pegawai','rencana_pengguna','status_proses_id','status_pengajuan_id')
+                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC');
+
+
+            if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
+                if ($request->unit_kerja_id) {
+                    $searchUkt = $dataUsulan->where('unit_kerja_id', $request->unit_kerja_id);
+                }
+                if ($request->start_date) {
+                    $searchUkt = $dataUsulan->whereBetween('tanggal_usulan', [$request->start_date, $request->end_date]);
+                }
+                if ($request->status_proses_id) {
+                    $searchUkt = $dataUsulan->where('status_proses_id', $request->status_proses_id);
+                }
+                if ($request->jenis_form) {
+                    $searchUkt = $dataUsulan->where('jenis_form', $request->jenis_form);
+                }
+
+                $formUsulan = $searchUkt->get();
+            } else {
+                $formUsulan = $dataUsulan->get();
+            }
+
+            return view('v_admin_user.apk_aadb.daftar_pengajuan', compact('uker', 'formUsulan'));
+        }
+    }
+
     public function Vehicle(Request $request, $aksi, $id)
     {
         if ($aksi == 'daftar') {
+            $char = '"';
             $kendaraan = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
                 ->join('aadb_tbl_kondisi_kendaraan', 'id_kondisi_kendaraan', 'kondisi_kendaraan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('aadb_tbl_status_kendaraan', 'id_status_kendaraan', 'status_kendaraan_id')
+                ->select('id_kendaraan','jenis_aadb','unit_kerja','no_plat_kendaraan','merk_tipe_kendaraan','kualifikasi','mb_stnk_plat_kendaraan','tahun_kendaraan',
+                         'tanggal_perolehan','no_bpkb','no_rangka','no_mesin','nilai_perolehan','kondisi_kendaraan','pengguna','status_kendaraan')
                 ->orderBy('jenis_aadb', 'ASC')
                 ->get();
 
@@ -1535,24 +1579,56 @@ class AdminUserController extends Controller
     //                        OLDAT
     // ====================================================
 
+    public function SubmissionOldat(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'daftar') {
+            $uker   = UnitKerja::get();
+
+            $dataUsulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->select('id_form_usulan','tanggal_usulan','no_surat_usulan','unit_kerja','jenis_form','nama_pegawai',
+                         'keterangan_pegawai','rencana_pengguna','status_proses_id','status_pengajuan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC');
+
+            if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
+                if ($request->unit_kerja_id) {
+                    $searchUkt = $dataUsulan->where('unit_kerja_id', $request->unit_kerja_id);
+                }
+                if ($request->start_date) {
+                    $searchUkt = $dataUsulan->whereBetween('tanggal_usulan', [$request->start_date, $request->end_date]);
+                }
+                if ($request->status_proses_id) {
+                    $searchUkt = $dataUsulan->where('status_proses_id', $request->status_proses_id);
+                }
+                if ($request->jenis_form) {
+                    $searchUkt = $dataUsulan->where('jenis_form', $request->jenis_form);
+                }
+
+                if ($request->unit_kerja_id == null && $request->start_date == null  && $request->status_proses_id == null  && $request->jenis_form == null ) {
+                    $formUsulan = $dataUsulan->get();
+                } else {
+                    $formUsulan = $searchUkt->get();
+                }
+
+            } else {
+                $formUsulan = $dataUsulan->get();
+            }
+            return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'formUsulan'));
+        }
+    }
+
     public function showItem(Request $request, $aksi, $id)
     {
         if ($aksi == 'data') {
             $char = '"';
-            $barang = Barang::select(
-                'id_barang',
-                'kode_barang',
-                'kategori_barang',
-                'nup_barang',
-                'jumlah_barang',
-                'satuan_barang',
-                'nilai_perolehan',
-                'tahun_perolehan',
-                'kondisi_barang',
-                'nama_pegawai',
-                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
-                'unit_kerja'
-            )
+            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
+                'nilai_perolehan', 'tahun_perolehan', 'kondisi_barang', 'nama_pegawai','unit_kerja',
+                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
                 ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')

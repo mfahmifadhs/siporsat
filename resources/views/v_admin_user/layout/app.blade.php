@@ -29,7 +29,7 @@
 
 <!-- <body class="hold-transition sidebar-mini sidebar-collapse"> -->
 
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini sidebar-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -125,23 +125,67 @@
                         </li>
                         <!-- <li class="nav-header font-weight-bold">DATA BMN</li> -->
                         @if(Auth::user()->akses->first()->is_oldat == 1)
+                        <li class="nav-header font-weight-bold small">Menu Oldat</li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link">
-                                <i class="nav-icon fas fa-boxes"></i>
-                                <p>Master Barang</p>
+                            <a href="{{ url('admin-user/oldat/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>Daftar Usulan</p>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#  " class="nav-link">
+                                <i class="nav-icon fas fa-box-open"></i>
+                                <p>Daftar Barang</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('admin-user/oldat/barang/data/semua') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Barang</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Tambah Barang</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_aadb == 1)
+                        <li class="nav-header font-weight-bold small">Menu Aadb</li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
-                                <i class="nav-icon fas fa-car"></i>
-                                <p>Master Kendaraan</p>
+                            <a href="{{ url('admin-user/aadb/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>Daftar Usulan</p>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#  " class="nav-link">
+                                <i class="nav-icon fas fa-car-side"></i>
+                                <p>Daftar Kendaraan</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('admin-user/aadb/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Kendaraan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Tambah Kendaraan</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_atk == 1)
-                        <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
+                        <li class="nav-header font-weight-bold">Menu Atk</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-pencil-ruler"></i>
@@ -184,7 +228,14 @@
                             </ul>
                         </li>
                         @endif
-                        @if(Auth::user()->akses->first()->is_mtc == 1)
+                        @if(Auth::user()->akses->first()->is_ukt == 1)
+                        <li class="nav-header font-weight-bold small">Menu Kerumahtanggaan</li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/ukt/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>Master Kendaraan</p>
+                            </a>
+                        </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_mtc == 1)
                         <li class="nav-item">
