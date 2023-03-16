@@ -156,8 +156,9 @@
                                             <thead class="bg-primary font-weight-bold">
                                                 <tr>
                                                     <th style="width: 0%;" class="text-center">No</th>
+						    <th style="width:0%;">ID</th>
                                                     <th style="width: 12;">Kode Referensi</th>
-                                                    <th style="width: 12;">Kode Kategori</th>
+                                                    <th style="width: 20;">Kode Kategori</th>
                                                     <th>Deskripsi</th>
                                                     <th style="width: 10%;">Satuan</th>
                                                     <th style="width: 20%;">Keterangan</th>
@@ -168,7 +169,8 @@
                                                 @foreach ($referensi as $i => $row)
                                                 <tr>
                                                     <td class="text-center">{{ $i + 1 }}</td>
-                                                    <td>{{ $row->kode_ref }}</td>
+                                                    <td>{{ $row->id_atk }}</td>
+						    <td>{{ $row->kode_ref }}</td>
                                                     <td>{{ $row->kategori_id }}</td>
                                                     <td>{{ $row->deskripsi_barang }}</td>
                                                     <td>{{ $row->satuan_barang }}</td>
