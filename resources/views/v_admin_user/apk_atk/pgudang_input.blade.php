@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-8 text-capitalize">
-                <h4 class="m-0">proses {{ $usulan->jenis_form }} ATK</h4>
+                <h4 class="m-0">Alat Tulis Kantor (ATK)</h4>
             </div>
         </div>
     </div>

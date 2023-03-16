@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-4">
-                <h1 class="m-0">Riwayat Permintaan</h1>
+                <h1 class="m-0">Alat Tulis Kantor (ATK)</h1>
             </div>
             <div class="col-sm-8">
                 <ol class="breadcrumb float-sm-right">

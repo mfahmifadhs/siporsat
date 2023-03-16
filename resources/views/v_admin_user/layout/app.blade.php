@@ -185,59 +185,52 @@
                         </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_atk == 1)
-                        <li class="nav-header font-weight-bold">Menu Atk</li>
+                        <li class="nav-header font-weight-bold">
+                            <a href="{{ url('admin-user/atk/dashboard') }}">
+                                Menu Atk
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>Daftar Usulan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/surat/bast-atk/daftar') }}" class="nav-link">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>Daftar Berita Acara</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
-                                <i class="nav-icon fas fa-pencil-ruler"></i>
+                                <i class="nav-icon fas fa-pallet"></i>
                                 <p>
-                                    Alat Tulis Kantor
+                                    Gudang ATK Sekjen
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
-                                <li class="nav-item">
-                                    <a href="{{ url('admin-user/surat/bast-atk/daftar') }}" class="nav-link">
-                                        <i class="nav-icon fas fa"></i>
-                                        <p>Berita Acara</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/dashboard') }}" class="nav-link">
-                                        <i class="nav-icon fas fa"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Daftar Usulan</p>
-                                    </a>
-                                </li>
+                            <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}" class="nav-link">
                                         <i class="nav-icon fas fa-hand-holding-usds"></i>
                                         <p>Gudang ATK</p>
                                     </a>
                                 </li>
-                                <!-- <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/barang/daftar/semua') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-pencil-rulers"></i>
-                                        <p>Daftar ATK</p>
-                                    </a>
-                                </li> -->
                             </ul>
                         </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_ukt == 1)
                         <li class="nav-header font-weight-bold small">Menu Kerumahtanggaan</li>
                         <li class="nav-item">
-                            <a href="{{ url('admin-user/ukt/kendaraan/daftar/seluruh-kendaraan') }}" class="nav-link">
-                                <i class="nav-icon fas fa-car"></i>
-                                <p>Master Kendaraan</p>
+                            <a href="{{ url('admin-user/ukt/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>Daftar Usulan</p>
                             </a>
                         </li>
                         @endif
                         @if(Auth::user()->akses->first()->is_mtc == 1)
+                        <li class="nav-header font-weight-bold small">Menu Rumah Dinas Negara</li>
                         <li class="nav-item">
                             <a href="{{ url('admin-user/rdn/rumah-dinas/daftar/seluruh-rumah') }}" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
