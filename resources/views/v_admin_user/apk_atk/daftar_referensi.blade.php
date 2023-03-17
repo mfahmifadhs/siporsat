@@ -11,8 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('admin-user/atk/dashboard') }}"> Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/atk/gudang/dashboard/data') }}"> Gudang ATK </a></li>
-                    <li class="breadcrumb-item active">Refensi ATK</li>
+                    <li class="breadcrumb-item active">Referensi ATK</li>
                 </ol>
             </div>
         </div>
@@ -33,6 +32,9 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-12 form-group">
                 <div class="row">
@@ -55,11 +57,13 @@
                                         <b class="font-weight-bold text-primary card-title pt-2" style="font-size:large;">
                                             <i class="fas fa-table"></i> DAFTAR KATEGORI BARANG ATK
                                         </b>
+                                        @if(Auth::user()->id == 3)
                                         <div class="card-tools">
                                             <a class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-add-kategori">
                                                 <i class="fas fa-plus-circle"></i> Tambah Kategori
                                             </a>
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="card-body">
                                         <div class="col-md-12">
@@ -145,18 +149,20 @@
                                         <b class="font-weight-bold text-primary card-title pt-2" style="font-size:large;">
                                             <i class="fas fa-table"></i> DAFTAR REFERENSI BARANG ATK
                                         </b>
+                                        @if(Auth::user()->id == 3)
                                         <div class="card-tools">
                                             <a class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-add-atk">
                                                 <i class="fas fa-plus-circle"></i> Tambah Referensi
                                             </a>
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="card-body">
                                         <table id="table-atk" class="table table-bordered table-striped fa-1x">
                                             <thead class="bg-primary font-weight-bold">
                                                 <tr>
                                                     <th style="width: 0%;" class="text-center">No</th>
-						    <th style="width:0%;">ID</th>
+                                                    <th style="width:0%;">ID</th>
                                                     <th style="width: 12;">Kode Referensi</th>
                                                     <th style="width: 20;">Kode Kategori</th>
                                                     <th>Deskripsi</th>
@@ -170,7 +176,7 @@
                                                 <tr>
                                                     <td class="text-center">{{ $i + 1 }}</td>
                                                     <td>{{ $row->id_atk }}</td>
-						    <td>{{ $row->kode_ref }}</td>
+                                                    <td>{{ $row->kode_ref }}</td>
                                                     <td>{{ $row->kategori_id }}</td>
                                                     <td>{{ $row->deskripsi_barang }}</td>
                                                     <td>{{ $row->satuan_barang }}</td>
@@ -358,27 +364,25 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
             ],
-            "buttons": [
-                {
-                    extend: 'excel',
-                    title: 'Daftar Referensi ATK',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
-                    }
-                },{
-                    extend: 'pdf',
-                    title: 'Daftar Referensi ATK',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
-                    }
-                },{
-                    extend: 'print',
-                    title: 'Daftar Referensi ATK',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
-                    }
+            "buttons": [{
+                extend: 'excel',
+                title: 'Daftar Referensi ATK',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5]
                 }
-            ]
+            }, {
+                extend: 'pdf',
+                title: 'Daftar Referensi ATK',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5]
+                }
+            }, {
+                extend: 'print',
+                title: 'Daftar Referensi ATK',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5]
+                }
+            }]
 
         }).buttons().container().appendTo('#table-atk_wrapper .col-md-6:eq(0)');
     })

@@ -3,165 +3,29 @@
 @section('content')
 
 <div class="content-header">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">Alat Tulis Kantor (ATK)</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/atk/dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active">Laporan Usulan ATK</li>
+                </ol>
             </div>
         </div>
     </div>
 </div>
 
-
 <section class="content">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/1') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small></h3>
-                                    <p>PERSETUJUAN KABAG RT</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i>1</i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/2') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small></h3>
-                                    <p>SEDANG DIPERSIAPKAN</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i>2</i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/3') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small></h3>
-                                    <p>SUDAH DAPAT DIAMBIL</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i>3</i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/4') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 4)->count() }} <small>usulan</small></h3>
-                                    <p>PROSES BERITA ACARA</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i>4</i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/5') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 5)->count() }} <small>usulan</small></h3>
-                                    <p>SELESAI BERITA ACARA</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/5') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small></h3>
-                                    <p>PENGAJUAN DITOLAK</p>
-                                </div>
-                                <div class="icon p-2">
-                                    <i class="fas fa-times-circle"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            <div class="col-md-12 col-12 mb-3">
+                <a href="{{ url('admin-user/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
-            <div class="col-md-12">
-                <hr>
-            </div>
-            <div class="col-md-12 text-center">
-                <div class="row">
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-copy fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Daftar Usulan</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/surat/bast-atk/daftar') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-file-signature fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Daftar Berita Acara</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/gudang/referensi/daftar') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-boxes fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Referensi Barang</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/gudang/stok/*') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-store fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Stok Gudang ATK</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-pallet fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Gudang ATK</h6>
-                        </a>
-                    </div>
-                    @if(Auth::user()->id == 3)
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/gudang/daftar-transaksi/Pembelian') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-arrow-circle-up fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Pembelian ATK</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/gudang/daftar-transaksi/Permintaan') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-arrow-circle-down fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Permintaan ATK</h6>
-                        </a>
-                    </div>
-                    @endif
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/atk/usulan/laporan/*') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-file-alt fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Laporan</h6>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- <section class="content">
-    <div class="container">
-        <div class="row">
             <div class="col-md-12 col-12">
                 <div class="card">
                     <div class="card-header bg-primary">
@@ -373,7 +237,7 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 @section('js')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

@@ -33,6 +33,9 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ URL::previous() }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <!-- Barang Masuk -->
             @if ($id == 'Pembelian')

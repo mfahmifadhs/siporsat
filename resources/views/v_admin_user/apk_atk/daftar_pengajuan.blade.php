@@ -32,16 +32,19 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline">
+                <div class="card card-primary">
                     <div class="card-header">
-                        <b class="font-weight-bold text-primary card-title mt-2" id="accordion">
-                            <i class="fas fa-table"></i> TABEL USULAN ATK
-                        </b>
+                        <h4 class="card-title mt-1 font-weight-bold" id="accordion">
+                            Daftar Usulan ATK
+                        </h4>
                         <div class="card-tools">
                             <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-primary btn-md">
+                                <span class="btn btn-default btn-sm">
                                     <i class="fas fa-filter"></i> Filter
                                 </span>
                             </a>
@@ -114,7 +117,7 @@
                         <table id="table-usulan" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 1%;" >No</th>
+                                    <th style="width: 1%;">No</th>
                                     <th style="width: 15%;">
                                         Tanggal
                                     </th>
@@ -131,7 +134,16 @@
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td class="text-center">{{ $no++ }} </td>
+                                    <td class="text-center">
+                                        @if($dataUsulan->status_pengajuan_id == null)
+                                        <i class="fas fa-clock text-warning"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 1)
+                                        <i class="fas fa-check-circle text-green"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 2)
+                                        <i class="fas fa-times-circle text-red"></i>
+                                        @endif
+                                        {{ $no++ }}
+                                    </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
                                     </td>
@@ -146,56 +158,48 @@
                                     <td>{{ $dataUsulan->rencana_pengguna }}</td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
-                                            @if ($dataUsulan->status_pengajuan_id != null)
-                                                @if($dataUsulan->status_pengajuan_id == 1)
-                                                <span class="badge badge-sm badge-pill badge-success">
-                                                    Disetujui
-                                                </span>
-                                                @elseif($dataUsulan->status_pengajuan_id == 2)
-                                                <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
-                                                @if ($dataUsulan->keterangan != null)
-                                                <p class="small text-danger">{{ $dataUsulan->keterangan }}</p>
-                                                @endif
-                                                @endif
-                                                <hr>
-                                            @endif
-
                                             @if($dataUsulan->status_proses_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
+                                                <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
+                                                <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">
+                                                <span class="badge badge-sm badge-pill badge-warning">
                                                 @php
-                                                $atkNull = $dataUsulan->permintaanAtk
-                                                ->where('status_penyerahan', null)
-                                                ->where('status','diterima')
-                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
-                                                ->count();
-                                                $atkFalse = $dataUsulan->permintaanAtk
-                                                ->where('status_penyerahan', 'false')
-                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
-                                                ->count();
-                                                $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                    $atkNull = $dataUsulan->permintaanAtk
+                                                        ->where('status_penyerahan', null)
+                                                        ->where('status','diterima')
+                                                        ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                        ->count();
+                                                    $atkFalse = $dataUsulan->permintaanAtk
+                                                        ->where('status_penyerahan', 'false')
+                                                        ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                        ->count();
+                                                    $belum_diserahkan = (int) $atkNull + $atkFalse;
                                                 @endphp
 
                                                 @if ($belum_diserahkan != 0)
-                                                {{ $belum_diserahkan }} barang <br> belum diserahkan
+                                                    {{ $belum_diserahkan }} barang <br> belum diserahkan
                                                 @else
-                                                seluruh barang <br> sudah diserahkan
+                                                    seluruh barang <br> sudah diserahkan
                                                 @endif
                                             </span>
                                             @if ($dataUsulan->bastAtk->count() != 0 && $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count() == 1 ||
                                             $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count() == 1 ||
                                             $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count() == 1
                                             )
-                                            <hr>
-                                            <span class="badge badge-sm badge-pill badge-warning">
-                                                Menunggu Proses <br> Tanda Tangan BAST
-                                            </span>
+                                                <hr>
+                                                <span class="badge badge-sm badge-pill badge-warning">
+                                                    Menunggu Proses <br> Tanda Tangan BAST
+                                                </span>
                                             @endif
                                             @elseif ($dataUsulan->status_proses_id == 5)
-                                            <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                                <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                            @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                                @if ($dataUsulan->keterangan != null)
+                                                    <p class="small text-danger">{{ $dataUsulan->keterangan }}</p>
+                                                @else
+                                                    <p class="small text-danger">Ditolak</p>
+                                                @endif
                                             @endif
                                         </h6>
                                     </td>

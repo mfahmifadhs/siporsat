@@ -20,8 +20,12 @@
 
 <section class="content">
     <div class="container-fluid">
-        <div class="row">
-
+        <v class="row">
+            <div class="col-md-12 col-12 mb-3">
+                <a href="{{ url('admin-user/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
+            </div>
             <div class="col-md-6 col-12">
                 <a href="{{ url('admin-user/atk/gudang/daftar-transaksi/Pembelian') }}">
                     <div class="card bg-success border border-dark">
@@ -56,15 +60,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-2 col-12">
-                <div class="col-md-12 col-12 p-0">
-                    <a href="{{ url('admin-user/atk/gudang/referensi/daftar') }}" class="btn btn-primary btn-block border-dark">
-                        <i class="fas fa-cubes fa-2x"></i>
-                        <h5>Daftar Referensi ATK</h5>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-10 col-12">
+            <div class="col-md-12 col-12">
                 <div class="card">
                     <div class="card-header bg-primary">
                         <b class="font-weight-bold card-title" style="font-size:medium;">
@@ -83,50 +79,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header bg-primary">
-                        <b class="font-weight-bold">
-                            <i class="fas fa-table"></i> &nbsp; TABEL DAFTAR STOK BARANG PADA GUDANG ATK
-                        </b>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-12">
-                            <div class="card-body border border-default">
-                                <table id="table-atk" class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Kode Referensi</th>
-                                            <th>Kode Barang</th>
-                                            <th>Deskripsi</th>
-                                            <th class="text-center">Satuan</th>
-                                            <th class="text-center">Total Pembelian</th>
-                                            <th class="text-center">Total Permintaan</th>
-                                            <th class="text-center">Sisa Stok</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($barang as $i => $dataAtk)
-                                        <tr>
-                                            <td class="text-center">{{ $i + 1 }}</td>
-                                            <td>{{ $dataAtk['kode_ref'] }}</td>
-                                            <td>{{ $dataAtk['kategori_id'] }}</td>
-                                            <td>{{ $dataAtk['deskripsi'] }}</td>
-                                            <td class="text-center">{{ $dataAtk['satuan'] }}</td>
-                                            <td class="text-center">{{ (int) $dataAtk['barang_masuk'] }}</td>
-                                            <td class="text-center">{{ (int) $dataAtk['barang_keluar'] }}</td>
-                                            <td class="text-center">{{ (int) $dataAtk['jumlah'] }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div
+            </div>
         </div>
-    </div>
 </section>
 
 @section('js')

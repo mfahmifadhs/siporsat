@@ -39,6 +39,7 @@ use Carbon\Carbon;
 use Validator;
 use Auth;
 use Google2FA;
+use Hash;
 use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
@@ -106,9 +107,11 @@ class AdminUserController extends Controller
     public function Profile(Request $request, $aksi, $id)
     {
         $user = User::where('id', Auth::user()->id)
-            ->join('tbl_level', 'id_level', 'level_id')
-            ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+            ->select('id','id_pegawai','nip_pegawai','nohp_pegawai','nama_pegawai','keterangan_pegawai',
+                     'unit_kerja','username','level','status_google2fa','password')
+            ->leftjoin('tbl_level', 'id_level', 'level_id')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
             ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
             ->first();
@@ -116,17 +119,65 @@ class AdminUserController extends Controller
         if ($aksi == 'user') {
             $google2fa  = app('pragmarx.google2fa');
             $secretkey  = $google2fa->generateSecretKey();
-            $QR_Image = $google2fa->getQRCodeInline(
+            $QR_Image   = $google2fa->getQRCodeInline(
                 $registration_data = 'Siporsat Kemenkes',
                 $registration_data = Auth::user()->username,
                 $registration_data = $secretkey
             );
-
             return view('v_admin_user.profil', compact('user', 'QR_Image', 'secretkey'));
         } elseif ($aksi == 'reset-autentikasi') {
-
             User::where('id', $id)->update(['status_google2fa' => null]);
             return redirect('admin-user/profil/user/' . Auth::user()->id)->with('success', 'Berhasil mereset autentikasi 2fa');
+        } elseif ($aksi == 'edit-profil') {
+            $username = User::where('id', $id)->where('username', $request->username)->count();
+            Pegawai::where('id_pegawai', $request->id_pegawai)
+                ->update([
+                    'nip_pegawai'   => $request->nip,
+                    'nama_pegawai'  => $request->nama_pegawai,
+                    'nohp_pegawai'  => $request->nohp_pegawai,
+                    'keterangan_pegawai' => strtoupper($request->keterangan_pegawai)
+                ]);
+
+
+            if ($username != 1) {
+                $cekUser    = Validator::make($request->all(), [
+                    'username'   => 'unique:users'
+                ]);
+
+                if ($cekUser->fails()) {
+                    return redirect('admin-user/profil/user/' . $id)->with('failed', 'Username sudah terdaftar');
+                } else {
+                    User::where('id', $id)
+                        ->update([
+                            'username' => $request->username
+                        ]);
+                }
+                return redirect('keluar')->with('success', 'Berhasil mengubah username');
+            }
+
+            return redirect('admin-user/profil/user/' . $id)->with('success', 'Berhasil mengubah informasi profil');
+        } elseif ($aksi == 'edit-password') {
+            $pass = User::where('password_teks', $request->old_password)->where('id', Auth::user()->id)->count();
+            if ($pass != 1) {
+                return redirect('admin-user/profil/user/' . $id)->with('failed', 'Password lama anda salah');
+            }
+
+            $cekPass    = Validator::make($request->all(), [
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required|min:6'
+            ]);
+
+            if ($cekPass->fails()) {
+                return redirect('admin-user/profil/user/' . $id)->with('failed', 'Konfirmasi password salah');
+            } else {
+                User::where('id', $id)
+                    ->update([
+                        'password'      => Hash::make($request->password),
+                        'password_teks' => $request->password
+                    ]);
+            }
+
+            return redirect('keluar')->with('success', 'Berhasil mengubah password');
         } else {
             User::where('id', $id)->first();
             User::where('id', $id)->update([
@@ -647,6 +698,7 @@ class AdminUserController extends Controller
 
     public function OfficeStationery(Request $request, $aksi, $id)
     {
+        dd('resq');
         if ($aksi == 'daftar') {
             $googleChartData = $this->ChartDataAtk();
             $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
@@ -1175,6 +1227,43 @@ class AdminUserController extends Controller
             ]);
 
             return redirect('admin-user/atk/usulan/edit/'. $permintaan->form_usulan_id)->with('success', 'Berhasil Membatalkan Permintaan');
+        } elseif ($aksi == 'laporan') {
+            $dataChartAtk = $this->ChartDataAtk();
+            $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+                ->where('unit_utama_id', '02401')
+                ->get();
+
+            $usulanTotal = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->get();
+
+            $usulanChart = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"))
+                ->groupBy('month')
+                ->get();
+
+            $chartData = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->get();
+
+            foreach ($usulanChart as $key => $value) {
+                $result[] = ['Bulan', 'Total Usulan Pengadaan', 'Total Usulan Distribusi'];
+                $result[++$key] = [
+                    Carbon::parse($value->month)->isoFormat('MMMM Y'),
+                    $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
+                    $chartData->where('month', $value->month)->where('jenis_form', 'distribusi')->count(),
+                ];
+            }
+
+            $usulanChartAtk = json_encode($result);
+
+            return view('v_admin_user.apk_atk.laporan', compact('usulanUker', 'usulanTotal', 'usulanChartAtk', 'dataChartAtk'));
         }
     }
 
@@ -1308,6 +1397,9 @@ class AdminUserController extends Controller
             }
             $usulanChartAtk = json_encode($result);
 
+            return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk'));
+        } elseif ($aksi == 'stok') {
+
             $atk = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
                 ->join('atk_tbl_master', 'id_atk', 'atk_id')
                 ->groupBy('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
@@ -1335,7 +1427,8 @@ class AdminUserController extends Controller
                 unset($data);
             }
 
-            return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk', 'barang'));
+            return view('v_admin_user.apk_atk.stok_gudang', compact('barang'));
+
         } elseif ($aksi == 'referensi') {
             $kategori  = KategoriAtk::get();
             $referensi = Atk::leftjoin('atk_tbl_kategori', 'id_kategori_atk', 'kategori_id')->get();

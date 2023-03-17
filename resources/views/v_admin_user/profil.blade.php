@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <section class="content-header">
     <div class="container">
         <div class="panel-heading font-weight-bold">Profil</div>
@@ -9,7 +10,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-center">
-                    @if ($user->status_google2fa == 0)
+                    @if (Auth::user()->status_google2fa == null)
                     <div class="card-header">
                         <p>Silahkan scan barcode di bawah ini dengan aplikasi <b>Google Authenticator</b>. <br>
                             Mohon klik submit setelah anda selesai scan barcode.</p>
@@ -54,14 +55,17 @@
                             <div class="col-sm-2 text-center">
                                 <i class="fas fa-user-circle fa-5x bg-pri"></i>
                             </div>
-                            <div class="col-sm-8 mt-3">
+                            <div class="col-sm-7 mt-3">
                                 <span class="font-weight-bold">{{ $user->nama_pegawai }}</span> <br>
                                 <small>{{ $user->unit_kerja }}</small>
                             </div>
-                            <div class="col-sm-2 text-right">
-                                <!-- <a href="{{ url('super-user/profil/ubah/'. $user->id) }}" class="btn btn-warning btn-sm mt-4">
+                            <div class="col-sm-3 text-right">
+                                <a class="btn btn-warning btn-xs mt-3 font-weight-bold" data-toggle="modal" data-target="#editProfile">
                                     <i class="fas fa-edit"></i> Ubah Profil
-                                </a> -->
+                                </a>
+                                <a class="btn btn-warning btn-xs mt-2 font-weight-bold" data-toggle="modal" data-target="#editPassword">
+                                    <i class="fas fa-lock"></i> Ubah Password
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -75,7 +79,7 @@
                         <label>Jabatan</label>
                         <div class="card-tools">
                             @if ($user->tim_kerja_id != null)
-                            {{ ucfirst(strtolower($user->keterangan_pegawai)) }}
+                            {{ ucfirst(strtolower($user->keterangan_pegawai.' '.$user->tim_kerja)) }}
                             @else
                             {{ ucfirst(strtolower($user->keterangan_pegawai)) }}
                             @endif
@@ -104,6 +108,167 @@
         </div>
     </div>
 </section>
+
+
+<div id="modal">
+    <!-- Modal Edit Profil-->
+    <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfile" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="{{ url('admin-user/profil/edit-profil/'. Auth::user()->id) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id_pegawai" value="{{ $user->id_pegawai }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProfile"><i class="fas fa-user-circle"></i> Ubah Profil</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">NIP</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="nip" value="{{ $user->nip_pegawai }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Nama Pegawai</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="nama_pegawai" value="{{ $user->nama_pegawai }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Jabatan</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="keterangan_pegawai" value="{{ ucfirst(strtolower($user->keterangan_pegawai)) }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Unit Kerja</label>
+                                    <div class="col-md-9">
+                                        <input type="hidden" class="form-control" value="{{ $user->id_unit_kerja }}">
+                                        <input type="text" class="form-control" value="{{ ucfirst(strtolower($user->unit_kerja)) }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">No. Hp Aktif</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="nohp_pegawai" value="{{ $user->nohp_pegawai }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Username</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="username" value="{{ $user->username }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah anda ingin mengubah profil ?')">
+                            Ubah
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit Password-->
+    <div class="modal fade" id="editPassword" tabindex="-1" role="dialog" aria-labelledby="editPassword" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="{{ url('admin-user/profil/edit-password/'. Auth::user()->id) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id_pegawai" value="{{ $user->id_pegawai }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPassword"><i class="fas fa-user-circle"></i> Ubah Profil</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row ">
+                                    <label class="col-form-label col-md-3">Password Lama</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group-append">
+                                            <input type="password" name="old_password" class="form-control" id="password1" placeholder="Password" minlength="8">
+                                            <div class="input-group-text">
+                                                <a type="button" onclick="viewPass1()"><span class="fas fa-eye"></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Password Baru</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group-append">
+                                            <input type="password" name="password" class="form-control" id="password2" placeholder="Password" minlength="8">
+                                            <div class="input-group-text">
+                                                <a type="button" onclick="viewPass2()"><span class="fas fa-eye"></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3">Konfirmasi Password</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group-append">
+                                            <input type="password" name="password_confirmation" class="form-control" id="password3" placeholder="Password" minlength="8">
+                                            <div class="input-group-text">
+                                                <a type="button" onclick="viewPass3()"><span class="fas fa-eye"></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('Apakah anda ingin mengubah profil ?')">
+                            Ubah
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function viewPass1() {
+        var x = document.getElementById("password1");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    function viewPass2() {
+        var x = document.getElementById("password2");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    function viewPass3() {
+        var x = document.getElementById("password3");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
 
 
 @endsection

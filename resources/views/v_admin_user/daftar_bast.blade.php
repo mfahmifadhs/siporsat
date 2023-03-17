@@ -33,6 +33,9 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ URL::previous() }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
@@ -49,7 +52,7 @@
                                     <th>Nomor Bast</th>
                                     <th style="width: 10;">Tanggal Usulan</th>
                                     <th>Nomor Usulan</th>
-                                    <th style="width: 15%;" class="text-center">Jumlah Penyerahan</th>
+                                    <th style="width: 15%;" class="text-center">Diserahkan</th>
                                     <th style="width: 0%;" class="text-center">Aksi</th>
                                 </tr>
                             </thead>

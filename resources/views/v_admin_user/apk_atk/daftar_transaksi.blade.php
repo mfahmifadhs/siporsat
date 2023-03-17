@@ -11,8 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('admin-user/atk/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}">Gudang ATK</a></li>
-                    <li class="breadcrumb-item active">Riwayat Gudang ATK</li>
+                    <li class="breadcrumb-item active">Daftar {{ $id }} ATK</li>
                 </ol>
             </div>
         </div>
@@ -33,6 +32,9 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <!-- Barang Masuk -->
             <div class="col-md-12 form-group mt-3">
@@ -45,11 +47,13 @@
                             <label class="col-md-8 mt-1">
                                 Riwayat {{ $id }} ATK
                             </label>
+                            @if(Auth::user()->id == 3)
                             <label class="col-md-4 text-right">
                                 <a href="{{ url('admin-user/atk/gudang/tambah/'. $id) }}" class="btn btn-default border border-dark">
                                     <i class="fas fa-plus-circle"></i> Tambah {{ $id }}
                                 </a>
                             </label>
+                            @endif
                             <div class="col-md-12">
                                 <table class="table ">
                                     <thead>

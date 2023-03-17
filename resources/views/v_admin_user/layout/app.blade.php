@@ -123,8 +123,16 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        @if(Auth::user()->akses->first()->is_atk == 1)
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/atk/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-pencil-ruler"></i>
+                                <p>Alat Tulis Kantor (ATK)</p>
+                            </a>
+                        </li>
+                        @endif
                         <!-- <li class="nav-header font-weight-bold">DATA BMN</li> -->
-                        @if(Auth::user()->akses->first()->is_oldat == 1)
+                        <!-- @if(Auth::user()->akses->first()->is_oldat == 1)
                         <li class="nav-header font-weight-bold small">Menu Oldat</li>
                         <li class="nav-item">
                             <a href="{{ url('admin-user/oldat/usulan/daftar/seluruh-usulan') }}" class="nav-link">
@@ -153,8 +161,8 @@
                                 </li>
                             </ul>
                         </li>
-                        @endif
-                        @if(Auth::user()->akses->first()->is_aadb == 1)
+                        @endif -->
+                        <!-- @if(Auth::user()->akses->first()->is_aadb == 1)
                         <li class="nav-header font-weight-bold small">Menu Aadb</li>
                         <li class="nav-item">
                             <a href="{{ url('admin-user/aadb/usulan/daftar/seluruh-usulan') }}" class="nav-link">
@@ -184,42 +192,6 @@
                             </ul>
                         </li>
                         @endif
-                        @if(Auth::user()->akses->first()->is_atk == 1)
-                        <li class="nav-header font-weight-bold">
-                            <a href="{{ url('admin-user/atk/dashboard') }}">
-                                Menu Atk
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="nav-link">
-                                <i class="nav-icon fas fa-clone"></i>
-                                <p>Daftar Usulan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('admin-user/surat/bast-atk/daftar') }}" class="nav-link">
-                                <i class="nav-icon fas fa-clone"></i>
-                                <p>Daftar Berita Acara</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link font-weight-bold">
-                                <i class="nav-icon fas fa-pallet"></i>
-                                <p>
-                                    Gudang ATK Sekjen
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-hand-holding-usds"></i>
-                                        <p>Gudang ATK</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        @endif
                         @if(Auth::user()->akses->first()->is_ukt == 1)
                         <li class="nav-header font-weight-bold small">Menu Kerumahtanggaan</li>
                         <li class="nav-item">
@@ -237,7 +209,7 @@
                                 <p>Master Rumah Dinas</p>
                             </a>
                         </li>
-                        @endif
+                        @endif -->
 
                     </ul>
                 </nav>
