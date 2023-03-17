@@ -186,11 +186,13 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                     </table>
                                 </div>
                             </div>
+                            @if ($belum_diserahkan != 0)
                             <div class="card-footer text-right">
                                 <button class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah barang sudah diserahkan ?')">
                                     <i class="fas fa-paper-plane"></i> Menyerahkan
                                 </button>
                             </div>
+                            @endif
                         </div>
                     </form>
                 </div>
