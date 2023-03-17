@@ -42,7 +42,7 @@
                     <div class="card-body">
 
                         <table id="table-kategori" class="table table-bordered fa-1x">
-                            <thead class="bg-primary font-weight-bold">
+                            <thead>
                                 <tr>
                                     <th style="width: 0%;" class="text-center">No</th>
                                     <th style="width: 10;">Tanggal Bast</th>
