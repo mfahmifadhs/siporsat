@@ -524,13 +524,14 @@
             "autoWidth": false,
             "info": false,
             "paging": true,
-            buttons: [{
-                    text: '(+) Usulan Pengadaan',
-                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
-                    action: function(e, dt, node, config) {
-                        window.location.href = "{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}";
-                    }
-                },
+            buttons: [
+                // {
+                //     text: '(+) Usulan Pengadaan',
+                //     className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                //     action: function(e, dt, node, config) {
+                //         window.location.href = "{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}";
+                //     }
+                // },
                 {
                     text: '(+) Usulan Distribusi',
                     className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
