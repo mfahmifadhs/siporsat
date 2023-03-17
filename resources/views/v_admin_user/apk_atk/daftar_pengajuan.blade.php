@@ -207,7 +207,7 @@
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            @if ($dataUsulan->jenis_form == 'distribusi' && $dataUsulan->status_proses_id == 3 && $belum_diserahkan == 0)
+                                            @if ($dataUsulan->jenis_form == 'distribusi' && $dataUsulan->status_proses_id == 3 && $belum_diserahkan != 0)
                                             <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-people-carry"></i> Menyerahkan
                                             </a>
