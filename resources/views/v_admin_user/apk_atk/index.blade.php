@@ -84,10 +84,10 @@
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
-                        <a href="{{ url('admin-user/atk/usulan/status/5') }}">
+                        <a href="{{ url('admin-user/atk/usulan/status/ditolak') }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small></h3>
+                                    <h3>{{ $usulanTotal->where('status_pengajuan_id', 2)->count() }} <small>usulan</small></h3>
                                     <p>PENGAJUAN DITOLAK</p>
                                 </div>
                                 <div class="icon p-2">
