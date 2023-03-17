@@ -86,8 +86,7 @@
                                             <option value="">-- Pilih Status Proses --</option>
                                             <option value="1">1 - Menunggu Persetujuan Kabag RT</option>
                                             <option value="2">2 - Sedang Diproses oleh PPK</option>
-                                            <option value="3">3 - Menunggu Konfirmasi BAST Pengusul</option>
-                                            <option value="4">4 - Menunggu Konfirmasi BAST Kabag RT</option>
+                                            <option value="3">3 - Belum Diserahkan</option>
                                             <option value="5">5 - Selesai BAST</option>
                                         </select>
                                     </div>
