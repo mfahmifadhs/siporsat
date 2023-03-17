@@ -83,7 +83,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <label class="col-form-label">Jumlah Belum Diserahkan </label>
-                                    <input type="text" class="form-control" value="{{ count($itemTotal) }} Barang" readonly>
+                                    <input type="text" class="form-control" value="{{ $belum_diserahkan }} Barang" readonly>
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
