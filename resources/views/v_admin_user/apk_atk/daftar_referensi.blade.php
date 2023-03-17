@@ -87,6 +87,7 @@
                                                         <td>{{ $kategori->satuan_kategori }}</td>
                                                         <td>{{ $kategori->keterangan_kategori }}</td>
                                                         <td class="text-center">
+                                                            @if(Auth::user()->id == 3)
                                                             <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                                                 <i class="fas fa-bars"></i>
                                                             </a>
@@ -95,6 +96,7 @@
                                                                     <i class="fas fa-edit"></i> Edit
                                                                 </a>
                                                             </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                     <div class="modal fade" id="info-kategori-{{ $kategori->id_kategori_atk }}">
@@ -182,6 +184,7 @@
                                                     <td>{{ $row->satuan_barang }}</td>
                                                     <td>{{ $row->keterangan_barang }}</td>
                                                     <td class="text-center">
+                                                        @if(Auth::user()->id == 3)
                                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
                                                             <i class="fas fa-bars"></i>
                                                         </a>
@@ -190,6 +193,7 @@
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>
                                                         </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 <div class="modal fade" id="modal-info-{{ $row->id_atk }}">
