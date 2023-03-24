@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('admin-user/oldat/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/oldat/barang/data/semua') }}">Daftar Barang</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ url('admin-user/oldat/barang/daftar/*') }}">Daftar Barang</a></li>
                     <li class="breadcrumb-item active">Barang</li>
                 </ol>
             </div>
@@ -32,6 +32,9 @@
                     <p style="color:white;margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/oldat/barang/daftar/*') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-3">
                 <div class="card card-primary card-outline">

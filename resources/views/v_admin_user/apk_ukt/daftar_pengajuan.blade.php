@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h4 class="m-0">Kerumahtanggaan</h4>
+                <h4 class="m-0">Urusan Kerumahtanggaan (UKT)</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -32,16 +32,19 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/ukt/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-12 form-group">
-                <div class="card card-primary card-outline" id="accordion">
+                <div class="card card-primary" id="accordion">
                     <div class="card-header">
-                        <b class="font-weight-bold text-primary card-title" style="font-size:medium;">
-                            <i class="fas fa-table"></i> TABEL USULAN URUSAN KERUMAHTANGGAAN
-                        </b>
+                        <h4 class="card-title mt-1 font-weight-bold">
+                            Daftar Usulan Kerumahtanggaan
+                        </h4>
                         <div class="card-tools">
                             <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-primary btn-md">
+                                <span class="btn btn-default btn-sm">
                                     <i class="fas fa-filter"></i> Filter
                                 </span>
                             </a>
@@ -229,36 +232,40 @@
                                                         Informasi Pengusul
                                                     </h6>
                                                 </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Nomor Surat </label></div>
-                                                    <div class="col-md-10">: {{ $dataUsulan->no_surat_usulan }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Nama Pengusul </label></div>
-                                                    <div class="col-md-10">: {{ $dataUsulan->nama_pegawai }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-10">: {{ $dataUsulan->keterangan_pegawai }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Unit Kerja</label></div>
-                                                    <div class="col-md-10">: {{ $dataUsulan->unit_kerja }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Tanggal Usulan </label></div>
-                                                    <div class="col-md-10">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                                </div>
-                                                @if ($dataUsulan->otp_usulan_pengusul != null)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-2"><label>Surat Usulan </label></div>
-                                                    <div class="col-md-10">:
-                                                        <a href="{{ url('admin-user/surat/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
-                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-md-3"><label>Nomor Surat </label></div>
+                                                            <div class="col-md-9">: {{ $dataUsulan->no_surat_usulan }}</div>
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-md-3"><label>Nama Pengusul </label></div>
+                                                            <div class="col-md-9">: {{ $dataUsulan->nama_pegawai }}</div>
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-md-3"><label>Jabatan Pengusul </label></div>
+                                                            <div class="col-md-9">: {{ $dataUsulan->keterangan_pegawai }}</div>
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-md-3"><label>Unit Kerja</label></div>
+                                                            <div class="col-md-9">: {{ $dataUsulan->unit_kerja }}</div>
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-md-3"><label>Tanggal Usulan </label></div>
+                                                            <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group row mb-0 text-right">
+                                                            <div class="col-md-4"><label>Surat Usulan </label></div>
+                                                            <div class="col-md-8">:
+                                                                <a href="{{ url('admin-user/surat/usulan-ukt/'. $dataUsulan->id_form_usulan) }}">
+                                                                    <i class="fas fa-file"></i> Surat Usulan Pengajuan
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                @endif
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi Pekerjaan

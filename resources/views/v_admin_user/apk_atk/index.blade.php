@@ -103,6 +103,13 @@
             </div>
             <div class="col-md-12 text-center">
                 <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-left">Usulan Pengajuan</h6>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h6 class="text-left">Referensi dan Stok Barang</h6>
+                    </div>
                     <div class="col-md-3 col-6 form-group">
                         <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="btn btn-default border-secondary p-4 btn-block">
                             <i class="fas fa-copy fa-3x"></i>
@@ -130,7 +137,7 @@
                     <div class="col-md-3 col-6 form-group">
                         <a href="{{ url('admin-user/atk/gudang/dashboard/roum') }}" class="btn btn-default border-secondary p-4 btn-block">
                             <i class="fas fa-pallet fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Gudang ATK</h6>
+                            <h6 class="mt-3 font-weight-bolder">Laporan Gudang ATK</h6>
                         </a>
                     </div>
                     @if(Auth::user()->id == 3)

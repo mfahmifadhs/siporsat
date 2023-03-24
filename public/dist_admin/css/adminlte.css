@@ -52495,4 +52495,13 @@ a.text-muted:hover {
     white-space: nowrap;
 }
 
+.text-spacing {
+    /* padding-top: 10px; */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+  }
+
 

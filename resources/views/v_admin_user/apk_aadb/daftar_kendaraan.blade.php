@@ -30,14 +30,17 @@
                 <p style="color:white;margin: auto;">{{ $message }}</p>
             </div>
             @endif
+            <a href="{{ url('admin-user/aadb/dashboard') }}" class="print mr-2">
+                <i class="fas fa-arrow-circle-left"></i> Kembali
+            </a>
         </div>
         <div class="alert alert-secondary loading" role="alert">
             Sedang menyiapkan data ...
         </div>
         <div class="card card-primary table-container">
             <div class="card-header">
-                <h4 class="card-title">
-                    Data Master AADB
+                <h4 class="card-title mt-1 font-weight-bold">
+                    Daftar Aadb
                 </h4>
             </div>
             <div class="card-body">
@@ -160,7 +163,7 @@
                     </div>
                     <label class="col-md-3">Kualifikasi</label>
                     <div class="col-md-9">:
-                        Kendaraan   <span id="kualifikasi"></span>
+                        Kendaraan <span id="kualifikasi"></span>
                     </div>
                     <label class="col-md-3">Tahun Perolehan</label>
                     <div class="col-md-9">:

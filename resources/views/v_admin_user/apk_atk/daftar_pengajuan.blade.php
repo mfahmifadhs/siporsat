@@ -38,8 +38,8 @@
             </div>
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
-                    <div class="card-header">
-                        <h4 class="card-title mt-1 font-weight-bold" id="accordion">
+                    <div class="card-header" id="accordion">
+                        <h4 class="card-title mt-1 font-weight-bold">
                             Daftar Usulan ATK
                         </h4>
                         <div class="card-tools">
@@ -117,13 +117,9 @@
                             <thead>
                                 <tr>
                                     <th style="width: 1%;">No</th>
-                                    <th style="width: 15%;">
-                                        Tanggal
-                                    </th>
-                                    <th style="width: 15%;">
-                                        No. Surat
-                                    </th>
-                                    <th>Usulan</th>
+                                    <th style="width: 15%;">Tanggal</th>
+                                    <th style="width: 15%;">No. Surat</th>
+                                    <th>Pengusul</th>
                                     <th style="width: 20%;">Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 0%;">Aksi</th>
@@ -154,7 +150,11 @@
                                         {{ $dataUsulan->nama_pegawai }} <br>
                                         {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                     </td>
-                                    <td>{{ $dataUsulan->rencana_pengguna }}</td>
+                                    <td>
+                                        <div class="text-spacing">
+                                            {{ $dataUsulan->rencana_pengguna }}
+                                        </div>
+                                    </td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
                                             @if($dataUsulan->status_proses_id == 1)

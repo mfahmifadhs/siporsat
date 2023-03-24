@@ -33,7 +33,7 @@
                     <p class="fw-light" style="margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
-                <a href="{{ url('admin-user/atk/usulan/daftar/seluruh-usulan') }}" class="print mr-2">
+                <a href="{{ url('admin-user/'.$modul.'/usulan/daftar/seluruh-usulan') }}" class="print mr-2">
                     <i class="fas fa-arrow-circle-left"></i> Kembali
                 </a>
             </div>
@@ -44,16 +44,22 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 col-6">
+                            <div class="col-md-5 col-6">
                                 <div class="form-group row">
-                                    <label class="col-md-4">Tanggal Bast</label>
-                                    <div class="col-md-8">: {{ \Carbon\carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
-                                    <label class="col-md-4">Nomor Surat</label>
-                                    <div class="col-md-8 text-capitalize">: {{ $bast->nomor_bast }}</div>
-                                    <label class="col-md-4">Jenis Usulan</label>
-                                    <div class="col-md-8 text-capitalize">: {{ $bast->jenis_form.' '.$modul }}</div>
-                                    <label class="col-md-4">Status</label>
-                                    <div class="col-md-8">:
+                                    <label class="col-md-5">Tanggal Bast</label>
+                                    <div class="col-md-7">: {{ \Carbon\carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
+                                    <label class="col-md-5">Nomor Surat Usulan</label>
+                                    <div class="col-md-7 text-capitalize">:
+                                        {{ $bast->no_surat_usulan }}
+                                    </div>
+                                    <label class="col-md-5">Nomor Surat BAST</label>
+                                    <div class="col-md-7 text-capitalize">:
+                                        {{ $modul == 'atk' ? $bast->nomor_bast : $bast->no_surat_bast }}
+                                    </div>
+                                    <label class="col-md-5">Jenis Usulan</label>
+                                    <div class="col-md-7 text-capitalize">: {{ $bast->jenis_form.' '.$modul }}</div>
+                                    <label class="col-md-5">Status</label>
+                                    <div class="col-md-7">:
                                         @if (!$bast->otp_bast_ppk)
                                         Menunggu Konfirmasi PPK
                                         @elseif (!$bast->otp_bast_pengusul)
@@ -66,7 +72,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-6">
+                            <div class="col-md-7 col-6">
                                 <div class="form-group row text-capitalize">
                                     <label class="col-md-4">Nama Pengusul</label>
                                     <div class="col-md-8">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
@@ -88,9 +94,15 @@
                                     </div>
                                     <label class="col-md-4">Aksi</label>
                                     <div class="col-md-8">:
+                                        @if ($modul == 'atk')
                                         <a href="{{ url('admin-user/cetak-surat/bast-'.$modul.'/'. $bast->id_bast) }}" class="btn btn-danger btn-sm" rel="noopener" target="_blank">
                                             <i class="fas fa-print"></i> Cetak
                                         </a>
+                                        @else
+                                        <a href="{{ url('admin-user/cetak-surat/bast-'.$modul.'/'. $bast->id_form_usulan) }}" class="btn btn-danger btn-sm" rel="noopener" target="_blank">
+                                            <i class="fas fa-print"></i> Cetak
+                                        </a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -100,6 +112,57 @@
                             <div class="col-md-12 col-12">
                                 <label class="text-muted">Informasi Barang/Pekerjaan</label>
                                 <table class="table table-bordered">
+                                    <!-- Modul Oldat -->
+                                    @if ($modul == 'oldat')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Merk/Tipe Barang</th>
+                                            @if($bast->jenis_form == 'pengadaan')
+                                            <th>Spesifikasi</th>
+                                            <th>Tahun </th>
+                                            @else
+                                            <th>Tahun</th>
+                                            <th>Keterangan</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @if($bast->jenis_form == 'pengadaan')
+                                        @foreach($bast->detailPengadaan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kategori_barang_id }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_barang }}</td>
+                                            <td>{{ $dataBarang->jumlah_barang.' '.$dataBarang->satuan_barang }}</td>
+                                            <td>Rp {{ number_format($dataBarang->estimasi_biaya, 0, ',', '.') }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                        @foreach($bast->detailPerbaikan as $dataBarang)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
+                                            <td>{{ $dataBarang->kategori_barang }}</td>
+                                            <td>{{ $dataBarang->merk_tipe_barang }}</td>
+                                            <td>
+                                                @if (\Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') != -1)
+                                                {{ \Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') }}
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
+                                            <td>{{ $dataBarang->keterangan_perbaikan }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
+                                    @endif
+                                    <!-- Modul ATK -->
                                     @if ($modul == 'atk')
                                     <thead class="bg-secondary">
                                         <tr>
@@ -118,6 +181,161 @@
                                             <td>{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</td>
                                             <td>{{ $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</td>
                                             <td>{{ $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @endif
+                                    @if ($modul == 'aadb')
+                                    @if($bast->jenis_form == 1)
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Jenis AADB</th>
+                                            <th>Jenis Kendaraan</th>
+                                            <th>Merk / Tipe</th>
+                                            <th>Tahun Kendaraan</th>
+                                            <th>Jumlah</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody class="text-capitalize">
+                                        @foreach($bast->usulanKendaraan as $dataPengadaan)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataPengadaan->jenis_aadb }}</td>
+                                            <td>{{ $dataPengadaan->jenis_kendaraan }}</td>
+                                            <td>{{ $dataPengadaan->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataPengadaan->tahun_kendaraan }}</td>
+                                            <td>{{ $dataPengadaan->jumlah_pengajuan }} kendaraan</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @elseif($bast->jenis_form == '2')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No. Plat</th>
+                                            <th>Kendaraan</th>
+                                            <th>Kilometer</th>
+                                            <th>Jadwal Servis</th>
+                                            <th>Jadwal Ganti Oli</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach($bast->usulanServis as $dataServis)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataServis->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataServis->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataServis->kilometer_terakhir }} Km</td>
+                                            <td>
+                                                Terakhir Servis : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_servis_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_servis }} Km
+                                            </td>
+                                            <td>
+                                                Terakhir Ganti Oli : <br>
+                                                {{ \Carbon\carbon::parse($dataServis->tgl_ganti_oli_terakhir)->isoFormat('DD MMMM Y') }} <br>
+                                                Jatuh Tempo Servis : <br>
+                                                {{ (int) $dataServis->jatuh_tempo_ganti_oli }} Km
+                                            </td>
+                                            <td>{{ $dataServis->keterangan_servis }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @elseif($bast->jenis_form == '3')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No. Plat</th>
+                                            <th>Kendaraan</th>
+                                            <th>Pengguna</th>
+                                            <th>Masa Berlaku STNK</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach($bast->usulanSTNK as $dataSTNK)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataSTNK->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->merk_tipe_kendaraan }}</td>
+                                            <td>{{ $dataSTNK->pengguna }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($dataSTNK->mb_stnk_baru)->isoFormat('DD MMMM Y') }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @elseif($bast->jenis_form == '4')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Bulan Pengadaan</th>
+                                            <th>Jenis AADB</th>
+                                            <th>No. Plat</th>
+                                            <th>Kendaraan</th>
+                                            <th>Kualifikasi</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody class="text-capitalize">
+                                        @foreach($bast->usulanVoucher as $dataVoucher)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($dataVoucher->bulan_pengadaan)->isoFormat('MMMM Y') }}</td>
+                                            <td>{{ $dataVoucher->jenis_aadb }}</td>
+                                            <td>{{ $dataVoucher->no_plat_kendaraan }}</td>
+                                            <td>{{ $dataVoucher->merk_tipe_kendaraan }}</td>
+                                            <td>Kendaraan {{ $dataVoucher->kualifikasi }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @endif
+                                    @endif
+                                    <!-- Modul Gedung dan Bangunan -->
+                                    @if ($modul == 'gdn')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Lokasi Perbaikan</th>
+                                            <th>Lokasi Spesifik</th>
+                                            <th>Bidang Kerusakan</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody>
+                                        @foreach($bast->detailUsulanGdn as $dataGdn)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataGdn->lokasi_bangunan }}</td>
+                                            <td>{!! nl2br(e($dataGdn->lokasi_spesifik)) !!}</td>
+                                            <td>{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</td>
+                                            <td>{!! nl2br(e($dataGdn->keterangan)) !!}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @endif
+                                    <!-- Modul Kerumahtanggaan -->
+                                    @if ($modul == 'ukt')
+                                    <thead class="bg-secondary">
+                                        <tr>
+                                            <th style="width: 1%;">No</th>
+                                            <th style="width: 20%;">Pekerjaan</th>
+                                            <th>Spesifikasi Pekerjaan</th>
+                                            <th style="width: 15%;">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <?php $no = 1; ?>
+                                    <tbody class="text-uppercase">
+                                        @foreach($bast->detailUsulanUkt as $dataUkt)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $dataUkt->lokasi_pekerjaan }}</td>
+                                            <td>{!! $dataUkt->spesifikasi_pekerjaan !!}</td>
+                                            <td>{{ $dataUkt->keterangan }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

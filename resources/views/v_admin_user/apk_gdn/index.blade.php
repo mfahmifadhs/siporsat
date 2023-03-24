@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Alat Angkutan Darat Bermotor (AADB)</h1>
+                <h1 class="m-0">Gedung dan Bangunan (GDN)</h1>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/aadb/usulan/status/1') }}">
+                        <a href="{{ url('admin-user/gdn/usulan/status/1') }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small></h3>
@@ -31,7 +31,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/aadb/usulan/status/2') }}">
+                        <a href="{{ url('admin-user/gdn/usulan/status/2') }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small></h3>
@@ -44,7 +44,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/aadb/usulan/status/5') }}">
+                        <a href="{{ url('admin-user/gdn/usulan/status/5') }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 5)->count() }} <small>usulan</small></h3>
@@ -57,7 +57,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/aadb/usulan/status/ditolak') }}">
+                        <a href="{{ url('admin-user/gdn/usulan/status/ditolak') }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_pengajuan_id', 2)->count() }} <small>usulan</small></h3>
@@ -76,31 +76,13 @@
             </div>
             <div class="col-md-12 text-center">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <h6 class="text-left">Usulan Pengajuan</h6>
                     </div>
-                    <div class="col-md-6">
-                        <h6 class="text-left">Daftar Alat Angkutan Darat Bermotor (AADB)</h6>
-                    </div>
                     <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/aadb/usulan/daftar/seluruh-usulan') }}" class="btn btn-default border-secondary p-4 btn-block">
+                        <a href="{{ url('admin-user/gdn/usulan/daftar/seluruh-usulan') }}" class="btn btn-default border-secondary p-4 btn-block">
                             <i class="fas fa-copy fa-3x"></i>
                             <h6 class="mt-3 font-weight-bolder">Daftar Usulan</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <!--  -->
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/aadb/kendaraan/daftar/*') }}" class="btn btn-default border-secondary p-4 btn-block">
-                            <i class="fas fa-car fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Daftar Aadb</h6>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/aadb/kendaraan/tambah/*') }}" class="btn btn-default border-secondary p-4 btn-block disabled">
-                            <i class="fas fa-plus-circle fa-3x"></i>
-                            <h6 class="mt-3 font-weight-bolder">Tambah Aadb</h6>
                         </a>
                     </div>
                 </div>
@@ -115,7 +97,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/aadb/usulan/laporan/*') }}" class="btn btn-default border-secondary p-4 btn-block disabled">
+                        <a href="{{ url('admin-user/gdn/usulan/laporan/*') }}" class="btn btn-default border-secondary p-4 btn-block disabled">
                             <i class="fas fa-file-alt fa-3x"></i>
                             <h6 class="mt-3 font-weight-bolder">Laporan</h6>
                         </a>
@@ -162,7 +144,7 @@
 
         })
 
-        $("#table-aadb").DataTable({
+        $("#table-gdn").DataTable({
             "responsive": true,
             "lengthChange": true,
             "autoWidth": true,

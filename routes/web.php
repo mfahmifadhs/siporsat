@@ -124,8 +124,9 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     Route::post('select2/{aksi}', [AdminUserController::class, 'Select2']);
     Route::post('verif/{aksi}/{id}', [AdminUserController::class, 'Verification'])->middleware('2fa');
 
+    // oldat
     Route::group(['prefix' => 'oldat', 'as' => 'oldat'], function () {
-        Route::get('dashboard', [AdminUserController::class, 'index']);
+        Route::get('dashboard', [AdminUserController::class, 'Oldat']);
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionOldat']);
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'showItem']);
 
@@ -134,8 +135,9 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
 
     });
 
+    // aadb
     Route::group(['prefix' => 'aadb', 'as' => 'aadb.'], function () {
-        Route::get('dasboard', [AdminUserController::class, 'Aadb']);
+        Route::get('dashboard', [AdminUserController::class, 'Aadb']);
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAadb']);
         Route::get('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
 
@@ -143,6 +145,7 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::post('kendaraan/{aksi}/{id}', [AdminUserController::class, 'Vehicle']);
     });
 
+    // alat tulis kantor
     Route::group(['prefix' => 'atk', 'as' => 'atk.'], function() {
         Route::get('dashboard', [AdminUserController::class, 'Atk']);
         Route::get('barang/{aksi}/{id}', [AdminUserController::class, 'OfficeStationery']);
@@ -157,6 +160,16 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionAtk']);
     });
 
+    // gedung dan bangunan
+    Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function() {
+        Route::get('dashboard', [AdminUserController::class, 'Gdn']);
+        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
+        Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterGdn']);
+
+        Route::post('surat/{aksi}/{id}', [AdminUserController::class, 'LetterGdn']);
+        Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
+    });
+
     // urusan kerumah tanggaan
     Route::group(['prefix' => 'ukt', 'as' => 'ukt'], function() {
         Route::get('dashboard', [AdminUserController::class, 'Ukt']);
@@ -167,6 +180,7 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionUkt']);
     });
 
+    // rumah dinas
     Route::group(['prefix' => 'rdn', 'as' => 'rdn.'], function () {
         Route::get('dasboard', [AdminUserController::class, 'Rdn']);
         Route::get('rumah-dinas/{aksi}/{id}', [AdminUserController::class, 'OfficialResidence']);

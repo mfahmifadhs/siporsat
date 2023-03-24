@@ -12,6 +12,7 @@ use App\Models\AADB\Kendaraan;
 use App\Models\AADB\KondisiKendaraan;
 use App\Models\AADB\JenisUsulan;
 use App\Models\AADB\UsulanAadb;
+use App\Models\AADB\UsulanKendaraan;
 use App\Models\OLDAT\Barang;
 use App\Models\OLDAT\KategoriBarang;
 use App\Models\OLDAT\KondisiBarang;
@@ -107,8 +108,19 @@ class AdminUserController extends Controller
     public function Profile(Request $request, $aksi, $id)
     {
         $user = User::where('id', Auth::user()->id)
-            ->select('id','id_pegawai','nip_pegawai','nohp_pegawai','nama_pegawai','keterangan_pegawai',
-                     'unit_kerja','username','level','status_google2fa','password')
+            ->select(
+                'id',
+                'id_pegawai',
+                'nip_pegawai',
+                'nohp_pegawai',
+                'nama_pegawai',
+                'keterangan_pegawai',
+                'unit_kerja',
+                'username',
+                'level',
+                'status_google2fa',
+                'password'
+            )
             ->leftjoin('tbl_level', 'id_level', 'level_id')
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -296,10 +308,10 @@ class AdminUserController extends Controller
         if ($aksi == 'bast-atk') {
             $modul = 'atk';
             if ($id == 'daftar') {
-                $bast = BastAtk::join('atk_tbl_form_usulan','id_form_usulan','usulan_id')
-                        ->select('id_bast','tanggal_usulan','no_surat_usulan','atk_tbl_bast.tanggal_bast','nomor_bast')
-                        ->orderBy('tanggal_bast', 'DESC')
-                        ->get();
+                $bast = BastAtk::join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
+                    ->select('id_bast', 'tanggal_usulan', 'no_surat_usulan', 'atk_tbl_bast.tanggal_bast', 'nomor_bast')
+                    ->orderBy('tanggal_bast', 'DESC')
+                    ->get();
                 return view('v_admin_user/daftar_bast', compact('bast', 'modul'));
             } else {
                 $pimpinan = Pegawai::join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -380,17 +392,63 @@ class AdminUserController extends Controller
             return view('v_admin_user.surat_bast', compact('modul', 'bast', 'pimpinan'));
         }
         // Detail Berita Acara Serah Terima
-        if ($aksi == 'detail-bast-atk') {
+        if ($aksi == 'detail-bast-oldat') {
+            $modul = 'oldat';
+
+            $bast = FormUsulan::where('id_form_usulan', $id)
+                ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_tim_kerja', 'id_tim_kerja', 'tim_kerja_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'tbl_pegawai.unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->first();
+            return view('v_admin_user.detail_bast', compact('modul', 'bast'));
+        } elseif ($aksi == 'detail-bast-aadb') {
+            $modul = 'aadb';
+            $form      = UsulanAadb::where('id_form_usulan', $id)->pluck('id_form_usulan');
+            $jenisAadb = UsulanKendaraan::where('form_usulan_id', $form)->first();
+
+            $bast = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_admin_user/detail_bast', compact('bast', 'modul', 'jenisAadb'));
+        } elseif ($aksi == 'detail-bast-atk') {
             $modul = 'atk';
-            $bast   = BastAtk::join('atk_tbl_form_usulan','id_form_usulan','usulan_id')
-                      ->join('tbl_pegawai','id_pegawai','pegawai_id')
-                      ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
-                      ->select('atk_tbl_bast.*','atk_tbl_form_usulan.*','tbl_pegawai.*','tbl_unit_kerja.*','atk_tbl_bast.tanggal_bast',
-                               'atk_tbl_bast.otp_bast_ppk','atk_tbl_bast.otp_bast_pengusul','atk_tbl_bast.otp_bast_kabag')
-                      ->where('id_bast', $id)
-                      ->first();
+            $bast   = BastAtk::join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
+                ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->select(
+                    'atk_tbl_bast.*',
+                    'atk_tbl_form_usulan.*',
+                    'tbl_pegawai.*',
+                    'tbl_unit_kerja.*',
+                    'atk_tbl_bast.tanggal_bast',
+                    'atk_tbl_bast.otp_bast_ppk',
+                    'atk_tbl_bast.otp_bast_pengusul',
+                    'atk_tbl_bast.otp_bast_kabag'
+                )
+                ->where('id_bast', $id)
+                ->first();
 
             return view('v_admin_user.detail_bast', compact('modul', 'bast'));
+        } elseif ($aksi == 'detail-bast-gdn') {
+            $modul = 'gdn';
+
+            $form      = UsulanGdn::where('id_form_usulan', $id)->pluck('id_form_usulan');
+
+            $bast = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_admin_user/detail_bast', compact('bast', 'modul'));
         }
     }
 
@@ -477,8 +535,16 @@ class AdminUserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
-                ->select('atk_tbl_bast.*','atk_tbl_form_usulan.*','tbl_pegawai.*','tbl_unit_kerja.*','atk_tbl_bast.tanggal_bast',
-                         'atk_tbl_bast.otp_bast_ppk','atk_tbl_bast.otp_bast_pengusul','atk_tbl_bast.otp_bast_kabag')
+                ->select(
+                    'atk_tbl_bast.*',
+                    'atk_tbl_form_usulan.*',
+                    'tbl_pegawai.*',
+                    'tbl_unit_kerja.*',
+                    'atk_tbl_bast.tanggal_bast',
+                    'atk_tbl_bast.otp_bast_ppk',
+                    'atk_tbl_bast.otp_bast_pengusul',
+                    'atk_tbl_bast.otp_bast_kabag'
+                )
                 ->first();
 
             return view('v_admin_user/print_surat_bast', compact('pimpinan', 'bast', 'id', 'modul'));
@@ -549,7 +615,6 @@ class AdminUserController extends Controller
 
             return view('v_admin_user.apk_atk.surat_penyerahan', compact('usulan'));
         }
-
     }
 
     // ====================================================
@@ -653,7 +718,7 @@ class AdminUserController extends Controller
     }
 
     // ===============================================
-    //             ALAT TULIS KANTOR (ATK)
+    //             ALAT TULIS KANTOR (--ATK)
     // ===============================================
 
     public function Atk(Request $request)
@@ -698,7 +763,6 @@ class AdminUserController extends Controller
 
     public function OfficeStationery(Request $request, $aksi, $id)
     {
-        dd('resq');
         if ($aksi == 'daftar') {
             $googleChartData = $this->ChartDataAtk();
             $usPengadaan = UsulanAtk::where('jenis_form', 'pengadaan')
@@ -978,13 +1042,13 @@ class AdminUserController extends Controller
             $uker   = UnitKerja::get();
 
             $dataUsulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
-            ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-            ->orderBy('status_pengajuan_id', 'ASC')
-            ->orderBy('status_proses_id', 'ASC')
-            ->orderBy('tanggal_usulan', 'DESC');
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC');
 
 
             if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
@@ -1137,7 +1201,7 @@ class AdminUserController extends Controller
                 ->where('id_form_usulan', $id)
                 ->first();
 
-            return view('v_admin_user.apk_atk.edit', compact('idBast','usulan'));
+            return view('v_admin_user.apk_atk.edit', compact('idBast', 'usulan'));
         } elseif ($aksi == 'proses-edit') {
             // Insert BAST
             $id_bast = (int) Carbon::now()->format('dhimy');
@@ -1180,32 +1244,40 @@ class AdminUserController extends Controller
                 }
             }
 
-            return redirect('admin-user/surat/detail-bast-atk/'. $id_bast)->with('success', 'Berhasil Menyerahkan ATK');
+            return redirect('admin-user/surat/detail-bast-atk/' . $id_bast)->with('success', 'Berhasil Menyerahkan ATK');
         } elseif ($aksi == 'pembatalan') {
             $totalUsulan = BastAtk::count();
             $permintaan  = UsulanAtkPermintaan::where('id_permintaan', $id)
-                            ->select('atk_tbl_form_usulan_pengadaan.*', 'atk_tbl_form_usulan.*', 'atk_tbl_form_usulan_permintaan.*',
-                                     'atk_tbl_form_usulan_permintaan.jumlah_disetujui')
-                            ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
-                            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
-                            ->first();
+                ->select(
+                    'atk_tbl_form_usulan_pengadaan.*',
+                    'atk_tbl_form_usulan.*',
+                    'atk_tbl_form_usulan_permintaan.*',
+                    'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
+                )
+                ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                ->first();
 
             $usulan      = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
-                            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-                            ->where('id_form_usulan', $permintaan->form_usulan_id)
-                            ->first();
+                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->where('id_form_usulan', $permintaan->form_usulan_id)
+                ->first();
 
-            return view('v_admin_user.apk_atk.pembatalan', compact('usulan','permintaan'));
+            return view('v_admin_user.apk_atk.pembatalan', compact('usulan', 'permintaan'));
         } elseif ($aksi == 'batal-permintaan') {
             $permintaan = UsulanAtkPermintaan::where('id_permintaan', $id)
-                            ->select('atk_tbl_form_usulan_pengadaan.*', 'atk_tbl_form_usulan.*', 'atk_tbl_form_usulan_permintaan.*',
-                                     'atk_tbl_form_usulan_permintaan.jumlah_disetujui')
-                            ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
-                            ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
-                            ->first();
+                ->select(
+                    'atk_tbl_form_usulan_pengadaan.*',
+                    'atk_tbl_form_usulan.*',
+                    'atk_tbl_form_usulan_permintaan.*',
+                    'atk_tbl_form_usulan_permintaan.jumlah_disetujui'
+                )
+                ->join('atk_tbl_form_usulan_pengadaan', 'id_form_usulan_pengadaan', 'pengadaan_id')
+                ->join('atk_tbl_form_usulan', 'id_form_usulan', 'atk_tbl_form_usulan_permintaan.form_usulan_id')
+                ->first();
             // Hapus Permintaan
-            UsulanAtkPermintaan::where('id_permintaan',$id)->update([
+            UsulanAtkPermintaan::where('id_permintaan', $id)->update([
                 'status'            => $permintaan->jumlah_penyerahan == null || $permintaan->jumlah_penyerahan == 0 ? 'ditolak' : 'diterima',
                 'jumlah_disetujui'  => ($permintaan->jumlah_disetujui - $request->jumlah_batal),
                 'keterangan'        => $request->keterangan
@@ -1226,7 +1298,7 @@ class AdminUserController extends Controller
                 'status_penyerahan' => $status_penyerahan
             ]);
 
-            return redirect('admin-user/atk/usulan/edit/'. $permintaan->form_usulan_id)->with('success', 'Berhasil Membatalkan Permintaan');
+            return redirect('admin-user/atk/usulan/edit/' . $permintaan->form_usulan_id)->with('success', 'Berhasil Membatalkan Permintaan');
         } elseif ($aksi == 'laporan') {
             $dataChartAtk = $this->ChartDataAtk();
             $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
@@ -1428,7 +1500,6 @@ class AdminUserController extends Controller
             }
 
             return view('v_admin_user.apk_atk.stok_gudang', compact('barang'));
-
         } elseif ($aksi == 'referensi') {
             $kategori  = KategoriAtk::get();
             $referensi = Atk::leftjoin('atk_tbl_kategori', 'id_kategori_atk', 'kategori_id')->get();
@@ -1594,9 +1665,22 @@ class AdminUserController extends Controller
     //                        AADB
     // ====================================================
 
-    public function Aadb(Request $request, $aksi)
+    public function Aadb(Request $request)
     {
-        return view('v_admin_user.apk_aadb.index');
+        $usulanUker  = UsulanAadb::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->get();
+
+        $usulanTotal = UsulanAadb::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_admin_user.apk_aadb.index', compact('usulanUker', 'usulanTotal'));
     }
 
     public function SubmissionAadb(Request $request, $aksi, $id)
@@ -1605,8 +1689,19 @@ class AdminUserController extends Controller
             $uker   = UnitKerja::get();
 
             $dataUsulan = UsulanAadb::with('usulanKendaraan')
-                ->select('id_form_usulan','tanggal_usulan','no_surat_usulan','unit_kerja','jenis_form','nama_pegawai',
-                         'keterangan_pegawai','rencana_pengguna','status_proses_id','status_pengajuan_id')
+                ->select(
+                    'id_form_usulan',
+                    'tanggal_usulan',
+                    'no_surat_usulan',
+                    'unit_kerja',
+                    'jenis_form',
+                    'nama_pegawai',
+                    'keterangan_pegawai',
+                    'rencana_pengguna',
+                    'status_proses_id',
+                    'status_pengajuan_id',
+                    'keterangan'
+                )
                 ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
@@ -1630,12 +1725,36 @@ class AdminUserController extends Controller
                     $searchUkt = $dataUsulan->where('jenis_form', $request->jenis_form);
                 }
 
-                $formUsulan = $searchUkt->get();
+                $usulan = $searchUkt->get();
             } else {
-                $formUsulan = $dataUsulan->get();
+                $usulan = $dataUsulan->get();
             }
 
-            return view('v_admin_user.apk_aadb.daftar_pengajuan', compact('uker', 'formUsulan'));
+            return view('v_admin_user.apk_aadb.daftar_pengajuan', compact('uker', 'usulan'));
+        } elseif ($aksi == 'status') {
+            $uker   = UnitKerja::get();
+
+            if ($id == 'ditolak') {
+                $usulan  = UsulanAadb::with('usulanKendaraan')
+                    ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                    ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_pengajuan_id', 2)
+                    ->get();
+            } else {
+                $usulan  = UsulanAadb::with('usulanKendaraan')
+                    ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+                    ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_proses_id', $id)
+                    ->get();
+            }
+
+            return view('v_admin_user.apk_aadb.daftar_pengajuan', compact('uker', 'usulan'));
         }
     }
 
@@ -1647,8 +1766,24 @@ class AdminUserController extends Controller
                 ->join('aadb_tbl_kondisi_kendaraan', 'id_kondisi_kendaraan', 'kondisi_kendaraan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->join('aadb_tbl_status_kendaraan', 'id_status_kendaraan', 'status_kendaraan_id')
-                ->select('id_kendaraan','jenis_aadb','unit_kerja','no_plat_kendaraan','merk_tipe_kendaraan','kualifikasi','mb_stnk_plat_kendaraan','tahun_kendaraan',
-                         'tanggal_perolehan','no_bpkb','no_rangka','no_mesin','nilai_perolehan','kondisi_kendaraan','pengguna','status_kendaraan')
+                ->select(
+                    'id_kendaraan',
+                    'jenis_aadb',
+                    'unit_kerja',
+                    'no_plat_kendaraan',
+                    'merk_tipe_kendaraan',
+                    'kualifikasi',
+                    'mb_stnk_plat_kendaraan',
+                    'tahun_kendaraan',
+                    'tanggal_perolehan',
+                    'no_bpkb',
+                    'no_rangka',
+                    'no_mesin',
+                    'nilai_perolehan',
+                    'kondisi_kendaraan',
+                    'pengguna',
+                    'status_kendaraan'
+                )
                 ->orderBy('jenis_aadb', 'ASC')
                 ->get();
 
@@ -1672,14 +1807,82 @@ class AdminUserController extends Controller
     //                        OLDAT
     // ====================================================
 
+
+    public function Oldat(Request $request)
+    {
+        $usulanUker  = FormUsulan::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->get();
+
+        $usulanTotal = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_admin_user.apk_oldat.index', compact('usulanUker', 'usulanTotal'));
+    }
+
     public function SubmissionOldat(Request $request, $aksi, $id)
     {
-        if ($aksi == 'daftar') {
+        if ($aksi == 'status') {
+            $uker   = UnitKerja::get();
+            if ($id == 'ditolak') {
+                $usulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_pengajuan_id', 2)
+                    ->get();
+            } elseif ($id == 'uker') {
+                $usulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('jenis_form', $request->jenis_form)
+                    ->where('unit_kerja_id', $request->id_unit_kerja)
+                    ->get();
+            } else {
+                $usulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_proses_id', $id)
+                    ->get();
+            }
+
+            return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'usulan'));
+        } elseif ($aksi == 'daftar') {
             $uker   = UnitKerja::get();
 
             $dataUsulan = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->select('id_form_usulan','tanggal_usulan','no_surat_usulan','unit_kerja','jenis_form','nama_pegawai',
-                         'keterangan_pegawai','rencana_pengguna','status_proses_id','status_pengajuan_id')
+                ->select(
+                    'id_form_usulan',
+                    'tanggal_usulan',
+                    'no_surat_usulan',
+                    'unit_kerja',
+                    'jenis_form',
+                    'nama_pegawai',
+                    'keterangan_pegawai',
+                    'rencana_pengguna',
+                    'status_proses_id',
+                    'status_pengajuan_id'
+                )
                 ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
@@ -1702,26 +1905,39 @@ class AdminUserController extends Controller
                     $searchUkt = $dataUsulan->where('jenis_form', $request->jenis_form);
                 }
 
-                if ($request->unit_kerja_id == null && $request->start_date == null  && $request->status_proses_id == null  && $request->jenis_form == null ) {
+                if ($request->unit_kerja_id == null && $request->start_date == null  && $request->status_proses_id == null  && $request->jenis_form == null) {
                     $formUsulan = $dataUsulan->get();
                 } else {
                     $formUsulan = $searchUkt->get();
                 }
-
             } else {
-                $formUsulan = $dataUsulan->get();
+                $usulan = $dataUsulan->get();
             }
-            return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'formUsulan'));
+
+            return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'usulan'));
+        } elseif ($aksi == 'laporan') {
+            return back();
         }
     }
 
     public function showItem(Request $request, $aksi, $id)
     {
-        if ($aksi == 'data') {
+        if ($aksi == 'daftar') {
             $char = '"';
-            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang','satuan_barang',
-                'nilai_perolehan', 'tahun_perolehan', 'kondisi_barang', 'nama_pegawai','unit_kerja',
-                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"))
+            $barang = Barang::select(
+                'id_barang',
+                'kode_barang',
+                'kategori_barang',
+                'nup_barang',
+                'jumlah_barang',
+                'satuan_barang',
+                'nilai_perolehan',
+                'tahun_perolehan',
+                'kondisi_barang',
+                'nama_pegawai',
+                'unit_kerja',
+                \DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang")
+            )
                 ->join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->join('oldat_tbl_kondisi_barang', 'oldat_tbl_kondisi_barang.id_kondisi_barang', 'oldat_tbl_barang.kondisi_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')
@@ -1826,10 +2042,8 @@ class AdminUserController extends Controller
             return redirect('admin-user/oldat/barang/detail/' . $id)->with('success', 'Berhasil Mengubah Informasi Barang');
         } elseif ($aksi == 'download') {
             return Excel::download(new BarangExport(), 'data_pengadaan_barang.xlsx');
-        } else {
-            $kategoriBarang = KategoriBarang::where('id_kategori_barang', $id);
-            $kategoriBarang->delete();
-            return redirect('admin-user/oldat/kategori-barang/data/semua')->with('success', 'Berhasil Menghapus Kategori Barang');
+        } elseif ($aksi == 'tambah') {
+            return back();
         }
     }
 
@@ -1858,9 +2072,122 @@ class AdminUserController extends Controller
     }
 
     /*===============================================================
+                                GEDUNG DAN BANGUNAN
+    ===============================================================*/
+
+    public function Gdn(Request $request)
+    {
+        $usulanUker  = UsulanGdn::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->get();
+
+        $usulanTotal = UsulanGdn::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_admin_user.apk_gdn.index', compact('usulanUker', 'usulanTotal'));
+    }
+
+    public function SubmissionGdn(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'status') {
+            $uker   = UnitKerja::get();
+            if ($id == 'ditolak') {
+                $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_pengajuan_id', 2)
+                    ->get();
+            } else {
+                $usulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_proses_id', $id)
+                    ->orWhere('unit_kerja_id', $id)
+                    ->get();
+            }
+
+
+            return view('v_admin_user.apk_gdn.daftar_pengajuan', compact('uker', 'usulan'));
+        } elseif ($aksi == 'daftar') {
+            $uker   = UnitKerja::get();
+
+            $dataUsulan = UsulanGdn::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                ->select(
+                    'id_form_usulan',
+                    'tanggal_usulan',
+                    'no_surat_usulan',
+                    'unit_kerja',
+                    'jenis_form',
+                    'nama_pegawai',
+                    'keterangan_pegawai',
+                    'status_proses_id',
+                    'status_pengajuan_id'
+                )
+                ->orderBy('status_pengajuan_id', 'ASC')
+                ->orderBy('status_proses_id', 'ASC')
+                ->orderBy('tanggal_usulan', 'DESC');
+
+            if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id'])) {
+                if ($request->unit_kerja_id) {
+                    $searchUkt = $dataUsulan->where('unit_kerja_id', $request->unit_kerja_id);
+                }
+                if ($request->start_date) {
+                    $searchUkt = $dataUsulan->whereBetween('tanggal_usulan', [$request->start_date, $request->end_date]);
+                }
+                if ($request->status_proses_id) {
+                    $searchUkt = $dataUsulan->where('status_proses_id', $request->status_proses_id);
+                }
+
+                $usulan = $searchUkt->get();
+            } else {
+                $usulan = $dataUsulan->get();
+            }
+
+            return view('v_admin_user.apk_gdn.daftar_pengajuan', compact('uker', 'usulan'));
+        }
+    }
+
+    /*===============================================================
                                 KERUMAHTANGGAAN
     ===============================================================*/
 
+    public function Ukt(Request $request)
+    {
+        $usulanUker  = UsulanUkt::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
+            ->get();
+
+        $usulanTotal = UsulanUkt::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_admin_user.apk_ukt.index', compact('usulanUker', 'usulanTotal'));
+    }
 
     public function SubmissionUkt(Request $request, $aksi, $id)
     {
@@ -1901,8 +2228,17 @@ class AdminUserController extends Controller
                 ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
-                ->select('id_form_usulan','tanggal_usulan','no_surat_usulan','unit_kerja','jenis_form','nama_pegawai',
-                         'keterangan_pegawai','status_proses_id','status_pengajuan_id')
+                ->select(
+                    'id_form_usulan',
+                    'tanggal_usulan',
+                    'no_surat_usulan',
+                    'unit_kerja',
+                    'jenis_form',
+                    'nama_pegawai',
+                    'keterangan_pegawai',
+                    'status_proses_id',
+                    'status_pengajuan_id'
+                )
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
                 ->orderBy('tanggal_usulan', 'DESC');

@@ -19,6 +19,21 @@
         .pagebreak {
             page-break-after: always;
         }
+
+        .table-data {
+            border: 1px solid;
+            font-size: 20px;
+        }
+
+        .table-data th,
+        .table-data td {
+            border: 1px solid;
+        }
+
+        .table-data thead th,
+        .table-data thead td {
+            border: 1px solid;
+        }
     }
 
     .divTable {
@@ -70,8 +85,8 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>sekretariat jenderal</b></h5>
                     <p style="font-size: 18px;"><i>
-                        Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                        Telepon : (021) 5201590</i>
+                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            Telepon : (021) 5201590</i>
                     </p>
                 </h2>
             </div>
@@ -239,8 +254,8 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     <div class="row divThead">
                         <div class="col-md-1 divTheadtd text-center">No</div>
                         <div class="col-md-3 divTheadtd">Bidang Kerusakan</div>
-                        <div class="col-md-2 divTheadtd">Lokasi Perbaikan</div>
-                        <div class="col-md-4 divTheadtd">Lokasi Spesifik</div>
+                        <div class="col-md-2 divTheadtd">Lokasi</div>
+                        <div class="col-md-4 divTheadtd">Spesifikasi Pekerjaan</div>
                         <div class="col-md-2">Keterangan</div>
                     </div>
                     @foreach($bast->detailUsulanGdn as $i => $dataGdn)
@@ -272,51 +287,33 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 </div>
                 @elseif ($modul == 'aadb')
                 @if($bast->jenis_form == '1')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
-                            @if($jenisAadb->jenis_aadb == 'bmn')
-                            <th>Kode Barang</th>
-                            @endif
                             <th>Jenis AADB</th>
-                            <th>Nama Kendaraan</th>
-                            <th>Merk/Tipe</th>
-                            @if($jenisAadb->jenis_aadb == 'sewa')
-                            <th>Mulai Sewa</th>
-                            <th>Penyedia</th>
-                            @endif
+                            <th>Jenis Kendaraan</th>
+                            <th>Merk / Tipe</th>
+                            <th>Tahun Kendaraan</th>
+                            <th>Jumlah</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
                     <tbody class="text-capitalize">
-                        @foreach($bast->kendaraan as $dataKendaraan)
+                        @foreach($bast->usulanKendaraan as $dataPengadaan)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            @if($dataKendaraan->jenis_aadb == 'bmn')
-                            <td>{{ $dataKendaraan->kode_barang }}</td>
-                            @endif
-                            <td>{{ $dataKendaraan->jenis_aadb }}</td>
-                            <td>{{ ucfirst(strtolower($dataKendaraan->jenis_kendaraan)) }}</td>
-                            <td>
-                                @if($jenisAadb->jenis_aadb == 'bmn')
-                                <span class="text-uppercase">{{ $dataKendaraan->no_plat_kendaraan }}</span> <br>
-                                @endif
-                                {{ $dataKendaraan->merk_tipe_kendaraan.' '.$dataKendaraan->tahun_kendaraan }}
-                            </td>
-                            @if($dataKendaraan->jenis_aadb == 'sewa')
-                            @foreach($dataKendaraan->kendaraanSewa as $dataSewa)
-                            <td>{{ $dataSewa->mulai_sewa }}</td>
-                            <td>{{ $dataSewa->penyedia }}</td>
-                            @endforeach
-                            @endif
-
+                            <td>{{ $dataPengadaan->jenis_aadb }}</td>
+                            <td>{{ $dataPengadaan->jenis_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->merk_tipe_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->tahun_kendaraan }}</td>
+                            <td>{{ $dataPengadaan->jumlah_pengajuan }} kendaraan</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '2')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -354,7 +351,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '3')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -378,7 +375,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </tbody>
                 </table>
                 @elseif($bast->jenis_form == '4')
-                <table class="table table-bordered m-0">
+                <table class="table table-data m-0">
                     <thead>
                         <tr>
                             <th>No</th>

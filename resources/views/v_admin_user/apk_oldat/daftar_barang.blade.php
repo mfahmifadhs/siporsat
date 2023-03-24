@@ -30,15 +30,17 @@
                 <p style="color:white;margin: auto;">{{ $message }}</p>
             </div>
             @endif
+            <a href="{{ url('admin-user/oldat/dashboard') }}" class="print mr-2">
+                <i class="fas fa-arrow-circle-left"></i> Kembali
+            </a>
         </div>
         <div class="alert alert-secondary loading" role="alert">
             Sedang menyiapkan data ...
         </div>
-        <br>
         <div class="card card-primary table-container">
             <div class="card-header">
-                <h4 class="card-title">
-                    Data Master Barang
+                <h4 class="card-title mt-1 font-weight-bold">
+                    Daftar BMN
                 </h4>
             </div>
             <div class="card-body">

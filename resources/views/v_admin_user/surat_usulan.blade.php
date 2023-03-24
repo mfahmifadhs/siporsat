@@ -140,11 +140,7 @@
                                         </div>
                                         <div class="col-md-3">Nomor Surat</div>
                                         <div class="col-md-9 text-uppercase">:
-                                            @if ($usulan->status_pengajuan_id == 1)
                                             {{ $usulan->no_surat_usulan }}
-                                            @else
-                                            -
-                                            @endif
                                         </div>
                                         <div class="col-md-3">Pengusul</div>
                                         <div class="col-md-9">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }}</div>

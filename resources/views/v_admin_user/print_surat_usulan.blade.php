@@ -33,6 +33,32 @@
                 border: 1px solid;
             }
         }
+
+        .divTable {
+            border-top: 1px solid;
+            border-left: 1px solid;
+            border-right: 1px solid;
+            font-size: 21px;
+        }
+
+        .divThead {
+            border-bottom: 1px solid;
+            font-weight: bold;
+        }
+
+        .divTbody {
+            border-bottom: 1px solid;
+            text-transform: capitalize;
+        }
+
+        .divTheadtd {
+            border-right: 1px solid;
+        }
+
+        .divTbodytd {
+            border-right: 1px solid;
+            padding: 10px;
+        }
     </style>
 </head>
 

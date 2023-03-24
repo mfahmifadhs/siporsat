@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="content-header">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h4 class="m-0">Alat Tulis Kantor (ATK)</h4>
@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active"><a href="{{ url('unit-kerja/atk/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Stok ATK</li>
+                    <li class="breadcrumb-item active">Daftar Kebutuhan ATK</li>
                 </ol>
             </div>
         </div>
@@ -19,62 +19,22 @@
 </div>
 
 <section class="content">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 form-group">
+                <a href="{{ url('unit-kerja/atk/dashboard') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
+            </div>
+            <div class="col-md-12 form-group">
                 <div class="card card-primary card-outline" id="accordion">
                     <div class="card-header">
                         <h3 class="card-title mt-1 font-weight-bold text-uppercase">
                             Daftar dan Stok ATK {{ Auth::user()->pegawai->unitKerja->unit_kerja }}
                         </h3>
-                        <!-- <div class="card-tools">
-                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-primary btn-sm">
-                                    <i class="fas fa-filter"></i> Filter
-                                </span>
-                            </a>
-                        </div> -->
                     </div>
-                    <!-- <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-header">
-                            <div class="form-group row">
-                                <div class="col-sm-3">
-                                    <label>Kategori</label> <br>
-                                    <select name="kategori" class="form-control text-capitalize select2-1" style="width: 100%;">
-                                        <option value="">-- KATEGORI BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Jenis</label> <br>
-                                    <select name="jenis" id="jenis`+ i +`" class="form-control text-capitalize select2-2" style="width: 100%;">
-                                        <option value="">-- JENIS BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Nama Barang</label> <br>
-                                    <select name="nama" id="barang`+ i +`" class="form-control text-capitalize select2-3" style="width: 100%;">
-                                        <option value="">-- NAMA BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Merk/Tipe</label> <br>
-                                    <select name="merk" id="merktipe`+ i +`" class="form-control text-capitalize select2-4" style="width: 100%;">
-                                        <option value="">-- MERK/TIPE BARANG --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 mt-2 text-right">
-                                    <button id="searchChartData" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="{{ url('unit-kerja/atk/dashboard') }}" class="btn btn-danger">
-                                        <i class="fas fa-undo"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row">
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <div id="notif-konten-chart"></div>
                         </div>
                         <div class="col-md-4 col-12">
@@ -83,20 +43,19 @@
                                     <div id="piechart" style="height: 400px;"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-8 col-12">
+                        </div> -->
+                        <div class="col-md-12 col-12">
                             <div class="card-body border border-default">
-                                <table id="table-atk" class="table table-bordered">
+                                <table id="table-atk" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis Barang</th>
                                             <th>Nama Barang</th>
                                             <th>Spesifikasi</th>
-                                            <th>Jumlah Pengadaan</th>
-                                            <th>Jumlah Permintaan</th>
-                                            <th>Sisa Stok</th>
-                                            <th>Riwayat</th>
+                                            <th style="width: 10%;" class="text-center">Pengadaan 1 Tahun</th>
+                                            <th style="width: 10%;" class="text-center">Total Distribusi</th>
+                                            <th style="width: 10%;" class="text-center">Sisa</th>
+                                            <th style="width: 0%;" class="text-center">Riwayat</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,7 +63,6 @@
                                         @foreach ($googleChartData1->atk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }}</td>
                                             <td>{{ $dataAtk->nama_barang }}</td>
                                             <td>{{ $dataAtk->spesifikasi }}</td>
                                             <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</td>

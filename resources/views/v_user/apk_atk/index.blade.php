@@ -91,15 +91,30 @@
                     <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
                     <div class="info-box-content">
                         <div class="row">
-                            <div class="col-md-6">
-                                <span class="info-box-text">STOK BARANG</span>
+                            <div class="col-md-8">
+                                <span class="info-box-text">Daftar Kebutuhan ATK</span>
                                 <span class="info-box-number">
                                     {{ $stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') }}
                                 </span>
                             </div>
-                            <div class="col-md-6 pt-3">
-                                <a href="{{ url('unit-kerja/atk/barang/stok/semua') }}" class="text-black btn btn-default btn-sm">
-                                    Lihat stok &nbsp;<i class="fas fa-arrow-circle-right"></i>
+                            <div class="col-md-4 pt-3">
+                                <a href="{{ url('unit-kerja/atk/barang/stok/*') }}" class="text-black btn btn-default btn-sm">
+                                    Lihat &nbsp;<i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-box mb-3 bg-primary">
+                    <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
+                    <div class="info-box-content">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <span class="info-box-text">Daftar Referensi ATK</span>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{{ url('unit-kerja/atk/barang/referensi/*') }}" class="text-black btn btn-default btn-sm">
+                                    Lihat &nbsp;<i class="fas fa-arrow-circle-right"></i>
                                 </a>
                             </div>
                         </div>

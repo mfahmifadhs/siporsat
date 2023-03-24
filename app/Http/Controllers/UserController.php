@@ -16,6 +16,7 @@ use App\Models\AADB\UsulanKendaraan;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanVoucherBBM;
+use App\Models\ATK\Atk;
 use App\Models\ATK\BastAtk;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkPengadaan;
@@ -1878,6 +1879,10 @@ class UserController extends Controller
         if ($aksi == 'daftar') {
             $atk = ATK::with('KategoriATK')->get();
             return view('v_user.apk_atk.daftar_atk', compact('atk'));
+        } elseif ($aksi == 'referensi') {
+            $referensi = Atk::leftjoin('atk_tbl_kategori', 'id_kategori_atk', 'kategori_id')->get();
+            return view('v_user.apk_atk.referensi_atk', compact('referensi'));
+
         } elseif ($aksi == 'stok') {
             $googleChartData = $this->ChartDataAtk();
             return view('v_user.apk_atk.stok', compact('googleChartData'));

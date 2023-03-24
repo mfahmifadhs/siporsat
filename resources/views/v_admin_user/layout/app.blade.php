@@ -125,9 +125,61 @@
                         </li>
                         @if(Auth::user()->akses->first()->is_atk == 1)
                         <li class="nav-item">
-                            <a href="{{ url('admin-user/atk/dashboard') }}" class="nav-link">
+                            <a href="{{ url('admin-user/oldat/dashboard') }}" class="nav-link
+                            {{ Request::is('admin-user/oldat/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
+                            {{ Request::is('admin-user/oldat/usulan/status/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/detail-bast-oldat/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/usulan-oldat/*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-boxes"></i>
+                                <p>Oldah Data BMN (OLDAT)</p>
+                            </a>
+                        </li>
+                        @endif
+                        @if(Auth::user()->akses->first()->is_atk == 1)
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/aadb/dashboard') }}" class="nav-link
+                            {{ Request::is('admin-user/aadb/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
+                            {{ Request::is('admin-user/aadb/usulan/status/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/detail-bast-atk/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/usulan-aadb/*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>Kendaraan (AADB)</p>
+                            </a>
+                        </li>
+                        @endif
+                        @if(Auth::user()->akses->first()->is_atk == 1)
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/atk/dashboard') }}" class="nav-link
+                            {{ Request::is('admin-user/atk/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
+                            {{ Request::is('admin-user/atk/usulan/status/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/detail-bast-atk/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/usulan-atk/*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-pencil-ruler"></i>
                                 <p>Alat Tulis Kantor (ATK)</p>
+                            </a>
+                        </li>
+                        @endif
+                        @if(Auth::user()->akses->first()->is_mtc == 1)
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/gdn/dashboard') }}" class="nav-link
+                            {{ Request::is('admin-user/gdn/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
+                            {{ Request::is('admin-user/gdn/usulan/status/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/detail-bast-gdn/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/usulan-gdn/*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-hotel"></i>
+                                <p>Gedung Bangunan (GDN)</p>
+                            </a>
+                        </li>
+                        @endif
+                        @if(Auth::user()->akses->first()->is_ukt == 1)
+                        <li class="nav-item">
+                            <a href="{{ url('admin-user/ukt/dashboard') }}" class="nav-link
+                            {{ Request::is('admin-user/ukt/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
+                            {{ Request::is('admin-user/ukt/usulan/status/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/detail-bast-ukt/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/surat/usulan-ukt/*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-laptop-house"></i>
+                                <p>Kerumahtanggaan (UKT)</p>
                             </a>
                         </li>
                         @endif
