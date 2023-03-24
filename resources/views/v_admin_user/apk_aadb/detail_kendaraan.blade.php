@@ -5,10 +5,14 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
+                <h1 class="m-0">Alat Angkutan Darat Bermotor (AADB)</h1>
+            </div>
+            <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('admin-user/aadb/dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Detail Kendaraan</li>
+                    <li class="breadcrumb-item"><a href="{{ url('admin-user/aadb/kendaraan/daftar/*') }}">Daftar Aadb</a></li>
+                    <li class="breadcrumb-item active">Detail Aadb</li>
                 </ol>
             </div>
         </div>
