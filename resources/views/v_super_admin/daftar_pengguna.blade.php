@@ -143,6 +143,9 @@
                                                         <input type="checkbox" name="is_mtc" value="1" <?php if ($row->is_mtc == 1) echo "checked"; ?>> Pengelola Gedung / Bangunan
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <input type="checkbox" name="is_ukt" value="1" <?php if ($row->is_ukt == 1) echo "checked"; ?>> Urusan Kerumahtanggaan
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <input type="checkbox" name="is_rdn" value="1" <?php if ($row->is_rdn == 1) echo "checked"; ?>> Pengelola Rumah Dinas Negara
                                                     </div>
                                                 </div>
@@ -235,6 +238,9 @@
                             </div>
                             <div class="col-md-6">
                                 <input type="checkbox" name="is_mtc" value="1"> Pengelola Pemeliharaan
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" name="is_ukt" value="1"> Urusan Kerumahtanggaan
                             </div>
                             <div class="col-md-6">
                                 <input type="checkbox" name="is_rdn" value="1"> Pengelola Rumah Dinas

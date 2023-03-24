@@ -200,7 +200,7 @@
                     </div>
                     @endif
                     <!-- GDN -->
-                    @if(Auth::user()->akses->first()->is_gdn == 1)
+                    @if(Auth::user()->akses->first()->is_mtc == 1)
                     <div class="col-md-4 col-12 mt-2">
                         <div class="card card-widget widget-user-2">
                             <div class="widget-user-header bg-primary">
