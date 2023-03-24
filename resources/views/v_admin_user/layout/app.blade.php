@@ -123,7 +123,7 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        @if(Auth::user()->akses->first()->is_atk == 1)
+                        @if(Auth::user()->akses->first()->is_oldat == 1)
                         <li class="nav-item">
                             <a href="{{ url('admin-user/oldat/dashboard') }}" class="nav-link
                             {{ Request::is('admin-user/oldat/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
@@ -135,7 +135,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(Auth::user()->akses->first()->is_atk == 1)
+                        @if(Auth::user()->akses->first()->is_aadb == 1)
                         <li class="nav-item">
                             <a href="{{ url('admin-user/aadb/dashboard') }}" class="nav-link
                             {{ Request::is('admin-user/aadb/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
