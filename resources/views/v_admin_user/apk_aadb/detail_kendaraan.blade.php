@@ -29,6 +29,9 @@
                     <p style="color:white;margin: auto;">{{ $message }}</p>
                 </div>
                 @endif
+                <a href="{{ url('admin-user/aadb/kendaraan/daftar/*') }}" class="print mr-2">
+                    <i class="fas fa-arrow-circle-left"></i> Kembali
+                </a>
             </div>
             <div class="col-md-3">
                 <div class="card card-primary card-outline">

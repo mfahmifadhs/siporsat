@@ -129,6 +129,8 @@
                             {{ Request::is('admin-user/oldat/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
                             {{ Request::is('admin-user/oldat/usulan/status/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/surat/detail-bast-oldat/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/oldat/barang/daftar/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/oldat/barang/detail/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/surat/usulan-oldat/*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-boxes"></i>
                                 <p>Oldah Data BMN (OLDAT)</p>
@@ -141,6 +143,8 @@
                             {{ Request::is('admin-user/aadb/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
                             {{ Request::is('admin-user/aadb/usulan/status/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/surat/detail-bast-atk/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/aadb/kendaraan/daftar/*') ? 'active' : '' }}
+                            {{ Request::is('admin-user/aadb/kendaraan/detail/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/surat/usulan-aadb/*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-car"></i>
                                 <p>Kendaraan (AADB)</p>
