@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="info-box mb-3 bg-primary">
+                <!-- <div class="info-box mb-3 bg-primary">
                     <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
                     <div class="info-box-content">
                         <div class="row">
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="col-md-9 col-12">
                 <div class="card card-outline card-primary">

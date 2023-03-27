@@ -77,7 +77,17 @@
                                         <td><input type="text" class="form-control" value="{{ $dataStok->nama_barang }}" style="font-size: 13px;" readonly></td>
                                         <td><input type="text" class="form-control" value="{{ $dataStok->spesifikasi }}" style="font-size: 13px;" readonly></td>
                                         <td><input type="text" class="form-control text-center" value="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian.' '.$dataStok->satuan }}" style="font-size: 13px;" min="1" readonly></td>
-                                        <td><input type="number" class="form-control text-center" name="jumlah_permintaan[]" max="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian }}" style="font-size: 13px;" value="0" oninput="this.value = Math.abs(this.value)"></td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="form-control text-center"
+                                                name="jumlah_permintaan[]"
+                                                max="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian }}"
+                                                style="font-size: 13px;border: none;border-bottom: 0.5px solid;"
+                                                value="0"
+                                                oninput="this.value = Math.abs(this.value)"
+                                            >
+                                        </td>
                                     </tr>
                                     @endif
                                     @endforeach

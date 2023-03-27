@@ -137,8 +137,8 @@
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         <div class="text-spacing">
-                                            @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
-                                            {{ $detailGdn->lokasi_bangunan }} <br>
+                                            @foreach ($dataUsulan->detailUsulanGdn->take(2) as $detailGdn)
+                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_bangunan, 50) . PHP_EOL)) !!}
                                             @endforeach
                                         </div>
                                     </td>
