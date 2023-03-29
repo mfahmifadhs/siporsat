@@ -30,6 +30,7 @@ class TransaksiAtk extends Model
 
     public function detailTransaksi() {
         return $this->hasMany(TransaksiAtkDetail::class, 'transaksi_id')
-            ->join('atk_tbl_master', 'id_atk', 'atk_id');
+            ->join('atk_tbl_master', 'id_atk', 'atk_id')
+            ->orderBy('deskripsi_barang', 'ASC');
     }
 }

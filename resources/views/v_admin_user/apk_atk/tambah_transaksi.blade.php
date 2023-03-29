@@ -172,6 +172,7 @@
                                                 <th class="text-center" style="border-right: 1px solid;width: 0%;">No</th>
                                                 <th style="border-right: 1px solid;width: 10%;">Kode Barang</th>
                                                 <th style="border-right: 1px solid;">Nama Barang</th>
+                                                <th style="border-right: 1px solid;">Keterangan</th>
                                                 <th class="text-center" style="border-right: 1px solid;width: 10%;">Stok</th>
                                                 <th style="border-right: 1px solid;width: 15%;" class="text-center">Permintaan</th>
                                                 <th class="text-center" style="border-right: 1px solid;width: 10%;">Satuan</th>
@@ -187,6 +188,9 @@
                                                 </td>
                                                 <td class="border-dark">
                                                     <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['deskripsi'] }}</span>
+                                                </td>
+                                                <td class="border-dark">
+                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['keterangan'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
                                                     <input class="form-control form-control-sm text-center" type="text" value="{{ $atk['jumlah'] }}" readonly>
