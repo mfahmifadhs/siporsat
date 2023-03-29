@@ -147,12 +147,13 @@
                             <td class="text-center">{{ $i + 1 }}</td>
                             <td>{{ $row->deskripsi_barang }}</td>
                             <td class="text-center">
-                                {{ $row->is_approve == 'true' ?
-                                        '✅ Sudah Ditambahkan'
-                                    : $row->is_approve == 'false' ?
-                                        '❌ Tidak Disetujui'
-                                    : '⏳ Sedang Diproses'
-                                    }}
+                                @if ($row->is_approve == 'true')
+                                ✅ Sudah Ditambahkan
+                                @elseif ($row->is_approve == 'false')
+                                ❌ Tidak Disetujui
+                                @else
+                                ⏳ Sedang Diproses
+                                @endif
                             </td>
                         </tr>
                         @endforeach
