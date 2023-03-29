@@ -135,7 +135,7 @@
                             Jika barang yang dibutuhkan untuk diusulkan pada bulan selanjutnya tidak ada pada referensi, mohon
                             untuk mengusulkan item baru pada halaman <b>Referensi ATK</b> dan pilih
                             <a class="btn btn-primary btn-xs disabled"><i class="fas fa-plus-circle"></i></a>. <br>
-                            Item yang sudah ditambahkan akan divalidasi terlebih dahulu oleh Admin untuk menghidari terjadinya
+                            Item yang sudah ditambahkan akan divalidasi terlebih dahulu oleh Admin untuk menghindari terjadinya
                             Duplikasi Item. <br>
                             <span class="text-danger small">*Maksimal pengajuan item baru tanggal 20 April 2023.</span>
                         </p>
