@@ -188,11 +188,11 @@
                 <table class="table table-data m-0">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th style="width: 15%;">Nama Barang</th>
+                            <th style="width: 0%;" class="text-center">No</th>
+                            <th>Nama Barang</th>
                             <th>Merk/Tipe</th>
-                            <th>Permintaan</th>
-                            <th>Disetujui</th>
+                            <th style="width: 15%;" class="text-center">Permintaan</th>
+                            <th style="width: 15%;" class="text-center">Disetujui</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
@@ -201,11 +201,27 @@
                         @if ($form->jenis_form == 'pengadaan')
                         @foreach($usulan->pengadaanAtk as $dataAtk)
                         <tr>
-                            <td>{{ $no++ }}</td>
+                            <td class="text-center">{{ $no++ }}</td>
                             <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
                             <td>{{ $dataAtk->spesifikasi }}</td>
-                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
-                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td>
+                                {{ $dataAtk->status }}
+                                @if ($dataAtk->keterangan != null)
+                                ({{ $dataAtk->keterangan }})
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                        @elseif ($form->jenis_form == 'distribusi')
+                        @foreach($usulan->permintaanAtk as $dataAtk)
+                        <tr>
+                            <td class="text-center">{{ $no++ }}</td>
+                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                            <td>{{ $dataAtk->spesifikasi }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
                             <td>
                                 {{ $dataAtk->status }}
                                 @if ($dataAtk->keterangan != null)
@@ -215,13 +231,13 @@
                         </tr>
                         @endforeach
                         @else
-                        @foreach($usulan->permintaanAtk as $dataAtk)
+                        @foreach($usulan->permintaan2Atk as $dataAtk)
                         <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
-                            <td>{{ $dataAtk->spesifikasi }}</td>
-                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
-                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td class="text-center">{{ $no++ }}</td>
+                            <td>{{ $dataAtk->deskripsi_barang }}</td>
+                            <td>{{ $dataAtk->catatan }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan_barang }}</td>
+                            <td class="text-center">{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan_barang }}</td>
                             <td>
                                 {{ $dataAtk->status }}
                                 @if ($dataAtk->keterangan != null)

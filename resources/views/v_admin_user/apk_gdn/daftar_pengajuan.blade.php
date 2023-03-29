@@ -116,6 +116,12 @@
                                     <th style="width: 20%;">Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 0%;">Aksi</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Usulan</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Usulan</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
@@ -154,6 +160,10 @@
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                            @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                            <small class="text-danger">
+                                                {{ $dataUsulan->keterangan }}
+                                            </small>
                                             @endif
                                         </h6>
                                     </td>
@@ -213,6 +223,30 @@
                                             </a>
                                             @endif
                                         </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td>{{ $dataUsulan->jenis_form }}</td>
+                                    <td>{{ $dataUsulan->unit_kerja }}</td>
+                                    <td>
+                                        @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
+                                        {!! nl2br(e($detailGdn->lokasi_bangunan, 50)) !!}
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @if($dataUsulan->status_proses_id == 1)
+                                        Menunggu Persetujuan Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 2)
+                                        Sedang Diproses PPK
+                                        @elseif ($dataUsulan->status_proses_id == 3)
+                                        Menunggu Konfirmasi Pengusul
+                                        @elseif ($dataUsulan->status_proses_id == 4)
+                                        Menunggu Konfirmasi BAST Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 5)
+                                        selesai
+                                        @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                        {{ $dataUsulan->keterangan }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <!-- Modal -->
@@ -314,17 +348,50 @@
 
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/" +
+            (currentdate.getMonth() + 1) + "/" +
+            currentdate.getFullYear() + " \n Pukul: " +
+            currentdate.getHours() + ":" +
+            currentdate.getMinutes() + ":" +
+            currentdate.getSeconds()
         $("#table-usulan").DataTable({
             "responsive": true,
             "lengthChange": true,
-            "autoWidth": true,
-            "info": true,
-            "paging": true,
+            "autoWidth": false,
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ]
-        });
+            ],
+            columnDefs: [{
+                "bVisible": false,
+                "aTargets": [7, 8, 9, 10, 11, 12]
+            }, ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12],
+                    },
+                    messageTop: datetime,
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12]
+                    },
+                    messageTop: datetime
+                }
+            ],
+            "bDestroy": true
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
     })
 </script>
 

@@ -51,6 +51,11 @@ class UsulanAtk extends Model
                      'atk_tbl_form_usulan_permintaan.form_usulan_id');
     }
 
+    public function permintaan2Atk() {
+        return $this->hasMany(UsulanAtkPermintaan::class, 'form_usulan_id')
+            ->join('atk_tbl_master', 'id_atk', 'atk_id');
+    }
+
     public function lampiranAtk() {
         return $this->hasMany(UsulanAtkLampiran::class, 'form_usulan_id')
             ->join('atk_tbl_form_usulan','id_form_usulan','form_usulan_id');

@@ -78,15 +78,7 @@
                                         <td><input type="text" class="form-control" value="{{ $dataStok->spesifikasi }}" style="font-size: 13px;" readonly></td>
                                         <td><input type="text" class="form-control text-center" value="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian.' '.$dataStok->satuan }}" style="font-size: 13px;" min="1" readonly></td>
                                         <td>
-                                            <input
-                                                type="number"
-                                                class="form-control text-center"
-                                                name="jumlah_permintaan[]"
-                                                max="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian }}"
-                                                style="font-size: 13px;border: none;border-bottom: 0.5px solid;"
-                                                value="0"
-                                                oninput="this.value = Math.abs(this.value)"
-                                            >
+                                            <input type="number" class="form-control text-center" name="jumlah_permintaan[]" max="{{ $dataStok->jumlah_disetujui - $dataStok->jumlah_pemakaian }}" style="font-size: 13px;border: none;border-bottom: 0.5px solid;" value="0" oninput="this.value = Math.abs(this.value)">
                                         </td>
                                     </tr>
                                     @endif
@@ -201,43 +193,104 @@
             <div class="card-header">
                 <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
             </div>
-            <form action="{{ url('unit-kerja/atk/usulan/preview-pengadaan/'. $aksi) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ url('unit-kerja/atk/usulan/distribusi2/'. $actionForm) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    <!-- <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                    <input type="hidden" name="jenis_form" value="1">
-                    <input type="hidden" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly> -->
-                    <input type="hidden" name="id_usulan" value="{{ $idUsulan }}">
-                    <input type="hidden" class="form-control text-uppercase" name="no_surat_usulan" value="{{ 'usulan/atk/'.$aksi.'/'.$idUsulan.'/'.\Carbon\Carbon::now()->isoFormat('MMMM').'/'.\Carbon\Carbon::now()->isoFormat('Y') }} " readonly>
-                    <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tanggal</label>
-                        <div class="col-sm-10">
-                            <input type="hidden" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::now()->isoFormat('Y-MM-DD') }}" readonly>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-6">
+                            <label class="col-form-label">Tanggal</label>
                             <input type="text" class="form-control" value="{{ \Carbon\Carbon::now()->isoFormat('DD MMMM Y') }}" readonly>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                        <label class="col-sm-10">
-                            <div class="alert alert-info alert-dismissible">
-                                <h6><i class="icon fas fa-info"></i> Mohon untuk mengisi kebutuhan ATK sesuai referensi!</h6>
-                                <span class="ml-3">&nbsp; Referensi ATK :
-                                    <a href="{{ asset('format/daftar_atk.xls') }}" download> Download</a>
-                                </span>
+                        <div class="form-group col-md-6 col-6">
+                            <label class="col-form-label">Perihal</label>
+                            <input type="text" class="form-control" value="Permintaan ATK" readonly>
+                        </div>
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label">Rencana Pengguna</label>
+                            <textarea type="text" class="form-control" name="rencana_pengguna" placeholder="Contoh : Permintaan untuk Bulan April" required>{{ $usulan ? $usulan['rencana_pengguna'] : '' }}</textarea>
+                        </div>
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label">Permintaan ATK</label><br>
+                            <small>
+                                Mohon untuk melengkapi informasi barang yang akan disimpan,
+                                format file dapat diunduh <a href="" class="font-weight-bold"><u>Disini</u></a>
+                            </small>
+                            <div class="card-footer text-center border border-dark">
+                                @if ($resArr == [])
+                                <div class="btn btn-default btn-file">
+                                    <i class="fas fa-upload"></i> Upload File
+                                    <input type="file" class="form-control image" name="file_atk[]" onchange="displaySelectedFileCountItem(this)" required>
+                                    <span id="selected-file-count-item"></span>
+                                </div><br>
+                                <button type="submit" class="btn btn-primary btn-md mt-2" onclick="return confirm('Upload File?')">
+                                    <i class="fas fa-clipboard-check"></i> Pilih
+                                </button><br>
+                                @else
+                                <a href="{{ url('unit-kerja/atk/usulan/distribusi2/*') }}" class="btn btn-danger btn-md font-weight-bold" onclick="return confirm('Upload ulang?')">
+                                    <i class="fas fa-sync"></i> Upload Ulang
+                                </a><br>
+                                @endif
+                                <span class="help-block" style="font-size: 12px;">Mohon upload file sesuai format yang telah di download (.xlsx)</span>
                             </div>
-                        </label>
-                        <label class="col-sm-2 col-form-label">Kebutuhan ATK (*)</label>
-                        <div class="col-sm-4">
-                            <input type="file" name="file_atk" class="form-control pt-1" required>
-                            <small>Format file (.xls)</small>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Rencana Pemakaian (*)</label>
-                        <div class="col-sm-10">
-                            <textarea type="text" name="rencana_pengguna" class="form-control" placeholder="Rencana Pengadaan Barang" required></textarea>
+                        @if ($resArr)
+                        <div class="form-group col-md-12 col-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td class="text-center">No</td>
+                                        <td>Nama Barang</td>
+                                        <td>Keterangan Barang</td>
+                                        <td style="width: 15%;" class="text-center">Permintaan</td>
+                                        <td style="width: 10%;" class="text-center">Satuan</td>
+                                        <td style="width: 20%;">Keterangan Permintaan</td>
+                                    </tr>
+                                </thead>
+                                @php $no = 1; @endphp
+                                <tbody>
+                                    @foreach ($resArr as $row)
+                                    @if ($row['kode_form'] == 101)
+                                    @foreach($row['data_barang'] as $rowItem)
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>{{ $rowItem['nama_barang'] }}</td>
+                                        <td>{{ $rowItem['keterangan'] }}</td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="idAtk[]" value="{{ $rowItem['kode_barang'] }}">
+                                            <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $rowItem['permintaan'] }}">
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $rowItem['satuan'] }}
+                                        </td>
+                                        <td>
+                                            <input type="text" name="keteranganAtk[]" class="form-control input-border-bottom" value="{{ $rowItem['keterangan_permintaan'] }}">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @else
+                                    @foreach($row['data_barang'] as $rowItem)
+                                    <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>{{ $rowItem['nama_barang'] }}</td>
+                                        <td>{{ $rowItem['keterangan'] }}</td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="idAlkom[]" value="{{ $rowItem['kode_barang'] }}">
+                                            <input type="number" name="permintaanAlkom[]" class="form-control input-border-bottom" value="{{ $rowItem['permintaan'] }}">
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $rowItem['satuan'] }}
+                                        </td>
+                                        <td>
+                                            <input type="text" name="keteranganAlkom[]" class="form-control input-border-bottom" value="{{ $rowItem['keterangan_permintaan'] }}">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
+                        @endif
                     </div>
                     <!-- <hr style="border: 0.5px solid grey;">
                     <div class="form-group row">
@@ -302,9 +355,13 @@
                         </div>
                     </div> -->
                 </div>
+                @if ($resArr != [])
                 <div class="card-footer text-right">
-                    <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Apakah file sudah benar ?')">Upload</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Upload File?')">
+                        <i class="fas fa-paper-plane"></i> Submit
+                    </button>
                 </div>
+                @endif
             </form>
 
         </div>
@@ -356,6 +413,12 @@
 @section('js')
 <script>
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+
+    function displaySelectedFileCountItem(input) {
+        var selectedFileCount = input.files.length;
+        var selectedFileCountElement = document.getElementById('selected-file-count-item');
+        selectedFileCountElement.textContent = selectedFileCount + ' (file dipilih)';
+    }
     // Jumlah Kendaraan
     $(function() {
         let total = 1

@@ -80,16 +80,16 @@
                             <table class="table table-bordered text-center">
                                 <thead class="bg-secondary">
                                     <tr>
-                                        <th style="width: 2%;" class="pb-4">No</th>
-                                        <th style="width: 20%;" class="pb-4">Nama Barang</th>
-                                        <th style="width: 25%;" class="pb-4">Merk/Tipe</th>
-                                        <th style="width: 14%;" class="pb-4">Jumlah</th>
-                                        <th class="pb-4">Satuan</th>
-                                        <th>
-                                            Status <br>
-                                            <input type="checkbox" id="selectAll">
+                                        <th style="width: 0%;" class="text-center">No</th>
+                                        <th>Nama Barang</th>
+                                        <th>Merk/Tipe</th>
+                                        <th style="width: 10%;" class="text-center">Jumlah</th>
+                                        <th>Satuan</th>
+                                        <th style="width: 15%;">
+                                            Status
+                                            <!-- <input type="checkbox" id="selectAll"> -->
                                         </th>
-                                        <th style="width: 20%;" class="pb-4">Keterangan</th>
+                                        <th style="width: 20%;">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <?php $no = 1; ?>
@@ -118,9 +118,38 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                    @else
+                                    @elseif ($usulan->jenis_form = 'distribusi')
                                     @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
                                     <tr>
+                                        <td class="text-center"> {{ $i + 1 }}</td>
+                                        <td>
+                                            <input type="hidden" name="modul" value="distribusi">
+                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            {{ $dataPermintaan->nama_barang }}
+                                        </td>
+                                        <td>{{ $dataPermintaan->spesifikasi }}</td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="jumlah_pengajuan[]" class="form-control" value="{{ $dataPermintaan->jumlah_disetujui }}">
+                                            {{ $dataPermintaan->jumlah_disetujui }}
+                                        </td>
+                                        <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                        <td class="text-center">
+                                            <!-- <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
+                                            <label for="checkbox_id{{$i}}">Diterima</label> -->
+                                            <input type="hidden" name="konfirmasi_atk[{{$i}}]" value="{{ $dataPermintaan->status }}">
+                                            @if ($dataPermintaan->status == 'diterima')
+                                                ✅ Disetujui
+                                            @else
+                                                ❌ Tidak Disetujui
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="keterangan[]" value="{{ $dataPermintaan->keterangan }}">
+                                            {{ $dataPermintaan->keterangan }}
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
                                         <td class="pt-4"> {{ $i + 1 }}</td>
                                         <td class="pt-4">
                                             <input type="hidden" name="modul" value="distribusi">
@@ -140,6 +169,38 @@
                                         <td>
                                             <textarea name="keterangan[]" class="form-control form-control-sm" style="font-size: 13px;"></textarea>
                                         </td>
+                                    </tr> -->
+                                    @endforeach
+                                    @else
+                                    @foreach($usulan->permintaan2Atk as $i => $dataPermintaan)
+                                    <tr>
+                                        <td class="text-center"> {{ $i + 1 }}</td>
+                                        <td>
+                                            <input type="hidden" name="modul" value="distribusi">
+                                            <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
+                                            {{ $dataPermintaan->deskripsi_barang }}
+                                        </td>
+                                        <td>{{ $dataPermintaan->catatan }}</td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="jumlah_pengajuan[]" class="form-control" value="{{ $dataPermintaan->jumlah_disetujui }}">
+                                            {{ $dataPermintaan->jumlah_disetujui }}
+                                        </td>
+                                        <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                        <td class="text-center">
+                                            <!-- <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
+                                            <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
+                                            <label for="checkbox_id{{$i}}">Diterima</label> -->
+                                            <input type="hidden" name="konfirmasi_atk[{{$i}}]" value="{{ $dataPermintaan->status }}">
+                                            @if ($dataPermintaan->status == 'diterima')
+                                                ✅ Disetujui
+                                            @else
+                                                ❌ Tidak Disetujui
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="keterangan[]" value="{{ $dataPermintaan->keterangan }}">
+                                            {{ $dataPermintaan->keterangan }}
+                                        </td>
                                     </tr>
                                     @endforeach
                                     @endif
@@ -150,7 +211,7 @@
                 </div>
                 <div class="card-footer text-right">
                     <button class="btn btn-success" id="btnSubmit" onclick="return confirm('Pengajuan Diterima ?')">
-                        <i class="fas fa-check-circle"></i> Terima
+                        <i class="fas fa-check-circle"></i> Konfirmasi
                     </button>
                     @if (Auth::user()->id == 5)
                     <a class="btn btn-danger" data-toggle="modal" data-target="#tolakUsulan">
@@ -158,6 +219,8 @@
                     </a>
                     @endif
                 </div>
+                <!-- @if ($usulan->permintaan2Atk->where('status', 'ditolak')->count() != $usulan->permintaan2Atk->count())
+                @endif -->
             </form>
             <!-- Modal -->
             <div class="modal fade" id="tolakUsulan" tabindex="-1" role="dialog" aria-hidden="true">

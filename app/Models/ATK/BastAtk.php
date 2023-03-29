@@ -43,4 +43,11 @@ class BastAtk extends Model
                      'jumlah_penyerahan','jumlah_bast_detail','satuan','status_penyerahan')
             ->orderBy('nama_barang', 'ASC');
     }
+
+    public function detailBast2() {
+        return $this->hasMany(BastAtkDetail::class, 'bast_id')
+            ->join('atk_tbl_form_usulan_permintaan', 'id_permintaan','permintaan_id')
+            ->join('atk_tbl_master', 'id_atk','atk_id')
+            ->orderBy('deskripsi_barang', 'ASC');
+    }
 }

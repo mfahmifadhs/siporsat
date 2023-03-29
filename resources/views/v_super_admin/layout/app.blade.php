@@ -31,11 +31,10 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
         <!-- Preloader -->
-        <!-- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="{{ asset('dist_admin/img/logo-kemenkes-brown.png') }}" alt="Sistem Informasi Pergudangan" height="200">
-  </div> -->
+        <div class="preloader">
+            <div class="loader"></div>
+        </div>
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light">

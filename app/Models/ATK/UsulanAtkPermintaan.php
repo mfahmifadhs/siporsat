@@ -17,8 +17,8 @@ class UsulanAtkPermintaan extends Model
     protected $fillable = [
         'id_permintaan',
         'form_usulan_id',
-        'bast_id',
-        'pengadaan_id',
+        'atk_id',
+        'catatan',
         'jumlah',
         'jumlah_disetujui',
         'jumlah_penyerahan',

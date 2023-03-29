@@ -1001,7 +1001,19 @@ class AdminUserController extends Controller
     {
         if ($aksi == 'status') {
             $uker   = UnitKerja::get();
-            if ($id == 'ditolak') {
+            if ($id == 'validasi') {
+                $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
+                    ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
+                    ->orderBy('status_pengajuan_id', 'ASC')
+                    ->orderBy('status_proses_id', 'ASC')
+                    ->orderBy('tanggal_usulan', 'DESC')
+                    ->where('status_proses_id', '1')
+                    ->where('is_checked', null)
+                    ->get();
+            } elseif ($id == 'ditolak') {
                 $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                     ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
@@ -1034,6 +1046,7 @@ class AdminUserController extends Controller
                     ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
+                    ->where('is_checked', true)
                     ->get();
             }
 
@@ -1204,7 +1217,7 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.edit', compact('idBast', 'usulan'));
         } elseif ($aksi == 'proses-edit') {
             // Insert BAST
-            $id_bast = (int) Carbon::now()->format('dhimy');
+            $id_bast = (int) Carbon::now()->format('dmhs');
             $bast = new BastAtk();
             $bast->id_bast      = $id_bast;
             $bast->usulan_id    = $id;
@@ -1336,6 +1349,41 @@ class AdminUserController extends Controller
             $usulanChartAtk = json_encode($result);
 
             return view('v_admin_user.apk_atk.laporan', compact('usulanUker', 'usulanTotal', 'usulanChartAtk', 'dataChartAtk'));
+        } elseif ($aksi == 'validasi') {
+            if ($request->all()) {
+                UsulanAtk::where('id_form_usulan', $id)->update([
+                    'total_pengajuan' => count(array_filter($request->status_pengajuan)),
+                    'is_checked'      => true
+                ]);
+
+                foreach ($request->id_permintaan as $i => $id_permintaan) {
+                    UsulanAtkPermintaan::where('id_permintaan', $id_permintaan)->update([
+                        'status'            => $request->status_pengajuan[$i] == 'true' ? 'diterima' : 'ditolak',
+                        'jumlah_disetujui'  => $request->status_pengajuan[$i] == 'true' ? $request->permintaanAtk[$i] : null,
+                        'keterangan'        => $request->keterangan[$i]
+                    ]);
+
+                    if ($request->status_pengajuan[$i] == null)
+                    {
+                        $pemakaian = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->first();
+                        UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->update([
+                            'jumlah_pemakaian' => $pemakaian->jumlah_pemakaian - $request->permintaanAtk[$i]
+                        ]);
+                    }
+                }
+
+                return redirect('admin-user/surat/usulan-atk/'. $id)->with('success', 'Berhasil Melakukan Validasi');
+            } else {
+                $totalUsulan = BastAtk::count();
+                $idBast      = (int) str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+                $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                    ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                    ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                    ->where('id_form_usulan', $id)
+                    ->first();
+
+                return view('v_admin_user.apk_atk.validasi', compact('idBast', 'usulan'));
+            }
         }
     }
 
@@ -1694,7 +1742,7 @@ class AdminUserController extends Controller
                     'tanggal_usulan',
                     'no_surat_usulan',
                     'unit_kerja',
-                    'jenis_form',
+                    'jenis_form_usulan',
                     'nama_pegawai',
                     'keterangan_pegawai',
                     'rencana_pengguna',

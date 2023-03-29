@@ -168,7 +168,13 @@
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
                                             @if($dataUsulan->status_proses_id == 1)
+                                            @if($dataUsulan->is_checked != true)
+                                            <span class="badge badge-sm badge-pill badge-warning">
+                                                sedang di validasi <br> oleh PJ
+                                            </span>
+                                            @else
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
+                                            @endif
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
@@ -183,14 +189,26 @@
                                                 ->where('status_penyerahan', 'false')
                                                 ->where('form_usulan_id', $dataUsulan->id_form_usulan)
                                                 ->count();
+                                                $atkNull2 = $dataUsulan->permintaan2Atk
+                                                ->where('status_penyerahan', null)
+                                                ->where('status','diterima')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $atkFalse2 = $dataUsulan->permintaan2Atk
+                                                ->where('status_penyerahan', 'false')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
                                                 $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
                                                 $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
                                                 $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
                                                 $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                $belum_diserahkan2 = (int) $atkNull2 + $atkFalse2;
                                                 @endphp
 
-                                                @if ($belum_diserahkan != 0)
+                                                @if ($dataUsulan->jenis_form != 'permintaan' && $belum_diserahkan != 0)
                                                 {{ $belum_diserahkan }} barang <br> belum diserahkan
+                                                @elseif ($dataUsulan->jenis_form == 'permintaan' && $belum_diserahkan2 != 0)
+                                                {{ $belum_diserahkan2 }} barang <br> belum diserahkan
                                                 @else
                                                 seluruh barang <br> sudah diserahkan
                                                 @endif
@@ -242,7 +260,7 @@
                                             </a>
                                             @endif -->
                                             <!-- Memproses Usulan -->
-                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
+                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1 && $dataUsulan->is_checked == true)
                                             <a class="dropdown-item btn" href="{{ url('super-user/atk/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-arrow-alt-circle-right"></i> Proses
                                             </a>
@@ -274,7 +292,7 @@
                                             </a>
                                             @endif -->
                                             <!-- Berita Acara Serah Terima Distribusi ATK -->
-                                            @if ($dataUsulan->jenis_form == 'distribusi' && $dataUsulan->bastAtk->count() != 0)
+                                            @if ($dataUsulan->jenis_form != 'pengadaan' && $dataUsulan->bastAtk->count() != 0)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#bast-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Berita Acara
                                             </a>
@@ -317,11 +335,7 @@
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Total Pengajuan</label></div>
                                                             <div class="col-md-7">:
-                                                                @if ($dataUsulan->jenis_form == 'pengadaan')
-                                                                {{ $dataUsulan->pengadaanAtk->count() }} barang
-                                                                @else
-                                                                {{ $dataUsulan->permintaanAtk->count() }} barang
-                                                                @endif
+                                                                {{ $dataUsulan->total_pengajuan }} barang
                                                             </div>
                                                         </div>
                                                         @if ($dataUsulan->otp_usulan_pengusul != null)
@@ -364,58 +378,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Nama Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->nama_pegawai)) }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Jabatan Pengusul </label></div>
-                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->keterangan_pegawai)) }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Unit Kerja</label></div>
-                                                    <div class="col-md-8">: {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}</div>
-                                                </div>
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Tanggal Usulan </label></div>
-                                                    <div class="col-md-8">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                                </div>
-                                                @if($dataUsulan->jenis_form == 1)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Rencana Pengguna </label></div>
-                                                    <div class="col-md-8">: {{ $dataUsulan->rencana_pengguna }}</div>
-                                                </div>
-                                                @endif
-                                                @if ($dataUsulan->otp_usulan_pengusul != null)
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat Usulan </label></div>
-                                                    <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/atk/surat/surat-usulan/'. $dataUsulan->id_form_usulan) }}">
-                                                            <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1 && $dataUsulan->jenis_form == 'distribusi' )
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Surat BAST </label></div>
-                                                    <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/surat/bast-atk/'. $dataUsulan->id_form_usulan) }}">
-                                                            <i class="fas fa-file"></i> Surat BAST
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if ($dataUsulan->jenis_form == 'pengadaan')
-                                                <div class="form-group row mb-0">
-                                                    <div class="col-md-4"><label>Data Pengadaan </label></div>
-                                                    <div class="col-md-8">:
-                                                        <a href="{{ url('super-user/atk/surat/download-pengadaan/'. $dataUsulan->id_form_usulan) }}">
-                                                            <i class="fas fa-download"></i> Download File
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                @endif -->
                                                 <div class="row mt-4">
                                                     <h6 class="col-md-12 font-weight-bold text-muted">
                                                         Informasi ATK
@@ -447,8 +409,8 @@
                                                                 {{ $dataAtk->nama_barang }}
                                                             </div>
                                                             <div class="col-md-3">{{ $dataAtk->spesifikasi }}</div>
-                                                            <div class="col-md-1">{{ $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
-                                                            <div class="col-md-1">{{ $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
                                                             <div class="col-md-2">
                                                                 {{ $dataAtk->status }}
                                                                 @if ($dataAtk->keterangan != null)
@@ -458,15 +420,15 @@
                                                         </div>
                                                         <hr class="bg-secondary">
                                                         @endforeach
-                                                        @else
+                                                        @elseif ($dataUsulan->jenis_form == 'distribusi')
                                                         @foreach($dataUsulan->permintaanAtk as $i => $dataAtk)
                                                         <div class="form-group row">
                                                             <div class="col-md-1 text-center">{{ $i + 1 }}</div>
                                                             <div class="col-md-3">{{ $dataAtk->nama_barang }}</div>
                                                             <div class="col-md-3">{{ $dataAtk->spesifikasi }}</div>
-                                                            <div class="col-md-1">{{ $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
-                                                            <div class="col-md-1">{{ $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
-                                                            <div class="col-md-1">{{ $dataAtk->jumlah_penyerahan.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_penyerahan.' '.$dataAtk->satuan }}</div>
                                                             <div class="col-md-2 text-center font-weight-bold">
                                                                 @if ($dataAtk->jumlah_disetujui == $dataAtk->jumlah_penyerahan && $dataAtk->jumlah_penyerahan != 0)
                                                                 <span class="text-success">✅ Sudah Diserahkan Semua</span>
@@ -475,6 +437,32 @@
                                                                     {{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_penyerahan }}
                                                                     {{ ucfirst(strtolower($dataAtk->satuan)) }} Belum Diserahkan
                                                                 </span>
+                                                                @else
+                                                                <span class="text-danger">Belum Diserahkan</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <hr class="bg-secondary">
+                                                        @endforeach
+                                                        @else
+                                                        @foreach($dataUsulan->permintaan2Atk as $i => $dataAtk)
+                                                        <div class="form-group row">
+                                                            <div class="col-md-1 text-center">{{ $i + 1 }}</div>
+                                                            <div class="col-md-3">{{ $dataAtk->deskripsi_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataAtk->catatan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_penyerahan.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-2 text-center font-weight-bold">
+                                                                @if ($dataAtk->jumlah_disetujui == $dataAtk->jumlah_penyerahan && $dataAtk->jumlah_penyerahan != 0)
+                                                                <span class="text-success">✅ Sudah Diserahkan Semua</span>
+                                                                @elseif ($dataAtk->jumlah_penyerahan != 0)
+                                                                <span class="text-dark">
+                                                                    {{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_penyerahan }}
+                                                                    {{ ucfirst(strtolower($dataAtk->satuan)) }} Belum Diserahkan
+                                                                </span>
+                                                                @elseif ($dataAtk->status == 'ditolak')
+                                                                <span class="text-danger">❌ Tidak Disetujui</span>
                                                                 @else
                                                                 <span class="text-danger">Belum Diserahkan</span>
                                                                 @endif
@@ -542,27 +530,42 @@
                                                         </div>
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Total Pengajuan</label></div>
-                                                            <div class="col-md-7">: {{ $dataUsulan->permintaanAtk->count() }} barang</div>
+                                                            <div class="col-md-7">: {{ $dataUsulan->total_pengajuan }} barang</div>
                                                         </div>
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Belum Diserahkan</label></div>
                                                             <div class="col-md-7">:
                                                                 @php
-                                                $atkNull = $dataUsulan->permintaanAtk
-                                                ->where('status_penyerahan', null)
-                                                ->where('status','diterima')
-                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
-                                                ->count();
-                                                $atkFalse = $dataUsulan->permintaanAtk
-                                                ->where('status_penyerahan', 'false')
-                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
-                                                ->count();
-                                                $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
-                                                $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
-                                                $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
-                                                $belum_diserahkan = (int) $atkNull + $atkFalse;
-                                                @endphp
-								{{ $belum_diserahkan }} barang
+                                                                $atkNull = $dataUsulan->permintaanAtk
+                                                                ->where('status_penyerahan', null)
+                                                                ->where('status','diterima')
+                                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                                ->count();
+                                                                $atkFalse = $dataUsulan->permintaanAtk
+                                                                ->where('status_penyerahan', 'false')
+                                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                                ->count();
+                                                                $atkNull2 = $dataUsulan->permintaan2Atk
+                                                                ->where('status_penyerahan', null)
+                                                                ->where('status','diterima')
+                                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                                ->count();
+                                                                $atkFalse2 = $dataUsulan->permintaan2Atk
+                                                                ->where('status_penyerahan', 'false')
+                                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                                ->count();
+                                                                $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
+                                                                $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
+                                                                $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
+                                                                $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                                $belum_diserahkan2 = (int) $atkNull2 + $atkFalse2;
+                                                                @endphp
+
+                                                                @if ($dataUsulan->jenis_form != 'permintaan')
+                                                                {{ $belum_diserahkan }} barang
+                                                                @elseif ($dataUsulan->jenis_form == 'permintaan')
+                                                                {{ $belum_diserahkan2 }} barang
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -603,7 +606,10 @@
                                                             <div class="col-md-1 text-center">{{ $i + 1 }}</div>
                                                             <div class="col-md-3">{{ \Carbon\Carbon::parse($dataBast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                                             <div class="col-md-3">{{ $dataBast->nomor_bast }}</div>
-                                                            <div class="col-md-2 text-center">{{ $dataBast->detailBast->count() }} barang</div>
+                                                            <div class="col-md-2 text-center">
+                                                                {{ $dataUsulan->jenis_form == 'distribusi' ? $dataBast->detailBast->count() : $dataBast->detailBast2->count() }}
+                                                                barang
+                                                            </div>
                                                             <div class="col-md-2 text-center">
                                                                 @if (!$dataBast->otp_bast_ppk)
                                                                 Menunggu Konfirmasi PPK

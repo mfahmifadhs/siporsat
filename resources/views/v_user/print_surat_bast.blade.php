@@ -87,12 +87,12 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     <p style="font-size: 16px;">
                         <i>
                             @if ($bast->id_unit_utama == '02407')
-                                Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
-                                Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
-                                Laman www.bppsdmk.depkes.go.id
+                            Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
+                            Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
+                            Laman www.bppsdmk.depkes.go.id
                             @else
-                                Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                                Telepon : (021) 5201590
+                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            Telepon : (021) 5201590
                             @endif
                         </i>
                     </p>
@@ -241,20 +241,32 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <div class="divTable">
                     <div class="row divThead">
                         <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Nama Barang</div>
-                        <div class="col-md-4 divTheadtd p-2">Deskripsi</div>
+                        <div class="col-md-4 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-3 divTheadtd p-2">Deskripsi</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
                     </div>
+                    @if ($bast->jenis_form == 'distribusi')
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
-                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
+                        <div class="col-md-4 divTbodytd">{{ $detailAtk->nama_barang }}</div>
+                        <div class="col-md-3 divTbodytd">{{ $detailAtk->spesifikasi }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>
                     @endforeach
+                    @elseif ($bast->jenis_form == 'permintaan')
+                    @foreach($bast->detailBast2 as $i => $detailAtk)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-4 divTbodytd">{{ $detailAtk->deskripsi_barang }}</div>
+                        <div class="col-md-3 divTbodytd">{{ $detailAtk->catatan }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</div>
+                    </div>
+                    @endforeach
+                    @endif
                 </div>
                 @if ( $bast->detailAtk->count() > 6 ) <div class="pagebreak"></div> @endif
                 @elseif ($modul == 'gdn')

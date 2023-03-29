@@ -31,7 +31,10 @@
 
 <body class="hold-transition sidebar-mini sidebar-fixed">
     <div class="wrapper">
-
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="loader"></div>
+        </div>
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light">
             <!-- Left navbar links -->
@@ -319,7 +322,7 @@
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('dist_admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('dist_admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('dist_admin/plugins/pdfmake/pdfmake.js') }}"></script>
     <script src="{{ asset('dist_admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('dist_admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>

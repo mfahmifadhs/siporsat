@@ -250,14 +250,12 @@ class SuperUserController extends Controller
                     $penyerahan = UsulanAtkPermintaan::where('form_usulan_id', Auth::user()->sess_form_id)
                                   ->where('status_penyerahan', 'false')
                                   ->count();
+                    $usulanBast = BastAtk::where('usulan_id', $request->form_id);
+                    $cekVerificator = ($usulanBast->where('otp_bast_ppk','!=', null)->count()) +
+                                      ($usulanBast->where('otp_bast_pengusul','!=', null)->count()) +
+                                      ($usulanBast->where('otp_bast_kabag','!=', null)->count());
 
-                    $usulanBast = BastAtk::where('usulan_id', $request->form_id)
-                                  ->where('otp_bast_ppk', null)
-                                  ->orWhere('otp_bast_pengusul', null)
-                                  ->orWhere('otp_bast_kabag', null)
-                                  ->count();
-
-                    if ($usulanBast == 0 && $penyerahan == 0) {
+                    if ($cekVerificator == 3 && $penyerahan == 0) {
                         UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                             'status_proses_id'  => 5
                         ]);
@@ -2005,18 +2003,6 @@ class SuperUserController extends Controller
 
             return redirect('super-user/verif/usulan-atk/' . $id)->with('success', 'Pembelian barang telah selesai dilakukan');
         } elseif ($aksi == 'proses-ditolak') {
-            $permintaan = UsulanAtkPermintaan::where('form_usulan_id', $id)->get();
-            foreach ($permintaan as $dataPermintaan) {
-                $pengadaan = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $dataPermintaan->pengadaan_id)->first();
-                UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $dataPermintaan->pengadaan_id)->update([
-                    'jumlah_pemakaian' => $pengadaan->jumlah_pemakaian - $dataPermintaan->jumlah
-                ]);
-
-                UsulanAtkPermintaan::where('id_permintaan', $dataPermintaan->id_permintaan)->update([
-                    'status' => 'ditolak'
-                ]);
-            }
-
             UsulanAtk::where('id_form_usulan', $id)->update([
                 'keterangan'          => $request->keterangan,
                 'status_pengajuan_id' => 2,

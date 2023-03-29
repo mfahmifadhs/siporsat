@@ -32,7 +32,10 @@
 
 <body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">
-
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="loader"></div>
+        </div>
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light">
             <!-- Left navbar links -->

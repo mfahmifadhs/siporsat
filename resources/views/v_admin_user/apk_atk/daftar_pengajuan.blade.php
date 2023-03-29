@@ -123,6 +123,11 @@
                                     <th style="width: 20%;">Rencana Pemakaian</th>
                                     <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 0%;">Aksi</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Usulan</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
@@ -158,7 +163,13 @@
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
                                             @if($dataUsulan->status_proses_id == 1)
+                                            @if($dataUsulan->is_checked != true)
+                                            <span class="badge badge-sm badge-pill badge-warning">
+                                                sedang di validasi <br> oleh PJ
+                                            </span>
+                                            @else
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
+                                            @endif
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
@@ -173,11 +184,26 @@
                                                 ->where('status_penyerahan', 'false')
                                                 ->where('form_usulan_id', $dataUsulan->id_form_usulan)
                                                 ->count();
+                                                $atkNull2 = $dataUsulan->permintaan2Atk
+                                                ->where('status_penyerahan', null)
+                                                ->where('status','diterima')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $atkFalse2 = $dataUsulan->permintaan2Atk
+                                                ->where('status_penyerahan', 'false')
+                                                ->where('form_usulan_id', $dataUsulan->id_form_usulan)
+                                                ->count();
+                                                $ttdPpk = $dataUsulan->bastAtk->where('otp_bast_ppk', null)->count();
+                                                $ttdPengusul = $dataUsulan->bastAtk->where('otp_bast_pengusul', null)->count();
+                                                $ttdKabag = $dataUsulan->bastAtk->where('otp_bast_kabag', null)->count();
                                                 $belum_diserahkan = (int) $atkNull + $atkFalse;
+                                                $belum_diserahkan2 = (int) $atkNull2 + $atkFalse2;
                                                 @endphp
 
-                                                @if ($belum_diserahkan != 0)
+                                                @if ($dataUsulan->jenis_form != 'permintaan' && $belum_diserahkan != 0)
                                                 {{ $belum_diserahkan }} barang <br> belum diserahkan
+                                                @elseif ($dataUsulan->jenis_form == 'permintaan' && $belum_diserahkan2 != 0)
+                                                {{ $belum_diserahkan2 }} barang <br> belum diserahkan
                                                 @else
                                                 seluruh barang <br> sudah diserahkan
                                                 @endif
@@ -211,11 +237,20 @@
                                             <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-people-carry"></i> Menyerahkan
                                             </a>
+                                            @elseif ($dataUsulan->jenis_form == 'permintaan' && $dataUsulan->status_proses_id == 3 && $belum_diserahkan2 != 0)
+                                            <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-people-carry"></i> Menyerahkan
+                                            </a>
+                                            @endif
+                                            @if ($dataUsulan->is_checked == null)
+                                            <a class="dropdown-item btn" href="{{ url('admin-user/atk/usulan/validasi/'. $dataUsulan->id_form_usulan) }}">
+                                                <i class="fas fa-clipboard-check"></i> Validasi
+                                            </a>
                                             @endif
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#usulan-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
-                                            @if ($dataUsulan->jenis_form == 'distribusi')
+                                            @if ($dataUsulan->jenis_form != 'pengadaan')
                                             @if ($dataUsulan->bastAtk->count() != 0)
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#bast-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Berita Acara
@@ -223,6 +258,25 @@
                                             @endif
                                             @endif
                                         </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td>{{ $dataUsulan->jenis_form }}</td>
+                                    <td>{{ $dataUsulan->unit_kerja }}</td>
+                                    <td>
+                                        @if($dataUsulan->status_proses_id == 1)
+                                        Menunggu Persetujuan Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 2)
+                                        Sedang Diproses PPK
+                                        @elseif ($dataUsulan->status_proses_id == 3)
+                                        Menunggu Konfirmasi Pengusul
+                                        @elseif ($dataUsulan->status_proses_id == 4)
+                                        Menunggu Konfirmasi BAST Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 5)
+                                        selesai
+                                        @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                        {{ $dataUsulan->keterangan }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <!-- Modal Usulan -->
@@ -259,11 +313,7 @@
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Total Pengajuan</label></div>
                                                             <div class="col-md-7">:
-                                                                @if ($dataUsulan->jenis_form == 'pengadaan')
-                                                                {{ $dataUsulan->pengadaanAtk->count() }} barang
-                                                                @else
-                                                                {{ $dataUsulan->permintaanAtk->count() }} barang
-                                                                @endif
+                                                                {{ $dataUsulan->total_pengajuan }}
                                                             </div>
                                                         </div>
                                                         @if ($dataUsulan->otp_usulan_pengusul != null)
@@ -348,7 +398,7 @@
                                                         </div>
                                                         <hr>
                                                         @endforeach
-                                                        @else
+                                                        @elseif ($dataUsulan->jenis_form == 'distribusi')
                                                         @foreach($dataUsulan->permintaanAtk as $i => $dataAtk)
                                                         <div class="form-group row">
                                                             <div class="col-md-1 text-center">{{ $i + 1 }}</div>
@@ -367,6 +417,32 @@
                                                                     {{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_penyerahan }}
                                                                     {{ ucfirst(strtolower($dataAtk->satuan)) }} Belum Diserahkan
                                                                 </span>
+                                                                @else
+                                                                <span class="text-danger">Belum Diserahkan</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <hr class="bg-secondary">
+                                                        @endforeach
+                                                        @else
+                                                        @foreach($dataUsulan->permintaan2Atk as $i => $dataAtk)
+                                                        <div class="form-group row">
+                                                            <div class="col-md-1 text-center">{{ $i + 1 }}</div>
+                                                            <div class="col-md-3">{{ $dataAtk->deskripsi_barang }}</div>
+                                                            <div class="col-md-3">{{ $dataAtk->catatan }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_disetujui.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-1">{{ (int) $dataAtk->jumlah_penyerahan.' '.$dataAtk->satuan_barang }}</div>
+                                                            <div class="col-md-2 text-center font-weight-bold">
+                                                                @if ($dataAtk->jumlah_disetujui == $dataAtk->jumlah_penyerahan && $dataAtk->jumlah_penyerahan != 0)
+                                                                <span class="text-success">✅ Sudah Diserahkan Semua</span>
+                                                                @elseif ($dataAtk->jumlah_penyerahan != 0)
+                                                                <span class="text-dark">
+                                                                    {{ $dataAtk->jumlah_disetujui - $dataAtk->jumlah_penyerahan }}
+                                                                    {{ ucfirst(strtolower($dataAtk->satuan)) }} Belum Diserahkan
+                                                                </span>
+                                                                @elseif ($dataAtk->status == 'ditolak')
+                                                                <span class="text-danger">❌ Tidak Disetujui</span>
                                                                 @else
                                                                 <span class="text-danger">Belum Diserahkan</span>
                                                                 @endif
@@ -434,7 +510,7 @@
                                                         </div>
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Total Pengajuan</label></div>
-                                                            <div class="col-md-7">: {{ $dataUsulan->permintaanAtk->count() }} barang</div>
+                                                            <div class="col-md-7">: {{ $dataUsulan->total_pengajuan }} barang</div>
                                                         </div>
                                                         <div class="form-group row mb-0">
                                                             <div class="col-md-5"><label>Belum Diserahkan</label></div>
@@ -495,7 +571,10 @@
                                                             <div class="col-md-1 text-center">{{ $i + 1 }}</div>
                                                             <div class="col-md-3">{{ \Carbon\Carbon::parse($dataBast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                                                             <div class="col-md-3">{{ $dataBast->nomor_bast }}</div>
-                                                            <div class="col-md-2 text-center">{{ $dataBast->detailBast->count() }} barang</div>
+                                                            <div class="col-md-2 text-center">
+                                                                {{ $dataUsulan->jenis_form == 'distribusi' ? $dataBast->detailBast->count() : $dataBast->detailBast2->count() }}
+                                                                barang
+                                                            </div>
                                                             <div class="col-md-2 text-center">
                                                                 @if (!$dataBast->otp_bast_ppk)
                                                                 Menunggu Konfirmasi PPK
@@ -536,17 +615,50 @@
 
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/" +
+            (currentdate.getMonth() + 1) + "/" +
+            currentdate.getFullYear() + " \n Pukul: " +
+            currentdate.getHours() + ":" +
+            currentdate.getMinutes() + ":" +
+            currentdate.getSeconds()
         $("#table-usulan").DataTable({
             "responsive": true,
             "lengthChange": true,
-            "autoWidth": true,
-            "info": true,
-            "paging": true,
+            "autoWidth": false,
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ]
-        })
+            ],
+            columnDefs: [{
+                "bVisible": false,
+                "aTargets": [7, 8, 9, 10, 11]
+            }, ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan ATK',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10],
+                    },
+                    messageTop: datetime,
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan ATK',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 11]
+                    },
+                    messageTop: datetime
+                }
+            ],
+            "bDestroy": true
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
     })
 </script>
 

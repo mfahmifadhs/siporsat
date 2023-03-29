@@ -272,12 +272,16 @@
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
+                                            <th class="text-center">No</th>
                                             <th>Nama Barang</th>
+                                            @if($form->jenis_form != 'permintaan')
                                             <th>Merk/Tipe</th>
+                                            @else
+                                            <th>Keterangan</th>
+                                            @endif
                                             <th>Permintaan</th>
                                             <th>Disetujui</th>
-                                            <th>Keterangan</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
@@ -298,7 +302,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                        @else
+                                        @elseif ($form->jenis_form == 'distribusi')
                                         @foreach($usulan->permintaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
@@ -306,6 +310,22 @@
                                             <td>{{ $dataAtk->spesifikasi }}</td>
                                             <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
                                             <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                                            <td>
+                                                {{ $dataAtk->status }}
+                                                @if ($dataAtk->keterangan != null)
+                                                ({{ $dataAtk->keterangan }})
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                        @foreach ($usulan->permintaan2Atk as $dataAtk)
+                                        <tr>
+                                            <td class="text-center">{{ $no++ }}</td>
+                                            <td>{{ $dataAtk->deskripsi_barang }}</td>
+                                            <td>{{ $dataAtk->catatan }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan_barang }}</td>
+                                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan_barang }}</td>
                                             <td>
                                                 {{ $dataAtk->status }}
                                                 @if ($dataAtk->keterangan != null)

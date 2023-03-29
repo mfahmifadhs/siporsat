@@ -233,20 +233,32 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <div class="divTable">
                     <div class="row divThead">
                         <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Nama Barang</div>
-                        <div class="col-md-4 divTheadtd p-2">Deskripsi</div>
+                        <div class="col-md-4 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-md-3 divTheadtd p-2">Deskripsi</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
                         <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
                     </div>
+                    @if ($bast->jenis_form == 'distribusi')
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
-                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
+                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
                         <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>
                     @endforeach
+                    @else
+                    @foreach($bast->detailBast2 as $i => $detailAtk)
+                    <div class="row divTbody">
+                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-md-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->deskripsi_barang)) }}</div>
+                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->catatan)) }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</div>
+                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</div>
+                    </div>
+                    @endforeach
+                    @endif
                 </div>
                 @if ( $bast->detailAtk->count() > 6 ) <div class="pagebreak"></div> @endif
                 @elseif ($modul == 'gdn')
@@ -406,7 +418,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
             <div class="col-md-12 mt-4">
                 <div class="col-md-12 text-capitalize">
                     <div class="row text-center">
-                        <label class="col-sm-4">Yang Menyerahkan {{ $bast->otp_bast_ppk }}, <br> {{ $jabatanPpk }} </label>
+                        <label class="col-sm-4">Yang Menyerahkan, <br> {{ $jabatanPpk }} </label>
                         <label class="col-sm-4">Yang Menerima, <br> {{ $bast->keterangan_pegawai }}</label>
                         <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->keterangan_pegawai }}</label>
                     </div>

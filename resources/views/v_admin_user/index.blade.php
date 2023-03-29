@@ -155,10 +155,18 @@
                             <div class="card-footer p-0">
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
+                                        <a href="{{ url('admin-user/atk/usulan/status/validasi') }}" class="nav-link">
+                                            Validasi oleh Penanggung Jawab
+                                            <span class="float-right">
+                                                {{ $usulanAtk->where('is_checked', null)->count() }} usulan
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{ url('admin-user/atk/usulan/status/1') }}" class="nav-link">
                                             Proses Persetujuan Kabag RT
                                             <span class="float-right">
-                                                {{ $usulanAtk->where('status_proses_id', 1)->count() }} usulan
+                                                {{ $usulanAtk->where('status_proses_id', 1)->where('is_checked', true)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>

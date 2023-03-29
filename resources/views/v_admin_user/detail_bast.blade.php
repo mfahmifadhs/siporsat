@@ -174,6 +174,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @if ($bast->jenis_form == 'distribusi')
                                         @foreach($bast->detailBast as $i => $detailAtk)
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
@@ -183,6 +184,17 @@
                                             <td>{{ $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</td>
                                         </tr>
                                         @endforeach
+                                        @else
+                                        @foreach($bast->detailBast2 as $i => $detailAtk)
+                                        <tr>
+                                            <td class="text-center">{{ $i + 1 }}</td>
+                                            <td>{{ ucfirst(strtolower($detailAtk->deskripsi_barang)) }}</td>
+                                            <td>{{ ucfirst(strtolower($detailAtk->catatan)) }}</td>
+                                            <td>{{ $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</td>
+                                            <td>{{ $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
                                     </tbody>
                                     @endif
                                     @if ($modul == 'aadb')

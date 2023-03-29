@@ -113,16 +113,30 @@
                                     <th style="width: 5%;">No. Surat</th>
                                     <th style="width: 15%;">Pengusul</th>
                                     <th style="width: 15%;">Usulan</th>
-                                    <th class="text-center" style="width: 11%;">Status Pengajuan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Usulan</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Usulan</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
+                                    <td class="text-center">
+                                        @if($dataUsulan->status_pengajuan_id == null)
+                                        <i class="fas fa-clock text-warning"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 1)
+                                        <i class="fas fa-check-circle text-green"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 2)
+                                        <i class="fas fa-times-circle text-red"></i>
+                                        @endif
+                                        {{ $no++ }}
+                                    </td>
                                     <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
                                     <td>{{ $dataUsulan->no_surat_usulan }}</td>
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
@@ -133,20 +147,6 @@
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td class="text-center">
-                                        <h6 class="mt-2">
-                                            @if($dataUsulan->status_pengajuan_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-success">
-                                                Disetujui
-                                            </span>
-                                            @elseif($dataUsulan->status_pengajuan_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
-                                            @if ($dataUsulan->keterangan != null)
-                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
-                                            @endif
-                                            @endif
-                                        </h6>
-                                    </td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
                                             @if($dataUsulan->status_proses_id == 1)
@@ -154,11 +154,15 @@
                                             @elseif ($dataUsulan->status_proses_id == 2)
                                             <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
                                             @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">konfirmasi pekerjaan <br> telah diterima</span>
+                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
                                             @elseif ($dataUsulan->status_proses_id == 4)
                                             <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 5)
                                             <span class="badge badge-sm badge-pill badge-success">selesai</span>
+                                            @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                            <small class="text-danger">
+                                                {{ $dataUsulan->keterangan }}
+                                            </small>
                                             @endif
                                         </h6>
                                     </td>
@@ -216,6 +220,30 @@
                                             </a>
                                             @endif
                                         </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td>{{ $dataUsulan->jenis_form }}</td>
+                                    <td>{{ $dataUsulan->unit_kerja }}</td>
+                                    <td>
+                                        @foreach ($dataUsulan->detailUsulanUkt as $detailUkt)
+                                        {!! nl2br(e($detailUkt->spesifikasi_pekerjaan)) !!}
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @if($dataUsulan->status_proses_id == 1)
+                                        Menunggu Persetujuan Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 2)
+                                        Sedang Diproses PPK
+                                        @elseif ($dataUsulan->status_proses_id == 3)
+                                        Menunggu Konfirmasi Pengusul
+                                        @elseif ($dataUsulan->status_proses_id == 4)
+                                        Menunggu Konfirmasi BAST Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 5)
+                                        selesai
+                                        @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                        {{ $dataUsulan->keterangan }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
@@ -313,18 +341,50 @@
 
 <script>
     $(function() {
+        var currentdate = new Date();
+        var datetime = "Tanggal: " + currentdate.getDate() + "/" +
+            (currentdate.getMonth() + 1) + "/" +
+            currentdate.getFullYear() + " \n Pukul: " +
+            currentdate.getHours() + ":" +
+            currentdate.getMinutes() + ":" +
+            currentdate.getSeconds()
         $("#table-usulan").DataTable({
             "responsive": true,
             "lengthChange": true,
-            "autoWidth": true,
-            "info": true,
-            "paging": true,
+            "autoWidth": false,
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ]
-
-        })
+            ],
+            columnDefs: [{
+                "bVisible": false,
+                "aTargets": [7, 8, 9, 10, 11, 12]
+            }, ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12],
+                    },
+                    messageTop: datetime,
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12]
+                    },
+                    messageTop: datetime
+                }
+            ],
+            "bDestroy": true
+        }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
     })
 </script>
 

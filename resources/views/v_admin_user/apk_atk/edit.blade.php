@@ -18,7 +18,8 @@
         </div>
     </div>
 </div>
-
+<!-- Distribusi -->
+@if ($usulan->jenis_form == 'distribusi')
 @foreach($usulan->permintaanAtk->where('status','diterima') as $i => $dataPermintaan)
 @php
 $permintaan = $dataPermintaan->jumlah_disetujui;
@@ -28,6 +29,18 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
 @php $itemTotal[] = $dataPermintaan->id_permintaan ; @endphp
 @endif
 @endforeach
+<!-- Permintaan -->
+@elseif ($usulan->jenis_form == 'permintaan')
+@foreach($usulan->permintaan2Atk->where('status','diterima') as $i => $dataPermintaan)
+@php
+$permintaan = $dataPermintaan->jumlah_disetujui;
+$belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
+@endphp
+@if ($belum_diserahkan != 0)
+@php $itemTotal[] = $dataPermintaan->id_permintaan ; @endphp
+@endif
+@endforeach
+@endif
 
 <section class="content">
     <div class="container">
@@ -93,7 +106,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                         <thead class="bg-secondary">
                                             <tr>
                                                 <th style="width: 0%;" class="text-center">No</th>
-                                                <th style="width: 10%;" class="text-center">Jenis Barang</th>
+                                                <th>Nama Barang</th>
                                                 <th>Deskripsi</th>
                                                 <th style="width: 10%;" class="text-center">Permintaan</th>
                                                 <th style="width: 13%;" class="text-center">Belum Diserahkan</th>
@@ -108,6 +121,8 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                             </tr>
                                         </thead>
                                         <?php $no = 1; ?>
+                                        @if ($usulan->jenis_form == 'distribusi')
+                                        <!-- Distribusi -->
                                         <tbody>
                                             @foreach($usulan->permintaanAtk->where('status','diterima') as $i => $dataPermintaan)
                                             @php
@@ -117,7 +132,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                             @if ($belum_diserahkan != 0)
                                             <tr>
                                                 <td class="text-center"> {{ $no++ }}</td>
-                                                <td class="text-center">
+                                                <td>
                                                     <input type="hidden" name="modul" value="distribusi">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
                                                     {{ $dataPermintaan->jenis_barang }}
@@ -127,7 +142,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <td class="text-center">{{ $belum_diserahkan }}</td>
                                                 <td class="text-center">{{ $dataPermintaan->satuan }}</td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                                    <input type="number" class="form-control input-border-bottom text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
                                                 </td>
                                                 <td class="text-center">{{ $dataPermintaan->satuan }}</td>
                                                 <td class="text-center">
@@ -183,6 +198,84 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                             @endif
                                             @endforeach
                                         </tbody>
+                                        @elseif ($usulan->jenis_form == 'permintaan')
+                                        <!-- Permintaan -->
+                                        <tbody>
+                                            @foreach($usulan->permintaan2Atk->where('status','diterima') as $i => $dataPermintaan)
+                                            @php
+                                            $permintaan = $dataPermintaan->jumlah_disetujui;
+                                            $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
+                                            @endphp
+                                            @if ($belum_diserahkan != 0)
+                                            <tr>
+                                                <td class="text-center"> {{ $no++ }}</td>
+                                                <td>
+                                                    <input type="hidden" name="modul" value="distribusi">
+                                                    <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
+                                                    {{ $dataPermintaan->deskripsi_barang }}
+                                                </td>
+                                                <td>{{ $dataPermintaan->catatan }}</td>
+                                                <td class="text-center">{{ $permintaan }}</td>
+                                                <td class="text-center">{{ $belum_diserahkan }}</td>
+                                                <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                                <td>
+                                                    <input type="number" class="form-control input-border-bottom" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                                </td>
+                                                <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                                <td class="text-center">
+                                                    <a href="{{ url('admin-user/atk/usulan/pembatalan/'. $dataPermintaan->id_permintaan) }}" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </a>
+                                                </td>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="deleteItem-{{ $dataPermintaan->id_permintaan }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="{{ url('admin-user/atk/usulan/batal-permintaan/'. $dataPermintaan->id_permintaan) }}" method="POST">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-5 col-form-label">Nama Barang</div>
+                                                                        <div class="col-md-7 col-form-label">Merk/Tipe</div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-5 col-form-label">{{ $dataPermintaan->nama_barang }}</div>
+                                                                        <div class="col-md-7 col-form-label">{{ $dataPermintaan->spesifikasi }}</div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <div class="col-md-9 col-form-label">Jumlah yang dibatalkan</div>
+                                                                        <div class="col-md-3 col-form-label">Satuan</div>
+                                                                        <div class="col-md-9 col-form-label">
+                                                                            <input type="number" class="form-control" name="jumlah_batal" value="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}" max="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}">
+                                                                        </div>
+                                                                        <div class="col-md-3 col-form-label">
+                                                                            <input type="text" class="form-control" value="{{ $dataPermintaan->satuan }}" readonly>
+                                                                        </div>
+                                                                        <div class="col-md-12 col-form-label">Keterangan</div>
+                                                                        <div class="col-md-12">
+                                                                            <textarea class="form-control" name="keterangan" placeholder="Keterangan Penolakan"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Membatalkan Permintaan ?')">
+                                                                        <i class="fas fa-times-circle"></i> Batal
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                            @endif
+                                            @endforeach
+                                        </tbody>
+                                        @endif
                                     </table>
                                 </div>
                             </div>

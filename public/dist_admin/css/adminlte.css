@@ -52502,6 +52502,16 @@ a.text-muted:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
-  }
+}
+
+.input-border-bottom {
+    border: none;
+    border-bottom: 1px solid;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+    height: 22px;
+    font-size: 15px;
+}
 
 

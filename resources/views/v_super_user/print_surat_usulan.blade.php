@@ -77,12 +77,12 @@
                     <p style="font-size: 16px;">
                         <i>
                             @if ($usulan->id_unit_utama == '02407')
-                                Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
-                                Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
-                                Laman www.bppsdmk.depkes.go.id
+                            Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
+                            Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
+                            Laman www.bppsdmk.depkes.go.id
                             @else
-                                Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                                Telepon : (021) 5201590
+                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            Telepon : (021) 5201590
                             @endif
                         </i>
                     </p>
@@ -222,7 +222,7 @@
                             </td>
                         </tr>
                         @endforeach
-                        @else
+                        @elseif ($form->jenis_form == 'distribusi')
                         @foreach($usulan->permintaanAtk as $dataAtk)
                         <tr>
                             <td>{{ $no++ }}</td>
@@ -230,6 +230,22 @@
                             <td>{{ $dataAtk->spesifikasi }}</td>
                             <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
                             <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
+                            <td>
+                                {{ $dataAtk->status }}
+                                @if ($dataAtk->keterangan != null)
+                                ({{ $dataAtk->keterangan }})
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        @foreach($usulan->permintaan2Atk as $dataAtk)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $dataAtk->deskripsi_barang }}</td>
+                            <td>{{ $dataAtk->catatan }}</td>
+                            <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan_barang }}</td>
+                            <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan_barang }}</td>
                             <td>
                                 {{ $dataAtk->status }}
                                 @if ($dataAtk->keterangan != null)

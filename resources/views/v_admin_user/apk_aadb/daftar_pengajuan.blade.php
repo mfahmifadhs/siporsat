@@ -125,6 +125,12 @@
                                     <th>Usulan</th>
                                     <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Usulan</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Usulan</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             @php $no = 1; @endphp
@@ -233,8 +239,45 @@
                                                 <i class="fas fa-info-circle"></i> Berita Acara
                                             </a>
                                             @endif
-
                                         </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
+                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
+                                    <td>{{ $dataUsulan->jenis_form_usulan }}</td>
+                                    <td>{{ $dataUsulan->unit_kerja }}</td>
+                                    <td>
+                                        @if ($dataUsulan->jenis_form == 1)
+                                        @foreach ($dataUsulan->usulanKendaraan as $detailAadb)
+                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                        @endforeach
+                                        @elseif ($dataUsulan->jenis_form == 2)
+                                        @foreach ($dataUsulan->usulanServis as $detailAadb)
+                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                        @endforeach
+                                        @elseif ($dataUsulan->jenis_form == 3)
+                                        @foreach ($dataUsulan->usulanSTNK as $detailAadb)
+                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                        @endforeach
+                                        @else
+                                        @foreach ($dataUsulan->usulanVoucher->take(5) as $detailAadb)
+                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                        @endforeach
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($dataUsulan->status_proses_id == 1)
+                                        Menunggu Persetujuan Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 2)
+                                        Sedang Diproses PPK
+                                        @elseif ($dataUsulan->status_proses_id == 3)
+                                        Menunggu Konfirmasi Pengusul
+                                        @elseif ($dataUsulan->status_proses_id == 4)
+                                        Menunggu Konfirmasi BAST Kabag RT
+                                        @elseif ($dataUsulan->status_proses_id == 5)
+                                        selesai
+                                        @elseif ($dataUsulan->status_pengajuan_id == 2)
+                                        {{ $dataUsulan->keterangan }}
+                                        @endif
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
@@ -430,8 +473,36 @@
             "lengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
-            ]
-        })
+            ],
+            columnDefs: [{
+                "bVisible": false,
+                "aTargets": [7, 8, 9, 10, 11, 12]
+            }, ],
+            buttons: [{
+                    extend: 'pdf',
+                    text: ' PDF',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Aadb',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12],
+                    },
+                    messageTop: datetime,
+                },
+                {
+                    extend: 'excel',
+                    text: ' Excel',
+                    className: 'fas fa-file btn btn-primary mr-2 rounded',
+                    title: 'Daftar Usulan Aadb',
+                    exportOptions: {
+                        columns: [0, 7, 8, 9, 10, 12]
+                    },
+                    messageTop: datetime
+                }
+            ],
+            "bDestroy": true
+        }).buttons().container().appendTo('#table-pengajuan_wrapper .col-md-6:eq(0)');
     })
 </script>
 @endsection
