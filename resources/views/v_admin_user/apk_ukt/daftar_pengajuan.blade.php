@@ -366,7 +366,7 @@
                     orientation: 'landscape',
                     pageSize: 'A4',
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    title: 'Daftar Usulan Urusan Kerumahtanggaan',
                     exportOptions: {
                         columns: [0, 7, 8, 9, 10, 12],
                     },
@@ -376,7 +376,7 @@
                     extend: 'excel',
                     text: ' Excel',
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
-                    title: 'Daftar Usulan Gedung dan Bangunan',
+                    title: 'Daftar Usulan Urusan Kerumahtanggaan',
                     exportOptions: {
                         columns: [0, 7, 8, 9, 10, 12]
                     },
