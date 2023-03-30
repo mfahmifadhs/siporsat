@@ -1363,7 +1363,7 @@ class AdminUserController extends Controller
                         'keterangan'        => $request->keterangan[$i]
                     ]);
 
-                    if ($request->status_pengajuan[$i] == null)
+                    if ($request->status_pengajuan[$i] == null && $request->modul == 'distribusi')
                     {
                         $pemakaian = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->first();
                         UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->update([
@@ -1534,6 +1534,7 @@ class AdminUserController extends Controller
                     ->where('status_riwayat', 'keluar')
                     ->where('atk_id', $dataAtk->atk_id)
                     ->first();
+
                 $data['id_atk']        = $dataAtk->atk_id;
                 $data['kategori_id']   = $dataAtk->kategori_id;
                 $data['kode_ref']      = $dataAtk->kode_ref;

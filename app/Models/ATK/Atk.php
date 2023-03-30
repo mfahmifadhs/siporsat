@@ -5,6 +5,7 @@ namespace App\Models\atk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Atk extends Model
 {
@@ -23,4 +24,10 @@ class Atk extends Model
         'satuan_barang',
         'keterangan_barang'
     ];
+
+    public function riwayatTransaksi() {
+        return $this->hasMany(RiwayatAtk::class, 'atk_id')
+            ->select(DB::raw('sum(jumlah) as stok'), 'status_riwayat')
+            ->groupBy('status_riwayat');
+    }
 }

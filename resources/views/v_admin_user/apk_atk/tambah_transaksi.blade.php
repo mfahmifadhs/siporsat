@@ -190,7 +190,7 @@
                                                     <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['deskripsi'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
-                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['keterangan'] }}</span>
+                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['keterangan_barang'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
                                                     <input class="form-control form-control-sm text-center" type="text" value="{{ $atk['jumlah'] }}" readonly>

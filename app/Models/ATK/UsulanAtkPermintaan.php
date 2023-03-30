@@ -2,6 +2,7 @@
 
 namespace App\Models\Atk;
 
+use App\Models\atk\Atk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,4 +26,8 @@ class UsulanAtkPermintaan extends Model
         'status_penyerahan',
         'tanggal_penyerahan'
     ];
+
+    public function atk() {
+        return $this->belongsTo(Atk::class, 'atk_id');
+    }
 }

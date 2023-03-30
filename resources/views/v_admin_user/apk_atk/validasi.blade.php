@@ -52,8 +52,7 @@
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <label class="col-form-label">Tanggal Usulan</label>
-                                    <input type="text" class="form-control" name="tanggal_usulan"
-                                    value="{{ \Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
+                                    <input type="text" class="form-control" name="tanggal_usulan" value="{{ \Carbon\carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}" readonly>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <label class="col-form-label">Pengusul</label>
@@ -87,9 +86,10 @@
                                                 <th style="width: 0%;" class="text-center">No</th>
                                                 <th>Nama Barang</th>
                                                 <th>Catatan</th>
+                                                <th style="width: 10%;">Stok Gudang</th>
                                                 <th style="width: 15%;" class="text-center">Permintaan</th>
-                                                <th style="width: 15%;" class="text-center">Satuan</th>
-                                                <th style="width: 15%;" class="text-center">Keterangan</th>
+                                                <th style="width: 10%;">Satuan</th>
+                                                <th style="width: 15%;">Keterangan</th>
                                                 <th style="width: 8%;" class="text-center">
                                                     <input type="checkbox" id="selectAll" style="scale: 1.7;">
                                                 </th>
@@ -102,19 +102,39 @@
                                             <tr>
                                                 <td class="text-center"> {{ $no++ }}</td>
                                                 <td>
-                                                    <input type="hidden" name="modul" value="distribusi">
+                                                    <input type="hidden" name="modul" value="permintaan">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataAtk->id_permintaan }}">
                                                     {{ $dataAtk->deskripsi_barang }}
                                                 </td>
                                                 <td>{{ $dataAtk->catatan }}</td>
+                                                <td>
+                                                    @php
+                                                    $masuk = $dataAtk->atk->riwayatTransaksi->where('status_riwayat', 'masuk')->first();
+                                                    $keluar = $dataAtk->atk->riwayatTransaksi->where('status_riwayat', 'keluar')->first();
+                                                    $stok = $masuk['stok'] - $keluar['stok'];
+                                                    @endphp
+
+                                                    {{ (int) $stok.' '.$dataAtk->satuan_barang }}
+                                                </td>
                                                 <td class="text-center">
                                                     <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $dataAtk->jumlah }}" max="{{ $dataAtk->jumlah }}">
                                                 </td>
-                                                <td class="text-center">{{ $dataAtk->satuan_barang }}</td>
-                                                <td><input type="text" name="keterangan[]" class="form-control input-border-bottom text-left"></td>
+                                                <td>{{ $dataAtk->satuan_barang }}</td>
+                                                <td>
+                                                    @if ($stok != 0)
+                                                    <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left">
+                                                    @else
+                                                    <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left" value="Tidak tersedia">
+                                                    @endif
+                                                </td>
                                                 <td class="text-center">
+                                                    @if ($stok != 0)
                                                     <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
                                                     <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
+                                                    @else
+                                                    <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
+                                                    🚫
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach
