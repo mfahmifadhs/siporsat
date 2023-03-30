@@ -20,10 +20,15 @@
 </div>
 <!-- Distribusi -->
 @if ($usulan->jenis_form == 'distribusi')
+@php
+$belumDiserahkan  = $usulan->permintaanAtk->where('status', 'diterima')->where('status_penyerahan', 'false')->count();
+$belumDiserahkanSemua = $usulan->permintaanAtk->where('status', 'diterima')->where('status_penyerahan', null)->count();
+$belum_diserahkan = $belumDiserahkanSemua + $belumDiserahkan;
+@endphp
 @foreach($usulan->permintaanAtk->where('status','diterima') as $i => $dataPermintaan)
 @php
 $permintaan = $dataPermintaan->jumlah_disetujui;
-$belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
+//$belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
 @endphp
 @if ($belum_diserahkan != 0)
 @php $itemTotal[] = $dataPermintaan->id_permintaan ; @endphp
@@ -127,9 +132,9 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                             @foreach($usulan->permintaanAtk->where('status','diterima') as $i => $dataPermintaan)
                                             @php
                                             $permintaan = $dataPermintaan->jumlah_disetujui;
-                                            $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
+                                            $belum_diserahkan_row = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_penyerahan;
                                             @endphp
-                                            @if ($belum_diserahkan != 0)
+                                            @if ($belum_diserahkan_row != 0)
                                             <tr>
                                                 <td class="text-center"> {{ $no++ }}</td>
                                                 <td>
@@ -139,10 +144,10 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 </td>
                                                 <td>{{ $dataPermintaan->nama_barang.' '.$dataPermintaan->spesifikasi }}</td>
                                                 <td class="text-center">{{ $permintaan }}</td>
-                                                <td class="text-center">{{ $belum_diserahkan }}</td>
+                                                <td class="text-center">{{ $belum_diserahkan_row }}</td>
                                                 <td class="text-center">{{ $dataPermintaan->satuan }}</td>
                                                 <td>
-                                                    <input type="number" class="form-control input-border-bottom text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                                    <input type="number" class="form-control input-border-bottom text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan_row }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
                                                 </td>
                                                 <td class="text-center">{{ $dataPermintaan->satuan }}</td>
                                                 <td class="text-center">

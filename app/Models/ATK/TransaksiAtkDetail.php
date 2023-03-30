@@ -21,6 +21,7 @@ class TransaksiAtkDetail extends Model
         'atk_id',
         'volume_transaksi',
         'harga_satuan',
-        'jumlah_biaya'
+        'jumlah_biaya',
+	'keterangan'
     ];
 }
