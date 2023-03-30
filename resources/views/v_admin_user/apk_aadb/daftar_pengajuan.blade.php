@@ -156,19 +156,19 @@
                                         <div class="text-spacing">
                                             @if ($dataUsulan->jenis_form == 1)
                                             @foreach ($dataUsulan->usulanKendaraan as $detailAadb)
-                                            {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                             @endforeach
                                             @elseif ($dataUsulan->jenis_form == 2)
                                             @foreach ($dataUsulan->usulanServis as $detailAadb)
-                                            {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                             @endforeach
                                             @elseif ($dataUsulan->jenis_form == 3)
                                             @foreach ($dataUsulan->usulanSTNK as $detailAadb)
-                                            {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50))) !!}
                                             @endforeach
                                             @else
                                             @foreach ($dataUsulan->usulanVoucher->take(5) as $detailAadb)
-                                            {{ $detailAadb->merk_tipe_kendaraan }} <br>
+                                            {!! nl2br(e(Str::limit($detailAadb->merk_tipe_kendaraan, 50) . PHP_EOL)) !!}
                                             @endforeach
                                             @endif
                                         </div>
@@ -247,21 +247,13 @@
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
                                     <td>
                                         @if ($dataUsulan->jenis_form == 1)
-                                        @foreach ($dataUsulan->usulanKendaraan as $detailAadb)
-                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->usulanKendaraan->pluck('merk_tipe_kendaraan')->implode(', ') }}
                                         @elseif ($dataUsulan->jenis_form == 2)
-                                        @foreach ($dataUsulan->usulanServis as $detailAadb)
-                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->usulanServis->pluck('merk_tipe_kendaraan')->implode(', ') }}
                                         @elseif ($dataUsulan->jenis_form == 3)
-                                        @foreach ($dataUsulan->usulanSTNK as $detailAadb)
-                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->usulanSTNK->pluck('merk_tipe_kendaraan')->implode(', ') }}
                                         @else
-                                        @foreach ($dataUsulan->usulanVoucher->take(5) as $detailAadb)
-                                        {{ $detailAadb->merk_tipe_kendaraan }} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->usulanVoucher->pluck('merk_tipe_kendaraan')->implode(', ') }}
                                         @endif
                                     </td>
                                     <td>
@@ -496,7 +488,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Aadb',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12]
+                        columns: [0, 7, 8, 9, 10, 11, 12]
                     },
                     messageTop: datetime
                 }

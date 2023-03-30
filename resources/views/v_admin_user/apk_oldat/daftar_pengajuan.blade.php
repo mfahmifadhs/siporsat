@@ -238,13 +238,9 @@
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
                                     <td>
                                         @if ($dataUsulan->jenis_form == 'pengadaan')
-                                        @foreach ($dataUsulan->detailPengadaan as $detailOldat)
-                                        {!! $detailOldat->kategori_barang !!} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->detailPengadaan->pluck('kategori_barang')->implode(', ') }}
                                         @else
-                                        @foreach ($dataUsulan->detailPerbaikan as $detailOldat)
-                                        {!! $detailOldat->merk_tipe_barang !!} <br>
-                                        @endforeach
+                                        {{ $dataUsulan->detailPerbaikan->pluck('merk_tipe_barang')->implode(', ') }}
                                         @endif
                                     </td>
                                     <td>
@@ -441,7 +437,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Oldat & Meubelair',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12]
+                        columns: [0, 7, 8, 9, 10, 11, 12]
                     },
                     messageTop: datetime
                 }

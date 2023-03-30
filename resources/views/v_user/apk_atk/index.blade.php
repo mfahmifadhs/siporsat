@@ -631,13 +631,13 @@
                         window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
                     }
                 },
-                {
-                    text: '(+) Usulan Distribusi v2',
-                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
-                    action: function(e, dt, node, config) {
-                        window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi2/*') }}";
-                    }
-                }
+                // {
+                //     text: '(+) Usulan Distribusi v2',
+                //     className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                //     action: function(e, dt, node, config) {
+                //         window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi2/*') }}";
+                //     }
+                // }
             ]
 
         }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
