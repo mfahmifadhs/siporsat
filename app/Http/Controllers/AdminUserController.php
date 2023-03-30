@@ -1363,7 +1363,7 @@ class AdminUserController extends Controller
                         'keterangan'        => $request->keterangan[$i]
                     ]);
 
-                    if ($request->status_pengajuan[$i] == null)
+                    if ($request->status_pengajuan[$i] == null && $request->modul == 'distribusi')
                     {
                         $pemakaian = UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->first();
                         UsulanAtkPengadaan::where('id_form_usulan_pengadaan', $request->id_pengadaan[$i])->update([
@@ -1534,6 +1534,7 @@ class AdminUserController extends Controller
                     ->where('status_riwayat', 'keluar')
                     ->where('atk_id', $dataAtk->atk_id)
                     ->first();
+
                 $data['id_atk']        = $dataAtk->atk_id;
                 $data['kategori_id']   = $dataAtk->kategori_id;
                 $data['kode_ref']      = $dataAtk->kode_ref;
@@ -1736,23 +1737,9 @@ class AdminUserController extends Controller
         if ($aksi == 'daftar') {
             $uker   = UnitKerja::get();
 
-            $dataUsulan = UsulanAadb::with('usulanKendaraan')
-                ->select(
-                    'id_form_usulan',
-                    'tanggal_usulan',
-                    'no_surat_usulan',
-                    'unit_kerja',
-                    'jenis_form_usulan',
-                    'nama_pegawai',
-                    'keterangan_pegawai',
-                    'rencana_pengguna',
-                    'status_proses_id',
-                    'status_pengajuan_id',
-                    'keterangan'
-                )
-                ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            $dataUsulan = UsulanAadb::join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-                ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')

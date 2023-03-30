@@ -142,9 +142,7 @@
                                     <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
                                     <td class="text-uppercase">
                                         <div class="text-spacing">
-                                            @foreach ($dataUsulan->detailUsulanUkt->take(2) as $detailUkt)
-                                            {!! nl2br(e(Str::limit($detailUkt->spesifikasi_pekerjaan, 50) . PHP_EOL)) !!}
-                                            @endforeach
+                                            {{ $dataUsulan->detailUsulanUkt->pluck('spesifikasi_pekerjaan')->implode(', ') }}
                                         </div>
                                     </td>
                                     <td class="text-center text-capitalize">
@@ -378,7 +376,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Urusan Kerumahtanggaan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12]
+                        columns: [0, 7, 8, 9, 10, 11, 12]
                     },
                     messageTop: datetime
                 }

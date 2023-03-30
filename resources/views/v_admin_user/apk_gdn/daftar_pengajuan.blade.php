@@ -229,9 +229,7 @@
                                     <td>{{ $dataUsulan->jenis_form }}</td>
                                     <td>{{ $dataUsulan->unit_kerja }}</td>
                                     <td>
-                                        @foreach ($dataUsulan->detailUsulanGdn as $detailGdn)
-                                        {!! nl2br(e($detailGdn->lokasi_bangunan, 50)) !!}
-                                        @endforeach
+                                        {{ $dataUsulan->detailUsulanGdn->pluck('lokasi_bangunan')->implode(', ') }}
                                     </td>
                                     <td>
                                         @if($dataUsulan->status_proses_id == 1)
@@ -385,7 +383,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Gedung dan Bangunan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12]
+                        columns: [0, 7, 8, 9, 10, 11, 12]
                     },
                     messageTop: datetime
                 }
