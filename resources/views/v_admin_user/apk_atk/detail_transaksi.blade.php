@@ -82,13 +82,13 @@
                                         <tr>
                                             <th class="text-center">No</th>
                                             <th class="text-center">Kode Referensi</th>
-                                            <th class="text-center">Kode Kategori</th>
                                             <th>Deskripsi</th>
                                             <th class="text-center">Volume</th>
                                             <th class="text-center">Satuan</th>
                                             @if($transaksi->kategori_transaksi == 'Pembelian')
                                             <th>Harga Satuan</th>
                                             <th>Jumlah Biaya</th>
+					    <th>Keterangan</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -97,14 +97,14 @@
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
                                             <td class="text-center">{{ $detail->kode_ref }}</td>
-                                            <td class="text-center">{{ $detail->kategori_id }}</td>
                                             <td>{{ $detail->deskripsi_barang }}</td>
                                             <td class="text-center">{{ $detail->volume_transaksi }}</td>
                                             <td class="text-center">{{ $detail->satuan_barang }}</td>
                                             @if($transaksi->kategori_transaksi == 'Pembelian')
                                             <td>Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}</td>
                                             <td>Rp {{ number_format($detail->jumlah_biaya, 0, ',', '.') }}</td>
-                                            @endif
+                                            <td>{{ $detail->keterangan }}</td>
+					    @endif
                                         </tr>
                                         @endforeach
                                     </tbody>
