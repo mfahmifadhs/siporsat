@@ -86,7 +86,9 @@
                                                 <th style="width: 0%;" class="text-center">No</th>
                                                 <th>Nama Barang</th>
                                                 <th>Catatan</th>
+                                                @if ($usulan->jenis_form == 'distribusi')
                                                 <th style="width: 10%;">Stok Gudang</th>
+                                                @endif
                                                 <th style="width: 15%;" class="text-center">Permintaan</th>
                                                 <th style="width: 10%;">Satuan</th>
                                                 <th style="width: 15%;">Keterangan</th>
