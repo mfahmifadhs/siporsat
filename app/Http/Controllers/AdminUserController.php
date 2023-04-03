@@ -449,6 +449,20 @@ class AdminUserController extends Controller
                 ->first();
 
             return view('v_admin_user/detail_bast', compact('bast', 'modul'));
+
+        } elseif ($aksi == 'detail-bast-ukt') {
+            $modul = 'ukt';
+
+            $form      = UsulanUkt::where('id_form_usulan', $id)->pluck('id_form_usulan');
+
+            $bast = UsulanUkt::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+                ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->join('tbl_unit_utama', 'id_unit_utama', 'unit_utama_id')
+                ->where('id_form_usulan', $id)
+                ->first();
+
+            return view('v_admin_user/detail_bast', compact('bast', 'modul'));
         }
     }
 
