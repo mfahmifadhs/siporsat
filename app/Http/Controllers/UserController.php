@@ -2330,7 +2330,7 @@ class UserController extends Controller
             $totalUsulan = UsulanAtk::count();
             $idUsulan    = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
             $stok        = UsulanAtkPengadaan::join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                           ->where('pegawai_id', Auth::user()->pegawai_id)
+                           ->where('user_id', Auth::user()->id)
                            ->where('status_proses_id', 5)
                            ->get();
 
@@ -2370,7 +2370,7 @@ class UserController extends Controller
         )
             ->join('atk_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
             ->groupBy('jenis_barang', 'nama_barang', 'spesifikasi', 'satuan')
-            ->where('pegawai_id', Auth::user()->pegawai_id)
+            ->where('user_id', Auth::user()->id)
             ->where('status_proses_id', 5)
             ->get();
 
