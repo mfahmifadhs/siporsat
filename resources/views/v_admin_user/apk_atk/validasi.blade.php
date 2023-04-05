@@ -123,20 +123,11 @@
                                                 </td>
                                                 <td>{{ $dataAtk->satuan_barang }}</td>
                                                 <td>
-                                                    @if ($stok != 0)
                                                     <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left">
-                                                    @else
-                                                    <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left" value="Tidak tersedia">
-                                                    @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    @if ($stok != 0)
                                                     <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
                                                     <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
-                                                    @else
-                                                    <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
-                                                    🚫
-                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach

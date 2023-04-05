@@ -213,7 +213,10 @@
                             <label class="col-form-label">Permintaan ATK</label><br>
                             <small>
                                 Mohon untuk melengkapi informasi barang yang akan disimpan,
-                                format file dapat diunduh <a href="" class="font-weight-bold"><u>Disini</u></a>
+                                format file dapat diunduh
+                                <a href="{{ asset('format/format_permintaan_atk.xlsx') }}" class="font-weight-bold" download>
+                                    <u>Disini</u>
+                                </a>
                             </small>
                             <div class="card-footer text-center border border-dark">
                                 @if ($resArr == [])

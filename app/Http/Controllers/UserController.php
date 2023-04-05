@@ -2230,35 +2230,42 @@ class UserController extends Controller
                 $totalUsulan    = UsulanAtk::count();
                 $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
                 $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
-                $idFormUsulan = Carbon::now()->format('dhis');
+                $idFormUsulan   = Carbon::now()->format('dhis');
+                $totalAtk       = (int) $request->idAtk ? count($request->idAtk) : 0;
+                $totalAlkom     = (int) $request->idAlkom ? count($request->idAlkom) : 0;
+                $totalItem      = $totalAtk + $totalAlkom;
                 // Usulan ATK
                 $usulan = new UsulanAtk();
-                $usulan->id_form_usulan = $idFormUsulan;
-                $usulan->user_id        = Auth::user()->id;
-                $usulan->pegawai_id     = Auth::user()->pegawai_id;
-                $usulan->jenis_form     = 'permintaan';
-                $usulan->total_pengajuan = count($request->idAtk) + count($request->idAlkom);
-                $usulan->no_surat_usulan = $noSurat;
-                $usulan->tanggal_usulan  = Carbon::now();
+                $usulan->id_form_usulan   = $idFormUsulan;
+                $usulan->user_id          = Auth::user()->id;
+                $usulan->pegawai_id       = Auth::user()->pegawai_id;
+                $usulan->jenis_form       = 'permintaan';
+                $usulan->total_pengajuan  = $totalItem;
+                $usulan->no_surat_usulan  = $noSurat;
+                $usulan->tanggal_usulan   = Carbon::now();
                 $usulan->rencana_pengguna = $request->rencana_pengguna;
                 $usulan->save();
                 // Permintaan ATK
-                foreach ($request->idAtk as $i => $id_atk) {
-                    $detail = new UsulanAtkPermintaan();
-                    $detail->form_usulan_id = $idFormUsulan;
-                    $detail->atk_id         = $id_atk;
-                    $detail->jumlah         = $request->permintaanAtk[$i];
-                    $detail->catatan        = $request->keteranganAtk[$i];
-                    $detail->save();
+                if ($request->idAtk) {
+                    foreach ($request->idAtk as $i => $id_atk) {
+                        $detail = new UsulanAtkPermintaan();
+                        $detail->form_usulan_id = $idFormUsulan;
+                        $detail->atk_id         = $id_atk;
+                        $detail->jumlah         = $request->permintaanAtk[$i];
+                        $detail->catatan        = $request->keteranganAtk[$i];
+                        $detail->save();
+                    }
                 }
-                // Permintaan Alkom
-                foreach ($request->idAlkom as $i => $id_alkom) {
-                    $detail = new UsulanAtkPermintaan();
-                    $detail->form_usulan_id = $idFormUsulan;
-                    $detail->atk_id         = $id_alkom;
-                    $detail->jumlah         = $request->permintaanAlkom[$i];
-                    $detail->catatan        = $request->keteranganAlkom[$i];
-                    $detail->save();
+                if ($request->idAlkom) {
+                    // Permintaan Alkom
+                    foreach ($request->idAlkom as $i => $id_alkom) {
+                        $detail = new UsulanAtkPermintaan();
+                        $detail->form_usulan_id = $idFormUsulan;
+                        $detail->atk_id         = $id_alkom;
+                        $detail->jumlah         = $request->permintaanAlkom[$i];
+                        $detail->catatan        = $request->keteranganAlkom[$i];
+                        $detail->save();
+                    }
                 }
 
                 return redirect('unit-kerja/verif/usulan-atk/' . $idFormUsulan);
