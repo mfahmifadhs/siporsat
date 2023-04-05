@@ -162,141 +162,142 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Tambah Refensi -->
-    <div class="modal fade" id="modal-add-atk">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h6 class="modal-title font-weight-bold">Tambah Referensi ATK</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                </div>
-                <form action="{{ url('admin-user/atk/gudang/insert/atk') }}" method="POST">
-                    @csrf
-                    <div class="modal-body text-capitalize">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Kode Refensi</label>
-                            <input class="col-md-10 form-control" name="kode_ref" placeholder="Kode Referensi" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Kode Kategori</label>
-                            <input class="col-md-10 form-control" name="kategori_id" placeholder="Kategori ID" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Deskripsi</label>
-                            <input class="col-md-10 form-control" name="deskripsi_barang" placeholder="Deskripsi Barang" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Satuan</label>
-                            <input class="col-md-10 form-control" name="satuan_barang" placeholder="Satuan Barang" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Keterangan</label>
-                            <textarea class="col-md-10 form-control" name="keterangan_barang" placeholder="Keterangan Tambahan"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer text-right">
-                        <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Tambah Baru?')">
-                            <i class="fas fa-plus-circle"></i> TAMBAH
-                        </button>
-                    </div>
-                </form>
+<!-- Modal Tambah Refensi -->
+<div class="modal fade" id="modal-add-atk">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h6 class="modal-title font-weight-bold">Tambah Referensi ATK</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
             </div>
+            <form action="{{ url('admin-user/atk/gudang/insert/atk') }}" method="POST">
+                @csrf
+                <div class="modal-body text-capitalize">
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Kode Refensi</label>
+                        <input class="col-md-10 form-control" name="kode_ref" placeholder="Kode Referensi" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Kode Kategori</label>
+                        <input class="col-md-10 form-control" name="kategori_id" placeholder="Kategori ID" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Deskripsi</label>
+                        <input class="col-md-10 form-control" name="deskripsi_barang" placeholder="Deskripsi Barang" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Satuan</label>
+                        <input class="col-md-10 form-control" name="satuan_barang" placeholder="Satuan Barang" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Keterangan</label>
+                        <textarea class="col-md-10 form-control" name="keterangan_barang" placeholder="Keterangan Tambahan"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Tambah Baru?')">
+                        <i class="fas fa-plus-circle"></i> TAMBAH
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- Modal Tambah Kategori -->
+<!-- Modal Tambah Kategori -->
 
-    <div class="modal fade" id="modal-add-kategori">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h6 class="modal-title font-weight-bold">Tambah Kategori ATK</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                </div>
-                <form action="{{ url('admin-user/atk/gudang/insert/kategori') }}" method="POST">
-                    @csrf
-                    <div class="modal-body text-capitalize">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Kode Kategori</label>
-                            <input class="col-md-10 form-control" name="id_kategori_atk" placeholder="Kode Kategori" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Deskripsi</label>
-                            <input class="col-md-10 form-control" name="deskripsi_kategori" placeholder="Deskripsi Kategori" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Satuan</label>
-                            <input class="col-md-10 form-control" name="satuan_kategori" placeholder="Satuan" required>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Keterangan</label>
-                            <textarea class="col-md-10 form-control" name="keterangan_kategori" placeholder="Keterangan Tambahan"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer text-right">
-                        <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Tambah Baru?')">
-                            <i class="fas fa-plus-circle"></i> TAMBAH
-                        </button>
-                    </div>
-                </form>
+<div class="modal fade" id="modal-add-kategori">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h6 class="modal-title font-weight-bold">Tambah Kategori ATK</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
             </div>
+            <form action="{{ url('admin-user/atk/gudang/insert/kategori') }}" method="POST">
+                @csrf
+                <div class="modal-body text-capitalize">
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Kode Kategori</label>
+                        <input class="col-md-10 form-control" name="id_kategori_atk" placeholder="Kode Kategori" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Deskripsi</label>
+                        <input class="col-md-10 form-control" name="deskripsi_kategori" placeholder="Deskripsi Kategori" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Satuan</label>
+                        <input class="col-md-10 form-control" name="satuan_kategori" placeholder="Satuan" required>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Keterangan</label>
+                        <textarea class="col-md-10 form-control" name="keterangan_kategori" placeholder="Keterangan Tambahan"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button type="submit" class="btn btn-primary font-weight-bold" onclick="return confirm('Tambah Baru?')">
+                        <i class="fas fa-plus-circle"></i> TAMBAH
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    @section('js')
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@section('js')
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <script>
-        $(function() {
-            $("#table-kategori").DataTable({
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": true,
-                "info": true,
-                "paging": true,
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "Semua"]
-                ],
-                "buttons": ["excel", "pdf", "print"]
-            }).buttons().container().appendTo('#table-kategori_wrapper .col-md-6:eq(0)');
+<script>
+    $(function() {
+        $("#table-kategori").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": true,
+            "info": true,
+            "paging": true,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ],
+            "buttons": ["excel", "pdf", "print"]
+        }).buttons().container().appendTo('#table-kategori_wrapper .col-md-6:eq(0)');
 
-            $("#table-atk").DataTable({
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": true,
-                "info": true,
-                "paging": true,
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "Semua"]
-                ]
-            }).buttons().container().appendTo('#table-atk_wrapper .col-md-6:eq(0)');
+        $("#table-atk").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": true,
+            "info": true,
+            "paging": true,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ]
+        }).buttons().container().appendTo('#table-atk_wrapper .col-md-6:eq(0)');
 
-            $("#table-riwayat").DataTable({
-                "responsive": false,
-                "lengthChange": true,
-                "autoWidth": true,
-                "info": true,
-                "paging": true,
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "Semua"]
-                ]
-            }).buttons().container().appendTo('#table-atk_wrapper .col-md-6:eq(0)');
-        })
+        $("#table-riwayat").DataTable({
+            "responsive": false,
+            "lengthChange": true,
+            "autoWidth": true,
+            "info": true,
+            "paging": true,
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Semua"]
+            ]
+        }).buttons().container().appendTo('#table-atk_wrapper .col-md-6:eq(0)');
+    })
 
-        $(function() {
-            // Attach listener to "Add More" button
-            $('.add-input').click(function() {
-                // Create new input row
-                var newRow = $(
-                    `<div class="row input-row mb-2">
+    $(function() {
+        // Attach listener to "Add More" button
+        $('.add-input').click(function() {
+            // Create new input row
+            var newRow = $(
+                `<div class="row input-row mb-2">
                     <label class="col-md-12 col-10 col-form-label">Deskripsi Barang</label>
                     <div class="col-md-10">
                         <input type="text" class="form-control" name="deskripsi_barang[]" placeholder="Contoh: Tinta 78A/Post It Sign Here">
@@ -307,18 +308,18 @@
                         </a>
                     </div>
                 </div>`
-                );
-                // Append new row to input container
-                $('#input-container').append(newRow);
-            });
-
-            // Attach listener to "Remove Index" button
-            $(document).on('click', '.remove-input', function() {
-                // Remove parent row
-                $(this).parents('.input-row').remove();
-            });
+            );
+            // Append new row to input container
+            $('#input-container').append(newRow);
         });
-    </script>
 
-    @endsection
-    @endsection
+        // Attach listener to "Remove Index" button
+        $(document).on('click', '.remove-input', function() {
+            // Remove parent row
+            $(this).parents('.input-row').remove();
+        });
+    });
+</script>
+
+@endsection
+@endsection
