@@ -626,7 +626,7 @@
                 // },
                 {
                     text: '(+) Usulan Distribusi',
-                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
+                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group disabled',
                     action: function(e, dt, node, config) {
                         window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
                     }
