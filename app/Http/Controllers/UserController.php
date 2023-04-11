@@ -2188,18 +2188,6 @@ class UserController extends Controller
 
                 return redirect('unit-kerja/surat/usulan-atk/' . $id_usulan)->with('success', 'Berhasil Mengubah Data Usulan Pengadaan');
             }
-        } elseif ($aksi == 'proses-diterima') {
-
-            $detailId = $request->detail_form_id;
-            foreach ($detailId as $i => $id_form_usulan_detail) {
-                UsulanAtkDetail::where('id_form_usulan_detail', $id_form_usulan_detail)
-                    ->update([
-                        'jumlah_pengajuan' => $request->jumlah_pengajuan[$i]
-                    ]);
-            }
-
-
-            return redirect('unit-kerja/verif/usulan-atk/' . $id)->with('success', 'Pembelian barang telah selesai dilakukan');
         } elseif ($aksi == 'proses-ditolak') {
 
             UsulanAtk::where('id_form_usulan', $id)->update(['status_pengajuan_id' => 2, 'status_proses_id' => 5]);
@@ -2212,7 +2200,12 @@ class UserController extends Controller
 
             return view('v_user/apk_atk/proses_persetujuan', compact('usulan'));
         } elseif ($aksi == 'proses-pembatalan') {
-            UsulanAtkDetail::where('form_usulan_id', $id)->delete();
+            $usulan = UsulanAtk::where('id_form_usulan', $id)->first();
+            if ($usulan->jenis_form == 'pengadaan') {
+                UsulanAtkPengadaan::where('form_usulan_id', $id)->delete();
+            } else {
+                UsulanAtkPermintaan::where('form_usulan_id', $id)->delete();
+            }
             UsulanAtk::where('id_form_usulan', $id)->delete();
             return redirect('unit-kerja/atk/dashboard')->with('failed', 'Berhasil membatalkan usulan');
         } elseif ($aksi == 'tambah-atk') {
