@@ -76,7 +76,7 @@
                             </div>
                             <label class="col-sm-2 col-form-label">Bidang Perbaikan</label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan">
+                                <select class="form-control" name="bid_kerusakan_id[]" id="bidangKerusakan" required>
                                     <option value="">-- Pilih Bidang Kerusakan --</option>
                                 </select>
                             </div>

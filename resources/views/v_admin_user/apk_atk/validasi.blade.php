@@ -86,9 +86,6 @@
                                                 <th style="width: 0%;" class="text-center">No</th>
                                                 <th>Nama Barang</th>
                                                 <th>Catatan</th>
-                                                @if ($usulan->jenis_form == 'permintaan')
-                                                <th style="width: 10%;">Stok Gudang</th>
-                                                @endif
                                                 <th style="width: 15%;" class="text-center">Permintaan</th>
                                                 <th style="width: 10%;">Satuan</th>
                                                 <th style="width: 15%;">Keterangan</th>
@@ -109,15 +106,6 @@
                                                     {{ $dataAtk->deskripsi_barang }}
                                                 </td>
                                                 <td>{{ $dataAtk->catatan }}</td>
-                                                <td>
-                                                    @php
-                                                    $masuk = $dataAtk->atk->riwayatTransaksi->where('status_riwayat', 'masuk')->first();
-                                                    $keluar = $dataAtk->atk->riwayatTransaksi->where('status_riwayat', 'keluar')->first();
-                                                    $stok = $masuk['stok'] - $keluar['stok'];
-                                                    @endphp
-
-                                                    {{ (int) $stok.' '.$dataAtk->satuan_barang }}
-                                                </td>
                                                 <td class="text-center">
                                                     <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $dataAtk->jumlah }}" max="{{ $dataAtk->jumlah }}">
                                                 </td>

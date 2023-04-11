@@ -2,7 +2,7 @@
 
 namespace App\Models\Atk;
 
-use App\Models\atk\Atk;
+use App\Models\ATK\Atk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
