@@ -118,7 +118,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                    @elseif ($usulan->jenis_form = 'distribusi')
+                                    @elseif ($usulan->jenis_form == 'distribusi')
                                     @foreach($usulan->permintaanAtk as $i => $dataPermintaan)
                                     <tr>
                                         <td class="text-center"> {{ $i + 1 }}</td>
