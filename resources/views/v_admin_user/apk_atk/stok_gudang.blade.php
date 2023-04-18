@@ -163,7 +163,11 @@
                                                                             @if ($riwayatAtk->bast)
                                                                                 {{ ucfirst(strtolower($riwayatAtk->bast->usulan->pegawai->unitKerja->unit_kerja)) }}
                                                                             @else
-                                                                                {{ ucfirst(strtolower($riwayatAtk->transaksi->unitKerja->unit_kerja)) }}
+										@if($riwayatAtk->transaksi)
+										    {{ ucfirst(strtolower($riwayatAtk->transaksi->unitKerja->unit_kerja)) }}
+										@else
+										    {{ ucfirst(strtolower($riwayatAtk->unitKerja->unit_kerja)) }}
+										@endif
                                                                             @endif
                                                                         </a>
                                                                         <br>

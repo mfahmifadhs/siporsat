@@ -3,6 +3,8 @@
 namespace App\Models\atk;
 
 use App\Models\UnitKerja;
+use App\Models\ATK\BastAtk;
+use App\Models\ATK\TransaksiAtk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

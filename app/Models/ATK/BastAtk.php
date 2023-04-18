@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\atk;
+namespace App\Models\ATK;
 
 use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\ATK\BastAtkDetail;
