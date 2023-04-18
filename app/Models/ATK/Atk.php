@@ -31,4 +31,8 @@ class Atk extends Model
             ->select(DB::raw('sum(jumlah) as stok'), 'status_riwayat')
             ->groupBy('status_riwayat');
     }
+
+    public function riwayat() {
+        return $this->hasMany(RiwayatAtk::class, 'atk_id');
+    }
 }

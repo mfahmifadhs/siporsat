@@ -44,7 +44,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-md-8 mt-1">
+                            <label class="col-md-8 mt-2">
                                 Riwayat {{ $id }} ATK
                             </label>
                             @if(Auth::user()->id == 3)
@@ -55,34 +55,37 @@
                             </label>
                             @endif
                             <div class="col-md-12">
-                                <table class="table ">
+                                <hr>
+                                <table id="table-transaksi" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Tanggal</th>
-                                            <th>Unit Kerja</th>
+                                            <th class="text-center" style="width: 0%;">No</th>
+                                            <th class="text-center" style="width: 10%;">Tanggal</th>
                                             @if ($id == 'Pembelian')
-                                            <th>Nomor Kwitansi</th>
                                             <th>Nama Vendor</th>
-                                            <th>Total Biaya</th>
+                                            <th class="text-center">Total Biaya</th>
+                                            @else
+                                            <th>Unit Kerja</th>
                                             @endif
-                                            <th>Jumlah Barang</th>
-                                            <th>Keterangan</th>
+                                            <th class="text-center">Total</th>
+                                            <th style="width: 25%;">Keterangan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($transaksi as $i => $row)
+                                        @foreach ($transaksi->sortByDesc('tanggal_transaksi') as $i => $row)
                                         <tr>
                                             <td class="text-center">{{ $i+1 }}</td>
-                                            <td>{{ \Carbon\carbon::parse($row->tanggal_transaksi)->isoFormat('DD MMMM Y') }}</td>
-                                            <td>{{ $row->unit_kerja }}</td>
+                                            <td class="text-center">
+                                                {{ \Carbon\carbon::parse($row->tanggal_transaksi)->isoFormat('DD MMMM Y') }}
+                                            </td>
                                             @if ($id == 'Pembelian')
-                                            <td>{{ $row->nomor_kwitansi  }}</td>
                                             <td>{{ $row->nama_vendor }}</td>
-                                            <td>Rp {{ number_format($row->total_biaya, 0, ',', '.') }}</td>
+                                            <td class="text-center">Rp {{ number_format($row->total_biaya, 0, ',', '.') }}</td>
+                                            @else
+                                            <td>{{ $row->unit_kerja }}</td>
                                             @endif
-                                            <td>{{ $row->total_barang }} barang</td>
+                                            <td class="text-center">{{ $row->total_barang }} barang</td>
                                             <td>{{ $row->keterangan_transaksi }} </td>
                                             <td class="text-center">
                                                 <a type="button" class="btn btn-primary btn-sm" data-toggle="dropdown">
@@ -132,6 +135,16 @@
             "paging": false,
             "searching": false,
             "sort": false
+        })
+
+        $("#table-transaksi").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": true,
+            "info": true,
+            "paging": true,
+            "searching": true,
+            "sort": true
         })
     })
 </script>

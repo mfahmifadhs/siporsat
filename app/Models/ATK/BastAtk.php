@@ -50,4 +50,8 @@ class BastAtk extends Model
             ->join('atk_tbl_master', 'id_atk','atk_id')
             ->orderBy('deskripsi_barang', 'ASC');
     }
+
+    public function usulan() {
+        return $this->belongsTo(UsulanAtk::class, 'usulan_id');
+    }
 }

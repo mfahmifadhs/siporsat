@@ -6,6 +6,7 @@ use App\Models\ATK\UsulanAtkPermintaan;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkLampiran;
 use App\Models\ATK\BastAtk;
+use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +36,10 @@ class UsulanAtk extends Model
         'status_proses_id',
         'otp_usulan_pengusul'
     ];
+
+    public function pegawai() {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id');
+    }
 
     public function pengadaanAtk() {
         return $this->hasMany(UsulanAtkPengadaan::class, 'form_usulan_id');

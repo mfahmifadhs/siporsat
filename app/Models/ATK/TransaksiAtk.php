@@ -3,6 +3,7 @@
 namespace App\Models\atk;
 
 use App\Models\ATK\TransaksiAtkDetail;
+use App\Models\UnitKerja;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,5 +33,9 @@ class TransaksiAtk extends Model
         return $this->hasMany(TransaksiAtkDetail::class, 'transaksi_id')
             ->join('atk_tbl_master', 'id_atk', 'atk_id')
             ->orderBy('deskripsi_barang', 'ASC');
+    }
+
+    public function unitKerja() {
+        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
 }

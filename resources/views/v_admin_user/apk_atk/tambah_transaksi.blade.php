@@ -154,10 +154,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Total Jenis Barang*</label>
                                 <input class="col-md-6 form-control border-dark" type="number" name="total_barang" value="0" oninput="this.value = Math.abs(this.value)">
-                            </div>
+                            </div> -->
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Keterangan*</label>
                                 <textarea class="col-md-6 form-control border-dark" name="keterangan_transaksi" placeholder="Keteragan Tambahan"></textarea>
@@ -190,7 +190,7 @@
                                                     <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['deskripsi'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
-                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['keterangan_barang'] }}</span>
+                                                    <span class="form-control form-control-sm font-weight-bold" readonly>{{ $atk['keterangan'] }}</span>
                                                 </td>
                                                 <td class="border-dark">
                                                     <input class="form-control form-control-sm text-center" type="text" value="{{ $atk['jumlah'] }}" readonly>

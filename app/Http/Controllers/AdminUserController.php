@@ -737,6 +737,7 @@ class AdminUserController extends Controller
 
     public function Atk(Request $request)
     {
+        $result = [];
         $dataChartAtk = $this->ChartDataAtk();
         $usulanUker  = UsulanAtk::select('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1268,17 +1269,9 @@ class AdminUserController extends Controller
                     $detailBast->permintaan_id = $id_permintaan;
                     $detailBast->jumlah_bast_detail = $request->jumlah_penyerahan[$i];
                     $detailBast->save();
-
-                    $detail = new TransaksiAtkDetail();
-                    $detail->transaksi_id     = $id;
-                    $detail->atk_id           = $request->id_atk[$i];
-                    $detail->volume_transaksi = (int) $request->jumlah_penyerahan[$i];
-                    $detail->harga_satuan     = 0;
-                    $detail->jumlah_biaya     = 0;
-                    $detail->save();
                     // Insert Riwayat Transaksi
                     $riwayat = new RiwayatAtk();
-                    $riwayat->unit_kerja_id   = $request->unit_kerja_id;
+                    $riwayat->usulan_id       = $id_bast;
                     $riwayat->atk_id          = $request->id_atk[$i];
                     $riwayat->jumlah          = (int) $request->jumlah_penyerahan[$i];
                     $riwayat->status_riwayat  = 'keluar';
@@ -1549,8 +1542,8 @@ class AdminUserController extends Controller
 
             return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk'));
         } elseif ($aksi == 'stok') {
-
-            $atk = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
+            $list = Atk::get();
+            $atk  = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
                 ->join('atk_tbl_master', 'id_atk', 'atk_id')
                 ->groupBy('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
                 ->get();
@@ -1566,6 +1559,7 @@ class AdminUserController extends Controller
                     ->first();
 
                 $data['id_atk']        = $dataAtk->atk_id;
+                $data['tanggal']       = $dataAtk->atk_id;
                 $data['kategori_id']   = $dataAtk->kategori_id;
                 $data['kode_ref']      = $dataAtk->kode_ref;
                 $data['deskripsi']     = $dataAtk->deskripsi_barang;
@@ -1578,7 +1572,7 @@ class AdminUserController extends Controller
                 unset($data);
             }
 
-            return view('v_admin_user.apk_atk.stok_gudang', compact('barang'));
+            return view('v_admin_user.apk_atk.stok_gudang', compact('list', 'barang'));
         } elseif ($aksi == 'referensi') {
             $kategori  = KategoriAtk::get();
             $referensi = Atk::leftjoin('atk_tbl_kategori', 'id_kategori_atk', 'kategori_id')->get();
@@ -1651,7 +1645,7 @@ class AdminUserController extends Controller
                         $detail->save();
                         // Insert Riwayat Transaksi
                         $riwayat = new RiwayatAtk();
-                        $riwayat->unit_kerja_id   = Auth::user()->pegawai->unit_kerja_id;
+                        $riwayat->usulan_id       = $idTransaksi;
                         $riwayat->atk_id          = $atkId;
                         $riwayat->jumlah          = $request->volume_transaksi[$i];
                         $riwayat->status_riwayat  = 'masuk';
@@ -1668,7 +1662,7 @@ class AdminUserController extends Controller
                 $permintaan->unit_kerja_id        = $request->unit_kerja_id;
                 $permintaan->tanggal_transaksi    = $request->tanggal_transaksi;
                 $permintaan->keterangan_transaksi = $request->keterangan_transaksi;
-                $permintaan->total_barang         = $request->total_barang;
+                $permintaan->total_barang         = count($request->atk_id);
                 $permintaan->save();
 
                 $atk = $request->atk_id;
@@ -1684,7 +1678,7 @@ class AdminUserController extends Controller
                         $detail->save();
                         // Insert Riwayat Transaksi
                         $riwayat = new RiwayatAtk();
-                        $riwayat->unit_kerja_id   = Auth::user()->pegawai->unit_kerja_id;
+                        $riwayat->usulan_id       = $idTransaksi;
                         $riwayat->atk_id          = $atkId;
                         $riwayat->jumlah          = $request->volume_transaksi[$i];
                         $riwayat->status_riwayat  = 'keluar';
