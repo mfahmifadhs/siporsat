@@ -1268,6 +1268,22 @@ class AdminUserController extends Controller
                     $detailBast->permintaan_id = $id_permintaan;
                     $detailBast->jumlah_bast_detail = $request->jumlah_penyerahan[$i];
                     $detailBast->save();
+
+                    $detail = new TransaksiAtkDetail();
+                    $detail->transaksi_id     = $id;
+                    $detail->atk_id           = $request->id_atk[$i];
+                    $detail->volume_transaksi = (int) $request->jumlah_penyerahan[$i];
+                    $detail->harga_satuan     = 0;
+                    $detail->jumlah_biaya     = 0;
+                    $detail->save();
+                    // Insert Riwayat Transaksi
+                    $riwayat = new RiwayatAtk();
+                    $riwayat->unit_kerja_id   = $request->unit_kerja_id;
+                    $riwayat->atk_id          = $request->id_atk[$i];
+                    $riwayat->jumlah          = (int) $request->jumlah_penyerahan[$i];
+                    $riwayat->status_riwayat  = 'keluar';
+                    $riwayat->tanggal_riwayat = Carbon::now();
+                    $riwayat->save();
                 }
             }
 

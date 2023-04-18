@@ -167,7 +167,9 @@
                                     <td class="text-center pt-3">{{ $no++ }}</td>
                                     <td class="text-left">
                                         {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }} <br>
-                                        <span class="text-uppercase">{{ $dataUsulan->jenis_form }}</span> <br>
+                                        <span class="text-uppercase">
+                                            {{ $dataUsulan->jenis_form == 'pengadaan' ? 'Pengadaan' : 'Distribusi' }}
+                                        </span><br>
                                         No. Surat :
                                         @if ($dataUsulan->status_pengajuan_id == 1)
                                         {{ strtoupper($dataUsulan->no_surat_usulan) }}
@@ -624,15 +626,15 @@
                 //         window.location.href = "{{ url('unit-kerja/atk/usulan/pengadaan/baru') }}";
                 //     }
                 // },
+                // {
+                //     text: '(+) Usulan Distribusi',
+                //     className: 'btn bg-primary mr-2 rounded font-weight-bold form-group disabled',
+                //     action: function(e, dt, node, config) {
+                //         window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
+                //     }
+                // },
                 {
                     text: '(+) Usulan Distribusi',
-                    className: 'btn bg-primary mr-2 rounded font-weight-bold form-group disabled',
-                    action: function(e, dt, node, config) {
-                        window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi/baru') }}";
-                    }
-                },
-                {
-                    text: '(+) Usulan Distribusi v2',
                     className: 'btn bg-primary mr-2 rounded font-weight-bold form-group',
                     action: function(e, dt, node, config) {
                         window.location.href = "{{ url('unit-kerja/atk/usulan/distribusi2/*') }}";

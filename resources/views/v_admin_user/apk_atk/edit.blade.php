@@ -77,6 +77,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                     </div>
                     <form action="{{ url('admin-user/atk/usulan/proses-edit/'. $usulan->id_form_usulan) }}" method="POST">
                         @csrf
+                        <input type="hidden" name="unit_kerja_id" value="{{ $usulan->unit_kerja_id }}">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 col-12">
@@ -217,6 +218,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <td>
                                                     <input type="hidden" name="modul" value="distribusi">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
+                                                    <input type="hidden" name="id_atk[{{$i}}]" value="{{ $dataPermintaan->atk_id }}">
                                                     {{ $dataPermintaan->deskripsi_barang }}
                                                 </td>
                                                 <td>{{ $dataPermintaan->catatan }}</td>
