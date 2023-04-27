@@ -52,6 +52,7 @@
                                     <th>Nomor Bast</th>
                                     <th style="width: 10;">Tanggal Usulan</th>
                                     <th>Nomor Usulan</th>
+				    <th>Usulan</th>
                                     <th style="width: 15%;" class="text-center">Diserahkan</th>
                                     <th style="width: 0%;" class="text-center">Aksi</th>
                                 </tr>
@@ -65,6 +66,13 @@
                                     <td>{{ $detailAtk->nomor_bast }}</td>
                                     <td>{{ \Carbon\carbon::parse($detailAtk->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
                                     <td>{{ $detailAtk->no_surat_usulan }}</td>
+				    <td>
+					@if ($detailAtk->jenis_form == 'distribusi')
+                                            @foreach ($detailAtk->detailBast as $item)
+						{{ $item->nama_barang.' '.$item->spesifikasi.' ['. $item->jumlah_bast_detail.' '. $item->satuan .']' }},
+                                            @endforeach
+					@endif
+                                    </td>
                                     <td class="text-center">{{ count($detailAtk->detailAtk) }} barang</td>
                                     <td class="text-center">
                                         <a type="button" class="btn btn-primary" data-toggle="dropdown">
@@ -189,7 +197,29 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
             ],
-            "buttons": ["excel", "pdf", "print"]
+	    columnDefs: [{
+                "bVisible": false,
+                "aTargets": [5]
+            }],
+            "buttons": [{
+                extend: 'excel',
+                title: 'Show',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6]
+                }
+            }, {
+                extend: 'pdf',
+                title: 'Show',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6]
+                }
+            }, {
+                extend: 'print',
+                title: 'Show',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6]
+                }
+            }]
         }).buttons().container().appendTo('#table-kategori_wrapper .col-md-6:eq(0)');
     })
 
@@ -204,6 +234,10 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "Semua"]
             ],
+	    columnDefs: [{
+                "bVisible": false,
+                "aTargets": [5]
+            }],
             "buttons": [{
                 extend: 'excel',
                 title: 'Daftar Referensi ATK',

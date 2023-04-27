@@ -309,7 +309,7 @@ class AdminUserController extends Controller
             $modul = 'atk';
             if ($id == 'daftar') {
                 $bast = BastAtk::join('atk_tbl_form_usulan', 'id_form_usulan', 'usulan_id')
-                    ->select('id_bast', 'tanggal_usulan', 'no_surat_usulan', 'atk_tbl_bast.tanggal_bast', 'nomor_bast')
+                    ->select('id_bast', 'usulan_id', 'jenis_form', 'tanggal_usulan', 'no_surat_usulan', 'atk_tbl_bast.tanggal_bast', 'nomor_bast')
                     ->orderBy('tanggal_bast', 'DESC')
                     ->get();
                 return view('v_admin_user/daftar_bast', compact('bast', 'modul'));
