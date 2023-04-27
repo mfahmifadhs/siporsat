@@ -1542,6 +1542,7 @@ class AdminUserController extends Controller
 
             return view('v_admin_user.apk_atk.gudang', compact('riwayatUker', 'riwayatTotal', 'usulanChartAtk'));
         } elseif ($aksi == 'stok') {
+            $barang = [];
             $list = Atk::get();
             $atk  = RiwayatAtk::select('atk_id', 'kode_ref', 'kategori_id', 'deskripsi_barang', 'satuan_barang')
                 ->join('atk_tbl_master', 'id_atk', 'atk_id')
@@ -1580,6 +1581,7 @@ class AdminUserController extends Controller
         } elseif ($aksi == 'daftar-transaksi') {
             $transaksi = TransaksiAtk::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->where('kategori_transaksi', $id)
+                ->orderBy('tanggal_transaksi','DESC')
                 ->get();
             return view('v_admin_user.apk_atk.daftar_transaksi', compact('transaksi', 'id'));
         } elseif ($aksi == 'tambah') {
@@ -1617,18 +1619,22 @@ class AdminUserController extends Controller
             return view('v_admin_user.apk_atk.tambah_transaksi', compact('uker', 'barang', 'id'));
         } elseif ($aksi == 'proses') {
             if ($id == 'pembelian') {
-                $idTransaksi = Carbon::now()->format('dhis');
+                // Total barang
+                $total = collect($request->volume_transaksi)->filter(function ($value) {
+                    return $value != 0;
+                })->count();
                 // Insert Transaksi Pembelian
+                $idTransaksi = Carbon::now()->format('dhis');
                 $pembelian = new TransaksiAtk();
                 $pembelian->id_transaksi         = $idTransaksi;
                 $pembelian->unit_kerja_id        = Auth::user()->pegawai->unit_kerja_id;
-                $pembelian->tanggal_transaksi    = Carbon::now();
+                $pembelian->tanggal_transaksi    = $request->tanggal_transaksi;
                 $pembelian->nomor_kwitansi       = $request->nomor_kwitansi;
                 $pembelian->nama_vendor          = $request->nama_vendor;
                 $pembelian->alamat_vendor        = $request->alamat_vendor;
                 $pembelian->keterangan_transaksi = $request->keterangan_transaksi;
                 $pembelian->file_kwitansi        = $request->file_kwitansi;
-                $pembelian->total_barang         = $request->total_barang;
+                $pembelian->total_barang         = $total;
                 $pembelian->total_biaya          = (int) $request->total_biaya;
                 $pembelian->save();
 

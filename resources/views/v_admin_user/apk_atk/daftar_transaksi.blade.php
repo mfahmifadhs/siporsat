@@ -60,7 +60,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width: 0%;">No</th>
-                                            <th class="text-center" style="width: 10%;">Tanggal</th>
+                                            <th class="text-center" style="width: 12%;">Tanggal</th>
                                             @if ($id == 'Pembelian')
                                             <th>Nama Vendor</th>
                                             <th class="text-center">Total Biaya</th>
@@ -73,7 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($transaksi->sortByDesc('tanggal_transaksi') as $i => $row)
+                                        @foreach ($transaksi as $i => $row)
                                         <tr>
                                             <td class="text-center">{{ $i+1 }}</td>
                                             <td class="text-center">

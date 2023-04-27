@@ -66,7 +66,7 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Total Jenis Barang*</label>
-                                <input class="col-md-4 form-control border-dark" type="number" name="total_barang" value="0" oninput="this.value = Math.abs(this.value)">
+                                <input class="col-md-4 form-control border-dark" type="number" name="total_barang" oninput="this.value = Math.abs(this.value)" disabled>
 
                                 <label class="col-md-2 col-form-label text-center">Total Biaya*</label>
                                 <div class="col-md-4"><span id="totalBiaya"></span></div>
