@@ -175,8 +175,8 @@
                                     </thead>
                                     <tbody>
                                         @if ($bast->jenis_form == 'distribusi')
-                                        @foreach($bast->detailBast as $i => $detailAtk)
-                                        <tr>
+                                        @foreach($bast->detailBast()->orderBy('nama_barang', 'ASC')->orderBy('spesifikasi','ASC')->get() as $i => $detailAtk)
+                                        <tr class="text-capitalize">
                                             <td class="text-center">{{ $i + 1 }}</td>
                                             <td>{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</td>
                                             <td>{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</td>

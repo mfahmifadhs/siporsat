@@ -434,7 +434,6 @@ class AdminUserController extends Controller
                 )
                 ->where('id_bast', $id)
                 ->first();
-
             return view('v_admin_user.detail_bast', compact('modul', 'bast'));
         } elseif ($aksi == 'detail-bast-gdn') {
             $modul = 'gdn';
@@ -1269,14 +1268,16 @@ class AdminUserController extends Controller
                     $detailBast->permintaan_id = $id_permintaan;
                     $detailBast->jumlah_bast_detail = $request->jumlah_penyerahan[$i];
                     $detailBast->save();
-                    // Insert Riwayat Transaksi
-                    $riwayat = new RiwayatAtk();
-                    $riwayat->usulan_id       = $id_bast;
-                    $riwayat->atk_id          = $request->id_atk[$i];
-                    $riwayat->jumlah          = (int) $request->jumlah_penyerahan[$i];
-                    $riwayat->status_riwayat  = 'keluar';
-                    $riwayat->tanggal_riwayat = Carbon::now();
-                    $riwayat->save();
+		    if ($request->modul == 'permintaan') {
+                    	// Insert Riwayat Transaksi
+                    	$riwayat = new RiwayatAtk();
+                    	$riwayat->usulan_id       = $id_bast;
+                    	$riwayat->atk_id          = $request->id_atk[$i];
+                    	$riwayat->jumlah          = (int) $request->jumlah_penyerahan[$i];
+                    	$riwayat->status_riwayat  = 'keluar';
+                    	$riwayat->tanggal_riwayat = Carbon::now();
+                    	$riwayat->save();
+		    }
                 }
             }
 
