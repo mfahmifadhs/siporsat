@@ -1930,7 +1930,6 @@ class AdminUserController extends Controller
                     ->where('status_proses_id', $id)
                     ->get();
             }
-
             return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'usulan'));
         } elseif ($aksi == 'daftar') {
             $uker   = UnitKerja::get();
@@ -1971,14 +1970,13 @@ class AdminUserController extends Controller
                 }
 
                 if ($request->unit_kerja_id == null && $request->start_date == null  && $request->status_proses_id == null  && $request->jenis_form == null) {
-                    $formUsulan = $dataUsulan->get();
+                    $usulan = $dataUsulan->get();
                 } else {
-                    $formUsulan = $searchUkt->get();
+                    $usulan = $searchUkt->get();
                 }
             } else {
                 $usulan = $dataUsulan->get();
             }
-
             return view('v_admin_user.apk_oldat.daftar_pengajuan', compact('uker', 'usulan'));
         } elseif ($aksi == 'laporan') {
             return back();
