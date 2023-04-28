@@ -109,10 +109,8 @@
                             <thead>
                                 <tr>
                                     <th style="width: 1%;">No</th>
-                                    <th style="width: 9%;">Tanggal</th>
-                                    <th style="width: 5%;">No. Surat</th>
-                                    <th style="width: 15%;">Pengusul</th>
-                                    <th style="width: 15%;">Usulan</th>
+                                    <th style="width: 29%;">Pengusul</th>
+                                    <th>Usulan</th>
                                     <th class="text-center" style="width: 10%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
                                     <th>Tanggal</th>
@@ -137,13 +135,46 @@
                                         @endif
                                         {{ $no++ }}
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
-                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
-                                    <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
-                                    <td class="text-uppercase">
-                                        <div class="text-spacing">
-                                            {{ $dataUsulan->detailUsulanUkt->pluck('spesifikasi_pekerjaan')->implode(', ') }}
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-3">Tanggal</div>
+                                            <div class="col-md-9">:
+                                                {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
+                                            </div>
+                                            <div class="col-md-3">No. Surat</div>
+                                            <div class="col-md-9">:
+                                                {{ $dataUsulan->no_surat_usulan }}
+                                            </div>
+                                            <div class="col-md-3">Nama</div>
+                                            <div class="col-md-9">:
+                                                {{ $dataUsulan->nama_pegawai }}
+                                            </div>
+                                            <div class="col-md-3">Unit Kerja</div>
+                                            <div class="col-md-9">:
+                                                {{ $dataUsulan->unit_kerja }}
+                                            </div>
                                         </div>
+
+                                    </td>
+                                    <td class="text-left">
+                                        @foreach($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
+                                        <div class="form-group row">
+                                            <div class="col-md-2">Pekerjaan</div>
+                                            <div class="col-md-9 text-capitalize">:
+                                                {{ ucfirst(strtolower($detailUkt->lokasi_pekerjaan)) }}
+                                            </div>
+                                            <div class="col-md-2">Spesifikasi</div>
+                                            <div class="col-md-9 text-capitalize">:
+                                                {!! nl2br(e(ucfirst(strtolower($detailUkt->spesifikasi_pekerjaan)))) !!}
+
+                                            </div>
+                                            <div class="col-md-2">Keterangan</div>
+                                            <div class="col-md-9 text-capitalize">:
+                                                {!! nl2br(e(ucfirst(strtolower($detailUkt->keterangan)))) !!}
+
+                                            </div>
+                                        </div>
+                                        @endforeach
                                     </td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
@@ -356,7 +387,7 @@
             ],
             columnDefs: [{
                 "bVisible": false,
-                "aTargets": [7, 8, 9, 10, 11, 12]
+                "aTargets": [5, 6, 7, 8, 9, 10]
             }, ],
             buttons: [{
                     extend: 'pdf',
@@ -366,7 +397,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Urusan Kerumahtanggaan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12],
+                        columns: [0, 5, 6, 7, 8, 9, 10],
                     },
                     messageTop: datetime,
                 },
@@ -376,7 +407,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Urusan Kerumahtanggaan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 11, 12]
+                        columns: [0, 5, 6, 7, 8, 9, 10]
                     },
                     messageTop: datetime
                 }

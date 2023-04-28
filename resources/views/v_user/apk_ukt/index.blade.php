@@ -129,7 +129,8 @@
                                             <div class="col-md-9 text-capitalize">{!! nl2br(e(ucfirst(strtolower($detailUkt->keterangan)))) !!}</div>
                                         </div>
                                         @if (count($dataUsulan->detailUsulanUkt) > 1)
-                                        <hr> @endif
+                                        <hr>
+                                        @endif
                                         @endforeach
                                     </td>
                                     <td>
