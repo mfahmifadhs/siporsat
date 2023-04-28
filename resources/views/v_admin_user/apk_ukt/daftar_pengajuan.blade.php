@@ -137,21 +137,21 @@
                                     </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-md-3">Tanggal</div>
-                                            <div class="col-md-9">:
+                                            <div class="col-md-3">Tanggal</div>:
+                                            <div class="col-md-8">
                                                 {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
                                             </div>
-                                            <div class="col-md-3">No. Surat</div>
-                                            <div class="col-md-9">:
+                                            <div class="col-md-3">No. Surat</div>:
+                                            <div class="col-md-8">
                                                 {{ $dataUsulan->no_surat_usulan }}
                                             </div>
-                                            <div class="col-md-3">Nama</div>
-                                            <div class="col-md-9">:
+                                            <div class="col-md-3">Nama</div>:
+                                            <div class="col-md-8">
                                                 {{ $dataUsulan->nama_pegawai }}
                                             </div>
-                                            <div class="col-md-3">Unit Kerja</div>
-                                            <div class="col-md-9">:
-                                                {{ $dataUsulan->unit_kerja }}
+                                            <div class="col-md-3">Unit Kerja</div>:
+                                            <div class="col-md-8 text-capitalize">
+                                                {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                             </div>
                                         </div>
 
@@ -159,17 +159,17 @@
                                     <td class="text-left">
                                         @foreach($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
                                         <div class="form-group row">
-                                            <div class="col-md-2">Pekerjaan</div>
-                                            <div class="col-md-9 text-capitalize">:
+                                            <div class="col-md-2">Pekerjaan</div>:
+                                            <div class="col-md-9 text-capitalize">
                                                 {{ ucfirst(strtolower($detailUkt->lokasi_pekerjaan)) }}
                                             </div>
-                                            <div class="col-md-2">Spesifikasi</div>
-                                            <div class="col-md-9 text-capitalize">:
+                                            <div class="col-md-2">Spesifikasi</div>:
+                                            <div class="col-md-9 text-capitalize">
                                                 {!! nl2br(e(ucfirst(strtolower($detailUkt->spesifikasi_pekerjaan)))) !!}
 
                                             </div>
-                                            <div class="col-md-2">Keterangan</div>
-                                            <div class="col-md-9 text-capitalize">:
+                                            <div class="col-md-2">Keterangan</div>:
+                                            <div class="col-md-9 text-capitalize">
                                                 {!! nl2br(e(ucfirst(strtolower($detailUkt->keterangan)))) !!}
 
                                             </div>
