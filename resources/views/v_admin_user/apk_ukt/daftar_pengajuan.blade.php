@@ -111,7 +111,7 @@
                                     <th style="width: 1%;">No</th>
                                     <th style="width: 29%;">Pengusul</th>
                                     <th>Usulan</th>
-                                    <th class="text-center" style="width: 10%;">Status Proses</th>
+                                    <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 1%;">Aksi</th>
                                     <th>Tanggal</th>
                                     <th>No. Surat</th>
