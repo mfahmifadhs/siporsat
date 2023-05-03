@@ -2435,7 +2435,7 @@ class SuperUserController extends Controller
                 foreach ($aadb as $i => $jenis_kendaraan) {
                     $idUsulan    = UsulanKendaraan::count() + 1;
                     $usulanPengadaan = new UsulanKendaraan();
-                    $usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
+                    //$usulanPengadaan->id_form_usulan_pengadaan  = (int) $idUsulan . Carbon::now()->format('dm');
                     $usulanPengadaan->form_usulan_id            = $idFormUsulan;
                     $usulanPengadaan->jenis_aadb                = $request->jenis_aadb;
                     $usulanPengadaan->jenis_kendaraan_id        = $jenis_kendaraan;
@@ -2450,7 +2450,7 @@ class SuperUserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan       = UsulanServis::count() + 1;
                     $usulanServis   = new UsulanServis();
-                    $usulanServis->id_form_usulan_servis    = (int) $idUsulan . Carbon::now()->format('dm');
+                    //$usulanServis->id_form_usulan_servis    = (int) $idUsulan . Carbon::now()->format('dm');
                     $usulanServis->form_usulan_id           = $idFormUsulan;
                     $usulanServis->kendaraan_id             = $kendaraan_id;
                     $usulanServis->kilometer_terakhir       = $request->kilometer_terakhir[$i];
@@ -2466,7 +2466,7 @@ class SuperUserController extends Controller
                 foreach ($kendaraan as $i => $kendaraan_id) {
                     $idUsulan    = UsulanPerpanjanganSTNK::count() + 1;
                     $usulanPerpanjangan   = new UsulanPerpanjanganSTNK();
-                    $usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . Carbon::now()->format('dm');
+                    //$usulanPerpanjangan->id_form_usulan_perpanjangan_stnk  = (int) $idUsulan . Carbon::now()->format('dm');
                     $usulanPerpanjangan->form_usulan_id                    = $idFormUsulan;
                     $usulanPerpanjangan->kendaraan_id                      = $kendaraan_id;
                     $usulanPerpanjangan->mb_stnk_lama                      = $request->mb_stnk[$i];
@@ -2479,7 +2479,7 @@ class SuperUserController extends Controller
                     if ($request->status_pengajuan[$i] == 'true') {
                         $idUsulan    = UsulanVoucherBBM::count() + 1;
                         $usulanVoucherBBM   = new UsulanVoucherBBM();
-                        $usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000, 9999);;
+                        //$usulanVoucherBBM->id_form_usulan_voucher_bbm   = (int) $idUsulan . rand(0000, 9999);;
                         $usulanVoucherBBM->form_usulan_id               = $idFormUsulan;
                         $usulanVoucherBBM->bulan_pengadaan              = $request->bulan_pengadaan;
                         $usulanVoucherBBM->kendaraan_id                 = $kendaraan_id;
