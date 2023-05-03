@@ -66,10 +66,14 @@
                         <label class="col-sm-12 col-form-label text-muted mb-2">Informasi Barang</label>
                         <div class="col-md-6 col-12 mt-3">
                             <label class="col-form-label">Nama Barang</label>
-                            <input type="text" class="form-control" value="{{ $permintaan->nama_barang }}" readonly>
+                            @if ($usulan->jenis_form == 'permintaan')
+                                <input type="text" class="form-control" value="{{ $permintaan->atk->deskripsi_barang }}" readonly>
+                            @else
+                                <input type="text" class="form-control" value="{{ $permintaan->nama_barang }}" readonly>
+                            @endif
                         </div>
                         <div class="col-md-6 col-12 mt-3">
-                            <label class="col-form-label">Merk/Tipe</label>
+                            <label class="col-form-label">Deskripsi</label>
                             <input type="text" class="form-control" value="{{ $permintaan->spesifikasi }}" readonly>
                         </div>
                         <div class="col-md-6 col-12 mt-3">
@@ -80,7 +84,11 @@
                         </div>
                         <div class="col-md-6 col-12 mt-3">
                             <label class="col-form-label">Satuan</label>
-                            <input type="text" class="form-control" value="{{ $permintaan->satuan }}" readonly>
+                            @if ($usulan->jenis_form == 'permintaan')
+                                <input type="text" class="form-control" value="{{ $permintaan->atk->satuan_barang }}" readonly>
+                            @else
+                                <input type="text" class="form-control" value="{{ $permintaan->satuan }}" readonly>
+                            @endif
                         </div>
                         <div class="col-md-12 col-12 mt-3">
                             <label class="col-form-label">Keterangan</label>
