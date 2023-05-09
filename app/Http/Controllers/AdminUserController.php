@@ -1393,7 +1393,6 @@ class AdminUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->where('id_form_usulan', $id)
                     ->first();
-
                 return view('v_admin_user.apk_atk.validasi', compact('idBast', 'usulan'));
             }
         }
