@@ -26,6 +26,7 @@ Route::get('/', function () { return view('index'); });
 Route::get('/login', function () { return view('login'); });
 Route::get('/surat/{modul}/{id}', [Controller::class, 'Links']);
 Route::get('/usulan/{modul}/{id}', [Controller::class, 'Letters']);
+
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
