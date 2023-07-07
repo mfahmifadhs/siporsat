@@ -84,6 +84,7 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
         Route::get('/grafik', [SuperAdminController::class, 'SearchChartDataAtk']);
         Route::get('usulan/{aksi}/{id}', [SuperAdminController::class, 'SubmissionAtk']);
         Route::get('barang/{aksi}/{id}', [SuperAdminController::class, 'OfficeStationery']);
+        Route::get('laporan', [SuperAdminController::class, 'ReportAtk']);
 
         Route::post('barang/{aksi}/{id}', [SuperAdminController::class, 'OfficeStationery']);
         Route::post('/select2-dashboard/{aksi}/{id}', [SuperAdminController::class, 'Select2AtkDashboard']);
@@ -256,6 +257,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('/select2/{aksi}/{id}', [SuperUserController::class, 'Select2Atk']);
         Route::get('/select2-dashboard/{aksi}/{id}', [SuperUserController::class, 'Select2AtkDashboard']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);
+        Route::get('laporan', [SuperUserController::class, 'ReportAtk']);
 
         Route::post('barang/{aksi}/{id}', [SuperUserController::class, 'OfficeStationery']);
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterAtk']);

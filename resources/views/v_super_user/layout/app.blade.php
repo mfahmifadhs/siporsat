@@ -290,12 +290,12 @@
                                         <p>Daftar Usulan</p>
                                     </a>
                                 </li>
-                                <!-- <li class="nav-item">
-                                    <a href="{{ url('super-user/atk/barang/daftar/semua') }}" class="nav-link">
-                                        <i class="nav-icon fas fa-pencil-rulers"></i>
-                                        <p>Daftar ATK</p>
+                                <li class="nav-item">
+                                    <a href="{{ url('super-user/atk/laporan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Laporan</p>
                                     </a>
-                                </li> -->
+                                </li>
                             </ul>
                         </li>
                         <!-- Gedung & Bangunan -->

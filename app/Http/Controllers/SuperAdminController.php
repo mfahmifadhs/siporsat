@@ -1568,6 +1568,21 @@ class SuperAdminController extends Controller
     // ====================================================
 
 
+    public function ReportAtk()
+    {
+        $atk = UsulanAtk::select('unit_kerja', DB::RAW('COUNT(id_form_usulan) as total_usulan'))
+                ->where('status_pengajuan_id', 1)
+                ->whereIn('jenis_form', ['distribusi','permintaan'])
+                ->join('users','id','user_id')
+                ->join('tbl_pegawai','id_pegawai','users.pegawai_id')
+                ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
+                ->groupBy('unit_kerja')
+                ->orderBy('unit_kerja', 'ASC')
+                ->get();
+        dd($atk);
+        return view('v_super_admin.apk_gdn.laporan', compact('gdn'));
+    }
+
     public function ReportGdn()
     {
         $gdn = UsulanGdn::select('unit_kerja', DB::RAW('COUNT(id_form_usulan) as total_usulan'))
