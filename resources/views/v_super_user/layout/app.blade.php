@@ -339,6 +339,10 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
                                     </a>
+                                    <a href="{{ url('super-user/ukt/laporan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Laporan</p>
+                                    </a>
                                 </li>
                             </ul>
                         </li>

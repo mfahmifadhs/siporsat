@@ -280,6 +280,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('dashboard', [SuperUserController::class, 'Ukt']);
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionUkt']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterUkt']);
+        Route::get('laporan', [SuperUserController::class, 'ReportUkt']);
 
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterUkt']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionUkt']);
