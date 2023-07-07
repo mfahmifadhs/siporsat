@@ -60,7 +60,7 @@
                                         <div class="card bg-default border border-primary">
                                             <div class="card-body">
                                                 <h5>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
-                                                <h6 class="font-weight-bold">Menunggu Persetujuan Kabag RT</h6>
+                                                <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
                                             </div>
                                         </div>
                                     </a>
@@ -70,7 +70,7 @@
                                         <div class="card bg-default border border-primary">
                                             <div class="card-body">
                                                 <h5>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
-                                                <h6 class="font-weight-bold">Sedang Diproses PPK</h6>
+                                                <h6 class="font-weight-bold">Sedang Diproses</h6>
                                             </div>
                                         </div>
                                     </a>
@@ -80,7 +80,7 @@
                                         <div class="card bg-default border border-primary">
                                             <div class="card-body">
                                                 <h5>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
-                                                <h6 class="font-weight-bold">Menunggu Konfirmasi BAST Pengusul</h6>
+                                                <h6 class="font-weight-bold">Konfirmasi BAST Pengusul</h6>
                                             </div>
                                         </div>
                                     </a>
@@ -90,7 +90,7 @@
                                         <div class="card bg-default border border-primary">
                                             <div class="card-body">
                                                 <h5>{{ $usulanTotal->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
-                                                <h6 class="font-weight-bold">Menunggu Konfirmasi BAST Kabag RT</h6>
+                                                <h6 class="font-weight-bold">Konfirmasi BAST Kabag RT</h6>
                                             </div>
                                         </div>
                                     </a>
