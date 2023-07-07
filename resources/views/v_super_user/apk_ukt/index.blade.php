@@ -179,6 +179,7 @@
         })
 
         let chartData = JSON.parse(`<?php echo $chartUkt; ?>`)
+        console.log(chartData)
         google.charts.load('current', {
             'packages': ['bar']
         });

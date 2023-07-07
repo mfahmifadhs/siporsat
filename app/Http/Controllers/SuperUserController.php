@@ -2317,46 +2317,54 @@ class SuperUserController extends Controller
     // ===============================================
     public function Aadb(Request $request)
     {
-        $unitKerja       = UnitKerja::get();
-        $jenisKendaraan  = JenisKendaraan::get();
-        $merk            = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
-        $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
-        $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
-        $kendaraan       = Kendaraan::orderBy('jenis_aadb', 'ASC')
-            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+        $usulanUker = UsulanAadb::select(
+            'id_unit_kerja',
+            'unit_kerja',
+            DB::raw('COUNT(CASE WHEN jenis_form = "1" THEN id_form_usulan END) AS total_pengadaan'),
+            DB::raw('COUNT(CASE WHEN jenis_form = "2" THEN id_form_usulan END) AS total_servis'),
+            DB::raw('COUNT(CASE WHEN jenis_form = "3" THEN id_form_usulan END) AS total_stnk'),
+            DB::raw('COUNT(CASE WHEN jenis_form = "4" THEN id_form_usulan END) AS total_voucher')
+        )
+        ->leftJoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+        ->rightJoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+        ->groupBy('id_unit_kerja', 'unit_kerja')
+        ->get();
+
+        $usulanTotal = UsulanAadb::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        $usulanChart = UsulanAadb::select(
+            DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->get();
+
+        $chartData = UsulanAadb::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->get();
-        $stnk      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->where(DB::raw("(DATE_FORMAT(mb_stnk_plat_kendaraan, '%Y-%m'))"), '>', Carbon::now()->format('Y-m'))
-            ->orderBy('mb_stnk_plat_kendaraan', 'ASC')
-            ->get();
-        $googleChartData = $this->ChartDataAADB();
 
-        $usulan  = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
-            ->orderBy('tanggal_usulan', 'DESC')
-            ->orderBy('status_proses_id', 'ASC')
-            ->get();
+        foreach ($usulanChart as $key => $value) {
+            $result[] = ['Bulan', 'Total Pengadaan', 'Total Servis', 'Total Perpanjangan STNK', 'Total Voucher BBM'];
+            $result[++$key] = [
+                Carbon::parse($value->month)->isoFormat('MMMM Y'),
+                $chartData->where('month', $value->month)->where('jenis_form', '1')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', '2')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', '3')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', '4')->count(),
+            ];
+        }
 
-        $jadwalServis = JadwalServis::join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
-            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
-            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-            ->get();
-
-        return view('v_super_user.apk_aadb.index', compact(
-            'unitKerja',
-            'jenisKendaraan',
-            'merk',
-            'tahun',
-            'pengguna',
-            'googleChartData',
-            'kendaraan',
-            'usulan',
-            'stnk',
-            'jadwalServis'
-        ));
+        $chartAadb = json_encode($result);
+        return view('v_super_user.apk_aadb.index', compact('usulanUker', 'usulanTotal', 'chartAadb'));
     }
 
     public function SubmissionAadb(Request $request, $aksi, $id)
@@ -2864,15 +2872,55 @@ class SuperUserController extends Controller
 
     public function ReportAadb(Request $request, $aksi, $id)
     {
-        if ($id == 'daftar') {
-            $jenisForm      = JenisUsulan::where('jenis_form_usulan', 'like', '%' . $aksi . '%')->first();
-            $pengajuan      = UsulanAadb::get();
-            $kategoriBarang = KategoriBarang::get();
-            $chartPengajuan = $this->ChartReportAADB($jenisForm->id_jenis_form_usulan);
-            $unitKerja      = UnitKerja::get();
+        $unitKerja       = UnitKerja::get();
+        $jenisKendaraan  = JenisKendaraan::get();
+        $merk            = Kendaraan::select('merk_tipe_kendaraan')->groupBy('merk_tipe_kendaraan')->get();
+        $tahun           = Kendaraan::select('tahun_kendaraan')->groupBy('tahun_kendaraan')->get();
+        $pengguna        = Kendaraan::select('pengguna')->groupBy('pengguna')->get();
+        $kendaraan       = Kendaraan::orderBy('jenis_aadb', 'ASC')
+            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+        $stnk      = Kendaraan::join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->where(DB::raw("(DATE_FORMAT(mb_stnk_plat_kendaraan, '%Y-%m'))"), '>', Carbon::now()->format('Y-m'))
+            ->orderBy('mb_stnk_plat_kendaraan', 'ASC')
+            ->get();
+        $googleChartData = $this->ChartDataAADB();
 
-            return view('v_super_user.apk_aadb.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
-        }
+        $usulan  = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->join('aadb_tbl_jenis_form_usulan', 'id_jenis_form_usulan', 'jenis_form')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->orderBy('status_proses_id', 'ASC')
+            ->get();
+
+        $jadwalServis = JadwalServis::join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+            ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+            ->leftjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+
+        return view('v_super_user.apk_aadb.index', compact(
+            'unitKerja',
+            'jenisKendaraan',
+            'merk',
+            'tahun',
+            'pengguna',
+            'googleChartData',
+            'kendaraan',
+            'usulan',
+            'stnk',
+            'jadwalServis'
+        ));
+        // if ($id == 'daftar') {
+        //     $jenisForm      = JenisUsulan::where('jenis_form_usulan', 'like', '%' . $aksi . '%')->first();
+        //     $pengajuan      = UsulanAadb::get();
+        //     $kategoriBarang = KategoriBarang::get();
+        //     $chartPengajuan = $this->ChartReportAADB($jenisForm->id_jenis_form_usulan);
+        //     $unitKerja      = UnitKerja::get();
+
+        //     return view('v_super_user.apk_aadb.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
+        // }
     }
 
     public function ChartReportAadb($pengajuan)
@@ -3187,21 +3235,50 @@ class SuperUserController extends Controller
     // ===============================================
     public function Oldat()
     {
-        $googleChartData = $this->ChartDataOldat();
-        $rekapUsulan = FormUsulan::select(
-            DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m') as bulan"),
-            DB::raw('count(id_form_usulan) as total_usulan')
+        $usulanUker = FormUsulan::select(
+            'id_unit_kerja',
+            'unit_kerja',
+            DB::raw('COUNT(CASE WHEN jenis_form = "pengadaan" THEN id_form_usulan END) AS total_pengadaan'),
+            DB::raw('COUNT(CASE WHEN jenis_form = "perbaikan" THEN id_form_usulan END) AS total_perbaikan')
         )
-            ->groupBy('bulan')
-            ->get();
+        ->leftJoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+        ->rightJoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+        ->groupBy('id_unit_kerja', 'unit_kerja')
+        ->get();
 
-        $usulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+        $usulanTotal = FormUsulan::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('status_pengajuan_id', 'ASC')
+            ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan', 'rekapUsulan'));
+        $usulanChart = FormUsulan::select(
+            DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->get();
+
+        $chartData = FormUsulan::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
+            ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->get();
+
+        foreach ($usulanChart as $key => $value) {
+            $result[] = ['Bulan', 'Total Usulan Pengadaan', 'Total Usulan Perbaikan'];
+            $result[++$key] = [
+                Carbon::parse($value->month)->isoFormat('MMMM Y'),
+                $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', 'perbaikan')->count(),
+            ];
+        }
+
+        $chartOldat = json_encode($result);
+        return view('v_super_user.apk_oldat.index', compact('usulanUker', 'usulanTotal', 'chartOldat'));
     }
 
     public function Items(Request $request, $aksi, $id)
@@ -3248,21 +3325,36 @@ class SuperUserController extends Controller
 
     public function ReportOldat(Request $request, $aksi, $id)
     {
-        if ($id == 'daftar') {
-            if ($aksi == 'pengadaan') {
-                $pengajuan      = FormUsulanPengadaan::get();
-                $kategoriBarang = KategoriBarang::get();
-                $chartPengajuan = $this->ChartReportOldat($aksi);
-                $unitKerja      = UnitKerja::get();
-                return view('v_super_user.apk_oldat.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
-            } else {
-                $pengajuan      = FormUsulanPerbaikan::get();
-                $kategoriBarang = KategoriBarang::get();
-                $chartPengajuan = $this->ChartReportOldat($aksi);
-                $unitKerja      = UnitKerja::get();
-                return view('v_super_user.apk_oldat.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
-            }
-        }
+        $googleChartData = $this->ChartDataOldat();
+        $rekapUsulan = FormUsulan::select(
+            DB::raw("DATE_FORMAT(tanggal_usulan, '%Y-%m') as bulan"),
+            DB::raw('count(id_form_usulan) as total_usulan')
+        )
+            ->groupBy('bulan')
+            ->get();
+
+        $usulan  = FormUsulan::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
+            ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
+            ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->orderBy('tanggal_usulan', 'DESC')
+            ->get();
+
+        return view('v_super_user.apk_oldat.index', compact('googleChartData', 'usulan', 'rekapUsulan'));
+        // if ($id == 'daftar') {
+        //     if ($aksi == 'pengadaan') {
+        //         $pengajuan      = FormUsulanPengadaan::get();
+        //         $kategoriBarang = KategoriBarang::get();
+        //         $chartPengajuan = $this->ChartReportOldat($aksi);
+        //         $unitKerja      = UnitKerja::get();
+        //         return view('v_super_user.apk_oldat.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
+        //     } else {
+        //         $pengajuan      = FormUsulanPerbaikan::get();
+        //         $kategoriBarang = KategoriBarang::get();
+        //         $chartPengajuan = $this->ChartReportOldat($aksi);
+        //         $unitKerja      = UnitKerja::get();
+        //         return view('v_super_user.apk_oldat.laporan', compact('aksi', 'kategoriBarang', 'pengajuan', 'chartPengajuan', 'unitKerja'));
+        //     }
+        // }
     }
 
     public function Recap(Request $request, $aksi, $id)
