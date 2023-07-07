@@ -1563,7 +1563,7 @@ class SuperUserController extends Controller
         }
 
         $usulanChartAtk = json_encode($result);
-        dd($usulanChartAtk);
+
         return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'usulanChartAtk', 'dataChartAtk'));
     }
 
