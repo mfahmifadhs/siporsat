@@ -91,6 +91,7 @@ Route::group(['middleware' => ['level:super-admin'], 'prefix' => 'super-admin', 
 
     Route::group(['prefix' => 'gdn', 'as' => 'gdn.'], function () {
         Route::get('dashboard/{aksi}/{id}', [SuperAdminController::class, 'Gdn']);
+        Route::get('laporan', [SuperAdminController::class, 'ReportGdn']);
     });
 
     Route::group(['prefix' => 'ukt', 'as' => 'ukt.'], function () {
@@ -271,6 +272,7 @@ Route::group(['middleware' => ['level:super-user'], 'prefix' => 'super-user', 'a
         Route::get('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionGdn']);
         Route::get('surat/{aksi}/{id}', [SuperUserController::class, 'LetterGdn']);
         Route::get('js/{aksi}/{id}', [SuperUserController::class, 'JsGdn']);
+        Route::get('laporan', [SuperUserController::class, 'ReportGdn']);
 
         Route::post('surat/{aksi}/{id}', [SuperUserController::class, 'LetterGdn']);
         Route::post('usulan/{aksi}/{id}', [SuperUserController::class, 'SubmissionGdn']);

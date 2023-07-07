@@ -196,10 +196,25 @@
                         </li>
                         <!-- Pengelolaan Gedung Bangunan -->
                         <li class="nav-item">
-                            <a href="{{ url('super-admin/gdn/dashboard/daftar/seluruh-usulan') }}" class="nav-link font-weight-bold">
-                                <i class="nav-icon fas fa-building"></i>
-                                <p>Gedung & Bangunan</p>
+                            <a href="#" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-suitcase"></i>
+                                <p>
+                                Gedung & Bangunan
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/gdn/dashboard/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Usulan</p>
+                                    </a>
+                                    <a href="{{ url('super-admin/gdn/laporan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Laporan</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
 
                         <!-- Pengelolaan Urusan Kerumah Tanggaan -->

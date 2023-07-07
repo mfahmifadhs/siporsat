@@ -6,11 +6,11 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Laporan Urusan Kerumahtanggaan</h1>
+                <h1 class="m-0">Laporan Gedung dan Bangunan</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('super-user/ukt/dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('super-user/gdn/dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Laporan</li>
                 </ol>
             </div>
@@ -33,10 +33,10 @@
         </div>
         <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">
-                <h3 class="card-title">Laporan Usulan Urusan Kerumahtanggaan</h3>
+                <h3 class="card-title">Laporan Usulan Perbaikan Gedung dan Bangunan</h3>
             </div>
             <div class="card-header">
-                <canvas id="uktChart" style="height: 500px;"></canvas>
+                <canvas id="reportChart" style="height: 500px;"></canvas>
             </div>
             <div class="card-body">
                 <table id="table-show" class="table table-bordered table-striped text-center">
@@ -49,7 +49,7 @@
                     </thead>
                     @php $no = 1; $totalUsulan = 0; @endphp
                     <tbody>
-                        @foreach ($ukt as $row)
+                        @foreach ($gdn as $row)
                         @php
                         $totalUsulan += $row->total_usulan;
                         @endphp
@@ -73,11 +73,11 @@
 @section('js')
 <script>
     // Chart
-    var uktData = {!! json_encode($ukt) !!};
-    var labels = uktData.map(data => data.unit_kerja);
-    var values = uktData.map(data => data.total_usulan);
+    var data = {!! json_encode($gdn) !!};
+    var labels = data.map(data => data.unit_kerja);
+    var values = data.map(data => data.total_usulan);
 
-    var ctx = document.getElementById('uktChart').getContext('2d');
+    var ctx = document.getElementById('reportChart').getContext('2d');
     var chart = new Chart(ctx, {
         type: 'pie',
         data: {
