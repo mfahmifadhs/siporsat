@@ -209,10 +209,6 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
                                     </a>
-                                    <a href="{{ url('super-admin/gdn/laporan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa"></i>
-                                        <p>Laporan</p>
-                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -231,10 +227,6 @@
                                     <a href="{{ url('super-admin/ukt/dashboard/daftar/seluruh-usulan') }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
-                                    </a>
-                                    <a href="{{ url('super-admin/ukt/laporan') }}" class="nav-link">
-                                        <i class="nav-icon fas fa"></i>
-                                        <p>Laporan</p>
                                     </a>
                                 </li>
                             </ul>
