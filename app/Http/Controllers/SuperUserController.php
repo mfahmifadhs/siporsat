@@ -4294,6 +4294,7 @@ class SuperUserController extends Controller
     public function ReportUkt()
     {
         $ukt = UsulanUkt::select('unit_kerja', DB::RAW('COUNT(id_form_usulan) as total_usulan'))
+                ->where('status_pengajuan_id', 1)
                 ->join('users','id','user_id')
                 ->join('tbl_pegawai','id_pegawai','users.pegawai_id')
                 ->join('tbl_unit_kerja','id_unit_kerja','unit_kerja_id')
