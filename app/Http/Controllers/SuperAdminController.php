@@ -1579,8 +1579,8 @@ class SuperAdminController extends Controller
                 ->groupBy('unit_kerja')
                 ->orderBy('unit_kerja', 'ASC')
                 ->get();
-        dd($atk);
-        return view('v_super_admin.apk_gdn.laporan', compact('gdn'));
+
+        return view('v_super_admin.apk_atk.laporan', compact('atk'));
     }
 
     public function ReportGdn()
