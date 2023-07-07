@@ -204,10 +204,25 @@
 
                         <!-- Pengelolaan Urusan Kerumah Tanggaan -->
                         <li class="nav-item">
-                            <a href="{{ url('super-admin/ukt/dashboard/daftar/seluruh-usulan') }}" class="nav-link font-weight-bold">
+                            <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-suitcase"></i>
-                                <p>Kerumah Tanggaan</p>
+                                <p>
+                                    Kerumah Tanggaan
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview ">
+                                <li class="nav-item">
+                                    <a href="{{ url('super-admin/ukt/dashboard/daftar/seluruh-usulan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Daftar Usulan</p>
+                                    </a>
+                                    <a href="{{ url('super-admin/ukt/laporan') }}" class="nav-link">
+                                        <i class="nav-icon fas fa"></i>
+                                        <p>Laporan</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
 
                         <!-- Pengelolaan Rumah Dinas -->
