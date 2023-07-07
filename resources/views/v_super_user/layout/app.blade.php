@@ -231,7 +231,7 @@
                                         <p>Rekapitulasi</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-chart-bars"></i>
                                         <p>
@@ -265,7 +265,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                         <!-- <li class="nav-header font-weight-bold">Pengelolaan ATK</li> -->
