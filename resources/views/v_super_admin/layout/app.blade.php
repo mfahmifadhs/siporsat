@@ -240,12 +240,12 @@
                                 <p>Level</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link {{ Request::is('super-admin/kewenangan/data/semua') ? 'active' : '' }}">
                                 <i class="fas fa-users-cog nav-icon"></i>
                                 <p>Kewenangan</p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item mb-4">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
