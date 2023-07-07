@@ -3269,7 +3269,7 @@ class SuperUserController extends Controller
             ->get();
 
         foreach ($usulanChart as $key => $value) {
-            $result[] = ['Bulan', 'Total Usulan Pengadaan', 'Total Usulan Perbaikan'];
+            $result[] = ['Bulan', 'Total Pengadaan', 'Total Perbaikan'];
             $result[++$key] = [
                 Carbon::parse($value->month)->isoFormat('MMMM Y'),
                 $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
