@@ -134,7 +134,7 @@
                                                     <td>{{ $row->unit_kerja }}</td>
                                                     <td class="text-center">
                                                         @php
-                                                        $totalUsulan = $usulanTotal->where('unit_kerja_id', $row->id_unit_kerja)->where('jenis_form','distribusi')->count()
+                                                        $totalUsulan = $usulanTotal->where('unit_kerja_id', $row->id_unit_kerja)->whereIn('jenis_form',['distribusi','permintaan'])->count()
                                                         @endphp
                                                         @if ($totalUsulan)
                                                         <form action="{{ url('super-user/atk/usulan/status/uker') }}" method="POST">
@@ -161,7 +161,7 @@
         </div>
     </div>
 </section>
-
+<!--
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -215,13 +215,36 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 @section('js')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
     $(function() {
+
+        let chartData = JSON.parse(`<?php echo $chartAtk; ?>`)
+
+        google.charts.load('current', {
+            'packages': ['bar']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                height: 300,
+                chart: {
+                    subtitle: 'Rekapitulasi Total Usulan',
+                },
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+
         $("#table-usulan").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -252,53 +275,6 @@
             ]
 
         })
-
-        $("#table-atk").DataTable({
-            "responsive": true,
-            "lengthChange": true,
-            "autoWidth": true,
-            "info": false,
-            "paging": true,
-            "lengthMenu": [
-                [11, 25, 50, -1],
-                [11, 25, 50, "Semua"]
-            ],
-            "columnDefs": [{
-                    "width": "5%",
-                    "targets": 0
-                },
-                {
-                    "width": "25%",
-                    "targets": 2
-                },
-                {
-                    "width": "25%",
-                    "targets": 3
-                },
-            ]
-
-        })
-
-        let chartData = JSON.parse(`<?php echo $usulanChartAtk; ?>`)
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable(chartData);
-
-            var options = {
-                height: 300,
-                chart: {
-                    subtitle: 'Rekapitulasi Total Usulan',
-                },
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
     })
 </script>
 
