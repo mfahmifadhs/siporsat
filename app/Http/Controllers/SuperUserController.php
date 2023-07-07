@@ -1555,16 +1555,15 @@ class SuperUserController extends Controller
             ->get();
 
         foreach ($usulanChart as $key => $value) {
-            $result[] = ['Bulan', 'Total Usulan Pengadaan', 'Total Usulan Distribusi'];
+            $result[] = ['Bulan', 'Total Usulan Distribusi'];
             $result[++$key] = [
                 Carbon::parse($value->month)->isoFormat('MMMM Y'),
                 $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
-                $chartData->where('month', $value->month)->where('jenis_form', 'distribusi')->count(),
             ];
         }
 
         $usulanChartAtk = json_encode($result);
-
+        dd($usulanChartAtk);
         return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'usulanChartAtk', 'dataChartAtk'));
     }
 

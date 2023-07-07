@@ -124,8 +124,7 @@
                                                 <tr>
                                                     <th class="text-center">No</th>
                                                     <th>Unit Kerja</th>
-                                                    <th class="text-center">Jumlah Usulan Pengadaan</th>
-                                                    <th class="text-center">Jumlah Usulan Distribusi</th>
+                                                    <th class="text-center">Total Usulan Distribusi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -133,21 +132,6 @@
                                                 <tr>
                                                     <td class="text-center">{{ $i+1 }}</td>
                                                     <td>{{ $row->unit_kerja }}</td>
-                                                    <td class="text-center">
-                                                        @php
-                                                        $totalUsulan = $usulanTotal->where('unit_kerja_id', $row->id_unit_kerja)->where('jenis_form','pengadaan')->count()
-                                                        @endphp
-                                                        @if ($totalUsulan)
-                                                        <form action="{{ url('super-user/atk/usulan/status/uker') }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="jenis_form" value="pengadaan">
-                                                            <input type="hidden" name="id_unit_kerja" value="{{ $row->id_unit_kerja }}">
-                                                            <button type="submit" class="btn btn-dark btn-sm font-weight-bold">
-                                                                {{ $totalUsulan }}
-                                                            </button>
-                                                        </form>
-                                                        @endif
-                                                    </td>
                                                     <td class="text-center">
                                                         @php
                                                         $totalUsulan = $usulanTotal->where('unit_kerja_id', $row->id_unit_kerja)->where('jenis_form','distribusi')->count()

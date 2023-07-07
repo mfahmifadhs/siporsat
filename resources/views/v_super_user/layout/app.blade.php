@@ -290,12 +290,12 @@
                                         <p>Daftar Usulan</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="{{ url('super-user/atk/laporan') }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Laporan</p>
                                     </a>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                         <!-- Gedung & Bangunan -->
@@ -317,10 +317,10 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
                                     </a>
-                                    <a href="{{ url('super-user/gdn/laporan') }}" class="nav-link">
+                                    <!-- <a href="{{ url('super-user/gdn/laporan') }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Laporan</p>
-                                    </a>
+                                    </a> -->
                                 </li>
                             </ul>
                         </li>
