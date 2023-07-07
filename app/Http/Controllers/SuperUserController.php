@@ -3285,17 +3285,15 @@ class SuperUserController extends Controller
     {
         if ($aksi == 'daftar') {
             $char = '"';
-            $barang = Barang::select(
-                'id_barang',
-                'kode_barang',
-                'kategori_barang',
-                'nup_barang',
-                'jumlah_barang',
-                'satuan_barang',
-                'nilai_perolehan',
-                'kondisi_barang',
-                'unit_kerja',
-                'pengguna_barang',
+
+            $rekapBarang = Barang::select('unit_kerja', DB::raw('count(id_barang) as total_barang'))
+                ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                ->groupBy('unit_kerja')
+                ->orderBy('unit_kerja', 'ASC')
+                ->get();
+
+            $barang = Barang::select('id_barang','kode_barang','kategori_barang','nup_barang','jumlah_barang',
+                'satuan_barang','nilai_perolehan','kondisi_barang','unit_kerja','pengguna_barang',
                 DB::raw("REPLACE(merk_tipe_barang, '$char', '&#x22;') as barang"),
                 DB::raw("DATE_FORMAT(tahun_perolehan, '%Y') as tahun_perolehan")
             )
@@ -3306,7 +3304,7 @@ class SuperUserController extends Controller
                 ->get();
 
             $result = json_decode($barang);
-            return view('v_super_user.apk_oldat.daftar_barang', compact('barang'));
+            return view('v_super_user.apk_oldat.daftar_barang', compact('barang', 'rekapBarang'));
         } elseif ($aksi == 'detail') {
             $barang  = Barang::join('oldat_tbl_kategori_barang', 'oldat_tbl_kategori_barang.id_kategori_barang', 'oldat_tbl_barang.kategori_barang_id')
                 ->leftjoin('tbl_pegawai', 'tbl_pegawai.id_pegawai', 'oldat_tbl_barang.pegawai_id')

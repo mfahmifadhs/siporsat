@@ -40,6 +40,15 @@
                     <i class="fas fa-table"></i> TABEL DAFTAR OLDAT & MEUBELAIR
                 </b>
             </div>
+            <div class="card-header">
+                <label>Total Barang Per-Unit Kerja</label>
+                <div class="form-group row">
+                    @foreach ($rekapBarang as $row)
+                    <div class="col-md-3">{{ $row->unit_kerja }}</div>:
+                    <div class="col-md-2">{{ $row->total_barang }} barang</div>
+                    @endforeach
+                </div>
+            </div>
             <div class="card-body">
                 <table id="table-barang" class="table table-bordered">
                     <thead>
@@ -170,6 +179,24 @@
         let row = dataTable.row($(this).parents('tr')).data()
         window.location.href = "/super-user/oldat/barang/detail/" + row[0];
     })
+
+
+
+        google.charts.load('current', {
+            'packages': ['bar']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(chartData);
+            var options = {
+                height: 300,
+                chart: {
+                    subtitle: 'Rekapitulasi Total Usulan',
+                },
+            };
+            var chart = new google.charts.Bar(document.getElementById('reportChart'));
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
 </script>
 @endsection
 
