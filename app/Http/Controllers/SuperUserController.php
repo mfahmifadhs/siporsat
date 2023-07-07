@@ -1052,6 +1052,7 @@ class SuperUserController extends Controller
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('month')
+            ->orderBy('month', 'ASC')
             ->get();
 
         foreach ($usulanChart as $key => $value) {
@@ -1293,6 +1294,7 @@ class SuperUserController extends Controller
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('month')
+            ->orderBy('month', 'ASC')
             ->get();
 
         foreach ($usulanChart as $key => $value) {
