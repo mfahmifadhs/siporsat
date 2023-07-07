@@ -1558,7 +1558,7 @@ class SuperUserController extends Controller
             $result[] = ['Bulan', 'Total Usulan Distribusi'];
             $result[++$key] = [
                 Carbon::parse($value->month)->isoFormat('MMMM Y'),
-                $chartData->where('month', $value->month)->where('jenis_form', 'pengadaan')->count(),
+                $chartData->where('month', $value->month)->where('jenis_form', 'distribusi')->count(),
             ];
         }
 

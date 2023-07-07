@@ -279,14 +279,14 @@
 
         })
 
-        let chartUsulanAtk = JSON.parse(`<?php echo $usulanChartAtk; ?>`)
+        let chartData = JSON.parse(`<?php echo $usulanChartAtk; ?>`)
         google.charts.load('current', {
             'packages': ['bar']
         });
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            var data = google.visualization.arrayToDataTable(chartUsulanAtk);
+            var data = google.visualization.arrayToDataTable(chartData);
 
             var options = {
                 height: 300,
