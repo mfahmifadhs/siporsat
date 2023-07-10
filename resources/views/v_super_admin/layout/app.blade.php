@@ -203,7 +203,7 @@
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview ">
+                            <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ url('super-admin/gdn/dashboard/daftar/seluruh-usulan') }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
