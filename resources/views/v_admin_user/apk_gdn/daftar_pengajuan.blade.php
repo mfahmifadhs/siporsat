@@ -110,10 +110,8 @@
                             <thead>
                                 <tr>
                                     <th style="width: 1%;">No</th>
-                                    <th style="width: 15%;">Tanggal</th>
-                                    <th style="width: 15%;">No. Surat</th>
-                                    <th>Pengusul</th>
-                                    <th style="width: 20%;">Rencana Pemakaian</th>
+                                    <th style="width: 29%;">Pengusul</th>
+                                    <th>Usulan</th>
                                     <th class="text-center" style="width: 15%;">Status Proses</th>
                                     <th class="text-center" style="width: 0%;">Aksi</th>
                                     <th>Tanggal</th>
@@ -138,15 +136,45 @@
                                         @endif
                                         {{ $no++ }}
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}</td>
-                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
-                                    <td>{{ $dataUsulan->nama_pegawai }} <br> {{ $dataUsulan->unit_kerja }}</td>
-                                    <td class="text-uppercase">
-                                        <div class="text-spacing">
-                                            @foreach ($dataUsulan->detailUsulanGdn->take(2) as $detailGdn)
-                                            {!! nl2br(e(Str::limit($detailGdn->lokasi_bangunan, 50) . PHP_EOL)) !!}
-                                            @endforeach
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-3">Tanggal</div>:
+                                            <div class="col-md-8">
+                                                {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
+                                            </div>
+                                            <div class="col-md-3">No. Surat</div>:
+                                            <div class="col-md-8">
+                                                {{ $dataUsulan->no_surat_usulan }}
+                                            </div>
+                                            <div class="col-md-3">Nama</div>:
+                                            <div class="col-md-8">
+                                                {{ $dataUsulan->nama_pegawai }}
+                                            </div>
+                                            <div class="col-md-3">Unit Kerja</div>:
+                                            <div class="col-md-8 text-capitalize">
+                                                {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
+                                            </div>
                                         </div>
+                                    </td>
+                                    <td class="text-left">
+                                        @foreach($dataUsulan->detailUsulanGdn->take(1) as $detailGdn)
+                                        <div class="form-group row">
+                                            <div class="col-md-2">Pekerjaan</div>:
+                                            <div class="col-md-9 text-capitalize">
+                                                {{ ucfirst(strtolower($detailGdn->lokasi_bangunan)) }}
+                                            </div>
+                                            <div class="col-md-2">Spesifikasi</div>:
+                                            <div class="col-md-9 text-capitalize hide-text">
+                                                {!! nl2br(e(ucfirst(strtolower($detailGdn->lokasi_spesifik)))) !!}
+                                            </div>
+                                            <div class="col-md-12"></div>
+                                            <div class="col-md-2">Keterangan</div>:
+                                            <div class="col-md-9 text-capitalize">
+                                                {!! nl2br(e(ucfirst(strtolower($detailGdn->keterangan)))) !!}
+
+                                            </div>
+                                        </div>
+                                        @endforeach
                                     </td>
                                     <td class="text-center text-capitalize">
                                         <h6 class="mt-2">
@@ -363,7 +391,7 @@
             ],
             columnDefs: [{
                 "bVisible": false,
-                "aTargets": [7, 8, 9, 10, 11, 12]
+                "aTargets": [5, 6, 7, 8, 9, 10]
             }, ],
             buttons: [{
                     extend: 'pdf',
@@ -373,7 +401,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Gedung dan Bangunan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 12],
+                        columns: [0, 5, 6, 7, 8, 9, 10],
                     },
                     messageTop: datetime,
                 },
@@ -383,7 +411,7 @@
                     className: 'fas fa-file btn btn-primary mr-2 rounded',
                     title: 'Daftar Usulan Gedung dan Bangunan',
                     exportOptions: {
-                        columns: [0, 7, 8, 9, 10, 11, 12]
+                        columns: [0, 5, 6, 7, 8, 9, 10]
                     },
                     messageTop: datetime
                 }
@@ -391,6 +419,45 @@
             "bDestroy": true
         }).buttons().container().appendTo('#table-usulan_wrapper .col-md-6:eq(0)');
     })
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elements = document.querySelectorAll('.hide-text');
+
+        elements.forEach(function(element) {
+            var maxHeight = parseFloat(window.getComputedStyle(element).getPropertyValue('max-height'));
+
+            if (element.scrollHeight > maxHeight) {
+                var showMoreLink = document.createElement('a');
+                showMoreLink.className = 'show-more';
+                showMoreLink.textContent = 'Show More';
+
+                var hideText = function() {
+                    element.style.maxHeight = maxHeight + 'px';
+                    showMoreLink.style.display = 'block';
+                    showMoreLink.textContent = 'Tampilkan lebih banyak';
+                };
+
+                var showMore = function() {
+                    element.style.maxHeight = 'none';
+                    showMoreLink.style.display = 'block';
+                    showMoreLink.textContent = 'Tampilkan lebih sedikit';
+                };
+
+                showMoreLink.addEventListener('click', function() {
+                    if (element.style.maxHeight === 'none') {
+                        hideText();
+                    } else {
+                        showMore();
+                    }
+                });
+
+                element.insertAdjacentElement('afterend', showMoreLink);
+                hideText();
+            }
+        });
+    });
 </script>
 
 @endsection

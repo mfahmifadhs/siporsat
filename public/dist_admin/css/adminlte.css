@@ -52514,4 +52514,22 @@ a.text-muted:hover {
     font-size: 15px;
 }
 
+.hide-text {
+    max-height: 3em;
+    overflow: hidden;
+}
+
+.hide-text::after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 20px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}
+
+.show-more {
+    cursor: pointer;
+    color: blue; /* Sesuaikan warna teks yang menunjukkan opsi show more */
+    margin: 0% 0% 0% 18%;
+}
 

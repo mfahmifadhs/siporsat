@@ -154,7 +154,6 @@
                                                 {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
                                             </div>
                                         </div>
-
                                     </td>
                                     <td class="text-left">
                                         @foreach($dataUsulan->detailUsulanUkt->take(1) as $detailUkt)
