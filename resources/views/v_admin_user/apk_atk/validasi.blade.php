@@ -80,16 +80,17 @@
                                     ▪ <span class="text-danger">Barang yang tidak di centang (✔️) akan dianggap ditolak</span>
                                 </small>
                                 <div class="col-sm-12">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered text-center">
                                         <thead class="bg-secondary">
                                             <tr>
-                                                <th style="width: 0%;" class="text-center">No</th>
-                                                <th>Nama Barang</th>
-                                                <th>Catatan</th>
-                                                <th style="width: 15%;" class="text-center">Permintaan</th>
+                                                <th style="width: 0%;">No</th>
+                                                <th class="text-left">Nama Barang</th>
+                                                <th class="text-left">Catatan</th>
+                                                <th style="width: 15%;">Permintaan</th>
+                                                <th style="width: 15%;">Disetujui</th>
                                                 <th style="width: 10%;">Satuan</th>
-                                                <th style="width: 15%;">Keterangan</th>
-                                                <th style="width: 8%;" class="text-center">
+                                                <th style="width: 15%;" class="text-left">Keterangan</th>
+                                                <th style="width: 8%;">
                                                     <input type="checkbox" id="selectAll" style="scale: 1.7;">
                                                 </th>
                                             </tr>
@@ -99,21 +100,22 @@
                                             @if ($usulan->jenis_form == 'permintaan')
                                             @foreach ($usulan->permintaan2Atk as $i => $dataAtk)
                                             <tr>
-                                                <td class="text-center"> {{ $no++ }}</td>
-                                                <td>
+                                                <td> {{ $no++ }}</td>
+                                                <td class="text-left">
                                                     <input type="hidden" name="modul" value="permintaan">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataAtk->id_permintaan }}">
                                                     {{ $dataAtk->deskripsi_barang }}
                                                 </td>
-                                                <td>{{ $dataAtk->catatan }}</td>
-                                                <td class="text-center">
+                                                <td class="text-left">{{ $dataAtk->catatan }}</td>
+                                                <td>{{ $dataAtk->jumlah }}</td>
+                                                <td>
                                                     <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $dataAtk->jumlah }}" max="{{ $dataAtk->jumlah }}">
                                                 </td>
                                                 <td>{{ $dataAtk->satuan_barang }}</td>
-                                                <td>
+                                                <td class="text-left">
                                                     <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left">
                                                 </td>
-                                                <td class="text-center">
+                                                <td>
                                                     <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
                                                     <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
                                                 </td>
@@ -122,20 +124,22 @@
                                             @else
                                             @foreach ($usulan->permintaanAtk as $i => $dataAtk)
                                             <tr>
-                                                <td class="text-center"> {{ $no++ }}</td>
-                                                <td>
+                                                <td> {{ $no++ }}</td>
+                                                <td class="text-left">
                                                     <input type="hidden" name="modul" value="distribusi">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataAtk->id_permintaan }}">
                                                     <input type="hidden" name="id_pengadaan[{{$i}}]" value="{{ $dataAtk->pengadaan_id }}">
                                                     {{ $dataAtk->nama_barang }}
                                                 </td>
-                                                <td>{{ $dataAtk->spesifikasi }}</td>
-                                                <td class="text-center">
+                                                <td class="text-left">{{ $dataAtk->spesifikasi }}</td>
+                                                <td>
                                                     <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $dataAtk->jumlah }}" max="{{ $dataAtk->jumlah }}">
                                                 </td>
-                                                <td class="text-center">{{ $dataAtk->satuan }}</td>
-                                                <td><input type="text" name="keterangan[]" class="form-control input-border-bottom text-left"></td>
-                                                <td class="text-center">
+                                                <td>{{ $dataAtk->satuan }}</td>
+                                                <td class="text-left">
+                                                    <input type="text" name="keterangan[]" class="form-control input-border-bottom text-left">
+                                                </td>
+                                                <td>
                                                     <input type="hidden" value="" name="status_pengajuan[{{$i}}]">
                                                     <input type="checkbox" class="confirm-check" style="scale: 1.7;" name="status_pengajuan[{{$i}}]" id="checkbox_id{{$i}}" value="true">
                                                 </td>

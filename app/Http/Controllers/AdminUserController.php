@@ -1222,21 +1222,24 @@ class AdminUserController extends Controller
         } elseif ($aksi == 'edit') {
             $totalUsulan = BastAtk::count();
             $idBast      = (int) str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
+            $atk    = Atk::orderBy('deskripsi_barang')->get();
             $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->where('id_form_usulan', $id)
                 ->first();
 
-            return view('v_admin_user.apk_atk.edit', compact('idBast', 'usulan'));
+            return view('v_admin_user.apk_atk.edit', compact('idBast','usulan','atk'));
         } elseif ($aksi == 'proses-edit') {
             // Insert BAST
             $id_bast = (int) Carbon::now()->format('dmhs');
             $bast = new BastAtk();
-            $bast->id_bast      = $id_bast;
-            $bast->usulan_id    = $id;
-            $bast->tanggal_bast = $request->tanggal_bast;
-            $bast->nomor_bast   = $request->no_surat_bast;
+            $bast->id_bast        = $id_bast;
+            $bast->usulan_id      = $id;
+            $bast->tanggal_bast   = $request->tanggal_bast;
+            $bast->nomor_bast     = $request->no_surat_bast;
+            $bast->otp_bast_ppk   = rand(111111,999999);
+            $bast->otp_bast_kabag = rand(111111,999999);
             $bast->save();
 
             // Update tanggal penyerahan ATK
@@ -1259,7 +1262,8 @@ class AdminUserController extends Controller
                     }
                     // Update status penyerahan
                     UsulanAtkPermintaan::where('id_permintaan', $id_permintaan)->update([
-                        'status_penyerahan' => $status_penyerahan
+                        'atk_id' => $request->id_atk[$i],
+                        'status_penyerahan' => $status_penyerahan,
                     ]);
 
                     // Update detail bast
@@ -1268,7 +1272,8 @@ class AdminUserController extends Controller
                     $detailBast->permintaan_id = $id_permintaan;
                     $detailBast->jumlah_bast_detail = $request->jumlah_penyerahan[$i];
                     $detailBast->save();
-		    if ($request->modul == 'permintaan') {
+
+                    if ($request->modul == 'permintaan') {
                     	// Insert Riwayat Transaksi
                     	$riwayat = new RiwayatAtk();
                     	$riwayat->usulan_id       = $id_bast;
@@ -1277,7 +1282,7 @@ class AdminUserController extends Controller
                     	$riwayat->status_riwayat  = 'keluar';
                     	$riwayat->tanggal_riwayat = Carbon::now();
                     	$riwayat->save();
-		    }
+		            }
                 }
             }
 

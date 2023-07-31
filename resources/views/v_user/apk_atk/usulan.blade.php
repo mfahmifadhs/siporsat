@@ -32,7 +32,7 @@
         @endif
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
+                <h3 class="card-title text-capitalize">usulan Permintaan ATK </h3>
             </div>
             <form action="{{ url('unit-kerja/atk/usulan/proses-distribusi/'. $aksi) }}" method="POST">
                 <div class="card-body">
@@ -87,84 +87,6 @@
                             </table>
                         </div>
                     </div>
-                    <!-- <div id="main-gdn">
-                        <hr style="border: 0.5px solid grey;">
-                        <div class="form-group row">
-                            <label class="col-sm-8 text-muted float-left mt-2">Merk/Tipe ATK</label>
-                            <label class="col-sm-4 text-muted text-right">
-                                <a id="btn-total" class="btn btn-primary">
-                                    <i class="fas fa-plus-circle"></i> Tambah List Baru
-                                </a>
-                            </label>
-                        </div>
-                        <hr style="border: 0.5px solid grey;">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Kategori</label>
-                            <div class="col-sm-4">
-                                <select class="form-control text-capitalize kategori" id="kategori">
-                                    <option value="">-- KATEGORI BARANG --</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Jenis</label>
-                            <div class="col-sm-4">
-                                <select class="form-control text-capitalize jenis" id="jenis">
-                                    <option value="">-- JENIS BARANG --</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Barang</label>
-                            <div class="col-sm-4">
-                                <select class="form-control text-capitalize barang" id="barang">
-                                    <option value="">-- NAMA BARANG --</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Merk/Tipe</label>
-                            <div class="col-sm-4">
-                                <select name="atk_id[]" class="form-control text-capitalize merktipe" id="merktipe">
-                                    <option value="">-- MERK/TIPE BARANG --</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Stok</label>
-                            <div class="col-sm-4">
-                                <span id="stok"><input class="form-control" placeholder="STOK BARANG" readonly></span>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-4">
-                                <span id="satuan1-atk"><input class="form-control" placeholder="SATUAN" readonly></span>
-                            </div>
-                        </div>
-                        <span id="list-baru"></span>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Jumlah (*)</label>
-                            <div class="col-sm-4">
-                                @if ($aksi == 'pengadaan')
-                                <input type="number" class="form-control" name="jumlah[]" min="1" placeholder="MASUKAN JUMLAH BARANG" required>
-                                @else
-                                <span id="jumlahDistribusi"><input class="form-control" placeholder="MASUKAN JUMLAH BARANG" readonly></span>
-                                @endif
-                            </div>
-                            <label class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-4">
-                                <span id="satuan2-atk"><input class="form-control" placeholder="SATUAN" readonly></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Keterangan</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" name="keterangan[]" placeholder="Mohon isi, jika terdapat keterangan permintaan"></textarea>
-                            </div>
-                        </div>
-                        <div id="section-atk"></div>
-                        <div class="form-group row">
-                            <label class="col-sm-2">&nbsp;</label>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary font-weight-bold" id="btnSubmit" onclick="return confirm('Apakah anda ingin melakukan pengajuan perbaikan ?')">SUBMIT</button>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <div class="card-footer">
                     @if ($stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') != 0)
@@ -191,7 +113,7 @@
         @endif
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h3 class="card-title text-capitalize">usulan pengajuan {{ $aksi }} ATK </h3>
+                <h3 class="card-title text-capitalize">usulan permintaan ATK </h3>
             </div>
             <form action="{{ url('unit-kerja/atk/usulan/distribusi2/'. $actionForm) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -238,15 +160,15 @@
                         </div>
                         @if ($resArr)
                         <div class="form-group col-md-12 col-12">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered text-center">
                                 <thead>
                                     <tr>
-                                        <td class="text-center">No</td>
-                                        <td>Nama Barang</td>
-                                        <td>Keterangan Barang</td>
-                                        <td style="width: 15%;" class="text-center">Permintaan</td>
-                                        <td style="width: 10%;" class="text-center">Satuan</td>
-                                        <td style="width: 20%;">Keterangan Permintaan</td>
+                                        <th class="text-center">No</th>
+                                        <th>Nama Barang</th>
+                                        <th>Keterangan Barang</th>
+                                        <th style="width: 15%;" class="text-center">Permintaan</th>
+                                        <th style="width: 10%;" class="text-center">Satuan</th>
+                                        <th style="width: 20%;">Keterangan Permintaan</th>
                                     </tr>
                                 </thead>
                                 @php $no = 1; @endphp
@@ -255,14 +177,14 @@
                                     @if ($row['kode_form'] == 101)
                                     @foreach($row['data_barang'] as $rowItem)
                                     <tr>
-                                        <td class="text-center">{{ $no++ }}</td>
-                                        <td>{{ $rowItem['nama_barang'] }}</td>
-                                        <td>{{ $rowItem['keterangan'] }}</td>
-                                        <td class="text-center">
+                                        <td>{{ $no++ }}</td>
+                                        <td class="text-left">{{ $rowItem['nama_barang'] }}</td>
+                                        <td class="text-left">{{ $rowItem['keterangan'] }}</td>
+                                        <td>
                                             <input type="hidden" name="idAtk[]" value="{{ $rowItem['kode_barang'] }}">
                                             <input type="number" name="permintaanAtk[]" class="form-control input-border-bottom" value="{{ $rowItem['permintaan'] }}">
                                         </td>
-                                        <td class="text-center">
+                                        <td>
                                             {{ $rowItem['satuan'] }}
                                         </td>
                                         <td>
@@ -273,17 +195,17 @@
                                     @else
                                     @foreach($row['data_barang'] as $rowItem)
                                     <tr>
-                                        <td class="text-center">{{ $no++ }}</td>
-                                        <td>{{ $rowItem['nama_barang'] }}</td>
-                                        <td>{{ $rowItem['keterangan'] }}</td>
+                                        <td>{{ $no++ }}</td>
+                                        <td class="text-left">{{ $rowItem['nama_barang'] }}</td>
+                                        <td class="text-left">{{ $rowItem['keterangan'] }}</td>
                                         <td class="text-center">
                                             <input type="hidden" name="idAlkom[]" value="{{ $rowItem['kode_barang'] }}">
                                             <input type="number" name="permintaanAlkom[]" class="form-control input-border-bottom" value="{{ $rowItem['permintaan'] }}">
                                         </td>
-                                        <td class="text-center">
+                                        <td>
                                             {{ $rowItem['satuan'] }}
                                         </td>
-                                        <td>
+                                        <td class="text-left">
                                             <input type="text" name="keteranganAlkom[]" class="form-control input-border-bottom" value="{{ $rowItem['keterangan_permintaan'] }}">
                                         </td>
                                     </tr>

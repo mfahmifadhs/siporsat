@@ -116,7 +116,6 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <th>Deskripsi</th>
                                                 <th style="width: 10%;" class="text-center">Permintaan</th>
                                                 <th style="width: 13%;" class="text-center">Belum Diserahkan</th>
-                                                <th style="width: 0%;" class="text-center">Satuan</th>
                                                 <th style="width: 15%;" class="text-center">Diserahkan</th>
                                                 <th style="width: 0%;" class="text-center">Satuan</th>
                                                 <th style="width: 0%;" class="text-center">Aksi</th>
@@ -206,7 +205,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                         </tbody>
                                         @elseif ($usulan->jenis_form == 'permintaan')
                                         <!-- Permintaan -->
-                                        <tbody>
+                                        <tbody class="text-center">
                                             @foreach($usulan->permintaan2Atk->where('status','diterima') as $i => $dataPermintaan)
                                             @php
                                             $permintaan = $dataPermintaan->jumlah_disetujui;
@@ -214,22 +213,29 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                             @endphp
                                             @if ($belum_diserahkan != 0)
                                             <tr>
-                                                <td class="text-center"> {{ $no++ }}</td>
+                                                <td class="pt-3"> {{ $no++ }}</td>
                                                 <td>
                                                     <input type="hidden" name="modul" value="distribusi">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
-                                                    <input type="hidden" name="id_atk[{{$i}}]" value="{{ $dataPermintaan->atk_id }}">
-                                                    {{ $dataPermintaan->deskripsi_barang }}
+
+                                                    <select name="id_atk[{{ $i }}]" class="form-control form-control-sm list-atk" data-target="{{ $i }}" style="font-size: 14px;">
+                                                        @foreach ($atk as $row)
+                                                        <option value="{{ $row->id_atk }}" data-satuan="{{ $row->satuan_barang }}" <?php echo $dataPermintaan->atk_id == $row->id_atk ? 'selected' : '' ?>>
+                                                            {{ $row->deskripsi_barang }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
                                                 </td>
-                                                <td>{{ $dataPermintaan->catatan }}</td>
-                                                <td class="text-center">{{ $permintaan }}</td>
-                                                <td class="text-center">{{ $belum_diserahkan }}</td>
-                                                <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                                <td class="pt-3">{{ $dataPermintaan->catatan }}</td>
+                                                <td class="pt-3">{{ $permintaan }}</td>
+                                                <td class="pt-3">{{ $belum_diserahkan }}</td>
                                                 <td>
-                                                    <input type="number" class="form-control input-border-bottom" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                                    <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
                                                 </td>
-                                                <td class="text-center">{{ $dataPermintaan->satuan }}</td>
-                                                <td class="text-center">
+                                                <td class="pt-3">
+                                                    <span id="satuan_barang_{{ $i }}">{{ $dataPermintaan->atk->satuan_barang }}</span>
+                                                </td>
+                                                <td class="pt-3">
                                                     <a href="{{ url('admin-user/atk/usulan/pembatalan/'. $dataPermintaan->id_permintaan) }}" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-times-circle"></i>
                                                     </a>
@@ -314,6 +320,22 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
             }
         })
     })
+</script>
+<script>
+    function tampilkanSatuan() {
+        // Dapatkan elemen select dan elemen span berdasarkan ID yang diambil dari data-target
+        const targetId = $(this).data('target');
+        const selectAtk = document.querySelector(`[data-target="${targetId}"]`);
+        const satuanBarang = document.getElementById('satuan_barang_' + targetId);
+
+        const selectedOption = selectAtk.options[selectAtk.selectedIndex];
+        const satuan = selectedOption.getAttribute('data-satuan');;
+
+        satuanBarang.textContent = satuan;
+    }
+
+    // Panggil fungsi tampilkanSatuan saat opsi dipilih
+    $('.list-atk').on('change', tampilkanSatuan);
 </script>
 @endsection
 

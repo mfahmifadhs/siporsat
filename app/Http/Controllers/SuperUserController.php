@@ -212,8 +212,9 @@ class SuperUserController extends Controller
                 } elseif ($usulan->status_proses_id == '1') {
                     UsulanAtk::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_pimpinan' => $request->one_time_password,
+                        'otp_bast_ppk'        => rand(111111,999999),
                         'status_pengajuan_id' => 1,
-                        'status_proses_id'    => 2
+                        'status_proses_id'    => 3
                     ]);
                     Google2FA::logout();
 

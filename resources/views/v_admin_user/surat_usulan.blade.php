@@ -265,7 +265,7 @@
                                     </tbody>
                                 </table>
                                 @elseif ($modul == 'atk')
-                                <table class="table table-bordered m-0">
+                                <table class="table table-bordered text-center m-0">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -282,8 +282,8 @@
                                         @foreach($usulan->pengadaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
-                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td class="text-left">{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td class="text-left">{{ $dataAtk->spesifikasi }}</td>
                                             <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
                                             <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
                                             <td>
@@ -298,8 +298,8 @@
                                         @foreach($usulan->permintaanAtk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
-                                            <td>{{ $dataAtk->spesifikasi }}</td>
+                                            <td class="text-left">{{ $dataAtk->jenis_barang }} <br> {{ $dataAtk->nama_barang }}</td>
+                                            <td class="text-left">{{ $dataAtk->spesifikasi }}</td>
                                             <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan }}</td>
                                             <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan }}</td>
                                             <td>
@@ -314,8 +314,8 @@
                                         @foreach($usulan->permintaan2Atk as $dataAtk)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $dataAtk->deskripsi_barang }}</td>
-                                            <td>{{ $dataAtk->catatan }}</td>
+                                            <td class="text-left">{{ $dataAtk->deskripsi_barang }}</td>
+                                            <td class="text-left">{{ $dataAtk->catatan }}</td>
                                             <td>{{ (int) $dataAtk->jumlah.' '. $dataAtk->satuan_barang }}</td>
                                             <td>{{ (int) $dataAtk->jumlah_disetujui.' '. $dataAtk->satuan_barang }}</td>
                                             <td>

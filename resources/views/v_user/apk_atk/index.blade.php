@@ -86,76 +86,20 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-12">
-                <div class="info-box mb-3 bg-primary">
-                    <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
-                    <div class="info-box-content">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <span class="info-box-text">Daftar Kebutuhan ATK</span>
-                                <span class="info-box-number">
-                                    {{ $stok->sum('jumlah_disetujui') - $stok->sum('jumlah_pemakaian') }}
-                                </span>
-                            </div>
-                            <div class="col-md-4 pt-3">
-                                <a href="{{ url('unit-kerja/atk/barang/stok/*') }}" class="text-black btn btn-default btn-sm">
-                                    Lihat &nbsp;<i class="fas fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="info-box mb-3 bg-primary">
-                    <span class="info-box-icon"><i class="fas fa-cubes"></i></span>
-                    <div class="info-box-content">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <span class="info-box-text">Daftar Referensi ATK</span>
-                            </div>
-                            <div class="col-md-4">
-                                <a href="{{ url('unit-kerja/atk/barang/referensi/*') }}" class="text-black btn btn-default btn-sm">
-                                    Lihat &nbsp;<i class="fas fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="card" style="font-family: Arial, Helvetica, sans-serif;">
-                    <div class="card-header">
-                        <h4 class="card-title">Informasi</h4>
-                    </div>
-                    <div class="card-body">
-                        <p style="font-size: 14px;">
-                            Usulan Permintaan mulai Bulan Mei 2023, Permintaan ATK akan mengacu berdasarkan
-                            <b>Referensi ATK Biro Umum</b>,
-                            untuk daftarnya dapat dilihat dibawah ini: <br>
-                            <a href="{{ url('unit-kerja/atk/barang/referensi/*') }}" class="text-black btn btn-warning btn-sm mt-2 mb-2">
-                                <i class="fas fa-cubes"></i> Referensi ATK
-                            </a> <br>
-                            Jika barang yang dibutuhkan untuk diusulkan pada bulan selanjutnya tidak ada pada referensi, mohon
-                            untuk mengusulkan item baru pada halaman <b>Referensi ATK</b> dan pilih
-                            <a class="btn btn-primary btn-xs disabled"><i class="fas fa-plus-circle"></i></a>. <br>
-                            Item yang sudah ditambahkan akan divalidasi terlebih dahulu oleh Admin untuk menghindari terjadinya
-                            Duplikasi Item. <br>
-                            <span class="text-danger small">*Maksimal pengajuan item baru tanggal 20 April 2023.</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9 col-12">
+            <div class="col-md-12 col-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Daftar Usulan</h3>
                     </div>
                     <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered m-0">
-                            <thead>
-                                <tr class="text-center">
-                                    <th style="width: 1%;">No</th>
-                                    <th class="text-left" style="width: 44%;">Tanggal / No. Surat</th>
-                                    <th style="width: 25%;">Keterangan</th>
-                                    <th style="width: 25%;">Status Pengajuan</th>
-                                    <th style="width: 25%;">Status Proses</th>
+                        <table id="table-usulan" class="table table-bordered m-0 text-center">
+                            <thead class="h6">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>No. Surat</th>
+                                    <th>Rencana Pemakaian</th>
+                                    <th>Status Proses</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -163,37 +107,28 @@
                             $no2 = 1; ?>
                             <tbody>
                                 @foreach($usulan as $dataUsulan)
-                                <tr class="text-center">
-                                    <td class="text-center pt-3">{{ $no++ }}</td>
-                                    <td class="text-left">
-                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }} <br>
-                                        <span class="text-uppercase">
-                                            {{ $dataUsulan->jenis_form == 'pengadaan' ? 'Pengadaan' : 'Distribusi' }}
-                                        </span><br>
-                                        No. Surat :
+                                <tr>
+                                    <td class="pt-3">
+                                        @if($dataUsulan->status_pengajuan_id == null)
+                                        <i class="fas fa-clock text-warning"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 1)
+                                        <i class="fas fa-check-circle text-green"></i>
+                                        @elseif($dataUsulan->status_pengajuan_id == 2)
+                                        <i class="fas fa-times-circle text-red"></i>
+                                        @endif
+                                        {{ $no++ }}
+                                    </td>
+                                    <td class="pt-3">
+                                        {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y | HH:mm') }}
+                                    </td>
+                                    <td class="pt-3">
                                         @if ($dataUsulan->status_pengajuan_id == 1)
                                         {{ strtoupper($dataUsulan->no_surat_usulan) }}
-                                        @else
-                                        -
-                                        @endif
+                                        @else - @endif
                                     </td>
-                                    <td class="pt-4">{{ $dataUsulan->rencana_pengguna }}</td>
-                                    <td class="pt-2">
-                                        <h6 class="mt-3">
-                                            @if($dataUsulan->status_pengajuan_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-success">
-                                                Disetujui
-                                            </span>
-                                            @elseif($dataUsulan->status_pengajuan_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-danger">Ditolak</span>
-                                            @if ($dataUsulan->keterangan != null)
-                                            <p class="small mt-2 text-danger">{{ $dataUsulan->keterangan }}</p>
-                                            @endif
-                                            @endif
-                                        </h6>
-                                    </td>
-                                    <td class="pt-2">
-                                        <h6 class="mt-3">
+                                    <td class="pt-3 text-left">{{ $dataUsulan->rencana_pengguna }}</td>
+                                    <td class="pt-3">
+                                        <h6>
                                             @if($dataUsulan->status_proses_id == 1)
                                             <span class="badge badge-sm badge-pill badge-warning">Menunggu Persetujuan <br> Kabag RT</span>
                                             @elseif ($dataUsulan->status_proses_id == 2)
@@ -254,8 +189,8 @@
                                             @endif
                                         </h6>
                                     </td>
-                                    <td class="text-center">
-                                        <a type="button" class="btn btn-primary" data-toggle="dropdown">
+                                    <td class="pt-3">
+                                        <a type="button" class="btn btn-primary btn-md" data-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
                                         </a>
                                         <div class="dropdown-menu">

@@ -49,7 +49,7 @@
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small></h3>
-                                    <p>SUDAH DAPAT DIAMBIL</p>
+                                    <p>DAPAT DISERAHKAN</p>
                                 </div>
                                 <div class="icon p-2">
                                     <i>3</i>

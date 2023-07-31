@@ -13,10 +13,14 @@ return [
     ],
     'math' => [
         'length' => 9,
-        'width' => 120,
+        'width' => 162,
         'height' => 36,
-        'quality' => 90,
+        'quality' => 10,
+        'fontColors' => ['#2c3e50', '#c0392b', '#16a085', '#c0392b', '#8e44ad', '#303f9f', '#f57c00', '#795548'],
         'math' => true,
+        'contrast' => -5,
+        'sharpen' => 1,
+        'angle' => 10,
     ],
 
     'flat' => [

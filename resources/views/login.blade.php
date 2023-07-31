@@ -65,7 +65,7 @@
                     <div class="input-group">
                         <div class="mt-1 mb-2">
                             <div class="captcha">
-                                <span>{!! captcha_img() !!}</span>
+                                <span>{!! captcha_img('math') !!}</span>
                                 <button type="button" class="btn btn-danger" class="reload" id="reload">
                                     &#x21bb;
                                 </button>
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="mb-2">
-                            <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha" required>
+                            <input id="captcha" type="text" class="form-control" placeholder="Hasil Penjumlahan" name="captcha" required>
                         </div>
                     </div>
                     <div class="social-auth-links text-center mt-2 mb-3">

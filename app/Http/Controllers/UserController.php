@@ -2074,7 +2074,6 @@ class UserController extends Controller
                     return redirect('unit-kerja/atk/usulan/pengadaan/baru')->with('failed', 'Anda belum mengunggah file kebutuhan Alkom atau Oldat');
                 }
             }
-
             return view('v_user.apk_atk.preview', compact('resultAtk', 'resultAlkom', 'idUsulan', 'noSurat', 'tanggal', 'rencana'));
         } elseif ($aksi == 'proses-pengadaan') {
             $cekUsulan = UsulanAtk::where('id_form_usulan', $request->id_usulan)->count();

@@ -175,7 +175,7 @@
                                     @foreach($usulan->permintaan2Atk as $i => $dataPermintaan)
                                     <tr>
                                         <td class="text-center"> {{ $i + 1 }}</td>
-                                        <td>
+                                        <td class="text-left">
                                             <input type="hidden" name="modul" value="distribusi">
                                             <input type="hidden" name="id_permintaan[]" value="{{ $dataPermintaan->id_permintaan }}">
                                             {{ $dataPermintaan->deskripsi_barang }}
@@ -185,7 +185,7 @@
                                             <input type="hidden" name="jumlah_pengajuan[]" class="form-control" value="{{ $dataPermintaan->jumlah_disetujui }}">
                                             {{ $dataPermintaan->jumlah_disetujui }}
                                         </td>
-                                        <td class="text-center">{{ $dataPermintaan->satuan }}</td>
+                                        <td class="text-center">{{ $dataPermintaan->satuan_barang }}</td>
                                         <td class="text-center">
                                             <!-- <input type="hidden" value="ditolak" name="konfirmasi_atk[{{$i}}]">
                                             <input type="checkbox" class="confirm-check" name="konfirmasi_atk[{{$i}}]" id="checkbox_id{{$i}}" value="diterima"> <br>
