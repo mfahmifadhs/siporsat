@@ -230,7 +230,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <td class="pt-3">{{ $permintaan }}</td>
                                                 <td class="pt-3">{{ $belum_diserahkan }}</td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan }}">
+                                                    <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)">
                                                 </td>
                                                 <td class="pt-3">
                                                     <span id="satuan_barang_{{ $i }}">{{ $dataPermintaan->atk->satuan_barang }}</span>
@@ -264,7 +264,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                                         <div class="col-md-9 col-form-label">Jumlah yang dibatalkan</div>
                                                                         <div class="col-md-3 col-form-label">Satuan</div>
                                                                         <div class="col-md-9 col-form-label">
-                                                                            <input type="number" class="form-control" name="jumlah_batal" value="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}">
+                                                                            <input type="number" class="form-control" name="jumlah_batal" value="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}" max="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}">
                                                                         </div>
                                                                         <div class="col-md-3 col-form-label">
                                                                             <input type="text" class="form-control" value="{{ $dataPermintaan->satuan }}" readonly>
