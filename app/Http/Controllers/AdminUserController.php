@@ -1222,7 +1222,7 @@ class AdminUserController extends Controller
         } elseif ($aksi == 'edit') {
             $totalUsulan = BastAtk::count();
             $idBast      = (int) str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $atk    = Atk::orderBy('deskripsi_barang')->get();
+            $atk    = Atk::orderBy('deskripsi_barang')->where('status_id', 1)->get();
             $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')

@@ -23,7 +23,8 @@ class Atk extends Model
         'kategori_id',
         'deskripsi_barang',
         'satuan_barang',
-        'keterangan_barang'
+        'keterangan_barang',
+        'status_id'
     ];
 
     public function riwayatTransaksi() {

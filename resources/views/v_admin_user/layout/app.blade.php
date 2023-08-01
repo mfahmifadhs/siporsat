@@ -145,7 +145,6 @@
                             <a href="{{ url('admin-user/aadb/dashboard') }}" class="nav-link
                             {{ Request::is('admin-user/aadb/usulan/daftar/seluruh-usulan') ? 'active' : '' }}
                             {{ Request::is('admin-user/aadb/usulan/status/*') ? 'active' : '' }}
-                            {{ Request::is('admin-user/surat/detail-bast-atk/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/aadb/kendaraan/daftar/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/aadb/kendaraan/detail/*') ? 'active' : '' }}
                             {{ Request::is('admin-user/surat/usulan-aadb/*') ? 'active' : '' }}">
