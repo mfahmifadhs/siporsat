@@ -107,7 +107,7 @@
                                         <td>{{ $dataPermintaan->satuan }}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]"
-                                            value="0" oninput="this.value = Math.abs(this.value)" max="{{ $permintaan }}">
+                                            value="0" oninput="this.value = Math.abs(this.value)">
                                         </td>
                                         <td>{{ $dataPermintaan->satuan }}</td>
                                         <!-- <td class="text-center">
