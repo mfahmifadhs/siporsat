@@ -264,7 +264,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                                         <div class="col-md-9 col-form-label">Jumlah yang dibatalkan</div>
                                                                         <div class="col-md-3 col-form-label">Satuan</div>
                                                                         <div class="col-md-9 col-form-label">
-                                                                            <input type="number" class="form-control" name="jumlah_batal" value="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}" max="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}">
+                                                                            <input type="number" class="form-control" name="jumlah_batal" value="{{ (int) $dataPermintaan->jumlah_disetujui - (int) $dataPermintaan->jumlah_penyerahan }}">
                                                                         </div>
                                                                         <div class="col-md-3 col-form-label">
                                                                             <input type="text" class="form-control" value="{{ $dataPermintaan->satuan }}" readonly>
