@@ -190,6 +190,14 @@
     <script src="{{ asset('dist_admin/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('dist_main/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('dist_main/main.js') }}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LWFXY0HY62"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LWFXY0HY62');
+    </script>
 </body>
 
 </html>
