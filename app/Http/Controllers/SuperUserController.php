@@ -18,6 +18,7 @@ use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
 use App\Models\ATK\BastAtk;
+use App\Models\atk\BastAtkDetail;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkPermintaan;
@@ -1548,10 +1549,6 @@ class SuperUserController extends Controller
             ->orderBy('tanggal_usulan', 'DESC')
             ->get();
 
-        // $usulanChart = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"))
-        //     ->groupBy('month')
-        //     ->get();
-
         $usulanChart = UsulanAtk::select(
                 DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"),
                 DB::raw('count(id_form_usulan) as total_usulan')
@@ -1570,22 +1567,18 @@ class SuperUserController extends Controller
 
         $chartAtk = json_encode($result);
 
-        // $chartData = UsulanAtk::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
-        //     ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
-        //     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
-        //     ->get();
+        $stokAtk = BastAtkDetail::select('atk_tbl_form_usulan_permintaan.atk_id', 'deskripsi_barang as barang',
+                DB::raw('sum(jumlah_bast_detail) as distribusi'), DB::raw('sum(volume_transaksi) as pembelian'),
+                DB::raw('(sum(volume_transaksi) - sum(jumlah_bast_detail)) as stok'), 'satuan_barang')
+                ->join('atk_tbl_form_usulan_permintaan', 'id_permintaan', 'permintaan_id')
+                ->leftJoin('atk_tbl_master', 'id_atk', 'atk_id')
+                ->join('atk_tbl_transaksi_detail', 'atk_tbl_transaksi_detail.atk_id', 'id_atk')
+                ->where('atk_tbl_form_usulan_permintaan.atk_id', '!=', '')
+                ->groupBy('atk_tbl_form_usulan_permintaan.atk_id', 'barang', 'satuan_barang')
+                ->orderBy('barang', 'ASC')
+                ->get();
 
-        // foreach ($usulanChart as $key => $value) {
-        //     $result[] = ['Bulan', 'Total Usulan Distribusi'];
-        //     $result[++$key] = [
-        //         Carbon::parse($value->month)->isoFormat('MMMM Y'),
-        //         $chartData->where('month', $value->month)->whereIn('jenis_form', ['distribusi','permintaan'])->count(),
-        //     ];
-        // }
-
-        // $usulanChartAtk = json_encode($result);
-
-        return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'chartAtk', 'dataChartAtk'));
+        return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'chartAtk', 'dataChartAtk','stokAtk'));
     }
 
     public function OfficeStationery(Request $request, $aksi, $id)
