@@ -18,7 +18,7 @@ use App\Models\AADB\UsulanServis;
 use App\Models\AADB\UsulanPerpanjanganSTNK;
 use App\Models\AADB\UsulanVoucherBBM;
 use App\Models\ATK\BastAtk;
-use App\Models\atk\BastAtkDetail;
+use App\Models\ATK\BastAtkDetail;
 use App\Models\ATK\UsulanAtk;
 use App\Models\ATK\UsulanAtkPengadaan;
 use App\Models\ATK\UsulanAtkPermintaan;
