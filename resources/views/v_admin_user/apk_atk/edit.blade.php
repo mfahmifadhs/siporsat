@@ -145,7 +145,6 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <td>{{ $dataPermintaan->nama_barang.' '.$dataPermintaan->spesifikasi }}</td>
                                                 <td class="text-center">{{ $permintaan }}</td>
                                                 <td class="text-center">{{ $belum_diserahkan_row }}</td>
-                                                <td class="text-center">{{ $dataPermintaan->satuan }}</td>
                                                 <td>
                                                     <input type="number" class="form-control input-border-bottom text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan_row }}" oninput="this.value = Math.abs(this.value)" max="{{ $belum_diserahkan_row }}">
                                                 </td>
