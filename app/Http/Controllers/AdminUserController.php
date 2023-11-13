@@ -1231,7 +1231,7 @@ class AdminUserController extends Controller
 
             return view('v_admin_user.apk_atk.edit', compact('idBast','usulan','atk'));
         } elseif ($aksi == 'proses-edit') {
-            // Insert BAST
+	    // Insert BAST
             $id_bast = (int) Carbon::now()->format('dmhs');
             $bast = new BastAtk();
             $bast->id_bast        = $id_bast;

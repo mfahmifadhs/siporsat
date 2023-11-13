@@ -140,6 +140,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                 <td>
                                                     <input type="hidden" name="modul" value="distribusi">
                                                     <input type="hidden" name="id_permintaan[{{$i}}]" value="{{ $dataPermintaan->id_permintaan }}">
+						    <input type="hidden" name="pengadaan_id[{{$i}}]" value="{{ $dataPermintaan->pengadaan_id }}">
                                                     {{ $dataPermintaan->jenis_barang }}
                                                 </td>
                                                 <td>{{ $dataPermintaan->nama_barang.' '.$dataPermintaan->spesifikasi }}</td>
