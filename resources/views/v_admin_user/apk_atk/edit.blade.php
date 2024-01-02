@@ -233,7 +233,7 @@ $belum_diserahkan = $dataPermintaan->jumlah_disetujui - $dataPermintaan->jumlah_
                                                     <input type="number" class="form-control form-control-sm text-center" name="jumlah_penyerahan[{{$i}}]" value="{{ $belum_diserahkan }}" oninput="this.value = Math.abs(this.value)">
                                                 </td>
                                                 <td class="pt-3">
-                                                    <span id="satuan_barang_{{ $i }}">{{ $dataPermintaan->atk->satuan_barang }}</span>
+                                                    <span id="satuan_barang_{{ $i }}">{{ $dataPermintaan->atk?->satuan_barang }}</span>
                                                 </td>
                                                 <td class="pt-3">
                                                     <a href="{{ url('admin-user/atk/usulan/pembatalan/'. $dataPermintaan->id_permintaan) }}" class="btn btn-danger btn-sm">
