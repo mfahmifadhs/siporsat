@@ -731,9 +731,11 @@ class UserController extends Controller
     public function SubmissionUkt(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses') {
-            $totalUsulan    = UsulanUkt::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'UKT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = UsulanUkt::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                              ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+            $noSurat        = 'KR.01.01/501/' . $idUsulan . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanUkt();
@@ -813,9 +815,11 @@ class UserController extends Controller
     public function SubmissionGdn(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses') {
-            $totalUsulan    = UsulanGdn::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'GDN/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = UsulanGdn::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                              ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+            $noSurat        = 'KR.02.01/401/' . $idUsulan . '/' . Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanGdn();
@@ -1047,9 +1051,12 @@ class UserController extends Controller
     public function SubmissionOldat(Request $request, $aksi, $id)
     {
         if ($aksi == 'proses-usulan' && $id == 'pengadaan') {
-            $totalUsulan    = FormUsulan::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/1/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = FormUsulan::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                                ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+
+            $noSurat        = 'KR.02.04/201/'. $idUsulan .'/'.Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
@@ -1081,9 +1088,12 @@ class UserController extends Controller
 
             return redirect('unit-kerja/verif/usulan-oldat/' . $idFormUsulan);
         } elseif ($aksi == 'proses-usulan' && $id == 'perbaikan') {
-            $totalUsulan    = FormUsulan::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ODT/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = FormUsulan::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                                ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+
+            $noSurat        = 'KR.02.04/202/'. $idUsulan .'/'.Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $formUsulan = new FormUsulan();
@@ -1567,9 +1577,28 @@ class UserController extends Controller
 
             return view('v_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
         } elseif ($aksi == 'proses') {
-            $totalUsulan    = UsulanAadb::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ADB/' . $request->jenis_form . '/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = UsulanAadb::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                                ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+
+            $klasifikasi = '';
+            $form        = '';
+            if ($request->jenis_form == 1) {
+                $klasifikasi = 'KR.04.02';
+                $form        = '101';
+            } elseif ($request->jenis_form == 2) {
+                $klasifikasi = 'KR.04.02';
+                $form        = '102';
+            } elseif ($request->jenis_form == 3) {
+                $klasifikasi = 'KR.04.01';
+                $form        = '103';
+            } elseif ($request->jenis_form == 4) {
+                $klasifikasi = 'KR.04.03';
+                $form        = '104';
+            }
+
+            $noSurat        = $klasifikasi.'/'.$form.'/'. $idUsulan .'/'.Carbon::now()->format('Y');
 
             $idFormUsulan = (int) Carbon::now()->format('dhis');
             $usulan = new UsulanAadb();
@@ -1951,11 +1980,13 @@ class UserController extends Controller
 
             return view('v_user.apk_atk.daftar_pengajuan', compact('usulan'));
         } elseif ($aksi == 'proses-distribusi') {
-            $totalUsulan    = UsulanAtk::count();
-            $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-            $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
-            $idFormUsulan = Carbon::now()->format('dhis');
-
+            $idFormUsulan   = Carbon::now()->format('dhis');
+            $tahunPick      = Carbon::now()->format('Y');
+            $totalUsulan    = UsulanAtk::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                              ->withTrashed()->count();
+            $idUsulan       = $totalUsulan + 1;
+            $noSurat        = 'KR.02.04/301/' . $idUsulan . '/' . Carbon::now()->format('Y');
+            dd($noSurat);
             // Daftar barang
             $daftar = $request->id_pengadaan;
             foreach ($daftar as $i => $id_pengadaan) {
@@ -2219,9 +2250,12 @@ class UserController extends Controller
             return redirect('unit-kerja/atk/barang/referensi/*')->with('success', 'Berhasil Mengajukan Item Baru');
         } else {
             if ($id == 'submit') {
-                $totalUsulan    = UsulanAtk::count();
-                $idUsulan       = str_pad($totalUsulan + 1, 4, 0, STR_PAD_LEFT);
-                $noSurat        = 'ATK/2/' . $idUsulan . '/' . Carbon::now()->format('M') . '/' . Carbon::now()->format('Y');
+                $tahunPick      = Carbon::now()->format('Y');
+                $totalUsulan    = UsulanAtk::where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $tahunPick)
+                                ->withTrashed()->count();
+                $idUsulan       = $totalUsulan + 1;
+                $noSurat        = 'KR.02.04/301/' . $idUsulan . '/' . Carbon::now()->format('Y');
+
                 $idFormUsulan   = Carbon::now()->format('dhis');
                 $totalAtk       = (int) $request->idAtk ? count($request->idAtk) : 0;
                 $totalAlkom     = (int) $request->idAlkom ? count($request->idAlkom) : 0;
