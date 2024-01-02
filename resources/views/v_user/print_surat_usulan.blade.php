@@ -65,46 +65,46 @@
 <body style="font-family: Arial;">
     <div class="">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-2">
                 <h2 class="page-header ml-4">
                     <img src="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
                 </h2>
             </div>
-            <div class="col-md-8 text-center">
+            <div class="col-8 text-center">
                 <h2 class="page-header">
                     <h5 style="font-size: 26px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $usulan->unit_utama }}</b></h5>
                     <p style="font-size: 16px;">
-			<i>
-			    @if ($usulan->id_unit_utama == '02407')
-				Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
-				Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
-				Laman www.bppsdmk.depkes.go.id
+                        <i>
+                            @if ($usulan->id_unit_utama == '02407')
+                            Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
+                            Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
+                            Laman www.bppsdmk.depkes.go.id
                             @else
-				Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                            	Telepon : (021) 5201590
-			    @endif
-			</i>
+                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
+                            Telepon : (021) 5201590
+                            @endif
+                        </i>
                     </p>
                 </h2>
             </div>
-            <div class="col-md-2">
+            <div class="col-2">
                 <h2 class="page-header">
                     <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
                 </h2>
             </div>
-            <div class="col-md-12" style="margin-top: -15px;">
+            <div class="col-12" style="margin-top: -15px;">
                 <hr style="border-width: medium;border-color: black;">
                 <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
             </div>
         </div>
         <div class="row" style="font-size: 20px;">
-            <div class="col-md-9">
+            <div class="col-8">
                 <div class="form-group row">
-                    <div class="col-md-2">Nomor</div>
-                    <div class="col-md-10 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
-                    <div class="col-md-2">Hal</div>
-                    <div class="col-md-10 text-capitalize">:
+                    <div class="col-3">Nomor</div>
+                    <div class="col-9 text-uppercase">: {{ $usulan->no_surat_usulan }}</div>
+                    <div class="col-3">Hal</div>
+                    <div class="col-9 text-capitalize">:
                         @if ($modul == 'usulan-oldat')
                         {{ $usulan->jenis_form }} barang
                         @elseif ($modul == 'usulan-aadb')
@@ -117,14 +117,21 @@
                         permintaan kerumahtanggaan
                         @endif
                     </div>
-                    <div class="col-md-2 mt-4">Pengusul</div>
-                    <div class="col-md-10 text-capitalize mt-4">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }} </div>
-                    <div class="col-md-2">Jabatan</div>
-                    <div class="col-md-10">: {{ $usulan->keterangan_pegawai }} </div>
-                    <div class="col-md-2">Unit Kerja</div>
-                    <div class="col-md-10 text-capitalize">: {{ ucfirst(strtolower($usulan->unit_kerja)) }} </div>
-                    <div class="col-md-2">Jumlah</div>
-                    <div class="col-md-10 text-capitalize">:
+                </div>
+            </div>
+            <div class="col-4 text-right">
+                <div class="col-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
+            </div>
+            <div class="col-12">
+                <div class="form-group row">
+                    <div class="col-2 mt-4">Pengusul</div>
+                    <div class="col-10 text-capitalize mt-4">: {{ ucfirst(strtolower($usulan->nama_pegawai)) }} </div>
+                    <div class="col-2">Jabatan</div>
+                    <div class="col-10">: {{ $usulan->keterangan_pegawai }} </div>
+                    <div class="col-2">Unit Kerja</div>
+                    <div class="col-10 text-capitalize">: {{ ucfirst(strtolower($usulan->unit_kerja)) }} </div>
+                    <div class="col-2">Jumlah</div>
+                    <div class="col-10 text-capitalize">:
                         {{ $usulan->total_pengajuan }}
                         @if ($modul == 'usulan-oldat' || $modul == 'usulan-atk')
                         barang
@@ -135,15 +142,12 @@
                         @endif
                     </div>
                     @if($usulan->rencana_pengguna != null)
-                    <div class="col-md-2">Keterangan</div>
-                    <div class="col-md-10 text-capitalize">:
+                    <div class="col-2">Keterangan</div>
+                    <div class="col-10 text-capitalize">:
                         {{ $usulan->rencana_pengguna }}
                     </div>
                     @endif
                 </div>
-            </div>
-            <div class="col-md-3 text-right">
-                <div class="col-md-12">{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
             </div>
             <div class="col-12 table-responsive mt-4 mb-5">
                 @if ($modul == 'usulan-oldat')
@@ -260,36 +264,36 @@
                 @elseif ($modul == 'usulan-gdn')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Bidang Kerusakan</div>
-                        <div class="col-md-3 divTheadtd p-2">Lokasi Perbaikan</div>
-                        <div class="col-md-3 divTheadtd p-2">Lokasi Spesifik</div>
-                        <div class="col-md-2 p-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-3 divTheadtd p-2">Bidang Kerusakan</div>
+                        <div class="col-3 divTheadtd p-2">Lokasi Perbaikan</div>
+                        <div class="col-3 divTheadtd p-2">Lokasi Spesifik</div>
+                        <div class="col-2 p-2">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanGdn as $i => $dataGdn)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
-                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
-                        <div class="col-md-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
+                        <div class="col-3 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
+                        <div class="col-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
                     </div>
                     @endforeach
                 </div>
                 @elseif ($modul == 'usulan-ukt')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-3 divTheadtd p-2">Pekerjaan</div>
-                        <div class="col-md-5 divTheadtd p-2">Spesifikasi Pekerjaan</div>
-                        <div class="col-md-3 p-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-3 divTheadtd p-2">Pekerjaan</div>
+                        <div class="col-5 divTheadtd p-2">Spesifikasi Pekerjaan</div>
+                        <div class="col-3 p-2">Keterangan</div>
                     </div>
                     @foreach($usulan->detailUsulanUkt as $i => $dataUkt)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
-                        <div class="col-md-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
-                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
+                        <div class="col-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                        <div class="col-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
                     </div>
                     @endforeach
                 </div>
@@ -415,8 +419,8 @@
                 @endif
                 @endif
             </div>
-            <div class="col-md-12 mt-5">
-                <div class="col-md-12 text-capitalize">
+            <div class="col-12 mt-5">
+                <div class="col-12 text-capitalize">
                     <div class="row text-center">
                         <label class="col-sm-6">Yang Mengusulkan, <br> {{ ucfirst(strtolower($usulan->keterangan_pegawai)) }}</label>
                         @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
@@ -424,7 +428,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-12 mt-4">
+                <div class="col-12 mt-4">
                     <div class="row text-center">
                         <label class="col-sm-6">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/'.$modul.'/'.$usulan->otp_usulan_pengusul) !!}</label>
                         @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null)
@@ -432,7 +436,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-12 mt-4">
+                <div class="col-12 mt-4">
                     <div class="row text-center">
                         <label class="col-sm-6">{{ $usulan->nama_pegawai }}</label>
                         @if ($usulan->otp_usulan_kabag != null || $usulan->otp_usulan_pimpinan != null )

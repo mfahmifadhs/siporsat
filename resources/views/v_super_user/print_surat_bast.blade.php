@@ -75,12 +75,12 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
 <body style="font-family: Arial;">
     <div class="">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-2">
                 <h2 class="page-header ml-4">
                     <img src="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
                 </h2>
             </div>
-            <div class="col-md-8 text-center">
+            <div class="col-8 text-center">
                 <h2 class="page-header">
                     <h5 style="font-size: 26px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
                     <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
@@ -98,94 +98,94 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     </p>
                 </h2>
             </div>
-            <div class="col-md-2">
+            <div class="col-2">
                 <h2 class="page-header">
                     <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
                 </h2>
             </div>
-            <div class="col-md-12" style="margin-top: -15px;">
+            <div class="col-12" style="margin-top: -15px;">
                 <hr style="border-width: medium;border-color: black;">
                 <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
             </div>
         </div>
         <div class="row" style="font-size: 20px;">
-            <div class="col-md-12 form-group">
+            <div class="col-12 form-group">
                 <div class="form-group row mb-3 text-center">
-                    <div class="col-md-12 text-uppercase">
+                    <div class="col-12 text-uppercase">
                         berita acara serah terima <br>
                         nomor surat : {{ $modul == 'atk' ? $bast->nomor_bast : $bast->no_surat_bast }}
                     </div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-12">
+                    <div class="col-12">
                         Pada Hari Ini, Tanggal {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }} bertempat Di
                         Kantor Pusat Kementerian Kesehatan Republik Indonesia, kami yang bertanda tangan dibawah Ini:
                     </div>
                 </div>
                 <div class="form-group row mb-0 py-3">
-                    <div class="col-md-2"><span class="ml-5">Nama</span></div>
-                    <div class="col-md-10">: {{ $namaPpk }}</div>
-                    <div class="col-md-2"><span class="ml-5">Jabatan</span></div>
-                    <div class="col-md-10">: {{ $jabatanPpk }}
+                    <div class="col-2"><span class="ml-5">Nama</span></div>
+                    <div class="col-10">: {{ $namaPpk }}</div>
+                    <div class="col-2"><span class="ml-5">Jabatan</span></div>
+                    <div class="col-10">: {{ $jabatanPpk }}
                     </div>
-                    <div class="col-md-2"><span class="ml-5">Unit Kerja</span></div>
-                    <div class="col-md-10">: Biro Umum</div>
+                    <div class="col-2"><span class="ml-5">Unit Kerja</span></div>
+                    <div class="col-10">: Biro Umum</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-12">
+                    <div class="col-12">
                         Dalam Berita Acara ini bertindak untuk dan atas nama Biro Umum Sekretariat Jenderal, {{ $jabatanPpk }}
                         selaku yang menyerahkan, yang selanjutnya disebut <b>PIHAK PERTAMA</b>.
                     </div>
                 </div>
                 <div class="form-group row mb-0 py-3">
-                    <div class="col-md-2"><span class="ml-5">Nama</span></div>
-                    <div class="col-md-10">: {{ $bast->nama_pegawai }}</div>
-                    <div class="col-md-2"><span class="ml-5">Jabatan</span></div>
-                    <div class="col-md-10">: {{ $bast->keterangan_pegawai }}
+                    <div class="col-2"><span class="ml-5">Nama</span></div>
+                    <div class="col-10">: {{ $bast->nama_pegawai }}</div>
+                    <div class="col-2"><span class="ml-5">Jabatan</span></div>
+                    <div class="col-10">: {{ $bast->keterangan_pegawai }}
                     </div>
-                    <div class="col-md-2"><span class="ml-5">Unit Kerja</span></div>
-                    <div class="col-md-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
+                    <div class="col-2"><span class="ml-5">Unit Kerja</span></div>
+                    <div class="col-10">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0 text-justify">
-                    <div class="col-md-12">
+                    <div class="col-12">
                         Dalam Berita Acara ini bertindak untuk dan atas nama {{ ucfirst(strtolower($bast->unit_kerja)) }}
                         Selaku Penerima, yang selanjutnya disebut <b>PIHAK KEDUA</b>.
                     </div>
                 </div>
                 <div class="form-group row mb-0 text-justify">
-                    <div class="col-md-12 mt-4">
+                    <div class="col-12 mt-4">
                         Bahwa <b>PIHAK PERTAMA</b> telah menyerahkan barang/pekerjaan dari/kepada <b>PIHAK KEDUA</b>
                         dengan rincian sebagai berikut:
                     </div>
                 </div>
                 <!-- <div class="form-group row mb-0">
-                    <div class="col-md-3">Tanggal</div>
-                    <div class="col-md-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
+                    <div class="col-3">Tanggal</div>
+                    <div class="col-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Pengusul</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
+                    <div class="col-3">Pengusul</div>
+                    <div class="col-9">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Jabatan</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
+                    <div class="col-3">Jabatan</div>
+                    <div class="col-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Unit Kerja</div>
-                    <div class="col-md-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
+                    <div class="col-3">Unit Kerja</div>
+                    <div class="col-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
                 </div>
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Total Pengajuan</div>
-                    <div class="col-md-9">: {{ $bast->total_pengajuan }}</div>
+                    <div class="col-3">Total Pengajuan</div>
+                    <div class="col-9">: {{ $bast->total_pengajuan }}</div>
                 </div>
                 @if($bast->rencana_pengguna != null)
                 <div class="form-group row mb-0">
-                    <div class="col-md-3">Rencana Pengguna</div>
-                    <div class="col-md-9">: {{ $bast->rencana_pengguna }}</div>
+                    <div class="col-3">Rencana Pengguna</div>
+                    <div class="col-9">: {{ $bast->rencana_pengguna }}</div>
                 </div>
                 @endif -->
                 <!-- <div class="form-group row mb-0">
-                    <div class="col-md-12 text-justify mt-4">
+                    <div class="col-12 text-justify mt-4">
                         Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
                         dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
                         berfungsi normal sebagaimana mestinya.
@@ -246,30 +246,30 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 @elseif ($modul == 'atk')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center p-2">No</div>
-                        <div class="col-md-4 divTheadtd p-2">Nama Barang</div>
-                        <div class="col-md-3 divTheadtd p-2">Deskripsi</div>
-                        <div class="col-md-2 divTheadtd text-center p-2">Permintaan</div>
-                        <div class="col-md-2 divTheadtd text-center p-2">Penyerahan</div>
+                        <div class="col-1 divTheadtd text-center p-2">No</div>
+                        <div class="col-4 divTheadtd p-2">Nama Barang</div>
+                        <div class="col-3 divTheadtd p-2">Deskripsi</div>
+                        <div class="col-2 divTheadtd text-center p-2">Permintaan</div>
+                        <div class="col-2 divTheadtd text-center p-2">Penyerahan</div>
                     </div>
                     @if ($bast->jenis_form == 'distribusi')
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-4 divTbodytd">{{ $detailAtk->nama_barang }}</div>
-                        <div class="col-md-3 divTbodytd">{{ $detailAtk->spesifikasi }}</div>
-                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
-                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-4 divTbodytd">{{ $detailAtk->nama_barang }}</div>
+                        <div class="col-3 divTbodytd">{{ $detailAtk->spesifikasi }}</div>
+                        <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
+                        <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>
                     @endforeach
                     @elseif ($bast->jenis_form == 'permintaan')
                     @foreach($bast->detailBast2 as $i => $detailAtk)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-4 divTbodytd">{{ $detailAtk->deskripsi_barang }}</div>
-                        <div class="col-md-3 divTbodytd">{{ $detailAtk->catatan }}</div>
-                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</div>
-                        <div class="col-md-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-4 divTbodytd">{{ $detailAtk->deskripsi_barang }}</div>
+                        <div class="col-3 divTbodytd">{{ $detailAtk->catatan }}</div>
+                        <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</div>
+                        <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</div>
                     </div>
                     @endforeach
                     @endif
@@ -278,36 +278,36 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 @elseif ($modul == 'gdn')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center py-2">No</div>
-                        <div class="col-md-3 divTheadtd py-2">Bidang Kerusakan</div>
-                        <div class="col-md-2 divTheadtd py-2">Lokasi Perbaikan</div>
-                        <div class="col-md-4 divTheadtd py-2">Lokasi Spesifik</div>
-                        <div class="col-md-2 py-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center py-2">No</div>
+                        <div class="col-3 divTheadtd py-2">Bidang Kerusakan</div>
+                        <div class="col-2 divTheadtd py-2">Lokasi Perbaikan</div>
+                        <div class="col-4 divTheadtd py-2">Lokasi Spesifik</div>
+                        <div class="col-2 py-2">Keterangan</div>
                     </div>
                     @foreach($bast->detailUsulanGdn as $i => $dataGdn)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
-                        <div class="col-md-2 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
-                        <div class="col-md-4 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
-                        <div class="col-md-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($dataGdn->bid_kerusakan)) }}</div>
+                        <div class="col-2 divTbodytd">{{ ucfirst(strtolower($dataGdn->lokasi_bangunan)) }}</div>
+                        <div class="col-4 divTbodytd">{!! nl2br(e($dataGdn->lokasi_spesifik )) !!}</div>
+                        <div class="col-2 divTbodytd">{!! nl2br(e($dataGdn->keterangan )) !!}</div>
                     </div>
                     @endforeach
                 </div>
                 @elseif ($modul == 'ukt')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-md-1 divTheadtd text-center py-2">No</div>
-                        <div class="col-md-3 divTheadtd py-2">Pekerjaan</div>
-                        <div class="col-md-5 divTheadtd py-2">Spesifikasi Pekerjaan</div>
-                        <div class="col-md-3 py-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center py-2">No</div>
+                        <div class="col-3 divTheadtd py-2">Pekerjaan</div>
+                        <div class="col-5 divTheadtd py-2">Spesifikasi Pekerjaan</div>
+                        <div class="col-3 py-2">Keterangan</div>
                     </div>
                     @foreach($bast->detailUsulanUkt as $i => $dataUkt)
                     <div class="row divTbody">
-                        <div class="col-md-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-md-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
-                        <div class="col-md-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
-                        <div class="col-md-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
+                        <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($dataUkt->lokasi_pekerjaan)) }}</div>
+                        <div class="col-5 divTbodytd">{!! nl2br(e($dataUkt->spesifikasi_pekerjaan)) !!}</div>
+                        <div class="col-3 divTbodytd">{!! nl2br(e($dataUkt->keterangan)) !!}</div>
                     </div>
                     @endforeach
                 </div>
@@ -430,15 +430,15 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 @endif
                 @endif
             </div>
-            <div class="col-md-12 mt-5">
-                <div class="col-md-12 text-capitalize">
+            <div class="col-12 mt-5">
+                <div class="col-12 text-capitalize">
                     <div class="row text-center">
                         <label class="col-sm-4">Yang Menyerahkan, <br> {{ $jabatanPpk }} </label>
                         <label class="col-sm-4">Yang Menerima, <br> {{ $bast->keterangan_pegawai }}</label>
                         <label class="col-sm-4">Mengetahui, <br> {{ $pimpinan->keterangan_pegawai }}</label>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="row text-center mt-4 ml">
                         @if ($bast->otp_bast_ppk != null)
                         <label class="col-sm-4">{!! QrCode::size(100)->generate('https://siporsat.kemkes.go.id/surat/bast-ukt/'.$bast->otp_bast_ppk) !!}</label>
@@ -457,7 +457,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                         @endif
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="row text-center">
                         <label class="col-sm-4">{{ $namaPpk }}</label>
                         <label class="col-sm-4">{{ $bast->nama_pegawai }}</label>

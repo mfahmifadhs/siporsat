@@ -273,11 +273,11 @@
                                                 <i class="fas fa-file-signature"></i> Konfirmasi
                                             </a>
                                             @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul != null)
+                                            
                                             <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
-                                            @else
+                                            @if ($dataUsulan->otp_usulan_pengusul == null)
                                             <a class="dropdown-item btn" href="{{ url('unit-kerja/verif/usulan-aadb/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-file-signature"></i> Verifikasi
                                             </a>
