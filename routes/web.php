@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\MailController;
@@ -30,7 +31,7 @@ Route::get('/usulan/{modul}/{id}', [Controller::class, 'Letters']);
 // ====================================================
 //                    AUTENTIKASI
 // ====================================================
-Route::get('dashboard', [AuthController::class, 'dashboard']);
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('masuk', [AuthController::class, 'index'])->name('masuk');
 Route::get('daftar', [AuthController::class, 'daftar'])->name('daftar-user');
 Route::get('keluar', [AuthController::class, 'keluar'])->name('keluar');
