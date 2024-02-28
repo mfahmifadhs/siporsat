@@ -38,7 +38,7 @@
     <header class="header-section clearfix">
         <div class="container-fluid">
             <a href="index.html" class="site-logo">
-                <img src="{{ asset('dist_admin/img/biro-umum.png') }}" width="350" height="120" alt="">
+                <img src="{{ asset('dist_admin/img/biro-umum.png') }}" width="400" height="120" alt="">
             </a>
         </div>
     </header>
