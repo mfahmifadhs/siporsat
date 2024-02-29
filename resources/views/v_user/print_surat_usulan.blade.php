@@ -47,7 +47,7 @@
         }
 
         .divTbodytd {
-            border-right: 1px solid;
+            /* border-right: 1px solid; */
             padding: 10px;
         }
 
