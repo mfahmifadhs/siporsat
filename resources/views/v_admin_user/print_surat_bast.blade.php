@@ -19,38 +19,25 @@
         .pagebreak {
             page-break-after: always;
         }
-
-        .table-data {
-            border: 1px solid;
-            font-size: 20px;
-        }
-
-        .table-data th,
-        .table-data td {
-            border: 1px solid;
-        }
-
-        .table-data thead th,
-        .table-data thead td {
-            border: 1px solid;
-        }
     }
+
 
     .divTable {
         border-top: 1px solid;
         border-left: 1px solid;
-        border-right: 1px solid;
+        /* border-right: 1px solid; */
+        border-bottom: 1px solid;
         font-size: 21px;
     }
 
     .divThead {
-        border-bottom: 1px solid;
         font-weight: bold;
+        margin: 0px;
     }
 
     .divTbody {
-        border-bottom: 1px solid;
-        text-transform: capitalize;
+        border-top: 1px solid;
+        margin: 0px;
     }
 
     .divTheadtd {
@@ -60,6 +47,21 @@
     .divTbodytd {
         border-right: 1px solid;
         padding: 10px;
+    }
+
+    .table-data {
+        border: 1px solid;
+        font-size: 20px;
+    }
+
+    .table-data th,
+    .table-data td {
+        border: 1px solid;
+    }
+
+    .table-data thead th,
+    .table-data thead td {
+        border: 1px solid;
     }
 </style>
 @php
@@ -73,38 +75,16 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
 @endphp
 
 <body style="font-family: Arial;">
-    <div class="">
-        <div class="row">
-            <div class="col-2">
-                <h2 class="page-header ml-4">
-                    <img src="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
-                </h2>
-            </div>
-            <div class="col-8 text-center">
-                <h2 class="page-header">
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>kementerian kesehatan republik indonesia</b></h5>
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>sekretariat jenderal</b></h5>
-                    <p style="font-size: 18px;"><i>
-                            Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                            Telepon : (021) 5201590</i>
-                    </p>
-                </h2>
-            </div>
-            <div class="col-2">
-                <h2 class="page-header">
-                    <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
-                </h2>
-            </div>
-            <div class="col-12" style="margin-top: -11px;">
-                <hr style="border-width: medium;border-color: black;">
-                <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
-            </div>
-        </div>
+    <section class="header">
+        <img src="{{ asset('dist_admin/img/header-surat.png') }}" style="width: 100%;">
+    </section>
+
+    <section class="narasi mx-4 my-3">
         <div class="row" style="font-size: 20px;">
             <div class="col-12 form-group">
                 <div class="form-group row mb-3 text-center">
                     <div class="col-12 text-uppercase">
-                        berita acara serah terima <br>
+                        <b>berita acara serah terima</b> <br>
                         nomor surat : {{ $modul == 'atk' ? $bast->nomor_bast : $bast->no_surat_bast }}
                     </div>
                 </div>
@@ -150,40 +130,12 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                         dengan rincian sebagai berikut:
                     </div>
                 </div>
-                <!-- <div class="form-group row mb-0">
-                    <div class="col-3">Tanggal</div>
-                    <div class="col-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Pengusul</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Jabatan</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Unit Kerja</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Total Pengajuan</div>
-                    <div class="col-9">: {{ $bast->total_pengajuan }}</div>
-                </div>
-                @if($bast->rencana_pengguna != null)
-                <div class="form-group row mb-0">
-                    <div class="col-3">Rencana Pengguna</div>
-                    <div class="col-9">: {{ $bast->rencana_pengguna }}</div>
-                </div>
-                @endif -->
-                <!-- <div class="form-group row mb-0">
-                    <div class="col-12 text-justify mt-4">
-                        Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
-                        dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
-                        berfungsi normal sebagaimana mestinya.
-                    </div>
-                </div> -->
             </div>
+        </div>
+    </section>
+
+    <section class="body mx-4">
+        <div class="row" style="font-size: 20px;">
             <div class="col-12 table-responsive mb-5">
                 @if ($modul == 'oldat')
                 <table class="table table-bordered m-0">
@@ -451,7 +403,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     <!-- ./wrapper -->
     <!-- Page specific script -->
     <script>
