@@ -32,7 +32,7 @@
 
         .divThead {
             font-weight: bold;
-            border-right: 1px solid;
+            /* border-right: 1px solid; */
             margin: 0px;
         }
 
@@ -47,7 +47,7 @@
         }
 
         .divTbodytd {
-            /* border-right: 1px solid; */
+            border-right: 1px solid;
             padding: 10px;
         }
 
