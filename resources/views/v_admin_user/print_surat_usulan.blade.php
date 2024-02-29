@@ -24,7 +24,7 @@
         .divTable {
             border-top: 1px solid;
             border-left: 1px solid;
-            border-right: 1px solid;
+            /* border-right: 1px solid; */
             border-bottom: 1px solid;
             font-size: 21px;
             font-family: 'Segoeui';
@@ -32,6 +32,7 @@
 
         .divThead {
             font-weight: bold;
+            border-right: 1px solid;
             margin: 0px;
         }
 
