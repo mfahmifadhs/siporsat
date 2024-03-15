@@ -2382,6 +2382,7 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_pengajuan_id', 2)
+                    ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                     ->get();
             } else {
                 $pengajuan  = UsulanAadb::with('usulanKendaraan')
@@ -2391,6 +2392,7 @@ class SuperUserController extends Controller
                     ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
+                    ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                     ->get();
             }
 
@@ -2404,6 +2406,7 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('id_form_usulan', $id)
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->get();
 
             return view('v_super_user.apk_aadb.daftar_pengajuan', compact('pengajuan'));
@@ -2417,7 +2420,8 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
-                ->orderBy('tanggal_usulan', 'DESC');
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024);
 
 
             if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
@@ -2557,24 +2561,33 @@ class SuperUserController extends Controller
             $usulan = UsulanAadb::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_form_usulan', $id)
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->first();
 
             $usulanKendaraan = UsulanKendaraan::where('id_form_usulan', $id)
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')->get();
+                ->join('aadb_tbl_jenis_kendaraan', 'id_jenis_kendaraan', 'jenis_kendaraan_id')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->get();
 
             $usulanServis = UsulanServis::where('id_form_usulan', $id)
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->get();
 
             $usulanStnk = UsulanPerpanjanganSTNK::where('id_form_usulan', $id)
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->get();
 
             $usulanVoucher = UsulanVoucherBBM::where('id_form_usulan', $id)
                 ->select('no_plat_kendaraan', 'merk_tipe_kendaraan', 'tahun_kendaraan')
                 ->join('aadb_tbl_form_usulan', 'id_form_usulan', 'form_usulan_id')
-                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')->get();
+                ->join('aadb_tbl_kendaraan', 'id_kendaraan', 'kendaraan_id')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->get();
 
             return view('v_super_user/apk_aadb/proses_persetujuan', compact('usulan', 'usulanKendaraan', 'usulanServis', 'usulanStnk', 'usulanVoucher'));
         } elseif ($aksi == 'proses-pembatalan') {
