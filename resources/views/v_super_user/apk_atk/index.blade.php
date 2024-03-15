@@ -36,7 +36,7 @@
                         <a href="{{ url('super-user/atk/usulan/status/1') }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
-                                    <h5>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
+                                    <h5>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
                                     <h6 class="font-weight-bold">Menunggu Persetujuan</h6>
                                 </div>
                             </div>
@@ -46,7 +46,7 @@
                         <a href="{{ url('super-user/atk/usulan/status/2') }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
-                                    <h5>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
+                                    <h5>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
                                     <h6 class="font-weight-bold">Sedang Diproses</h6>
                                 </div>
                             </div>
