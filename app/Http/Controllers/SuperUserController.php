@@ -1540,6 +1540,8 @@ class SuperUserController extends Controller
             ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
             ->where('unit_utama_id', '02401')
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         $usulanTotal = UsulanAtk::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1547,6 +1549,8 @@ class SuperUserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         $usulanChart = UsulanAtk::select(
@@ -1558,6 +1562,8 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->groupBy('month')
                 ->orderBy('month', 'ASC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->where('status_proses_id', '!=', null)
                 ->get();
 
         foreach ($usulanChart as $key => $value) {
@@ -1576,6 +1582,8 @@ class SuperUserController extends Controller
                 ->where('atk_tbl_form_usulan_permintaan.atk_id', '!=', '')
                 ->groupBy('atk_tbl_form_usulan_permintaan.atk_id', 'barang', 'satuan_barang')
                 ->orderBy('barang', 'ASC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->where('status_proses_id', '!=', null)
                 ->get();
 
         return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'chartAtk', 'dataChartAtk','stokAtk'));
