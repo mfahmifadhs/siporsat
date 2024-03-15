@@ -1582,8 +1582,6 @@ class SuperUserController extends Controller
                 ->where('atk_tbl_form_usulan_permintaan.atk_id', '!=', '')
                 ->groupBy('atk_tbl_form_usulan_permintaan.atk_id', 'barang', 'satuan_barang')
                 ->orderBy('barang', 'ASC')
-                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
-                ->where('status_proses_id', '!=', null)
                 ->get();
 
         return view('v_super_user.apk_atk.index', compact('usulanUker', 'usulanTotal', 'chartAtk', 'dataChartAtk','stokAtk'));
