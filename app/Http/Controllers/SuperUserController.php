@@ -3412,6 +3412,7 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
                 ->where('status_proses_id', $id)
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->get();
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker', 'formUsulan'));
@@ -3426,6 +3427,7 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_status_pengajuan', 'id_status_pengajuan', 'status_pengajuan_id')
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('tanggal_usulan', 'DESC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->get();
 
             return view('v_super_user.apk_oldat.daftar_pengajuan', compact('uker','formUsulan'));
@@ -3535,7 +3537,8 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
-                ->orderBy('tanggal_usulan', 'DESC');
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024);
 
 
             if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
