@@ -2322,6 +2322,8 @@ class SuperUserController extends Controller
         ->leftJoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
         ->rightJoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
         ->groupBy('id_unit_kerja', 'unit_kerja')
+        ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+        ->where('status_proses_id', '!=', null)
         ->get();
 
         $usulanTotal = UsulanAadb::leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -2329,6 +2331,8 @@ class SuperUserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         $usulanChart = UsulanAadb::select(
@@ -2339,11 +2343,15 @@ class SuperUserController extends Controller
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('month')
             ->orderBy('month', 'ASC')
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         $chartData = UsulanAadb::select(DB::raw("(DATE_FORMAT(tanggal_usulan, '%Y-%m')) as month"), 'jenis_form')
             ->leftjoin('tbl_pegawai', 'id_pegawai', 'pegawai_id')
             ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where('status_proses_id', '!=', null)
             ->get();
 
         foreach ($usulanChart as $key => $value) {
