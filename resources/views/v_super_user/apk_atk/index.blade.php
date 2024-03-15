@@ -43,7 +43,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
-                        <a href="{{ url('super-user/atk/usulan/status/1') }}">
+                        <a href="{{ url('super-user/atk/usulan/status/2') }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
@@ -53,7 +53,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
-                        <a href="{{ url('super-user/atk/usulan/status/2') }}">
+                        <a href="{{ url('super-user/atk/usulan/status/3') }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
