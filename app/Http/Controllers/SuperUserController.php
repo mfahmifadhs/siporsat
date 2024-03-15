@@ -1700,6 +1700,7 @@ class SuperUserController extends Controller
                     ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_pengajuan_id', 2)
+                    ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                     ->get();
             } elseif ($id == 'uker') {
                 $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1712,6 +1713,7 @@ class SuperUserController extends Controller
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('jenis_form', $request->jenis_form)
                     ->where('unit_kerja_id', $request->id_unit_kerja)
+                    ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                     ->get();
             } else {
                 $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
@@ -1723,6 +1725,7 @@ class SuperUserController extends Controller
                     ->orderBy('status_proses_id', 'ASC')
                     ->orderBy('tanggal_usulan', 'DESC')
                     ->where('status_proses_id', $id)
+                    ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                     ->get();
             }
 
@@ -1737,7 +1740,8 @@ class SuperUserController extends Controller
                 ->leftjoin('tbl_status_proses', 'id_status_proses', 'status_proses_id')
                 ->orderBy('status_pengajuan_id', 'ASC')
                 ->orderBy('status_proses_id', 'ASC')
-                ->orderBy('tanggal_usulan', 'DESC');
+                ->orderBy('tanggal_usulan', 'DESC')
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024);
 
 
             if ($request->hasAny(['unit_kerja_id', 'start_date', 'end_date', 'status_proses_id', 'jenis_form'])) {
@@ -2033,6 +2037,7 @@ class SuperUserController extends Controller
             $usulan = UsulanAtk::join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->join('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_form_usulan', $id)
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->first();
 
             return view('v_super_user/apk_atk/proses_persetujuan', compact('usulan'));
