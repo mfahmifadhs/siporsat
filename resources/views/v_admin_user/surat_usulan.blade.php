@@ -163,11 +163,16 @@
                                         <div class="col-md-3">Keterangan</div>
                                         <div class="col-md-9">: {{ $usulan->rencana_pengguna }}</div>
                                         @endif
-                                        <div class="col-md-3">Aksi</div>
+                                        <div class="col-md-3 mt-1">Aksi</div>
                                         <div class="col-md-9">:
                                             <a href="{{ url('admin-user/cetak-surat/usulan-'. $modul.'/'. $usulan->id_form_usulan) }}" rel="noopener" target="_blank" class="btn btn-danger btn-sm pdf">
                                                 <i class="fas fa-print"></i> Cetak
                                             </a>
+                                            @if ($modul == 'ukt' || $modul == 'gdn')
+                                            <a href="{{ url('admin-user/'. $modul.'/edit/usulan/'. $usulan->id_form_usulan) }}" class="btn btn-warning btn-sm pdf">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            @endif
                                         </div>
                                         @if($modul == 'atk' && $form->jenis_form == 'pengadaan' && $usulan->status_pengajuan_id == null)
                                         @if($usulan->otp_usulan_kabag == null || $usulan->otp_usulan_pimpinan == null)
@@ -364,7 +369,7 @@
                                         </tr>
                                     </thead>
                                     <?php $no = 1; ?>
-                                    <tbody class="text-uppercase">
+                                    <tbody>
                                         @foreach($usulan->detailUsulanUkt as $dataUkt)
                                         <tr>
                                             <td>{{ $no++ }}</td>

@@ -4,9 +4,11 @@ use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GdnController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\UktController;
 use App\Http\Controllers\UserController;
 
 
@@ -170,6 +172,11 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterGdn']);
 
+        Route::get('js/{aksi}/{id}', [GdnController::class, 'JsGdn']);
+        Route::get('edit/usulan/{id}', [GdnController::class, 'edit']);
+        Route::get('delete/detail/{id}', [GdnController::class, 'deleteDetail']);
+        Route::post('update/usulan/{id}', [GdnController::class, 'update']);
+
         Route::post('surat/{aksi}/{id}', [AdminUserController::class, 'LetterGdn']);
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
     });
@@ -179,6 +186,10 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
         Route::get('dashboard', [AdminUserController::class, 'Ukt']);
         Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionUkt']);
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterUkt']);
+
+        Route::get('edit/usulan/{id}', [UktController::class, 'edit']);
+        Route::get('delete/detail/{id}', [UktController::class, 'deleteDetail']);
+        Route::post('update/usulan/{id}', [UktController::class, 'update']);
 
         Route::post('surat/{aksi}/{id}', [AdminUserController::class, 'LetterUkt']);
         Route::post('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionUkt']);

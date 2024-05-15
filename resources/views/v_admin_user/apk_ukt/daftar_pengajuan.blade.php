@@ -203,6 +203,10 @@
                                                 <i class="fas fa-info-circle"></i> Detail
                                             </a>
 
+                                            <a href="{{ url('admin-user/ukt/edit/usulan/'. $dataUsulan->id_form_usulan) }}" class="dropdown-item btn" type="button">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+
                                             @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
                                             <a class="dropdown-item btn" href="{{ url('admin-user/surat/detail-bast-ukt/'. $dataUsulan->id_form_usulan) }}">
                                                 <i class="fas fa-info-circle"></i> Berita Acara
