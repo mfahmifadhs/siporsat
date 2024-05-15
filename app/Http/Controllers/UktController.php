@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ukt\UsulanUkt;
-use App\Models\Ukt\UsulanUktDetail;
+use App\Models\UKT\UsulanUkt;
+use App\Models\UKT\UsulanUktDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\User;

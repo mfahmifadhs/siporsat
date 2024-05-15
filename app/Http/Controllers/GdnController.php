@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\gdn\BidangKerusakan;
-use App\Models\gdn\UsulanGdn;
-use App\Models\gdn\UsulanGdnDetail;
+use App\Models\GDN\BidangKerusakan;
+use App\Models\GDN\UsulanGdn;
+use App\Models\GDN\UsulanGdnDetail;
 use Illuminate\Http\Request;
 
 class GdnController extends Controller
