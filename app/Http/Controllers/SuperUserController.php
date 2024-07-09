@@ -111,6 +111,7 @@ class SuperUserController extends Controller
             $reportAtk[] = null;
         }
 
+
         return view('v_super_user.index', compact('usulanUkt', 'usulanOldat', 'usulanAadb', 'usulanAtk', 'usulanGdn', 'reportOldat', 'reportAadb', 'reportAtk'));
     }
 
@@ -2338,6 +2339,11 @@ class SuperUserController extends Controller
     // ===============================================
     public function Aadb(Request $request)
     {
+        $totalAadb  = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
+                        ->groupBy('id_unit_kerja', 'unit_kerja')
+                        ->select('id_unit_kerja','unit_kerja', DB::raw('count(id_kendaraan) as total'))
+                        ->get();
+
         $usulanUker = UsulanAadb::select(
             'id_unit_kerja',
             'unit_kerja',
@@ -2393,7 +2399,7 @@ class SuperUserController extends Controller
         }
 
         $chartAadb = json_encode($result);
-        return view('v_super_user.apk_aadb.index', compact('usulanUker', 'usulanTotal', 'chartAadb'));
+        return view('v_super_user.apk_aadb.index', compact('totalAadb','usulanUker', 'usulanTotal', 'chartAadb'));
     }
 
     public function SubmissionAadb(Request $request, $aksi, $id)

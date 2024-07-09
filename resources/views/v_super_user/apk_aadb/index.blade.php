@@ -86,6 +86,29 @@
             </div>
             <div class="col-md-9 col-12">
                 <div class="card">
+                    <div class="card-body">
+                        <label>Total AADB Unit Kerja</label>
+                        <table id="taadb" class="table table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Unit Kerja</th>
+                                    <th>Total Kendaraan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($totalAadb as $row)
+                                <tr>
+                                    <td>{{ $loop->iteration }} </td>
+                                    <td class="text-left">{{ $row->unit_kerja }}</td>
+                                    <td>{{ $row->total }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
                     <div class="card-header bg-primary">
                         <b class="font-weight-bold card-title" style="font-size:medium;">
                             GRAFIK USULAN AADB
@@ -153,6 +176,14 @@
 
 <script>
     $(function() {
+        $("#taadb").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "info": true,
+            "paging": true
+        })
+
         $("#table-usulan").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -198,6 +229,7 @@
             'packages': ['bar']
         });
         google.charts.setOnLoadCallback(drawChart);
+
         function drawChart() {
             var data = google.visualization.arrayToDataTable(chartData);
             var options = {
