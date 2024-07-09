@@ -96,7 +96,7 @@
                                     <th>Total Kendaraan</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="small">
                                 @foreach ($totalAadb as $row)
                                 <tr>
                                     <td>{{ $loop->iteration }} </td>

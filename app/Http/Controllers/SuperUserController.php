@@ -2342,6 +2342,7 @@ class SuperUserController extends Controller
         $totalAadb  = Kendaraan::join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                         ->groupBy('id_unit_kerja', 'unit_kerja')
                         ->select('id_unit_kerja','unit_kerja', DB::raw('count(id_kendaraan) as total'))
+                        ->orderBy('total', 'DESC')
                         ->get();
 
         $usulanUker = UsulanAadb::select(
