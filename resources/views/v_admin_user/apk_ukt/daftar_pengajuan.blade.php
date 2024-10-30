@@ -41,7 +41,7 @@
                 <div class="card card-primary">
                     <div class="card-header">
                         <h4 class="card-title mt-1 font-weight-bold">
-                            Daftar Usulan Gedung dan Bangunan
+                            Daftar Usulan Urusan Kerumahtanggaan
                         </h4>
                     </div>
                     <div class="card-body border border-dark">
