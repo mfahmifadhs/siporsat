@@ -5,6 +5,8 @@ namespace App\Models\gdn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\GDN\UsulanGdnDetail;
+use App\Models\Pegawai;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsulanGdn extends Model
@@ -30,11 +32,19 @@ class UsulanGdn extends Model
         'status_pengajuan_id',
         'status_proses_id',
         'otp_usulan_pengusul',
-        'otp_usulan_kabag',
+        'otp_usulan_kabag'
     ];
 
     public function detailUsulanGdn() {
         return $this->hasMany(UsulanGdnDetail::class, 'form_usulan_id')
             ->join('gdn_tbl_bid_kerusakan','id_bid_kerusakan','bid_kerusakan_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function pegawai() {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id');
     }
 }

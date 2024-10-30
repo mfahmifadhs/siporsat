@@ -2,20 +2,22 @@
 
 @section('content')
 
-<div class="content-header">
+<section class="content-header">
     <div class="container">
-        <div class="row mb-2">
+        <div class="row text-capitalize">
             <div class="col-sm-6">
-                <h1 class="m-0">Usulan Pemeliharaan Gedung Bangunan</h1>
+                <h4>Edit Usulan</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active mt-2">Edit Usulan Pemeliharaan Gedung Bangunan</li>
+                    <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('gdn.show', ['aksi' => 'pengajuan', 'id' => '*']) }}">Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Edit Usulan</li>
                 </ol>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <section class="content">
     <div class="container">
@@ -29,6 +31,11 @@
                 <p style="color:white;margin: auto;">{{ $message }}</p>
             </div>
             @endif
+        </div>
+        <div class="col-md-12 form-group">
+            <a href="{{ route('gdn.show', ['aksi' => 'pengajuan', 'id' => '*']) }}" class="print mr-2">
+                <i class="fas fa-arrow-circle-left"></i> Kembali
+            </a>
         </div>
         <div class="card card-primary card-outline">
             <div class="card-header text-capitalize ">

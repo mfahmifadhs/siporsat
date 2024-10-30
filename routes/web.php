@@ -40,6 +40,12 @@ Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.
 Route::post('lg/{id}', [AuthController::class, 'postMasuk'])->name('lg');
 Route::get('captcha-reload', [AuthController::class, 'reloadCaptcha']);
 
+
+Route::get('gdn/show/{aksi}/{id}', [GdnController::class, 'show'])->name('gdn.show');
+Route::get('gdn/detail/{id}', [GdnController::class, 'detail'])->name('gdn.detail');
+Route::get('gdn/edit/{id}', [GdnController::class, 'edit'])->name('gdn.edit');
+Route::get('gdn/select', [GdnController::class, 'select'])->name('gdn.select');
+
 // ====================================================
 //                    SUPER ADMIN
 // ====================================================
@@ -169,11 +175,11 @@ Route::group(['middleware' => ['level:admin-user'], 'prefix' => 'admin-user', 'a
     // gedung dan bangunan
     Route::group(['prefix' => 'gdn', 'as' => 'gdn'], function() {
         Route::get('dashboard', [AdminUserController::class, 'Gdn']);
-        Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
+        // Route::get('usulan/{aksi}/{id}', [AdminUserController::class, 'SubmissionGdn']);
         Route::get('surat/{aksi}/{id}', [AdminUserController::class, 'LetterGdn']);
 
         Route::get('js/{aksi}/{id}', [GdnController::class, 'JsGdn']);
-        Route::get('edit/usulan/{id}', [GdnController::class, 'edit']);
+        // Route::get('edit/usulan/{id}', [GdnController::class, 'edit']);
         Route::get('delete/detail/{id}', [GdnController::class, 'deleteDetail']);
         Route::post('update/usulan/{id}', [GdnController::class, 'update']);
 

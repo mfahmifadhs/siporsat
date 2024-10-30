@@ -40,332 +40,111 @@
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h4 class="card-title mt-1 font-weight-bold" id="accordion">
+                        <h4 class="card-title mt-1 font-weight-bold">
                             Daftar Usulan Gedung dan Bangunan
                         </h4>
-                        <div class="card-tools">
-                            <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                <span class="btn btn-default btn-sm">
-                                    <i class="fas fa-filter"></i> Filter
-                                </span>
-                            </a>
-                        </div>
                     </div>
-                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-header">
-                            <form method="POST" action="{{ url('admin-user/gdn/usulan/daftar/seluruh-usulan') }}">
-                                @csrf
-                                <div class="form-group row">
-                                    <div class="col-sm-4">
-                                        <label>Pilih Tanggal</label>
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <small>Tanggal Awal</small>
-                                                <input type="date" class="form-control border-dark" name="start_date">
-                                            </div>
-                                            <div class="col-md-2 text-center" style="margin-top: 30px;"> ➖ </div>
-                                            <div class="col-md-5">
-                                                <small>Tanggal Akhir</small>
-                                                <input type="date" class="form-control border-dark" name="end_date">
-                                            </div>
+                    <div class="card-body border border-dark">
+                        <form method="GET" action="{{ route('gdn.show', ['aksi' => 'filter', 'id' => '*']) }}">
+                            @csrf
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="text-xs">Pilih Tanggal</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select name="tanggal" class="form-control form-control-sm border-dark rounded text-center">
+                                                <option value="">Semua Tanggal</option>
+                                                @foreach(range(1, 31) as $dateNumber)
+                                                @php $rowTgl = Carbon\Carbon::create()->day($dateNumber)->isoFormat('DD'); @endphp
+                                                <option value="{{ $rowTgl }}" <?php echo $tanggal == $rowTgl ? 'selected' : '' ?>>
+                                                    {{ $rowTgl }}
+                                                </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label>Unit Kerja</label> <br>
-                                        <small>Pilih Unit Kerja</small>
-                                        <select name="unit_kerja_id" class="form-control text-capitalize border-dark">
-                                            <option value="">-- Pilih Unit Kerja --</option>
-                                            @foreach ($uker as $dataUker)
-                                            <option value="{{ $dataUker->id_unit_kerja }}">{{ $dataUker->unit_kerja }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label>Status Proses</label> <br>
-                                        <small>Pilih Status Proses Pengajuan</small>
-                                        <select name="status_proses_id" class="form-control text-capitalize border-dark">
-                                            <option value="">-- Pilih Status Proses --</option>
-                                            <option value="1">1 - Menunggu Persetujuan Kabag RT</option>
-                                            <option value="2">2 - Sedang Diproses oleh PPK</option>
-                                            <option value="3">3 - Menunggu Konfirmasi BAST Pengusul</option>
-                                            <option value="4">4 - Menunggu Konfirmasi BAST Kabag RT</option>
-                                            <option value="5">5 - Selesai BAST</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-2 text-right">
-                                        <label class="mt-4">&nbsp;</label> <br>
-                                        <button class="btn btn-primary">
-                                            <i class="fas fa-search"></i> Cari
-                                        </button>
-                                        <a href="{{ url('admin-user/gdn/usulan/daftar/seluruh-usulan') }}" class="btn btn-danger">
-                                            <i class="fas fa-undo"></i> Refresh
-                                        </a>
+                                        <div class="col-md-4">
+                                            <select name="bulan" class="form-control form-control-sm border-dark rounded text-center">
+                                                <option value="">Semua Bulan</option>
+                                                @foreach(range(1, 12) as $monthNumber)
+                                                @php $rowBulan = Carbon\Carbon::create()->month($monthNumber); @endphp
+                                                <option value="{{ $rowBulan->isoFormat('MM') }}" <?php echo $bulan == $rowBulan->isoFormat('M') ? 'selected' : '' ?>>
+                                                    {{ $rowBulan->isoFormat('MMMM') }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="tahun" class="form-control form-control-sm border-dark rounded text-center">
+                                                <option value="">Semua Tahun</option>
+                                                @foreach(range(2023, 2024) as $yearNumber)
+                                                @php $rowTahun = Carbon\Carbon::create()->year($yearNumber); @endphp
+                                                <option value="{{ $rowTahun->isoFormat('Y') }}" <?php echo $tahun == $rowTahun->isoFormat('Y') ? 'selected' : '' ?>>
+                                                    {{ $rowTahun->isoFormat('Y') }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table id="table-usulan" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="width: 1%;">No</th>
-                                    <th style="width: 29%;">Pengusul</th>
-                                    <th>Usulan</th>
-                                    <th class="text-center" style="width: 15%;">Status Proses</th>
-                                    <th class="text-center" style="width: 0%;">Aksi</th>
-                                    <th>Tanggal</th>
-                                    <th>No. Surat</th>
-                                    <th>Jenis Usulan</th>
-                                    <th>Unit Kerja</th>
-                                    <th>Usulan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            @php $no = 1; @endphp
-                            <tbody>
-                                @foreach($usulan as $dataUsulan)
-                                <tr>
-                                    <td class="text-center">
-                                        @if($dataUsulan->status_pengajuan_id == null)
-                                        <i class="fas fa-clock text-warning"></i>
-                                        @elseif($dataUsulan->status_pengajuan_id == 1)
-                                        <i class="fas fa-check-circle text-green"></i>
-                                        @elseif($dataUsulan->status_pengajuan_id == 2)
-                                        <i class="fas fa-times-circle text-red"></i>
-                                        @endif
-                                        {{ $no++ }}
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-3">Tanggal</div>:
-                                            <div class="col-md-8">
-                                                {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMM Y | HH:mm') }}
-                                            </div>
-                                            <div class="col-md-3">No. Surat</div>:
-                                            <div class="col-md-8">
-                                                {{ $dataUsulan->no_surat_usulan }}
-                                            </div>
-                                            <div class="col-md-3">Nama</div>:
-                                            <div class="col-md-8">
-                                                {{ $dataUsulan->nama_pegawai }}
-                                            </div>
-                                            <div class="col-md-3">Unit Kerja</div>:
-                                            <div class="col-md-8 text-capitalize">
-                                                {{ ucfirst(strtolower($dataUsulan->unit_kerja)) }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-left">
-                                        @foreach($dataUsulan->detailUsulanGdn->take(1) as $detailGdn)
-                                        <div class="form-group row">
-                                            <div class="col-md-2">Pekerjaan</div>:
-                                            <div class="col-md-9 text-capitalize">
-                                                {{ ucfirst(strtolower($detailGdn->lokasi_bangunan)) }}
-                                            </div>
-                                            <div class="col-md-2">Spesifikasi</div>:
-                                            <div class="col-md-9 text-capitalize hide-text">
-                                                {!! nl2br(e(ucfirst(strtolower($detailGdn->lokasi_spesifik)))) !!}
-                                            </div>
-                                            <div class="col-md-12"></div>
-                                            <div class="col-md-2">Keterangan</div>:
-                                            <div class="col-md-9 text-capitalize">
-                                                {!! nl2br(e(ucfirst(strtolower($detailGdn->keterangan)))) !!}
-
-                                            </div>
-                                        </div>
+                                <div class="col-sm-3">
+                                    <label class="text-xs">Unit Kerja</label>
+                                    <select name="uker_id" class="form-control form-control-sm text-capitalize border-dark">
+                                        <option value="">Seluruh Unit Kerja</option>
+                                        @foreach ($listUker as $row)
+                                        <option value="{{ $row->id_unit_kerja }}" <?php echo $row->id_unit_kerja == $uker ? 'selected' : ''; ?>>
+                                            {{ ucwords(strtolower($row->unit_kerja)) }}
+                                        </option>
                                         @endforeach
-                                    </td>
-                                    <td class="text-center text-capitalize">
-                                        <h6 class="mt-2">
-                                            @if($dataUsulan->status_proses_id == 1)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu persetujuan <br> kabag RT</span>
-                                            @elseif ($dataUsulan->status_proses_id == 2)
-                                            <span class="badge badge-sm badge-pill badge-warning">sedang <br> diproses ppk</span>
-                                            @elseif ($dataUsulan->status_proses_id == 3)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu <br> konfirmasi pengusul</span>
-                                            @elseif ($dataUsulan->status_proses_id == 4)
-                                            <span class="badge badge-sm badge-pill badge-warning">menunggu konfirmasi BAST <br> kabag RT</span>
-                                            @elseif ($dataUsulan->status_proses_id == 5)
-                                            <span class="badge badge-sm badge-pill badge-success">selesai</span>
-                                            @elseif ($dataUsulan->status_pengajuan_id == 2)
-                                            <small class="text-danger">
-                                                {{ $dataUsulan->keterangan }}
-                                            </small>
-                                            @endif
-                                        </h6>
-                                    </td>
-                                    <td class="text-center">
-                                        <a type="button" class="btn btn-primary" data-toggle="dropdown">
-                                            <i class="fas fa-bars"></i>
-                                        </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item btn" type="button" data-toggle="modal" data-target="#modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                                <i class="fas fa-info-circle"></i> Detail
-                                            </a>
-
-                                            <a href="{{ url('admin-user/gdn/edit/usulan/'. $dataUsulan->id_form_usulan) }}" class="dropdown-item btn" type="button">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-
-                                            @if ($dataUsulan->status_proses_id > 3 && $dataUsulan->status_pengajuan_id == 1)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/surat/detail-bast-gdn/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-info-circle"></i> Berita Acara
-                                            </a>
-                                            @endif
-
-                                            @if ($dataUsulan->status_proses_id == 1 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/gdn/usulan/edit/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/gdn/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
-                                                <i class="fas fa-times-circle"></i> Batal
-                                            </a>
-                                            @elseif ($dataUsulan->status_proses_id == 3 && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah pekerjaan telah diterima?')">
-                                                <i class="fas fa-file-signature"></i> Konfirmasi
-                                            </a>
-                                            @endif
-
-                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 1)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/gdn/usulan/persetujuan/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-arrow-alt-circle-right"></i> Proses
-                                            </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 5 && $dataUsulan->status_proses_id == 2 )
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/ppk/gdn/usulan/perbaikan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Selesai Proses Usulan')">
-                                                <i class="fas fa-check-circle"></i> Selesai Proses
-                                            </a>
-                                            @elseif (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_proses_id == 4)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-file-signature"></i> Konfirmasi
-                                            </a>
-                                            @endif
-                                            @if ($dataUsulan->otp_usulan_pengusul == null && $dataUsulan->pegawai_id == Auth::user()->pegawai_id)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/verif/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
-                                                <i class="fas fa-file-signature"></i> Verifikasi
-                                            </a>
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/gdn/usulan/proses-pembatalan/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
-                                                <i class="fas fa-times-circle"></i> Batal
-                                            </a>
-                                            @endif
-
-                                            @if (Auth::user()->pegawai->jabatan_id == 2 && $dataUsulan->status_pengajuan_id == NULL)
-                                            <a class="dropdown-item btn" href="{{ url('admin-user/gdn/usulan/hapus/'. $dataUsulan->id_form_usulan) }}" onclick="return confirm('Apakah anda ingin membatalkan usulan ini ?')">
-                                                <i class="fas fa-trash-alt"></i> Hapus
-                                            </a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</td>
-                                    <td>{{ $dataUsulan->no_surat_usulan }}</td>
-                                    <td>{{ $dataUsulan->jenis_form }}</td>
-                                    <td>{{ $dataUsulan->unit_kerja }}</td>
-                                    <td>
-                                        {{ $dataUsulan->detailUsulanGdn->pluck('lokasi_bangunan')->implode(', ') }}
-                                    </td>
-                                    <td>
-                                        @if($dataUsulan->status_proses_id == 1)
-                                        Menunggu Persetujuan Kabag RT
-                                        @elseif ($dataUsulan->status_proses_id == 2)
-                                        Sedang Diproses PPK
-                                        @elseif ($dataUsulan->status_proses_id == 3)
-                                        Menunggu Konfirmasi Pengusul
-                                        @elseif ($dataUsulan->status_proses_id == 4)
-                                        Menunggu Konfirmasi BAST Kabag RT
-                                        @elseif ($dataUsulan->status_proses_id == 5)
-                                        selesai
-                                        @elseif ($dataUsulan->status_pengajuan_id == 2)
-                                        {{ $dataUsulan->keterangan }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <!-- Modal -->
-                                <div class="modal fade" id="modal-info-{{ $dataUsulan->id_form_usulan }}">
-                                    <div class="modal-dialog modal-xl">
-                                        <div class="modal-content">
-                                            <div class="modal-body text-capitalize">
-                                                <div class="form-group row">
-                                                    <div class="col-md-12 text-center font-weight-bold">
-                                                        <h5>Detail Pengajuan Usulan {{ $dataUsulan->jenis_form }}
-                                                            <hr>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row mt-2">
-                                                    <h6 class="col-md-12 font-weight-bold text-muted">
-                                                        Informasi Pengusul
-                                                    </h6>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <div class="form-group row mb-0">
-                                                            <div class="col-md-3"><label>Nomor Surat </label></div>
-                                                            <div class="col-md-9">: {{ $dataUsulan->no_surat_usulan }}</div>
-                                                        </div>
-                                                        <div class="form-group row mb-0">
-                                                            <div class="col-md-3"><label>Nama Pengusul </label></div>
-                                                            <div class="col-md-9">: {{ $dataUsulan->nama_pegawai }}</div>
-                                                        </div>
-                                                        <div class="form-group row mb-0">
-                                                            <div class="col-md-3"><label>Jabatan Pengusul </label></div>
-                                                            <div class="col-md-9">: {{ $dataUsulan->keterangan_pegawai }}</div>
-                                                        </div>
-                                                        <div class="form-group row mb-0">
-                                                            <div class="col-md-3"><label>Unit Kerja</label></div>
-                                                            <div class="col-md-9">: {{ $dataUsulan->unit_kerja }}</div>
-                                                        </div>
-                                                        <div class="form-group row mb-0">
-                                                            <div class="col-md-3"><label>Tanggal Usulan </label></div>
-                                                            <div class="col-md-9">: {{ \Carbon\Carbon::parse($dataUsulan->tanggal_usulan)->isoFormat('DD MMMM Y') }}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group row mb-0 text-right">
-                                                            <div class="col-md-4"><label>Surat Usulan </label></div>
-                                                            <div class="col-md-8">:
-                                                                <a href="{{ url('admin-user/surat/usulan-gdn/'. $dataUsulan->id_form_usulan) }}">
-                                                                    <i class="fas fa-file"></i> Surat Usulan Pengajuan
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-4">
-                                                    <h6 class="col-md-12 font-weight-bold text-muted">
-                                                        Informasi Perbaikan
-                                                    </h6>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-md-12">
-                                                        <hr class="bg-secondary">
-                                                        <div class="form-group row font-weight-bold">
-                                                            <div class="col-sm-1 text-center">No</div>
-                                                            <div class="col-sm-3">Bidang Kerusakan</div>
-                                                            <div class="col-sm-3">Lokasi</div>
-                                                            <div class="col-sm-3">Spesifikasi</div>
-                                                            <div class="col-sm-2">Keterangan</div>
-                                                        </div>
-                                                        <hr class="bg-secondary">
-                                                        @foreach($dataUsulan->detailUsulanGdn as $i => $dataGdn)
-                                                        <div class="form-group row text-uppercase small">
-                                                            <div class="col-sm-1 text-center">{{ $i + 1 }}</div>
-                                                            <div class="col-sm-3">{{ $dataGdn->bid_kerusakan }}</div>
-                                                            <div class="col-sm-3">{{ $dataGdn->lokasi_bangunan }}</div>
-                                                            <div class="col-sm-3">{!! nl2br(e($dataGdn->lokasi_spesifik)) !!}</div>
-                                                            <div class="col-sm-2">{!! nl2br(e($dataGdn->keterangan)) !!}</div>
-                                                        </div>
-                                                        <hr>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </select>
                                 </div>
-                                @endforeach
-                            </tbody>
-
-                        </table>
+                                <div class="col-sm-3">
+                                    <label class="text-xs">Status Proses</label>
+                                    <select name="proses_id" class="form-control form-control-sm text-capitalize border-dark">
+                                        <option value="">Seluruh Status Proses</option>
+                                        <option value="1" <?php echo $proses == '1' ? 'selected' : ''; ?>>Menunggu Persetujuan</option>
+                                        <option value="2" <?php echo $proses == '2' ? 'selected' : ''; ?>>Sedang Diproses</option>
+                                        <option value="5" <?php echo $proses == '5' ? 'selected' : ''; ?>>Selesai Berita Acara</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 text-right">
+                                    <label class="text-xs" style="margin-top: 19%;">&nbsp;</label>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-search"></i> Cari
+                                    </button>
+                                    <a href="{{ route('gdn.show', ['aksi' => 'pengajuan', 'id' => '*']) }}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-undo"></i> Muat
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <div class="card-body border border-dark">
+                            <table id="table-data" class="table table-bordered text-uppercase text-xs text-center">
+                                <thead class="text-uppercase">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Aksi</th>
+                                        <th style="width: 12%;">Tanggal</th>
+                                        <th style="width: 13%;">Unit Kerja</th>
+                                        <th style="width: 15%;">No. Surat</th>
+                                        <th>Pekerjaan</th>
+                                        <th>Detail</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($usulan == 0)
+                                    <tr class="text-center">
+                                        <td colspan="9">Tidak ada data</td>
+                                    </tr>
+                                    @endif
+                                    <tr>
+                                        <td colspan="9">Sedang Mengambil data ...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,6 +240,89 @@
                 hideText();
             }
         });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        loadTable();
+
+        function loadTable() {
+            $.ajax({
+                url: `{{ route('gdn.select') }}`,
+                method: 'GET',
+                data: {
+                    aksi: '{{ $aksi }}',
+                    id: '{{ $id }}',
+                    uker: '{{ $uker }}',
+                    proses: '{{ $proses }}',
+                    tanggal: '{{ $tanggal }}',
+                    bulan: '{{ $bulan }}',
+                    tahun: '{{ $tahun }}',
+                },
+                dataType: 'json',
+                success: function(response) {
+                    let tbody = $('.table tbody');
+                    tbody.empty(); // Mengosongkan tbody sebelum menambahkan data
+
+                    if (response.message) {
+                        // Jika ada pesan dalam respons (misalnya "No data available")
+                        tbody.append(`
+                        <tr>
+                            <td colspan="9">${response.message}</td>
+                        </tr>
+                    `);
+                    } else {
+                        // Jika ada data
+                        $.each(response, function(index, item) {
+                            tbody.append(`
+                                <tr>
+                                    <td>${item.no}</td>
+                                    <td>${item.aksi}</td>
+                                    <td>${item.tanggal}</td>
+                                    <td>${item.uker}</td>
+                                    <td>${item.nosurat}</td>
+                                    <td class="text-left">${item.pekerjaan}</td>
+                                    <td class="text-left">${item.deskripsi}</td>
+                                    <td>${item.status}</td>
+                                </tr>
+                            `);
+                        });
+
+                        $("#table-data").DataTable({
+                            "responsive": false,
+                            "lengthChange": true,
+                            "autoWidth": false,
+                            "info": true,
+                            "paging": true,
+                            "searching": true,
+                            buttons: [{
+                                extend: 'pdf',
+                                text: ' PDF',
+                                pageSize: 'A4',
+                                className: 'bg-danger',
+                                title: 'show',
+                                exportOptions: {
+                                    columns: [2, 3, 4, 5, 6, 7]
+                                },
+                            }, {
+                                extend: 'excel',
+                                text: ' Excel',
+                                className: 'bg-success',
+                                title: 'show',
+                                exportOptions: {
+                                    columns: ':not(:nth-child(2))'
+                                },
+                            }],
+                            "bDestroy": true
+                        }).buttons().container().appendTo('#table-data_wrapper .col-md-6:eq(0)');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
     });
 </script>
 

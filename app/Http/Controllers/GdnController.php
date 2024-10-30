@@ -5,10 +5,138 @@ namespace App\Http\Controllers;
 use App\Models\GDN\BidangKerusakan;
 use App\Models\GDN\UsulanGdn;
 use App\Models\GDN\UsulanGdnDetail;
+use App\Models\UnitKerja;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use DB;
 
 class GdnController extends Controller
 {
+    public function show(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'verifikasi') {
+            $aksi = 'status_pengajuan_id';
+        }
+
+        if ($aksi == 'proses') {
+            $aksi = 'status_proses_id';
+        }
+
+        $usulan   = UsulanGdn::count();
+        $listUker = UnitKerja::orderBy('unit_kerja', 'ASC')->get();
+
+        $uker    = $request->get('uker_id');
+        $proses  = $request->get('proses_id');
+        $tanggal = $request->get('tanggal');
+        $bulan   = $request->get('bulan'  );
+        $tahun   = $request->get('tahun');
+
+        return view('v_admin_user.apk_gdn.daftar_pengajuan', compact('usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
+    }
+
+    public function detail($id)
+    {
+        $usulan = UsulanGdn::where('id_form_usulan', $id)->first();
+        return view('v_admin_user.apk_gdn.detail', compact('usulan', 'id'));
+    }
+
+    public function select(Request $request)
+    {
+        $aksi    = $request->aksi;
+        $id      = $request->id;
+        $data    = UsulanGdn::with('user', 'pegawai.unitKerja', 'detailUsulanGdn')->orderBy('tanggal_usulan', 'DESC');
+        $no = 1;
+        $response = [];
+
+        if ($request->uker || $request->proses || $request->tanggal || $request->bulan || $request->tahun) {
+            if ($request->uker) {
+                $res = $data->whereHas('pegawai', function ($query) use ($request) {
+                    $query->where('unit_kerja_id', $request->uker);
+                });
+            }
+
+            if ($request->proses) {
+                $res = $data->where('status_proses_id', $request->proses);
+            }
+
+            if ($request->tanggal) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%d')"), $request->tanggal);
+            }
+
+            if ($request->bulan) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%m')"), $request->bulan);
+            }
+
+            if ($request->tahun) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $request->tahun);
+            }
+
+            $result = $res->get();
+        } else if ($aksi == 'status_proses_id') {
+            $result = $data->where($aksi, $id)->get();
+        } else if ($aksi == 'status_pengajuan_id') {
+            $result = $data->where($aksi, $id)->get();
+        } else {
+            $result = $data->get();
+        }
+
+        foreach ($result as $row) {
+
+            if ($row->status_pengajuan_id == 1) {
+                $status = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> setuju</span>';
+            } else if ($row->status_pengajuan_id == 2) {
+                $status = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> tolak</span>';
+            } else {
+                $status = '<span class="badge badge-warning"><i class="fas fa-clock"></i> pending</span>';
+            }
+
+            if ($row->status_proses_id >= 2 && $row->status_proses_id < 5) {
+                $proses = '<span class="badge badge-warning"><i class="fas fa-clock"></i> proses</span>';
+            } else if ($row->status_proses_id == 5) {
+                $proses = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> selesai</span>';
+            } else {
+                $proses = '';
+            }
+
+            $aksi = '
+                <a href="' . route('gdn.detail', $row->id_form_usulan) . '"><i class="fas fa-info-circle"></i></a>
+                <a href="' . route('gdn.edit', $row->id_form_usulan) . '"><i class="fas fa-edit"></i></a>
+            ';
+
+            $response[] = [
+                'no'        => $no,
+                'id'        => $row->id_form_usulan,
+                'aksi'      => $aksi,
+                'tanggal'   => Carbon::parse($row->tanggal_usulan)->isoFormat('HH:mm | DD MMM Y'),
+                'uker'      => $row->pegawai?->unitKerja->unit_kerja,
+                'nosurat'   => $row->no_surat_usulan,
+                'pekerjaan' => $row->detailUsulanGdn->pluck('lokasi_bangunan')->map(function ($item) {
+                    return Str::limit($item, 50);
+                }),
+                'deskripsi' => $row->detailUsulanGdn->pluck('lokasi_spesifik')->map(function ($item) {
+                    return Str::limit($item, 50);
+                }),
+                'status'     => $status.'<br>'.$proses
+            ];
+
+            $no++;
+        }
+
+        return response()->json($response);
+    }
+
+    public function filter($aksi, $id)
+    {
+        $status = $aksi == 'status' ? 'status_pengajuan_id' : '';
+        $data    = UsulanGdn::with('user', 'pegawai.unitKerja', 'detailUsulanGdn');
+
+        if ($status) {
+            $result = $data->where('status_pengajuan_id', $id)->get();
+        }
+
+        dd($result);
+    }
 
     public function edit($id)
     {
