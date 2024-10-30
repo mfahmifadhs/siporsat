@@ -126,18 +126,6 @@ class GdnController extends Controller
         return response()->json($response);
     }
 
-    public function filter($aksi, $id)
-    {
-        $status = $aksi == 'status' ? 'status_pengajuan_id' : '';
-        $data    = UsulanGdn::with('user', 'pegawai.unitKerja', 'detailUsulanGdn');
-
-        if ($status) {
-            $result = $data->where('status_pengajuan_id', $id)->get();
-        }
-
-        dd($result);
-    }
-
     public function edit($id)
     {
         $usulan = UsulanGdn::where('id_form_usulan', $id)->orderBy('id_form_usulan', 'DESC')->first();

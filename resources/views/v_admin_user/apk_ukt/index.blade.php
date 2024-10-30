@@ -18,11 +18,11 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/ukt/usulan/status/1') }}">
+                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 1]) }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small></h3>
-                                    <p>PERSETUJUAN KABAG RT</p>
+                                    <p>MENUNGGU PERSETUJUAN</p>
                                 </div>
                                 <div class="icon p-2">
                                     <i>1</i>
@@ -31,11 +31,11 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/ukt/usulan/status/2') }}">
+                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 2]) }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small></h3>
-                                    <p>SEDANG PROSES PPK</p>
+                                    <p>PROSES</p>
                                 </div>
                                 <div class="icon p-2">
                                     <i>2</i>
@@ -44,7 +44,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/ukt/usulan/status/5') }}">
+                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 5]) }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_proses_id', 5)->count() }} <small>usulan</small></h3>
@@ -57,7 +57,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-12">
-                        <a href="{{ url('admin-user/ukt/usulan/status/ditolak') }}">
+                        <a href="{{ route('ukt.show', ['aksi' => 'verifikasi', 'id' => 2]) }}">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{{ $usulanTotal->where('status_pengajuan_id', 2)->count() }} <small>usulan</small></h3>
@@ -80,7 +80,7 @@
                         <h6 class="text-left">Usulan Pengajuan</h6>
                     </div>
                     <div class="col-md-3 col-6 form-group">
-                        <a href="{{ url('admin-user/ukt/usulan/daftar/seluruh-usulan') }}" class="btn btn-default border-secondary p-4 btn-block">
+                        <a href="{{ route('ukt.show', ['aksi' => 'pengajuan', 'id' => '*']) }}" class="btn btn-default border-secondary p-4 btn-block">
                             <i class="fas fa-copy fa-3x"></i>
                             <h6 class="mt-3 font-weight-bolder">Daftar Usulan</h6>
                         </a>

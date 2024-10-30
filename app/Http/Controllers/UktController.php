@@ -4,16 +4,126 @@ namespace App\Http\Controllers;
 
 use App\Models\UKT\UsulanUkt;
 use App\Models\UKT\UsulanUktDetail;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use App\Models\User;
-use Hash;
-use Auth;
-use Session;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use DB;
 
 class UktController extends Controller
 {
+    public function show(Request $request, $aksi, $id)
+    {
+        if ($aksi == 'verifikasi') {
+            $aksi = 'status_pengajuan_id';
+        }
+
+        if ($aksi == 'proses') {
+            $aksi = 'status_proses_id';
+        }
+
+        $usulan   = UsulanUkt::count();
+        $listUker = UnitKerja::orderBy('unit_kerja', 'ASC')->get();
+
+        $uker    = $request->get('uker_id');
+        $proses  = $request->get('proses_id');
+        $tanggal = $request->get('tanggal');
+        $bulan   = $request->get('bulan'  );
+        $tahun   = $request->get('tahun');
+
+        return view('v_admin_user.apk_ukt.daftar_pengajuan', compact('usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
+    }
+
+    public function detail($id)
+    {
+        $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
+        return view('v_admin_user.apk_ukt.detail', compact('usulan', 'id'));
+    }
+
+    public function select(Request $request)
+    {
+        $aksi    = $request->aksi;
+        $id      = $request->id;
+        $data    = UsulanUkt::with('user', 'pegawai.unitKerja', 'detailUsulanUkt')->orderBy('tanggal_usulan', 'DESC');
+        $no = 1;
+        $response = [];
+
+        if ($request->uker || $request->proses || $request->tanggal || $request->bulan || $request->tahun) {
+            if ($request->uker) {
+                $res = $data->whereHas('pegawai', function ($query) use ($request) {
+                    $query->where('unit_kerja_id', $request->uker);
+                });
+            }
+
+            if ($request->proses) {
+                $res = $data->where('status_proses_id', $request->proses);
+            }
+
+            if ($request->tanggal) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%d')"), $request->tanggal);
+            }
+
+            if ($request->bulan) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%m')"), $request->bulan);
+            }
+
+            if ($request->tahun) {
+                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $request->tahun);
+            }
+
+            $result = $res->get();
+        } else if ($aksi == 'status_proses_id') {
+            $result = $data->where($aksi, $id)->get();
+        } else if ($aksi == 'status_pengajuan_id') {
+            $result = $data->where($aksi, $id)->get();
+        } else {
+            $result = $data->get();
+        }
+
+        foreach ($result as $row) {
+
+            if ($row->status_pengajuan_id == 1) {
+                $status = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> setuju</span>';
+            } else if ($row->status_pengajuan_id == 2) {
+                $status = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> tolak</span>';
+            } else {
+                $status = '<span class="badge badge-warning"><i class="fas fa-clock"></i> pending</span>';
+            }
+
+            if ($row->status_proses_id >= 2 && $row->status_proses_id < 5) {
+                $proses = '<span class="badge badge-warning"><i class="fas fa-clock"></i> proses</span>';
+            } else if ($row->status_proses_id == 5) {
+                $proses = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> selesai</span>';
+            } else {
+                $proses = '';
+            }
+
+            $aksi = '
+                <a href="' . route('ukt.detail', $row->id_form_usulan) . '"><i class="fas fa-info-circle"></i></a>
+                <a href="' . route('ukt.edit', $row->id_form_usulan) . '"><i class="fas fa-edit"></i></a>
+            ';
+
+            $response[] = [
+                'no'        => $no,
+                'id'        => $row->id_form_usulan,
+                'aksi'      => $aksi,
+                'tanggal'   => Carbon::parse($row->tanggal_usulan)->isoFormat('HH:mm | DD MMM Y'),
+                'uker'      => $row->pegawai?->unitKerja->unit_kerja,
+                'nosurat'   => $row->no_surat_usulan,
+                'pekerjaan' => $row->detailUsulanUkt->pluck('lokasi_pekerjaan')->map(function ($item) {
+                    return Str::limit($item, 50);
+                }),
+                'deskripsi' => $row->detailUsulanUkt->pluck('spesifikasi_pekerjaan')->map(function ($item) {
+                    return Str::limit($item, 50);
+                }),
+                'status'     => $status.'<br>'.$proses
+            ];
+
+            $no++;
+        }
+
+        return response()->json($response);
+    }
 
     public function edit($id)
     {

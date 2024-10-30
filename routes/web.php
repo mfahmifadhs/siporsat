@@ -46,6 +46,11 @@ Route::get('gdn/detail/{id}', [GdnController::class, 'detail'])->name('gdn.detai
 Route::get('gdn/edit/{id}', [GdnController::class, 'edit'])->name('gdn.edit');
 Route::get('gdn/select', [GdnController::class, 'select'])->name('gdn.select');
 
+Route::get('ukt/show/{aksi}/{id}', [UktController::class, 'show'])->name('ukt.show');
+Route::get('ukt/detail/{id}', [UktController::class, 'detail'])->name('ukt.detail');
+Route::get('ukt/edit/{id}', [UktController::class, 'edit'])->name('ukt.edit');
+Route::get('ukt/select', [UktController::class, 'select'])->name('ukt.select');
+
 // ====================================================
 //                    SUPER ADMIN
 // ====================================================

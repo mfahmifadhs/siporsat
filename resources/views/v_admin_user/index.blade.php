@@ -23,8 +23,7 @@
                                         <i class="fas fa-laptop fa-3x"></i>
                                     </div>
                                     <div class="col-md-9 mt-2 mb-0">
-                                        <h5 class="font-weight-bold">Olah Data BMN & Meubelair</h5>
-                                        <h6>(OLDAT)</h6>
+                                        <h6 class="font-weight-bold text-uppercase">Olah Data BMN & Meubelair <br> (OLDAT)</h6>
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +31,7 @@
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/oldat/usulan/status/1') }}" class="nav-link">
-                                            Proses Persetujuan Kabag RT
+                                            Menunggu Persetujuan
                                             <span class="float-right">
                                                 {{ $usulanOldat->where('status_proses_id', 1)->count() }} usulan
                                             </span>
@@ -40,7 +39,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/oldat/usulan/status/2') }}" class="nav-link">
-                                            Proses PPK
+                                            Sedang Diproses
                                             <span class="float-right">
                                                 {{ $usulanOldat->where('status_proses_id', 2)->count() }} usulan
                                             </span>
@@ -85,8 +84,7 @@
                                         <i class="fas fa-car fa-3x"></i>
                                     </div>
                                     <div class="col-md-9 mt-2 mb-0">
-                                        <h5 class="font-weight-bold">Alat Angkutan Darat Bermotor</h5>
-                                        <h6>(AADB)</h6>
+                                        <h6 class="font-weight-bold text-uppercase">Alat Angkutan Darat Bermotor <br> (AADB)</h6>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +92,7 @@
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/aadb/usulan/status/1') }}" class="nav-link">
-                                            Proses Persetujuan Kabag RT
+                                            Menunggu Persetujuan
                                             <span class="float-right">
                                                 {{ $usulanAadb->where('status_proses_id', 1)->count() }} usulan
                                             </span>
@@ -102,7 +100,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/aadb/usulan/status/2') }}" class="nav-link">
-                                            Proses PPK
+                                            Sedang Diproses
                                             <span class="float-right">
                                                 {{ $usulanAadb->where('status_proses_id', 2)->count() }} usulan
                                             </span>
@@ -147,8 +145,7 @@
                                         <i class="fas fa-pencil-ruler fa-3x"></i>
                                     </div>
                                     <div class="col-md-9 mt-2 mb-0">
-                                        <h5 class="font-weight-bold">Alat Tulis Kantor</h5>
-                                        <h6>(ATK)</h6>
+                                        <h6 class="font-weight-bold text-uppercase">Alat Tulis Kantor <br> (ATK)</h6>
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +153,7 @@
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/atk/usulan/status/validasi') }}" class="nav-link">
-                                            Validasi oleh Penanggung Jawab
+                                            Menunggu Validasi
                                             <span class="float-right">
                                                 {{ $usulanAtk->where('is_checked', null)->count() }} usulan
                                             </span>
@@ -164,7 +161,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/atk/usulan/status/1') }}" class="nav-link">
-                                            Proses Persetujuan Kabag RT
+                                            Menunggu Persetujuan
                                             <span class="float-right">
                                                 {{ $usulanAtk->where('status_proses_id', 1)->where('is_checked', true)->count() }} usulan
                                             </span>
@@ -172,17 +169,9 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url('admin-user/atk/usulan/status/2') }}" class="nav-link">
-                                            Mempersiapkan Barang
+                                            Sedang Diproses
                                             <span class="float-right">
                                                 {{ $usulanAtk->where('status_proses_id', 2)->count() }} usulan
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ url('admin-user/atk/usulan/status/3') }}" class="nav-link">
-                                            Dapat Diserahkan
-                                            <span class="float-right">
-                                                {{ $usulanAtk->where('status_proses_id', 3)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
@@ -217,31 +206,30 @@
                                         <i class="fas fa-hotel fa-3x"></i>
                                     </div>
                                     <div class="col-md-9 mt-2 mb-0">
-                                        <h5 class="font-weight-bold">Gedung dan Bangunan</h5>
-                                        <h6>(GDN)</h6>
+                                        <h6 class="font-weight-bold text-uppercase">Gedung dan Bangunan <br> (GDN)</h6>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer p-0">
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/gdn/usulan/status/1') }}" class="nav-link">
-                                            Proses Persetujuan Kabag RT
+                                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 1]) }}" class="nav-link">
+                                            Menunggu Persetujuan
                                             <span class="float-right">
                                                 {{ $usulanGdn->where('status_proses_id', 1)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/gdn/usulan/status/2') }}" class="nav-link">
-                                            Proses PPK
+                                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 2]) }}" class="nav-link">
+                                            Sedang Diproses
                                             <span class="float-right">
                                                 {{ $usulanGdn->where('status_proses_id', 2)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/gdn/usulan/status/3') }}" class="nav-link">
+                                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 3]) }}" class="nav-link">
                                             Proses Berita Acara
                                             <span class="float-right">
                                                 {{ $usulanGdn->where('status_proses_id', 3)->count() }} usulan
@@ -249,15 +237,15 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/gdn/usulan/status/5') }}" class="nav-link">
-                                            Selasai Berita Acara
+                                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 5]) }}" class="nav-link">
+                                            Selesai Berita Acara
                                             <span class="float-right">
                                                 {{ $usulanGdn->where('status_proses_id', 5)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/gdn/usulan/status/ditolak') }}" class="nav-link">
+                                        <a href="{{ route('gdn.show', ['aksi' => 'verifikasi', 'id' => 2]) }}" class="nav-link">
                                             Ditolak
                                             <span class="float-right">
                                                 {{ $usulanGdn->where('status_pengajuan_id', 2)->count() }} usulan
@@ -279,31 +267,30 @@
                                         <i class="fas fa-laptop-house fa-3x"></i>
                                     </div>
                                     <div class="col-md-9 mt-2 mb-0">
-                                        <h5 class="font-weight-bold">Urusan Kerumahtanggaan</h5>
-                                        <h6>(UKT)</h6>
+                                        <h6 class="font-weight-bold text-uppercase">Urusan Kerumahtanggaan <br> (UKT)</h6>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer p-0">
                                 <ul class="nav flex-column font-weight-bold">
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/ukt/usulan/status/1') }}" class="nav-link">
-                                            Proses Persetujuan Kabag RT
+                                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 1]) }}" class="nav-link">
+                                            Menunggu Persetujuan
                                             <span class="float-right">
                                                 {{ $usulanUkt->where('status_proses_id', 1)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/ukt/usulan/status/2') }}" class="nav-link">
-                                            Proses PPK
+                                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 2]) }}" class="nav-link">
+                                            Sedang Diproses
                                             <span class="float-right">
                                                 {{ $usulanUkt->where('status_proses_id', 2)->count() }} usulan
                                             </span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/ukt/usulan/status/3') }}" class="nav-link">
+                                        <a href="{{ route('ukt.show', ['aksi' => 'proses', 'id' => 3]) }}" class="nav-link">
                                             Proses Berita Acara
                                             <span class="float-right">
                                                 {{ $usulanUkt->where('status_proses_id', 3)->count() }} usulan
@@ -311,7 +298,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/ukt/usulan/status/5') }}" class="nav-link">
+                                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 5]) }}" class="nav-link">
                                             Selasai Berita Acara
                                             <span class="float-right">
                                                 {{ $usulanUkt->where('status_proses_id', 5)->count() }} usulan
@@ -319,7 +306,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('admin-user/ukt/usulan/status/ditolak') }}" class="nav-link">
+                                        <a href="{{ route('gdn.show', ['aksi' => 'verifikasi', 'id' => 2]) }}" class="nav-link">
                                             Ditolak
                                             <span class="float-right">
                                                 {{ $usulanUkt->where('status_pengajuan_id', 2)->count() }} usulan

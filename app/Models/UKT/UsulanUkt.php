@@ -2,9 +2,11 @@
 
 namespace App\Models\Ukt;
 
+use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\UKT\UsulanUktDetail;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsulanUkt extends Model
@@ -35,5 +37,13 @@ class UsulanUkt extends Model
 
     public function detailUsulanUkt() {
         return $this->hasMany(UsulanUktDetail::class, 'form_usulan_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function pegawai() {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id');
     }
 }
