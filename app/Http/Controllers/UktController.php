@@ -9,11 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use DB;
+use Auth;
 
 class UktController extends Controller
 {
     public function show(Request $request, $aksi, $id)
     {
+        $role   = Auth::user()->level_id;
+        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : '');
+
         if ($aksi == 'verifikasi') {
             $aksi = 'status_pengajuan_id';
         }
@@ -31,17 +36,25 @@ class UktController extends Controller
         $bulan   = $request->get('bulan'  );
         $tahun   = $request->get('tahun');
 
-        return view('v_admin_user.apk_ukt.daftar_pengajuan', compact('usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
+        return view($layout.'.apk_ukt.daftar_pengajuan', compact('url', 'layout', 'usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
     }
 
     public function detail($id)
     {
+        $role   = Auth::user()->level_id;
+        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : '');
+
         $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
-        return view('v_admin_user.apk_ukt.detail', compact('usulan', 'id'));
+        return view($layout . '.apk_ukt.detail', compact('role', 'url', 'layout', 'usulan', 'id'));
     }
 
     public function select(Request $request)
     {
+        $role    = Auth::user()->level_id;
+        $jabatan = Auth::user()->pegawai->jabatan_id;
+        $url     = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
+
         $aksi    = $request->aksi;
         $id      = $request->id;
         $data    = UsulanUkt::with('user', 'pegawai.unitKerja', 'detailUsulanUkt')->orderBy('tanggal_usulan', 'DESC');
@@ -98,10 +111,18 @@ class UktController extends Controller
                 $proses = '';
             }
 
-            $aksi = '
-                <a href="' . route('ukt.detail', $row->id_form_usulan) . '"><i class="fas fa-info-circle"></i></a>
-                <a href="' . route('ukt.edit', $row->id_form_usulan) . '"><i class="fas fa-edit"></i></a>
-            ';
+            $aksi = '';
+
+            if ($jabatan == 2 && $row->status_proses_id == 1) {
+                $aksi .= '<a href="' . url($url.'/ukt/usulan/persetujuan/'. $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
+            }
+
+            if ($jabatan == 5 && $row->status_proses_id == 2) {
+                $aksi .= '<a href="' . url($url.'/ppk/ukt/usulan/perbaikan/'. $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
+            }
+
+            $aksi .= '<a href="' . route('ukt.detail', $row->id_form_usulan) . '"><i class="fas fa-info-circle"></i></a> ';
+            $aksi .= '<a href="' . route('ukt.edit', $row->id_form_usulan) . '"><i class="fas fa-edit"></i></a>';
 
             $response[] = [
                 'no'        => $no,
@@ -127,8 +148,12 @@ class UktController extends Controller
 
     public function edit($id)
     {
+        $role   = Auth::user()->level_id;
+        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : '');
+
         $usulan = UsulanUkt::where('id_form_usulan', $id)->orderBy('id_form_usulan', 'DESC')->first();
-        return view('v_admin_user.apk_ukt.edit', compact('id', 'usulan'));
+        return view($layout . '.apk_ukt.edit', compact('role', 'url', 'layout', 'id', 'usulan'));
     }
 
     public function update(Request $request, $id)

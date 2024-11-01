@@ -313,7 +313,7 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Dashboard</p>
                                     </a>
-                                    <a href="{{ url('super-user/gdn/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                    <a href="{{ route('gdn.show', ['aksi' => 'pengajuan', 'id' => '*']) }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
                                     </a>
@@ -339,7 +339,7 @@
                                         <i class="nav-icon fas fa"></i>
                                         <p>Dashboard</p>
                                     </a>
-                                    <a href="{{ url('super-user/ukt/usulan/daftar/seluruh-usulan') }}" class="nav-link">
+                                    <a href="{{ route('ukt.show', ['aksi' => 'pengajuan', 'id' => '*']) }}" class="nav-link">
                                         <i class="nav-icon fas fa"></i>
                                         <p>Daftar Usulan</p>
                                     </a>

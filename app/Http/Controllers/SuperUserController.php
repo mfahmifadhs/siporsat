@@ -365,7 +365,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/usulan-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -373,28 +373,28 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/usulan-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
                         'status_proses_id'    => 3
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 3) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_pengusul' => $request->one_time_password,
                         'status_proses_id'    => 4
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 4) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_kabag'    => $request->one_time_password,
                         'status_proses_id'  => 5
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 }
             } elseif (Auth::user()->sess_modul == 'ukt') {
                 $usulan = UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->first();
@@ -404,7 +404,7 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/usulan-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('ukt.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -412,21 +412,21 @@ class SuperUserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/usulan-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('ukt.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 2) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_ppk' => $request->one_time_password,
                         'status_proses_id'    => 3
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 3) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_pengusul' => $request->one_time_password,
                         'status_proses_id'    => 4
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 4) {
                     $usulan      = UsulanUkt::where('no_surat_bast', '!=', NULL)->count();
                     $totalUsulan = str_pad($usulan + 1, 4, 0, STR_PAD_LEFT);
@@ -437,7 +437,7 @@ class SuperUserController extends Controller
                         'status_proses_id'  => 5
                     ]);
                     Google2FA::logout();
-                    return redirect('super-user/surat/detail-bast-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 }
             } elseif (Auth::user()->status_google2fa == null) {
                 return redirect('super-user/dashboard')->with('failed', 'Mohon untuk mendaftarkan akun pada google autentikasi');

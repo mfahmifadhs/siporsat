@@ -23,7 +23,7 @@
             <div class="col-md-3 col-12">
                 <div class="row">
                     <div class="col-md-12 col-12">
-                        <a href="{{ url('super-user/gdn/usulan/status/1') }}">
+                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 1]) }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 1)->count() }} <small>usulan</small> </h5>
@@ -33,7 +33,7 @@
                         </a>
                     </div>
                     <div class="col-md-12 col-12">
-                        <a href="{{ url('super-user/gdn/usulan/status/2') }}">
+                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 2]) }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 2)->count() }} <small>usulan</small> </h5>
@@ -43,31 +43,21 @@
                         </a>
                     </div>
                     <div class="col-md-12 col-12">
-                        <a href="{{ url('super-user/gdn/usulan/status/3') }}">
+                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 3]) }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 3)->count() }} <small>usulan</small> </h5>
-                                    <h6 class="font-weight-bold">Konfirmasi BAST Pengusul</h6>
+                                    <h6 class="font-weight-bold">Proses Berita Acara</h6>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-md-12 col-12">
-                        <a href="{{ url('super-user/gdn/usulan/status/4') }}">
-                            <div class="card bg-default border border-primary">
-                                <div class="card-body">
-                                    <h5>{{ $usulanTotal->where('status_proses_id', 4)->count() }} <small>usulan</small> </h5>
-                                    <h6 class="font-weight-bold">Konfirmasi BAST Kabag RT</h6>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-12 col-12">
-                        <a href="{{ url('super-user/gdn/usulan/status/5') }}">
+                        <a href="{{ route('gdn.show', ['aksi' => 'proses', 'id' => 5]) }}">
                             <div class="card bg-default border border-primary">
                                 <div class="card-body">
                                     <h5>{{ $usulanTotal->where('status_proses_id', 5)->count() }} <small>usulan</small> </h5>
-                                    <h6 class="font-weight-bold">Selesai BAST</h6>
+                                    <h6 class="font-weight-bold">Selesai Berita Acara</h6>
                                 </div>
                             </div>
                         </a>

@@ -21,21 +21,23 @@
         }
     }
 
+
     .divTable {
         border-top: 1px solid;
         border-left: 1px solid;
-        border-right: 1px solid;
-        font-size: 18px;
+        /* border-right: 1px solid; */
+        border-bottom: 1px solid;
+        font-size: 21px;
     }
 
     .divThead {
-        border-bottom: 1px solid;
         font-weight: bold;
+        margin: 0px;
     }
 
     .divTbody {
-        border-bottom: 1px solid;
-        text-transform: capitalize;
+        border-top: 1px solid;
+        margin: 0px;
     }
 
     .divTheadtd {
@@ -73,46 +75,16 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
 @endphp
 
 <body style="font-family: Arial;">
-    <div class="">
-        <div class="row">
-            <div class="col-2">
-                <h2 class="page-header ml-4">
-                    <img src="{{ asset('dist_admin/img/logo-kemenkes-icon.png') }}">
-                </h2>
-            </div>
-            <div class="col-8 text-center">
-                <h2 class="page-header">
-                    <h5 style="font-size: 26px;text-transform:uppercase;"><b>KEMENTERIAN KESEHATAN REPUBLIK INDONESIA</b></h5>
-                    <h5 style="font-size: 24px;text-transform:uppercase;"><b>{{ $bast->unit_utama }}</b></h5>
-                    <p style="font-size: 16px;">
-                        <i>
-                            @if ($bast->id_unit_utama == '02407')
-                                Jalan Hang Jebat III Blok F3 Kebayoran Baru Jakarta Selatan 12120<br>
-                                Telepon : (021) 724 5517 - 7279 7308 Faksimile : (021) 7279 7508<br>
-                                Laman www.bppsdmk.depkes.go.id
-                            @else
-                                Jl. H.R. Rasuna Said Blok X.5 Kav. 4-9, Jakarta 12950 <br>
-                                Telepon : (021) 5201590
-                            @endif
-                        </i>
-                    </p>
-                </h2>
-            </div>
-            <div class="col-2">
-                <h2 class="page-header">
-                    <img src="{{ asset('dist_admin/img/logo-germas.png') }}" style="width: 128px; height: 128px;">
-                </h2>
-            </div>
-            <div class="col-12" style="margin-top: -15px;">
-                <hr style="border-width: medium;border-color: black;">
-                <hr style="border-width: 1px;border-color: black;margin-top: -11px;">
-            </div>
-        </div>
+    <section class="header">
+        <img src="{{ asset('dist_admin/img/header-surat.png') }}" style="width: 100%;">
+    </section>
+
+    <section class="narasi mx-4 my-3">
         <div class="row" style="font-size: 20px;">
             <div class="col-12 form-group">
                 <div class="form-group row mb-3 text-center">
                     <div class="col-12 text-uppercase">
-                        berita acara serah terima <br>
+                        <b>berita acara serah terima</b> <br>
                         nomor surat : {{ $modul == 'atk' ? $bast->nomor_bast : $bast->no_surat_bast }}
                     </div>
                 </div>
@@ -158,55 +130,27 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                         dengan rincian sebagai berikut:
                     </div>
                 </div>
-                <!-- <div class="form-group row mb-0">
-                    <div class="col-3">Tanggal</div>
-                    <div class="col-9">: {{ \Carbon\Carbon::parse($bast->tanggal_bast)->isoFormat('DD MMMM Y') }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Pengusul</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->nama_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Jabatan</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->keterangan_pegawai)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Unit Kerja</div>
-                    <div class="col-9">: {{ ucfirst(strtolower($bast->unit_kerja)) }}</div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-3">Total Pengajuan</div>
-                    <div class="col-9">: {{ $bast->total_pengajuan }}</div>
-                </div>
-                @if($bast->rencana_pengguna != null)
-                <div class="form-group row mb-0">
-                    <div class="col-3">Rencana Pengguna</div>
-                    <div class="col-9">: {{ $bast->rencana_pengguna }}</div>
-                </div>
-                @endif -->
-                <!-- <div class="form-group row mb-0">
-                    <div class="col-12 text-justify mt-4">
-                        Saya yang bertandatangan dibawah ini, telah menerima Barang Milik Negara (BMN).
-                        dengan rincian sebagaimana tertera pada tabel dibawah ini, dalam keadaan baik dan
-                        berfungsi normal sebagaimana mestinya.
-                    </div>
-                </div> -->
             </div>
+        </div>
+    </section>
+
+    <section class="body mx-4">
+        <div class="row" style="font-size: 20px;">
             <div class="col-12 table-responsive mb-5">
                 @if ($modul == 'oldat')
-                <table class="table table-data m-0">
+                <table class="table table-bordered m-0">
                     <thead>
                         <tr>
-                            <th class="py-2">No</th>
-                            <th class="py-2">Kode Barang</th>
-                            <th class="py-2">Nama Barang</th>
-                            <th class="py-2">Merk/Tipe Barang</th>
+                            <th>No</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Merk/Tipe Barang</th>
                             @if($bast->jenis_form == 'pengadaan')
-                            <th class="py-2">Spesifikasi</th>
-                            <th class="py-2">Tahun </th>
+                            <th>Spesifikasi</th>
+                            <th>Tahun Perolehan </th>
                             @else
-                            <th class="py-2">Tahun Perolehan</th>
-                            <th class="py-2">Keterangan</th>
+                            <th>Tahun Perolehan</th>
+                            <th>Keterangan Kerusakan</th>
                             @endif
                         </tr>
                     </thead>
@@ -230,13 +174,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                             <td>{{ $dataBarang->kode_barang.'.'.$dataBarang->nup_barang }}</td>
                             <td>{{ $dataBarang->kategori_barang }}</td>
                             <td>{{ $dataBarang->merk_tipe_barang }}</td>
-                            <td>
-                                @if (\Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') != -1)
-                                    {{ \Carbon\carbon::parse($dataBarang->tahun_perolehan)->isoFormat('Y') }}
-                                @else
-                                    -
-                                @endif
-                            </td>
+                            <td>{{ $dataBarang->tahun_perolehan }}</td>
                             <td>{{ $dataBarang->keterangan_perbaikan }}</td>
                         </tr>
                         @endforeach
@@ -256,18 +194,18 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                     @foreach($bast->detailBast as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-4 divTbodytd">{{ $detailAtk->nama_barang }}</div>
-                        <div class="col-3 divTbodytd">{{ $detailAtk->spesifikasi }}</div>
+                        <div class="col-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->nama_barang)) }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->spesifikasi)) }}</div>
                         <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan }}</div>
                         <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan }}</div>
                     </div>
                     @endforeach
-                    @elseif ($bast->jenis_form == 'permintaan')
+                    @else
                     @foreach($bast->detailBast2 as $i => $detailAtk)
                     <div class="row divTbody">
                         <div class="col-1 divTbodytd text-center">{{ $i + 1 }}</div>
-                        <div class="col-4 divTbodytd">{{ $detailAtk->deskripsi_barang }}</div>
-                        <div class="col-3 divTbodytd">{{ $detailAtk->catatan }}</div>
+                        <div class="col-4 divTbodytd">{{ ucfirst(strtolower($detailAtk->deskripsi_barang)) }}</div>
+                        <div class="col-3 divTbodytd">{{ ucfirst(strtolower($detailAtk->catatan)) }}</div>
                         <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_disetujui.' '.$detailAtk->satuan_barang }}</div>
                         <div class="col-2 divTbodytd text-center">{{ (int) $detailAtk->jumlah_bast_detail.' '.$detailAtk->satuan_barang }}</div>
                     </div>
@@ -278,11 +216,11 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 @elseif ($modul == 'gdn')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-1 divTheadtd text-center py-2">No</div>
-                        <div class="col-3 divTheadtd py-2">Bidang Kerusakan</div>
-                        <div class="col-2 divTheadtd py-2">Lokasi Perbaikan</div>
-                        <div class="col-4 divTheadtd py-2">Lokasi Spesifik</div>
-                        <div class="col-2 py-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center">No</div>
+                        <div class="col-3 divTheadtd">Bidang Kerusakan</div>
+                        <div class="col-2 divTheadtd">Lokasi</div>
+                        <div class="col-4 divTheadtd">Spesifikasi Pekerjaan</div>
+                        <div class="col-2">Keterangan</div>
                     </div>
                     @foreach($bast->detailUsulanGdn as $i => $dataGdn)
                     <div class="row divTbody">
@@ -297,10 +235,10 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 @elseif ($modul == 'ukt')
                 <div class="divTable">
                     <div class="row divThead">
-                        <div class="col-1 divTheadtd text-center py-2">No</div>
-                        <div class="col-3 divTheadtd py-2">Pekerjaan</div>
-                        <div class="col-5 divTheadtd py-2">Spesifikasi Pekerjaan</div>
-                        <div class="col-3 py-2">Keterangan</div>
+                        <div class="col-1 divTheadtd text-center">No</div>
+                        <div class="col-3 divTheadtd">Pekerjaan</div>
+                        <div class="col-5 divTheadtd">Spesifikasi Pekerjaan</div>
+                        <div class="col-3">Keterangan</div>
                     </div>
                     @foreach($bast->detailUsulanUkt as $i => $dataUkt)
                     <div class="row divTbody">
@@ -342,13 +280,13 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <table class="table table-data m-0">
                     <thead>
                         <tr>
-                            <th class="py-2">No</th>
-                            <th class="py-2">No. Plat</th>
-                            <th class="py-2">Kendaraan</th>
-                            <th class="py-2">Kilometer</th>
-                            <th class="py-2">Jadwal Servis</th>
-                            <th class="py-2">Jadwal Ganti Oli</th>
-                            <th class="py-2">Keterangan</th>
+                            <th>No</th>
+                            <th>No. Plat</th>
+                            <th>Kendaraan</th>
+                            <th>Kilometer</th>
+                            <th>Jadwal Servis</th>
+                            <th>Jadwal Ganti Oli</th>
+                            <th>Keterangan</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -380,11 +318,11 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <table class="table table-data m-0">
                     <thead>
                         <tr>
-                            <th class="py-2">No</th>
-                            <th class="py-2">No. Plat</th>
-                            <th class="py-2">Kendaraan</th>
-                            <th class="py-2">Pengguna</th>
-                            <th class="py-2">Masa Berlaku STNK</th>
+                            <th>No</th>
+                            <th>No. Plat</th>
+                            <th>Kendaraan</th>
+                            <th>Pengguna</th>
+                            <th>Masa Berlaku STNK</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -404,12 +342,12 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 <table class="table table-data m-0">
                     <thead>
                         <tr>
-                            <th class="py-2">No</th>
-                            <th class="py-2">Bulan Pengadaan</th>
-                            <th class="py-2">Jenis AADB</th>
-                            <th class="py-2">No. Plat</th>
-                            <th class="py-2">Kendaraan</th>
-                            <th class="py-2">Kualifikasi</th>
+                            <th>No</th>
+                            <th>Bulan Pengadaan</th>
+                            <th>Jenis AADB</th>
+                            <th>No. Plat</th>
+                            <th>Kendaraan</th>
+                            <th>Kualifikasi</th>
                         </tr>
                     </thead>
                     <?php $no = 1; ?>
@@ -426,11 +364,10 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                         @endforeach
                     </tbody>
                 </table>
-                @if ( $bast->usulanVoucher->count() > 6 ) <div class="pagebreak"></div> @endif
                 @endif
                 @endif
             </div>
-            <div class="col-12 mt-5">
+            <div class="col-12 mt-4">
                 <div class="col-12 text-capitalize">
                     <div class="row text-center">
                         <label class="col-sm-4">Yang Menyerahkan, <br> {{ $jabatanPpk }} </label>
@@ -466,7 +403,7 @@ $jabatanPpk = 'Pejabat Pembuatan Komitmen Belanja Operasional';
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     <!-- ./wrapper -->
     <!-- Page specific script -->
     <script>

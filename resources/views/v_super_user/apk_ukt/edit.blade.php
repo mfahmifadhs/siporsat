@@ -5,13 +5,12 @@
 <div class="content-header">
     <div class="container">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Usulan Kerumah Tanggaan</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active mt-2">Pekerjaan Kerumah Tanggaan</li>
+            <div class="col-sm-12">
+                <h1 class="m-0 text-lg">Urusan Kerumahtanggaan</h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('ukt.show', ['aksi' => 'pengajuan', 'id' => '*']) }}">Daftar</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('ukt.detail', $usulan->id_form_usulan) }}">Detail</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </div>
         </div>
@@ -20,7 +19,7 @@
 
 <section class="content">
     <div class="container">
-        <div class="col-md-12 form-group">
+        <div class="col-md-12">
             @if ($message = Session::get('success'))
             <div class="alert alert-success">
                 <p style="color:white;margin: auto;">{{ $message }}</p>
