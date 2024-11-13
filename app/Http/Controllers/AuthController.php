@@ -34,7 +34,6 @@ class AuthController extends Controller
     public function callback(Request $request)
     {
         $code = $request->query('code');
-        dd($code);
 
         $response = Http::asForm()->post(config('services.sso.base_url') . '/oauth/token', [
             'grant_type' => 'authorization_code',
