@@ -9,6 +9,7 @@ use Hash;
 use Auth;
 use Session;
 use DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
