@@ -18,6 +18,54 @@ class AuthController extends Controller
         return view('login');
     }
 
+    public function redirect()
+    {
+        $ssoBaseUrl  = "https://auth-eoffice.kemkes.go.id/";
+        $clientId    = app('config')->get('services.sso.client_id');
+        $redirectUri = "https://siporsat.kemkes.go.id/auth/sso/callback";
+
+        $redirectUrl = $ssoBaseUrl . "/oauth/authorize" . "?client_id=" . $clientId . "&redirect_uri=" . urlencode($redirectUri) . "&response_type=code";
+
+        return Redirect::away($redirectUrl);
+    }
+
+    public function callback(Request $request)
+    {
+        $code = $request->query('code');
+
+        $response = Http::asForm()->post(config('services.sso.base_url') . '/oauth/token', [
+            'grant_type' => 'authorization_code',
+            'client_id' => config('services.sso.client_id'),
+            'client_secret' => config('services.sso.client_secret'),
+            'redirect_uri' => config('services.sso.redirect'),
+            'code' => $code,
+        ]);
+
+        $tokenData = $response->json();
+
+        if (!isset($tokenData['access_token'])) {
+            return redirect('/')->withErrors('Login failed. No response from eOffice.');
+        }
+
+        $userResponse = Http::withToken($tokenData['access_token'])->post(config('services.sso.base_url') . '/oauth/usertoken');
+        $userData = $userResponse->json();
+
+        if (empty($userData['nip'])) {
+            return redirect('/')->withErrors('Login failed. NIP not found.');
+        }
+
+        $user = User::join('t_pegawai', 'id_pegawai', 'pegawai_id')
+            ->where('nip_pegawai', $userData['nip'])
+            ->first();
+
+        if (!$user) {
+            return redirect()->route('masuk')->with('failed', 'Pengguna tidak terdaftar');
+        }
+
+        Auth::login($user);
+        return redirect()->intended('dashboard');
+    }
+
     public function postMasuk(Request $request, $id)
     {
         if (Crypt::decrypt($id) == 'masuk.post') {

@@ -40,6 +40,9 @@ Route::post('post-daftar', [AuthController::class, 'postDaftar'])->name('daftar.
 Route::post('lg/{id}', [AuthController::class, 'postMasuk'])->name('lg');
 Route::get('captcha-reload', [AuthController::class, 'reloadCaptcha']);
 
+Route::get('auth/sso/redirect', [AuthController::class, 'redirect']);
+Route::get('auth/sso/callback', [AuthController::class, 'callback']);
+
 
 Route::get('gdn/show/{aksi}/{id}', [GdnController::class, 'show'])->name('gdn.show');
 Route::get('gdn/detail/{id}', [GdnController::class, 'detail'])->name('gdn.detail');
