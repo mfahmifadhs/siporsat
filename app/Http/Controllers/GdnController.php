@@ -160,7 +160,8 @@ class GdnController extends Controller
     public function update(Request $request, $id)
     {
         UsulanGdn::where('id_form_usulan', $id)->update([
-            'tanggal_usulan' => $request->tanggal_usulan
+            'tanggal_usulan'  => $request->tanggal_usulan,
+            'no_surat_usulan' => $request->no_surat
         ]);
 
         $detailId = $request->id_detail;

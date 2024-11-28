@@ -50,6 +50,12 @@
                             <input type="date" class="form-control" name="tanggal_usulan" value="{{ \Carbon\Carbon::parse($usulan->tanggal_usulan)->format('Y-m-d') }}">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">No. Surat</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="no_surat" value="{{ $usulan->no_surat_usulan }}">
+                        </div>
+                    </div>
                     @foreach($usulan->detailUsulanUkt as $row)
                     <div class="">
                         <hr class="mt-5" style="border: 1px solid grey;">
