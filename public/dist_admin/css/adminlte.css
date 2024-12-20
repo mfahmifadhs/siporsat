@@ -70,7 +70,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: 'Segoeui';
+  font-family: 'Arial';
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -2898,15 +2898,15 @@ fieldset:disabled a.btn {
 
 .btn-info {
   color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+  background-color: #00bacb;
+  border-color: #00bacb;
   box-shadow: none;
 }
 
 .btn-info:hover {
   color: #fff;
-  background-color: #138496;
-  border-color: #117a8b;
+  background-color: #0497a4;
+  border-color: #0497a4;
 }
 
 .btn-info:focus, .btn-info.focus {

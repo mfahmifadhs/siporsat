@@ -7,11 +7,10 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">Usulan Kerumah Tanggaan</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <!-- <li class="breadcrumb-item active"><a href="{{ url('super-user/atk/dashboard') }}">Dashboard</a></li> -->
-                    <li class="breadcrumb-item active mt-2">Pekerjaan Kerumah Tanggaan</li>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="{{ route('ukt.dashboard') }}"> Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('ukt.show', ['aksi' => 'pengajuan', 'id' => '*']) }}"> Daftar Usulan</a></li>
+                    <li class="breadcrumb-item active">Tambah</li>
                 </ol>
             </div>
         </div>
@@ -20,7 +19,7 @@
 
 <section class="content">
     <div class="container">
-        <div class="col-md-12 form-group">
+        <div class="col-md-12">
             @if ($message = Session::get('success'))
             <div class="alert alert-success">
                 <p style="color:white;margin: auto;">{{ $message }}</p>
@@ -51,7 +50,7 @@
                         <div class="form-group row">
                             <label class="col-sm-8 text-muted float-left mt-2">Lokasi Pekerjaan</label>
                             <label class="col-sm-4 text-muted text-right">
-                                <a id="btn-total" class="btn btn-primary">
+                                <a id="btn-total" class="btn btn-primary btn-sm mt-2">
                                     <i class="fas fa-plus-circle"></i> Tambah List Baru
                                 </a>
                             </label>
@@ -60,7 +59,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
+                                <input type="text" class="form-control" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -124,7 +123,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pekerjaan*</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
+                            <input type="text" class="form-control" name="lokasi_pekerjaan[]" placeholder="Lokasi Pekerjaan / Judul Pekerjaan" required>
                         </div>
                     </div>
                     <div class="form-group row">

@@ -51,7 +51,7 @@
                         <div class="form-group row">
                             <label class="col-sm-8 text-muted float-left mt-2">Lokasi Perbaikan / Struktural</label>
                             <label class="col-sm-4 text-muted text-right">
-                                <a id="btn-total" class="btn btn-primary">
+                                <a id="btn-total" class="btn btn-primary btn-sm mt-2">
                                     <i class="fas fa-plus-circle"></i> Tambah List Baru
                                 </a>
                             </label>
@@ -60,7 +60,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                                <input type="text" class="form-control" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -142,7 +142,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Lokasi Perbaikan*</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control text-uppercase" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
+                            <input type="text" class="form-control" name="lokasi_bangunan[]" placeholder="Contoh: Gedung Sujudi/Gedung Adhyatma" required>
                         </div>
                     </div>
                     <div class="form-group row">

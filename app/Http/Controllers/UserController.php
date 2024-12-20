@@ -230,13 +230,14 @@ class UserController extends Controller
                 }
             } elseif (Auth::user()->sess_modul == 'gdn') {
                 $usulan = UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->first();
+
                 if ($usulan->status_proses_id == null) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_pengusul' => $request->one_time_password,
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -244,7 +245,7 @@ class UserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-gdn/' . Auth::user()->sess_form_id);
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 3) {
                     UsulanGdn::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_pengusul' => $request->one_time_password,
@@ -252,7 +253,7 @@ class UserController extends Controller
                         'status_proses_id'    => 4
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/gdn/dashboard');
+                    return redirect()->route('gdn.detail', Auth::user()->sess_form_id);
                 }
             } elseif (Auth::user()->sess_modul == 'ukt') {
                 $usulan = UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->first();
@@ -262,7 +263,7 @@ class UserController extends Controller
                         'status_proses_id'    => 1
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('ukt.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 1) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_usulan_kabag' => $request->one_time_password,
@@ -270,7 +271,7 @@ class UserController extends Controller
                         'status_proses_id'    => 2
                     ]);
                     Google2FA::logout();
-                    return redirect('unit-kerja/surat/usulan-ukt/' . Auth::user()->sess_form_id);
+                    return redirect()->route('ukt.detail', Auth::user()->sess_form_id);
                 } elseif ($usulan->status_proses_id == 3) {
                     UsulanUkt::where('id_form_usulan', Auth::user()->sess_form_id)->update([
                         'otp_bast_pengusul' => $request->one_time_password,

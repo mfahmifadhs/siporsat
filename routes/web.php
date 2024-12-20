@@ -44,15 +44,20 @@ Route::get('auth/sso/redirect', [AuthController::class, 'redirect']);
 Route::get('auth/sso/callback', [AuthController::class, 'callback']);
 
 
+Route::get('gdn/dashboard', [GdnController::class, 'index'])->name('gdn.dashboard');
 Route::get('gdn/show/{aksi}/{id}', [GdnController::class, 'show'])->name('gdn.show');
 Route::get('gdn/detail/{id}', [GdnController::class, 'detail'])->name('gdn.detail');
 Route::get('gdn/edit/{id}', [GdnController::class, 'edit'])->name('gdn.edit');
 Route::get('gdn/select', [GdnController::class, 'select'])->name('gdn.select');
+Route::get('gdn/delete/{id}', [GdnController::class, 'delete'])->name('gdn.delete');
 
+
+Route::get('ukt/dashboard', [UktController::class, 'index'])->name('ukt.dashboard');
 Route::get('ukt/show/{aksi}/{id}', [UktController::class, 'show'])->name('ukt.show');
 Route::get('ukt/detail/{id}', [UktController::class, 'detail'])->name('ukt.detail');
 Route::get('ukt/edit/{id}', [UktController::class, 'edit'])->name('ukt.edit');
 Route::get('ukt/select', [UktController::class, 'select'])->name('ukt.select');
+Route::get('ukt/delete/{id}', [UktController::class, 'delete'])->name('ukt.delete');
 
 // ====================================================
 //                    SUPER ADMIN

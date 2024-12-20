@@ -164,7 +164,7 @@
                         @endif
                         <!-- Gedung & Bangunan -->
                         <li class="nav-item">
-                            <a href="{{ url('unit-kerja/gdn/dashboard') }}" class="nav-link font-weight-bold">
+                            <a href="{{ route('gdn.dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-building"></i>
                                 <p>Gedung & Bangunan</p>
                             </a>
@@ -172,7 +172,7 @@
                         </li>
                         <!-- Gedung & Bangunan -->
                         <li class="nav-item">
-                            <a href="{{ url('unit-kerja/ukt/dashboard') }}" class="nav-link font-weight-bold">
+                            <a href="{{ route('ukt.dashboard') }}" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-suitcase"></i>
                                 <p>Kerumah Tanggaan</p>
                             </a>

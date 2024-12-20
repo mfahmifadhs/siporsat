@@ -13,11 +13,27 @@ use Auth;
 
 class UktController extends Controller
 {
+    public function index()
+    {
+        $role   = Auth::user()->level_id;
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : 'v_user');
+        $data   = UsulanUkt::orderBy('id_form_usulan', 'DESC');
+
+        if ($role == 4) {
+            $usulan = $data->where('user_id', Auth::user()->id)->get();
+        } else {
+            $usulan = $data->get();
+        }
+
+
+        return view($layout . '.apk_ukt.index', compact('usulan'));
+    }
+
     public function show(Request $request, $aksi, $id)
     {
         $role   = Auth::user()->level_id;
-        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
-        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : '');
+        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : 'v_user');
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : 'v_user');
 
         if ($aksi == 'verifikasi') {
             $aksi = 'status_pengajuan_id';
@@ -27,23 +43,29 @@ class UktController extends Controller
             $aksi = 'status_proses_id';
         }
 
-        $usulan   = UsulanUkt::count();
         $listUker = UnitKerja::orderBy('unit_kerja', 'ASC')->get();
+        $data     = UsulanUkt::orderBy('id_form_usulan', 'DESC');
+
+        if ($role == 4) {
+            $usulan = $data->where('user_id', Auth::user()->id)->count();
+        } else {
+            $usulan = $data->count();
+        }
 
         $uker    = $request->get('uker_id');
         $proses  = $request->get('proses_id');
         $tanggal = $request->get('tanggal');
-        $bulan   = $request->get('bulan'  );
+        $bulan   = $request->get('bulan');
         $tahun   = $request->get('tahun');
 
-        return view($layout.'.apk_ukt.daftar_pengajuan', compact('url', 'layout', 'usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
+        return view($layout . '.apk_ukt.daftar_pengajuan', compact('url', 'layout', 'usulan', 'listUker', 'uker', 'proses', 'tanggal', 'bulan', 'tahun', 'aksi', 'id'));
     }
 
     public function detail($id)
     {
         $role   = Auth::user()->level_id;
-        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
-        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : '');
+        $url    = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : 'v_user');
+        $layout = $role == 2 ? 'v_admin_user' : ($role == 3 ? 'v_super_user' : 'v_user');
 
         $usulan = UsulanUkt::where('id_form_usulan', $id)->first();
         return view($layout . '.apk_ukt.detail', compact('role', 'url', 'layout', 'usulan', 'id'));
@@ -53,7 +75,7 @@ class UktController extends Controller
     {
         $role    = Auth::user()->level_id;
         $jabatan = Auth::user()->pegawai->jabatan_id;
-        $url     = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : '');
+        $url     = $role == 2 ? 'admin-user' : ($role == 3 ? 'super-user' : 'v_user');
 
         $aksi    = $request->aksi;
         $id      = $request->id;
@@ -84,13 +106,19 @@ class UktController extends Controller
                 $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $request->tahun);
             }
 
-            $result = $res->get();
+            $result = $res;
         } else if ($aksi == 'status_proses_id') {
-            $result = $data->where($aksi, $id)->get();
+            $result = $data->where($aksi, $id);
         } else if ($aksi == 'status_pengajuan_id') {
-            $result = $data->where($aksi, $id)->get();
+            $result = $data->where($aksi, $id);
         } else {
-            $result = $data->get();
+            $result = $data;
+        }
+
+        if ($role == 4) {
+            $result = $result->where('user_id', Auth::user()->id)->get();
+        } else {
+            $result = $result->get();
         }
 
         foreach ($result as $row) {
@@ -99,6 +127,8 @@ class UktController extends Controller
                 $status = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> setuju</span>';
             } else if ($row->status_pengajuan_id == 2) {
                 $status = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> tolak</span>';
+            } else if (!$row->otp_usulan_pengusul) {
+                $status = '<span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> verif</span>';
             } else {
                 $status = '<span class="badge badge-warning"><i class="fas fa-clock"></i> pending</span>';
             }
@@ -114,15 +144,32 @@ class UktController extends Controller
             $aksi = '';
 
             if ($jabatan == 2 && $row->status_proses_id == 1) {
-                $aksi .= '<a href="' . url($url.'/ukt/usulan/persetujuan/'. $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
+                $aksi .= '<a href="' . url($url . '/ukt/usulan/persetujuan/' . $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
             }
 
             if ($jabatan == 5 && $row->status_proses_id == 2) {
-                $aksi .= '<a href="' . url($url.'/ppk/ukt/usulan/perbaikan/'. $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
+                $aksi .= '<a href="' . url($url . '/ppk/ukt/usulan/perbaikan/' . $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
             }
 
-            $aksi .= '<a href="' . route('ukt.detail', $row->id_form_usulan) . '"><i class="fas fa-info-circle"></i></a> ';
-            $aksi .= '<a href="' . route('ukt.edit', $row->id_form_usulan) . '"><i class="fas fa-edit"></i></a>';
+            $aksi .= '<a href="' . route('ukt.detail', $row->id_form_usulan) . '" alt="Detail"><i class="fas fa-info-circle"></i></a> ';
+
+            if ($role == 2 && $row->status_proses_id <= 2) {
+                $aksi .= '<a href="' . route('ukt.edit', $row->id_form_usulan) . '" alt="Edit"><i class="fas fa-edit"></i></a>';
+            }
+
+            if (Auth::user()->id == $row->user_id && !$row->otp_usulan_pengusul) {
+                $aksi .= '<a href="' . url('unit-kerja/verif/usulan-ukt', $row->id_form_usulan) . '" alt="Verifikasi"><i class="fas fa-file-signature"></i></a>';
+            }
+
+            if (Auth::user()->id == $row->user_id && !$row->otp_usulan_kabag && $row->status_pengajuan_id != 2) {
+                $aksi .= '<a href="' . route('ukt.delete', $row->id_form_usulan) . '" alt="Hapus" onclick="return confirm(`Apakah anda ingin membatalkan usulan ini ?`)">
+                <i class="fas fa-trash-alt ml-1"></i>
+                </a>';
+            }
+
+            if ($jabatan == 2 && $row->status_proses_id == 4) {
+                $aksi .= '<a href="' . url($url . '/verif/usulan-ukt/' . $row->id_form_usulan) . '"><i class="fas fa-file-signature"></i></a> ';
+            }
 
             $response[] = [
                 'no'        => $no,
@@ -132,12 +179,12 @@ class UktController extends Controller
                 'uker'      => $row->pegawai?->unitKerja->unit_kerja,
                 'nosurat'   => $row->no_surat_usulan,
                 'pekerjaan' => $row->detailUsulanUkt->pluck('lokasi_pekerjaan')->map(function ($item) {
-                    return Str::limit($item, 50);
+                    return Str::limit($item, 100);
                 }),
                 'deskripsi' => $row->detailUsulanUkt->pluck('spesifikasi_pekerjaan')->map(function ($item) {
-                    return Str::limit($item, 50);
+                    return Str::limit($item, 150);
                 }),
-                'status'     => $status.'<br>'.$proses
+                'status'     => $status . '<br>' . $proses
             ];
 
             $no++;
@@ -181,13 +228,20 @@ class UktController extends Controller
             }
         }
 
-        return redirect('admin-user/surat/usulan-ukt/'.$id)->with('success', 'Berhasil Menyimpan Perubahan');
+        return redirect('admin-user/surat/usulan-ukt/' . $id)->with('success', 'Berhasil Menyimpan Perubahan');
+    }
+
+    public function delete($id)
+    {
+        UsulanUkt::where('id_form_usulan', $id)->delete();
+
+        return redirect()->route('ukt.show', ['aksi' => 'pengajuan', 'id' => '*'])->with('success', 'Berhasil Menghapus Usulan');
     }
 
     public function deleteDetail($id)
     {
         $detail = UsulanuktDetail::where('id_form_usulan_detail', $id)->first();
         UsulanUktDetail::where('id_form_usulan_detail', $id)->delete();
-        return redirect('admin-user/surat/usulan-ukt/'. $detail->form_usulan_id)->with('success', 'Berhasil Menghapus Pekerjaan');
+        return redirect('admin-user/surat/usulan-ukt/' . $detail->form_usulan_id)->with('success', 'Berhasil Menghapus Pekerjaan');
     }
 }
