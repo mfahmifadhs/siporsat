@@ -15,7 +15,7 @@
                 </ol>
             </div>
             <div class="col-sm-6 text-right my-auto">
-                @if ($usulan->status_proses_id <= 2 && $usulan->status_pengajuan_id != 2)
+                @if (!$usulan->otp_usulan_kabag && $usulan->status_pengajuan_id != 2)
                 <a href="{{ route('ukt.edit', $id) }}" class="btn btn-default border-dark btn-sm pdf">
                     <i class="fas fa-edit"></i> Edit
                 </a>
