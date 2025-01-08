@@ -1557,7 +1557,7 @@ class SuperUserController extends Controller
             ->rightjoin('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
             ->groupBy('id_unit_kerja', 'unit_utama_id', 'unit_kerja')
             ->where('unit_utama_id', '02401')
-            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2025)
             ->where('status_proses_id', '!=', null)
             ->get();
 
@@ -1566,7 +1566,7 @@ class SuperUserController extends Controller
             ->orderBy('status_pengajuan_id', 'ASC')
             ->orderBy('status_proses_id', 'ASC')
             ->orderBy('tanggal_usulan', 'DESC')
-            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+            ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2025)
             ->where('status_proses_id', '!=', null)
             ->get();
 
@@ -1579,7 +1579,7 @@ class SuperUserController extends Controller
                 ->join('tbl_unit_kerja', 'id_unit_kerja', 'unit_kerja_id')
                 ->groupBy('month')
                 ->orderBy('month', 'ASC')
-                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2025)
                 ->where('status_proses_id', '!=', null)
                 ->get();
 
