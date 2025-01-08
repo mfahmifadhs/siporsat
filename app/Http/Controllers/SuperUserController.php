@@ -1505,7 +1505,7 @@ class SuperUserController extends Controller
                 ->join('tbl_pegawai', 'id_pegawai', 'pegawai_id')
                 ->leftjoin('tbl_pegawai_jabatan', 'id_jabatan', 'jabatan_id')
                 ->where('id_form_usulan', $id)
-                ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
+                // ->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), 2024)
                 ->first();
 
             return view('v_super_user/apk_gdn/proses_persetujuan', compact('usulan'));
